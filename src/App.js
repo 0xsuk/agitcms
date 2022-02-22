@@ -1,53 +1,73 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
+import { Fragment, useEffect, useState } from "react";
 
 function App() {
+  const navigate = useNavigate();
+  const goBack = () => navigate(-1);
   return (
-    <Router>
+    <Fragment>
+      <button onClick={goBack}>Go Back</button>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/about" element={<About />}></Route>
-        <Route path="/varfile" element={<Varfile />}></Route>
+        <Route path="/settings" element={<Settings />}></Route>
       </Routes>
-    </Router>
+    </Fragment>
   );
 }
 
 function Home() {
   return (
+    // list of workspace
     <div>
-      <Link to={"/about"}>About</Link>
-      <Link to={"/varfile"}>Varfile</Link>
-      <h1>Home</h1>
+      <h1>WorkSpaces</h1>
+      <SideBar />
     </div>
   );
 }
 
-function About() {
+function Settings() {
   return (
-    <div>
-      <Link to="/">Home</Link>
-      <h1>About</h1>
-    </div>
+    <Fragment>
+      <h1>Settings</h1>
+    </Fragment>
   );
 }
 
-function Varfile() {
-  const [data, setData] = useState({});
-
-  useEffect(async () => {
-    const res = await window.electronAPI.loadConfig();
-    setData(res);
-    console.log(res);
-  }, []);
-
+const _workspaces = [
+  {
+    key: "agitlanding",
+    name: "agitlanding",
+    source: {
+      type: "folder",
+      path: "/home/null/go/src/github.com/0xsuk/agitlanding",
+    },
+  },
+  {
+    key: "agitdocs",
+    name: "agitdocs",
+    source: {
+      type: "folder",
+      path: "/home/null/go/src/github.com/0xsuk/agitdocs",
+    },
+  },
+];
+function SideBar() {
   return (
-    <div>
-      {Object.keys(data).map((k) => (
-        <p>{data[k]}</p>
-      ))}
-    </div>
+    <Fragment>
+      <div>
+        {_workspaces.map((workspace) => (
+          <p>{workspace.name}</p>
+        ))}
+      </div>
+      <Link to="/settings">Settings</Link>
+    </Fragment>
   );
 }
 
