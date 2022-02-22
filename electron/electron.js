@@ -17,8 +17,6 @@ const createWindow = () => {
     },
   });
 
-  // win.loadFile('index.html')
-  console.log("I love you all!");
   win.loadURL("http://localhost:3000");
 };
 

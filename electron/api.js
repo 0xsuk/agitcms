@@ -1,6 +1,6 @@
 const fs = require("fs");
 const HOME_DIR = require("os").homedir();
-const path = require("path")
+const path = require("path");
 
 exports.loadConfig = async () => {
   const data = fs.readFileSync(path.join(HOME_DIR, ".varfile.json"));
