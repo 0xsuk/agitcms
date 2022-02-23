@@ -5,9 +5,11 @@ const isDev = require("electron-is-dev"); //is not a devDependencies
 const { loadConfig } = require("./api");
 
 // hot reload
-// require("electron-reload")(__dirname, {
-//   electron: path.join(__dirname, "..", "node_modules", ".bin", "electron"),
-// });
+if (isDev) {
+  require("electron-reload")(__dirname, {
+    electron: path.join(__dirname, "..", "node_modules", ".bin", "electron"),
+  });
+}
 
 const createWindow = () => {
   const win = new BrowserWindow({

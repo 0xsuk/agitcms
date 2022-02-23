@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 
@@ -19,9 +19,9 @@ function App() {
 function Home() {
   return (
     // list of workspace
-    <div>
-      <h1>WorkSpaces</h1>
+    <div className="flex">
       <SideBar />
+    <Editor />
     </div>
   );
 }
@@ -32,6 +32,14 @@ function Settings() {
       <h1>Settings</h1>
     </Fragment>
   );
+}
+
+function Editor() {
+  return (
+    <Fragment>
+      <textarea ></textarea>
+    </Fragment>
+  )
 }
 
 const _workspaces = [
@@ -55,7 +63,7 @@ const _workspaces = [
 function SideBar() {
   return (
     <Fragment>
-      <div>
+      <div className="sidebar">
         {_workspaces.map((workspace) => (
           <p>{workspace.name}</p>
         ))}
