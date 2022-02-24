@@ -21,15 +21,16 @@ code {
   height: 100vh;
 }
 
-#editor {
-  width: 100%;
-  background-color: burlywood;
-}
-
-#sidebar {
+#side {
+  flex-shrink: 0; //because #side is a flex element
   width: 250px;
   height: 100vh;
   border: 1px black solid;
+}
+
+#main {
+  width: 100%;
+  background-color: darkgray;
 }
 
 .mui-icon {
