@@ -55,12 +55,19 @@ function Editor() {
   console.log("importing refContainer", refContainer.current);
   console.log("current doc", doc);
 
+  const saveFile = async () => {
+    const err = await window.electronAPI.saveNewFile(doc);
+    if (err) console.log(err.message)
+  };
+
   return (
     <Fragment>
       <div id="editor">
         <h1>Editor</h1>
         <div ref={refContainer}></div>
-        <Button variant="contained">Save</Button>
+        <Button onClick={saveFile} variant="contained">
+          Save
+        </Button>
       </div>
     </Fragment>
   );
@@ -69,6 +76,8 @@ function Editor() {
 function SideBar() {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
+
+  useEffect(() => navigate("/edit"), []);
   return (
     <Fragment>
       <ArrowBackIosNew className="mui-icon" onClick={goBack} />
