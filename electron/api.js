@@ -3,29 +3,45 @@ const fs = require("fs");
 const HOME_DIR = require("os").homedir();
 const path = require("path");
 
+//TODO
+const CONFIG = ".varfile.json";
+
 exports.loadConfig = async () => {
-  const data = fs.readFileSync(path.join(HOME_DIR, ".varfile.json"));
-  //TODO err handling
-  const json_data = JSON.parse(data);
-  return json_data;
+  try {
+    const config = fs.readFileSync(path.join(HOME_DIR, CONFIG));
+    return { config: JSON.parse(config), err: null };
+  } catch (err) {
+    return { config: null, err };
+  }
 };
 
 exports.saveNewFile = async (e, content) => {
-  const err = dialog
-    .showSaveDialog({
-      // defaultPath: "abc", => works!
-      // properties: [""],
-    })
-    .then(({ canceled, filePath }) => {
-      if (canceled) return;
-      fs.writeFileSync(filePath, content);
-      throw new Error("new err!");
-    })
-    .catch((err) => {
-      //catching err from fs.writeFileSync
-      console.log("new err?", err);
-      return err;
-    });
+  const filePath = dialog.showSaveDialogSync();
 
-  return err;
+  //if canceled
+  if (filePath == undefined) {
+    return { err: null, canceled: true };
+  }
+
+  try {
+    fs.writeFileSync(filePath, content);
+    return { err: null, canceled: false };
+  } catch (err) {
+    return { err, canceled: false };
+  }
+};
+
+exports.openFile = async () => {
+  const filePaths = dialog.showOpenDialogSync();
+  //if canceled
+  if (filePaths == undefined) {
+    return { content: null, err: null, canceled: true };
+  }
+
+  try {
+    const content = fs.readFileSync(filePaths[0]).toString();
+    return { content, err: null, canceled: false };
+  } catch (err) {
+    return { content: null, err, canceled: false };
+  }
 };

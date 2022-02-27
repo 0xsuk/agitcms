@@ -8,6 +8,17 @@ import { EditorView } from "@codemirror/view";
 import {} from "@codemirror/commands";
 
 function App() {
+  const loadConfig = async () => {
+    const { config, err } = await window.electronAPI.loadConfig();
+    if (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    loadConfig();
+  }, []);
+
   return (
     <Fragment>
       <Routes>
@@ -43,27 +54,37 @@ function Settings() {
 }
 
 function Editor() {
-  const [doc, setDoc] = useState("Initial Doc");
-  const handleChange = (state) => {
-    // console.log("handleChange: state.doc", state.doc.toString());
+  //setDoc doest not update refContainer, use editorView.dispatch to update text
+  const [doc, setDoc] = useState("");
+  const handleChange = useCallback((state) => {
     setDoc(state.doc.toString());
-  };
+  }, []);
   const [refContainer, editorView] = useCodeMirror({
     initialDoc: doc,
     onChange: handleChange,
   });
-  console.log("importing refContainer", refContainer.current);
-  console.log("current doc", doc);
 
   const saveFile = async () => {
-    const err = await window.electronAPI.saveNewFile(doc);
-    if (err) console.log(err.message)
+    const { err, canceled } = await window.electronAPI.saveNewFile(doc);
+    if (err) {
+      alert(err.message)
+    }
+  };
+
+  const openFile = async () => {
+    const { content, err, canceled } = await window.electronAPI.openFile();
+    if (!err && !canceled) {
+      editorView.dispatch({changes: {from: 0, to:editorView.state.doc.length, insert: content}})
+    }
   };
 
   return (
     <Fragment>
       <div id="editor">
         <h1>Editor</h1>
+        <Button onClick={openFile} variant="contained">
+          Open
+        </Button>
         <div ref={refContainer}></div>
         <Button onClick={saveFile} variant="contained">
           Save
@@ -117,7 +138,7 @@ const _workspaces = [
 const useCodeMirror = (props) => {
   const refContainer = useRef(null);
   const [editorView, setEditorView] = useState();
-  const { onChange, initialDoc } = props;
+  const { initialDoc, onChange } = props;
 
   useEffect(() => {
     if (!refContainer.current) {
@@ -130,14 +151,12 @@ const useCodeMirror = (props) => {
       extensions: [
         EditorView.updateListener.of((update) => {
           if (update.changes) {
-            console.log("update.state", update.state);
-            onChange && onChange(update.state);
+            onChange(update.state);
           }
         }),
       ],
     });
 
-    console.log("setting refContainer");
     const view = new EditorView({
       state: startState,
       parent: refContainer.current,
