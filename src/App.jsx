@@ -69,6 +69,9 @@ function Editor() {
     if (err) {
       alert(err.message)
     }
+    if (!err & !canceled) {
+      alert("Saved!")
+    }
   };
 
   const openFile = async () => {
