@@ -3,13 +3,21 @@ const fs = require("fs");
 const HOME_DIR = require("os").homedir();
 const path = require("path");
 
-//TODO
-const CONFIG = ".varfile.json";
+const CONFIG_DIR = path.join(HOME_DIR, ".agitcms");
+const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
 exports.loadConfig = async () => {
   try {
-    const config = fs.readFileSync(path.join(HOME_DIR, CONFIG));
-    return { config: JSON.parse(config), err: null };
+    if (!fs.existsSync(CONFIG_DIR)) {
+      fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0775 });
+    }
+    if (!fs.existsSync(CONFIG_FILE)) {
+      const config = fs.readFileSync(path.join(__dirname, "assets", "config.json")).toString();
+      fs.writeFileSync(CONFIG_FILE, config, {mode: 0664});
+    }
+
+    const config = JSON.parse(fs.readFileSync(CONFIG_FILE));
+    return { config, err: null };
   } catch (err) {
     return { config: null, err };
   }
