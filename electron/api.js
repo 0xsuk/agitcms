@@ -12,8 +12,10 @@ exports.loadConfig = async () => {
       fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0775 });
     }
     if (!fs.existsSync(CONFIG_FILE)) {
-      const config = fs.readFileSync(path.join(__dirname, "assets", "config.json")).toString();
-      fs.writeFileSync(CONFIG_FILE, config, {mode: 0664});
+      const config = fs
+        .readFileSync(path.join(__dirname, "assets", "config.json"))
+        .toString();
+      fs.writeFileSync(CONFIG_FILE, config, { mode: 0664 });
     }
 
     const config = JSON.parse(fs.readFileSync(CONFIG_FILE));
@@ -23,8 +25,11 @@ exports.loadConfig = async () => {
   }
 };
 
-exports.saveNewFile = async (e, content) => {
-  const filePath = dialog.showSaveDialogSync();
+exports.saveFile = async (e, content, filePath) => {
+  console.log("saving", filePath)
+  if (filePath == "") {
+    filePath = dialog.showSaveDialogSync();
+  }
 
   //if canceled
   if (filePath == undefined) {
@@ -43,13 +48,13 @@ exports.openFile = async () => {
   const filePaths = dialog.showOpenDialogSync();
   //if canceled
   if (filePaths == undefined) {
-    return { content: null, err: null, canceled: true };
+    return { content: null, filePath: null, err: null, canceled: true };
   }
 
   try {
     const content = fs.readFileSync(filePaths[0]).toString();
-    return { content, err: null, canceled: false };
+    return { content, filePath: filePaths[0], err: null, canceled: false };
   } catch (err) {
-    return { content: null, err, canceled: false };
+    return { content: null, filePath: filePaths[0], err, canceled: false };
   }
 };

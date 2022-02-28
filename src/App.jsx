@@ -5,7 +5,7 @@ import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { EditorState } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
-import {} from "@codemirror/commands";
+import { cursorDocEnd } from "@codemirror/commands";
 
 function App() {
   const loadConfig = async () => {
@@ -65,6 +65,7 @@ function Settings() {
 function Editor() {
   //setDoc doest not update refContainer, use editorView.dispatch to update text
   const [doc, setDoc] = useState("");
+  const [currentFilePath, setCurrentFilePath] = useState("")
   const handleChange = useCallback((state) => {
     setDoc(state.doc.toString());
   }, []);
@@ -74,7 +75,8 @@ function Editor() {
   });
 
   const saveFile = async () => {
-    const { err, canceled } = await window.electronAPI.saveNewFile(doc);
+    console.log("saving", currentFilePath)
+    const { err, canceled } = await window.electronAPI.saveFile(doc, currentFilePath);
     if (err) {
       alert(err.message)
     }
@@ -84,9 +86,10 @@ function Editor() {
   };
 
   const openFile = async () => {
-    const { content, err, canceled } = await window.electronAPI.openFile();
+    const { content,filePath, err, canceled } = await window.electronAPI.openFile();
     if (!err && !canceled) {
       editorView.dispatch({changes: {from: 0, to:editorView.state.doc.length, insert: content}})
+      setCurrentFilePath(filePath)
     }
   };
 
