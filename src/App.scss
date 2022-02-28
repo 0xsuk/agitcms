@@ -30,7 +30,14 @@ code {
 
 #main {
   width: 100%;
-  background-color: darkgray;
+  background-color: rgb(214, 210, 210);
+}
+
+#editor {
+  .cm-editor {
+    min-height: 50vh;
+    background-color: rgb(201, 201, 201);
+  }
 }
 
 .mui-icon {

@@ -23,6 +23,7 @@ function App() {
     <Fragment>
       <Routes>
         <Route path="/" element={<Wrapper />}>
+          <Route path="" element={<Home></Home>}></Route>
           <Route path="settings" element={<Settings />}></Route>
           <Route path="edit" element={<Editor />}></Route>
         </Route>
@@ -43,6 +44,14 @@ function Wrapper() {
       </div>
     </div>
   );
+}
+
+function Home() {
+  return (
+    <div>
+      <h1>Home</h1>
+    </div>
+  )
 }
 
 function Settings() {
@@ -88,10 +97,10 @@ function Editor() {
         <Button onClick={openFile} variant="contained">
           Open
         </Button>
-        <div ref={refContainer}></div>
         <Button onClick={saveFile} variant="contained">
           Save
         </Button>
+        <div ref={refContainer}></div>
       </div>
     </Fragment>
   );
@@ -101,7 +110,7 @@ function SideBar() {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
 
-  useEffect(() => navigate("/edit"), []);
+  // useEffect(() => navigate("/edit"), []);
   return (
     <Fragment>
       <ArrowBackIosNew className="mui-icon" onClick={goBack} />
@@ -109,6 +118,9 @@ function SideBar() {
         {_workspaces.map((workspace) => (
           <p>{workspace.name}</p>
         ))}
+      </div>
+      <div>
+        <Link to="/">Home</Link>
       </div>
       <div>
         <Link to="/settings">Settings</Link>
