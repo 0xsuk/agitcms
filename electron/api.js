@@ -12,10 +12,10 @@ exports.loadConfig = async () => {
       fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0775 });
     }
     if (!fs.existsSync(CONFIG_FILE)) {
-      const config = fs
+      const config_str = fs
         .readFileSync(path.join(__dirname, "assets", "config.json"))
         .toString();
-      fs.writeFileSync(CONFIG_FILE, config, { mode: 0664 });
+      fs.writeFileSync(CONFIG_FILE, config_str, { mode: 0664 });
     }
 
     const config = JSON.parse(fs.readFileSync(CONFIG_FILE));
@@ -25,8 +25,19 @@ exports.loadConfig = async () => {
   }
 };
 
+exports.updateConfig = async (e, newConfig) => {
+  try {
+    console.log("New Config:", newConfig);
+    const config_str = JSON.stringify(newConfig);
+    fs.writeFileSync(CONFIG_FILE, config_str);
+    return;
+  } catch (err) {
+    return err;
+  }
+};
+
 exports.saveFile = async (e, content, filePath) => {
-  console.log("saving", filePath)
+  console.log("saving", filePath);
   if (filePath == "") {
     filePath = dialog.showSaveDialogSync();
   }

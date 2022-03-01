@@ -5,14 +5,27 @@ import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { EditorState } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
-import { cursorDocEnd } from "@codemirror/commands";
 
 function App() {
+  console.log("App");
+  const [config, setConfig] = useState({});
   const loadConfig = async () => {
     const { config, err } = await window.electronAPI.loadConfig();
     if (err) {
-      console.log(err);
+      alert(err.message);
+      return;
     }
+    console.log("configuration read", config);
+    setConfig(config);
+  };
+  const updateConfig = async (newConfig) => {
+    const err = await window.electronAPI.updateConfig(newConfig);
+    if (err) {
+      alert(err.message);
+      return;
+    }
+    console.log("udpating config:", newConfig);
+    setConfig(newConfig);
   };
 
   useEffect(() => {
@@ -23,7 +36,10 @@ function App() {
     <Fragment>
       <Routes>
         <Route path="/" element={<Wrapper />}>
-          <Route path="" element={<Home></Home>}></Route>
+          <Route
+            path=""
+            element={<Home config={config} updateConfig={updateConfig}></Home>}
+          ></Route>
           <Route path="settings" element={<Settings />}></Route>
           <Route path="edit" element={<Editor />}></Route>
         </Route>
@@ -46,12 +62,50 @@ function Wrapper() {
   );
 }
 
-function Home() {
+function Home(props) {
+  const { config, updateConfig } = props;
+  console.log("home");
+
+  const addNewSite =  () => {
+    if (!config.sites) return;
+    const newSite = {
+      key: "asdf",
+    };
+    let isDuplicatedKey = false;
+    config.sites.every(site => {
+      if (site.key == newSite.key) {
+        isDuplicatedKey = true
+        return false;
+      }
+      return true
+    })
+    if (isDuplicatedKey) {
+      alert("key already exists")
+      return
+    }
+    config.sites.push(newSite);
+    const newConfig = Object.assign({}, config); //!important
+    updateConfig(newConfig);
+  };
   return (
     <div>
       <h1>Home</h1>
+      {config.sites?.map((site) => (
+        <Site site={site} />
+      ))}
+      <Button onClick={addNewSite} variant="contained">
+        New
+      </Button>
     </div>
-  )
+  );
+}
+
+function Site({ site }) {
+  return (
+    <div>
+      <h2>{site.key}</h2>
+    </div>
+  );
 }
 
 function Settings() {
@@ -65,7 +119,8 @@ function Settings() {
 function Editor() {
   //setDoc doest not update refContainer, use editorView.dispatch to update text
   const [doc, setDoc] = useState("");
-  const [currentFilePath, setCurrentFilePath] = useState("")
+  const [currentFilePath, setCurrentFilePath] = useState("");
+  console.log("currentFilePath is", currentFilePath);
   const handleChange = useCallback((state) => {
     setDoc(state.doc.toString());
   }, []);
@@ -75,21 +130,27 @@ function Editor() {
   });
 
   const saveFile = async () => {
-    console.log("saving", currentFilePath)
-    const { err, canceled } = await window.electronAPI.saveFile(doc, currentFilePath);
+    console.log("saving", currentFilePath);
+    const { err, canceled } = await window.electronAPI.saveFile(
+      doc,
+      currentFilePath
+    );
     if (err) {
-      alert(err.message)
+      alert(err.message);
     }
     if (!err & !canceled) {
-      alert("Saved!")
+      alert("Saved!");
     }
   };
 
   const openFile = async () => {
-    const { content,filePath, err, canceled } = await window.electronAPI.openFile();
+    const { content, filePath, err, canceled } =
+      await window.electronAPI.openFile();
     if (!err && !canceled) {
-      editorView.dispatch({changes: {from: 0, to:editorView.state.doc.length, insert: content}})
-      setCurrentFilePath(filePath)
+      editorView.dispatch({
+        changes: { from: 0, to: editorView.state.doc.length, insert: content },
+      });
+      setCurrentFilePath(filePath);
     }
   };
 
