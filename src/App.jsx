@@ -68,6 +68,7 @@ function Home(props) {
 
   const addNewSite =  () => {
     if (!config.sites) return;
+    //TODO sample
     const newSite = {
       key: "asdf",
     };
