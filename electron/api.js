@@ -56,16 +56,32 @@ exports.saveFile = async (e, content, filePath) => {
 };
 
 exports.openFile = async () => {
-  const filePaths = dialog.showOpenDialogSync();
-  //if canceled
-  if (filePaths == undefined) {
-    return { content: null, filePath: null, err: null, canceled: true };
-  }
-
   try {
+    const filePaths = dialog.showOpenDialogSync();
+    //if canceled
+    if (filePaths == undefined) {
+      return { content: null, filePath: null, err: null, canceled: true };
+    }
+
     const content = fs.readFileSync(filePaths[0]).toString();
     return { content, filePath: filePaths[0], err: null, canceled: false };
   } catch (err) {
     return { content: null, filePath: filePaths[0], err, canceled: false };
+  }
+};
+
+exports.getFolderPath = async () => {
+  try {
+    const folderPaths = dialog.showOpenDialogSync({
+      properties: ["openDirectory"],
+    });
+
+    if (folderPaths == undefined) {
+      return { folderPath: null, err: null, canceled: true };
+    }
+
+    return { folderPath: folderPaths[0], err: null, canceled: false };
+  } catch (err) {
+    return { folderPath: null, err, canceled: false };
   }
 };

@@ -9,9 +9,25 @@ function Site({ _siteConfig, updateSiteConfig }) {
   const navigate = useNavigate();
 
   const selectSite = (key) => {
-    navigate("edit/"+key);
+    navigate("edit/" + key);
   };
 
+  const updateKey = async (e) => {
+    siteConfig.key = e.target.value;
+    setSiteConfig(Object.assign({}, siteConfig));
+  };
+  const updatePath = async () => {
+    const { folderPath, err, canceled } =
+      await window.electronAPI.getFolderPath();
+    if (err) {
+      alert(err);
+      return;
+    }
+    if (!err && !canceled) {
+      siteConfig.path = folderPath;
+      setSiteConfig(Object.assign({}, siteConfig));
+    }
+  };
   const updateCommands = (cmd_name, e) => {
     siteConfig.commands[cmd_name] = e.target.value;
     setSiteConfig(Object.assign({}, siteConfig));
@@ -33,11 +49,14 @@ function Site({ _siteConfig, updateSiteConfig }) {
       )}
       {editMode && (
         <div>
+          <div>
+            <p>key</p>
+            <input value={siteConfig.key} onChange={updateKey} />
+          </div>
           <div className="flex">
             <p>{siteConfig.path}</p>
             <Button>
-              {/* TODO: add open dialog event */}
-              <Folder />
+              <Folder onClick={updatePath} />
             </Button>
           </div>
           <div>
@@ -68,4 +87,4 @@ function Site({ _siteConfig, updateSiteConfig }) {
   );
 }
 
-export default Site
+export default Site;

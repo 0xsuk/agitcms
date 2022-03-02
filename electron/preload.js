@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveFile: (content, filePath) =>
     ipcRenderer.invoke("save-file", content, filePath),
   openFile: () => ipcRenderer.invoke("open-file"),
+  getFolderPath: () => ipcRenderer.invoke("get-folder-path"),
 });

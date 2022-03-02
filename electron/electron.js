@@ -2,7 +2,13 @@ const { app, BrowserWindow } = require("electron");
 const { ipcMain } = require("electron/main");
 const path = require("path");
 const isDev = require("electron-is-dev"); //is not a devDependencies
-const { loadConfig, updateConfig, openFile, saveFile } = require("./api");
+const {
+  loadConfig,
+  updateConfig,
+  openFile,
+  saveFile,
+  getFolderPath,
+} = require("./api");
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -27,6 +33,7 @@ app.whenReady().then(() => {
   ipcMain.handle("update-config", updateConfig);
   ipcMain.handle("save-file", saveFile);
   ipcMain.handle("open-file", openFile);
+  ipcMain.handle("get-folder-path", getFolderPath);
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
