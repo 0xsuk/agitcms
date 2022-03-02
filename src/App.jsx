@@ -1,15 +1,28 @@
 import "./App.scss";
-import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button } from "@mui/material";
-import { EditorState } from "@codemirror/state";
-import { EditorView } from "@codemirror/view";
+import { Routes, Route, Outlet } from "react-router-dom";
+import { createContext, useEffect, useState } from "react";
+import Home from "./components/Home";
+import Settings from "./components/Settings";
+import Editor from "./components/Editor";
+import SideBar from "./components/SideBar";
+
+export const ConfigContext = createContext();
 
 function App() {
   console.log("App");
   const [config, setConfig] = useState({});
-  const loadConfig = async () => {
+
+  const updateConfig = async (config) => {
+    const err = await window.electronAPI.updateConfig(config);
+    if (err) {
+      alert(err.message);
+      return;
+    }
+    console.log("udpating config:", config);
+    setConfig(Object.assign({}, config)); //!important
+  };
+
+  useEffect(async () => {
     const { config, err } = await window.electronAPI.loadConfig();
     if (err) {
       alert(err.message);
@@ -17,34 +30,20 @@ function App() {
     }
     console.log("configuration read", config);
     setConfig(config);
-  };
-  const updateConfig = async (newConfig) => {
-    const err = await window.electronAPI.updateConfig(newConfig);
-    if (err) {
-      alert(err.message);
-      return;
-    }
-    console.log("udpating config:", newConfig);
-    setConfig(newConfig);
-  };
-
-  useEffect(() => {
-    loadConfig();
   }, []);
 
   return (
-    <Fragment>
+    <ConfigContext.Provider value={{ config, updateConfig }}>
       <Routes>
         <Route path="/" element={<Wrapper />}>
-          <Route
-            path=""
-            element={<Home config={config} updateConfig={updateConfig}></Home>}
-          ></Route>
+          <Route path="" element={<Home />}></Route>
           <Route path="settings" element={<Settings />}></Route>
-          <Route path="edit" element={<Editor />}></Route>
+          <Route path="edit">
+            <Route path=":siteKey" element={<Editor />}></Route>
+          </Route>
         </Route>
       </Routes>
-    </Fragment>
+    </ConfigContext.Provider>
   );
 }
 
@@ -61,191 +60,5 @@ function Wrapper() {
     </div>
   );
 }
-
-function Home(props) {
-  const { config, updateConfig } = props;
-  console.log("home");
-
-  const addNewSite =  () => {
-    if (!config.sites) return;
-    //TODO sample
-    const newSite = {
-      key: "asdf",
-    };
-    let isDuplicatedKey = false;
-    config.sites.every(site => {
-      if (site.key == newSite.key) {
-        isDuplicatedKey = true
-        return false;
-      }
-      return true
-    })
-    if (isDuplicatedKey) {
-      alert("key already exists")
-      return
-    }
-    config.sites.push(newSite);
-    const newConfig = Object.assign({}, config); //!important
-    updateConfig(newConfig);
-  };
-  return (
-    <div>
-      <h1>Home</h1>
-      {config.sites?.map((site) => (
-        <Site site={site} />
-      ))}
-      <Button onClick={addNewSite} variant="contained">
-        New
-      </Button>
-    </div>
-  );
-}
-
-function Site({ site }) {
-  return (
-    <div>
-      <h2>{site.key}</h2>
-    </div>
-  );
-}
-
-function Settings() {
-  return (
-    <Fragment>
-      <h1>Settings</h1>
-    </Fragment>
-  );
-}
-
-function Editor() {
-  //setDoc doest not update refContainer, use editorView.dispatch to update text
-  const [doc, setDoc] = useState("");
-  const [currentFilePath, setCurrentFilePath] = useState("");
-  console.log("currentFilePath is", currentFilePath);
-  const handleChange = useCallback((state) => {
-    setDoc(state.doc.toString());
-  }, []);
-  const [refContainer, editorView] = useCodeMirror({
-    initialDoc: doc,
-    onChange: handleChange,
-  });
-
-  const saveFile = async () => {
-    console.log("saving", currentFilePath);
-    const { err, canceled } = await window.electronAPI.saveFile(
-      doc,
-      currentFilePath
-    );
-    if (err) {
-      alert(err.message);
-    }
-    if (!err & !canceled) {
-      alert("Saved!");
-    }
-  };
-
-  const openFile = async () => {
-    const { content, filePath, err, canceled } =
-      await window.electronAPI.openFile();
-    if (!err && !canceled) {
-      editorView.dispatch({
-        changes: { from: 0, to: editorView.state.doc.length, insert: content },
-      });
-      setCurrentFilePath(filePath);
-    }
-  };
-
-  return (
-    <Fragment>
-      <div id="editor">
-        <h1>Editor</h1>
-        <Button onClick={openFile} variant="contained">
-          Open
-        </Button>
-        <Button onClick={saveFile} variant="contained">
-          Save
-        </Button>
-        <div ref={refContainer}></div>
-      </div>
-    </Fragment>
-  );
-}
-
-function SideBar() {
-  const navigate = useNavigate();
-  const goBack = () => navigate(-1);
-
-  // useEffect(() => navigate("/edit"), []);
-  return (
-    <Fragment>
-      <ArrowBackIosNew className="mui-icon" onClick={goBack} />
-      <div>
-        {_workspaces.map((workspace) => (
-          <p>{workspace.name}</p>
-        ))}
-      </div>
-      <div>
-        <Link to="/">Home</Link>
-      </div>
-      <div>
-        <Link to="/settings">Settings</Link>
-      </div>
-      <div>
-        <Link to="/edit">edit</Link>
-      </div>
-    </Fragment>
-  );
-}
-const _workspaces = [
-  {
-    key: "agitlanding",
-    name: "agitlanding",
-    source: {
-      type: "folder",
-      path: "/home/null/go/src/github.com/0xsuk/agitlanding",
-    },
-  },
-  {
-    key: "agitdocs",
-    name: "agitdocs",
-    source: {
-      type: "folder",
-      path: "/home/null/go/src/github.com/0xsuk/agitdocs",
-    },
-  },
-];
-
-const useCodeMirror = (props) => {
-  const refContainer = useRef(null);
-  const [editorView, setEditorView] = useState();
-  const { initialDoc, onChange } = props;
-
-  useEffect(() => {
-    if (!refContainer.current) {
-      console.log("refContainer is null");
-      return;
-    }
-
-    const startState = EditorState.create({
-      doc: initialDoc,
-      extensions: [
-        EditorView.updateListener.of((update) => {
-          if (update.changes) {
-            onChange(update.state);
-          }
-        }),
-      ],
-    });
-
-    const view = new EditorView({
-      state: startState,
-      parent: refContainer.current,
-    });
-
-    setEditorView(view);
-  }, [refContainer]);
-
-  return [refContainer, editorView];
-};
 
 export default App;

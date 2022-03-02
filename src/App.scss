@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  margin: 0;
 }
 
 body {
@@ -46,6 +47,10 @@ code {
 
 .flex {
   display: flex;
+}
+.flex-col {
+  display: flex;
+  flex-direction: col;
 }
 
 .block {
