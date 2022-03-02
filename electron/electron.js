@@ -5,7 +5,7 @@ const isDev = require("electron-is-dev"); //is not a devDependencies
 const {
   loadConfig,
   updateConfig,
-  openFile,
+  readFile,
   saveFile,
   getFolderPath,
 } = require("./api");
@@ -32,7 +32,7 @@ app.whenReady().then(() => {
   ipcMain.handle("load-config", loadConfig);
   ipcMain.handle("update-config", updateConfig);
   ipcMain.handle("save-file", saveFile);
-  ipcMain.handle("open-file", openFile);
+  ipcMain.handle("read-file", readFile);
   ipcMain.handle("get-folder-path", getFolderPath);
 
   app.on("activate", () => {

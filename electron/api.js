@@ -55,7 +55,7 @@ exports.saveFile = async (e, content, filePath) => {
   }
 };
 
-exports.openFile = async () => {
+exports.readFile = async () => {
   try {
     const filePaths = dialog.showOpenDialogSync();
     //if canceled

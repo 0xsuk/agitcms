@@ -29,9 +29,9 @@ function Editor() {
     }
   };
 
-  const openFile = async () => {
+  const readFile = async () => {
     const { content, filePath, err, canceled } =
-      await window.electronAPI.openFile();
+      await window.electronAPI.readFile();
     if (!err && !canceled) {
       editorView.dispatch({
         changes: { from: 0, to: editorView.state.doc.length, insert: content },
@@ -44,7 +44,7 @@ function Editor() {
     <Fragment>
       <div id="editor">
         <h1>Editor</h1>
-        <Button onClick={openFile} variant="contained">
+        <Button onClick={readFile} variant="contained">
           Open
         </Button>
         <Button onClick={saveFile} variant="contained">
