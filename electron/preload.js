@@ -5,7 +5,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   updateConfig: (newConfig) => ipcRenderer.invoke("update-config", newConfig),
   saveFile: (content, filePath) =>
     ipcRenderer.invoke("save-file", content, filePath),
-  readFile: () => ipcRenderer.invoke("read-file"),
+  readFile: (filePath) => ipcRenderer.invoke("read-file", filePath),
   getFolderPath: () => ipcRenderer.invoke("get-folder-path"),
   getFolders: (folderPath) => ipcRenderer.invoke("get-folders", folderPath),
   getFilesAndFolders: (folderPath) =>

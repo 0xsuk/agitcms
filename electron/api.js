@@ -36,16 +36,16 @@ exports.updateConfig = async (e, newConfig) => {
 };
 
 exports.saveFile = async (e, content, filePath) => {
-  if (filePath == "") {
-    filePath = dialog.showSaveDialogSync();
-  }
-
-  //if canceled
-  if (filePath == undefined) {
-    return { err: null, canceled: true };
-  }
-
   try {
+    if (!filePath) {
+      filePath = dialog.showSaveDialogSync();
+    }
+
+    //if canceled
+    if (filePath == undefined) {
+      return { err: null, canceled: true };
+    }
+
     fs.writeFileSync(filePath, content);
     return { err: null, canceled: false };
   } catch (err) {
@@ -53,16 +53,19 @@ exports.saveFile = async (e, content, filePath) => {
   }
 };
 
-exports.readFile = async () => {
+exports.readFile = async (e, filePath) => {
   try {
-    const filePaths = dialog.showOpenDialogSync();
-    //if canceled
-    if (filePaths == undefined) {
-      return { content: null, filePath: null, err: null, canceled: true };
+    if (!filePath) {
+      const filePaths = dialog.showOpenDialogSync();
+      if (filePaths == undefined) {
+        return { content: null, filePath: null, err: null, canceled: true };
+      }
+      filePath = filePaths[0];
     }
+    //if canceled
 
-    const content = fs.readFileSync(filePaths[0]).toString();
-    return { content, filePath: filePaths[0], err: null, canceled: false };
+    const content = fs.readFileSync(filePath).toString();
+    return { content, filePath, err: null, canceled: false };
   } catch (err) {
     return { content: null, filePath: filePaths[0], err, canceled: false };
   }
