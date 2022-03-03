@@ -12,7 +12,6 @@ const newSiteConfig = () => {
 
 function Home() {
   const { config, updateConfig } = useContext(ConfigContext);
-  //TODO: does not make sense at all
   const [isNewSite, setIsNetSite] = useState(false);
 
   const updateSiteConfig = (siteConfig) => {
@@ -25,6 +24,7 @@ function Home() {
     });
 
     if (!isSiteExist) {
+      if (config.sites == undefined) config.sites = [];
       config.sites.push(siteConfig);
       setIsNetSite(false);
     }

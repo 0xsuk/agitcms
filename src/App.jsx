@@ -1,16 +1,16 @@
 import "./App.scss";
 import { Routes, Route, Outlet } from "react-router-dom";
-import { createContext, useEffect, useState } from "react";
+import { createContext, Fragment, useEffect, useState } from "react";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
-import Editor from "./components/Editor";
+import Dir from "./components/Dir";
 import SideBar from "./components/SideBar";
 
 export const ConfigContext = createContext();
 
 function App() {
   console.log("App");
-  const [config, setConfig] = useState({});
+  const [config, setConfig] = useState();
 
   const updateConfig = async (config) => {
     const err = await window.electronAPI.updateConfig(config);
@@ -32,6 +32,11 @@ function App() {
     setConfig(config);
   }, []);
 
+  if (config == undefined) {
+    console.log("reading config");
+    return <Fragment />;
+  }
+
   return (
     <ConfigContext.Provider value={{ config, updateConfig }}>
       <Routes>
@@ -39,7 +44,7 @@ function App() {
           <Route path="" element={<Home />}></Route>
           <Route path="settings" element={<Settings />}></Route>
           <Route path="edit">
-            <Route path=":siteKey" element={<Editor />}></Route>
+            <Route path=":siteKey/*" element={<Dir />}></Route>
           </Route>
         </Route>
       </Routes>

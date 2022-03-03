@@ -27,7 +27,6 @@ exports.loadConfig = async () => {
 
 exports.updateConfig = async (e, newConfig) => {
   try {
-    console.log("New Config:", newConfig);
     const config_str = JSON.stringify(newConfig);
     fs.writeFileSync(CONFIG_FILE, config_str);
     return;
@@ -37,7 +36,6 @@ exports.updateConfig = async (e, newConfig) => {
 };
 
 exports.saveFile = async (e, content, filePath) => {
-  console.log("saving", filePath);
   if (filePath == "") {
     filePath = dialog.showSaveDialogSync();
   }
@@ -83,5 +81,30 @@ exports.getFolderPath = async () => {
     return { folderPath: folderPaths[0], err: null, canceled: false };
   } catch (err) {
     return { folderPath: null, err, canceled: false };
+  }
+};
+
+exports.getFolders = async (e, folderPath) => {
+  try {
+    const dirents = fs.readdirSync(folderPath, { withFileTypes: true });
+    const folders = dirents
+      .filter((dirent) => dirent.isDirectory())
+      .map((dirent) => dirent.name);
+    return { folders, err: null };
+  } catch (err) {
+    return { folders: null, err };
+  }
+};
+
+exports.getFilesAndFolders = async (e, folderPath) => {
+  try {
+    const dirents = fs.readdirSync(folderPath, { withFileTypes: true });
+    const filesAndFolders = dirents.map((dirent) => ({
+      name: dirent.name,
+      isDir: dirent.isDirectory(),
+    }));
+    return { filesAndFolders, err: null };
+  } catch (err) {
+    return { filesAndFolders: null, err };
   }
 };

@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Fragment, useContext } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { ConfigContext } from "../App";
+import { findSiteConfigBySiteKey } from "../lib/config";
 
 function SideBar() {
   const { config } = useContext(ConfigContext);
@@ -10,13 +11,7 @@ function SideBar() {
   const params = useParams();
   let siteConfig;
   if (params.siteKey) {
-    config.sites.every((site, i) => {
-      if (site.key == params.siteKey) {
-        siteConfig = site;
-        return false;
-      }
-      return true;
-    });
+    siteConfig = findSiteConfigBySiteKey(config, params.siteKey);
   }
 
   // useEffect(() => navigate("/edit"), []);

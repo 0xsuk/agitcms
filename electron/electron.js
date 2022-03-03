@@ -8,6 +8,8 @@ const {
   readFile,
   saveFile,
   getFolderPath,
+  getFolders,
+  getFilesAndFolders,
 } = require("./api");
 
 const createWindow = () => {
@@ -34,6 +36,8 @@ app.whenReady().then(() => {
   ipcMain.handle("save-file", saveFile);
   ipcMain.handle("read-file", readFile);
   ipcMain.handle("get-folder-path", getFolderPath);
+  ipcMain.handle("get-folders", getFolders);
+  ipcMain.handle("get-files-and-folders", getFilesAndFolders);
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
