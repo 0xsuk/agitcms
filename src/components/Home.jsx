@@ -1,44 +1,34 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useState } from "react";
 import { Button } from "@mui/material";
-import Site from "./Site"
+import Site from "./Site";
 import { ConfigContext } from "../App";
 
+const newSiteConfig = () => {
+  return {
+    key: Date.now(),
+    path: "",
+  };
+};
 
 function Home() {
-  const { config, updateConfig } = useContext(ConfigContext)
-  console.log("home");
-
-  const createSiteConfig = () => {
-    if (!config.sites) return;
-    //TODO sample
-    const newSite = {
-      key: "newsite",
-      path: "/",
-    };
-    let isDuplicatedKey = false;
-    config.sites.every((site) => {
-      if (site.key == newSite.key) {
-        isDuplicatedKey = true;
-        return false;
-      }
-      return true;
-    });
-    if (isDuplicatedKey) {
-      alert("key already exists");
-      return;
-    }
-    config.sites.push(newSite);
-    updateConfig(config);
-  };
+  const { config, updateConfig } = useContext(ConfigContext);
+  //TODO: does not make sense at all
+  const [isNewSite, setIsNetSite] = useState(false);
 
   const updateSiteConfig = (siteConfig) => {
-    config.sites.every((site, i) => {
+    const isSiteExist = !config.sites.every((site, i) => {
       if (site.key == siteConfig.key) {
         config.sites[i] = siteConfig;
         return false;
       }
       return true;
     });
+
+    if (!isSiteExist) {
+      config.sites.push(siteConfig);
+      setIsNetSite(false);
+    }
+
     updateConfig(config);
   };
 
@@ -48,7 +38,14 @@ function Home() {
       {config.sites?.map((siteConfig) => (
         <Site _siteConfig={siteConfig} updateSiteConfig={updateSiteConfig} />
       ))}
-      <Button onClick={createSiteConfig} variant="contained">
+      {isNewSite && (
+        <Site
+          _siteConfig={newSiteConfig()}
+          updateSiteConfig={updateSiteConfig}
+          isNewSite={true}
+        />
+      )}
+      <Button onClick={() => setIsNetSite(true)} variant="contained">
         New
       </Button>
     </Fragment>

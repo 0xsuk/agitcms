@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Folder } from "@mui/icons-material";
 import { Button } from "@mui/material";
 
-function Site({ _siteConfig, updateSiteConfig }) {
-  const [editMode, setEditMode] = useState(false);
+function Site({ _siteConfig, updateSiteConfig, isNewSite }) {
+  const [editMode, setEditMode] = useState(
+    isNewSite == undefined ? false : isNewSite
+  );
   const [siteConfig, setSiteConfig] = useState(_siteConfig);
   const navigate = useNavigate();
 
@@ -12,10 +14,10 @@ function Site({ _siteConfig, updateSiteConfig }) {
     navigate("edit/" + key);
   };
 
-  const updateKey = async (e) => {
-    siteConfig.key = e.target.value;
-    setSiteConfig(Object.assign({}, siteConfig));
-  };
+  // const updateKey = async (e) => {
+  //   siteConfig.key = e.target.value;
+  //   setSiteConfig(Object.assign({}, siteConfig));
+  // };
   const updatePath = async () => {
     const { folderPath, err, canceled } =
       await window.electronAPI.getFolderPath();
@@ -32,6 +34,20 @@ function Site({ _siteConfig, updateSiteConfig }) {
     siteConfig.commands[cmd_name] = e.target.value;
     setSiteConfig(Object.assign({}, siteConfig));
   };
+
+  const saveSiteConfig = () => {
+    if (siteConfig.path == "") {
+      alert("path cannot be empty");
+      return;
+    }
+
+    updateSiteConfig(siteConfig);
+    setEditMode(false);
+  };
+
+  useEffect(() => {
+    if (siteConfig.key == "") setEditMode(true);
+  }, []);
 
   return (
     <Fragment>
@@ -50,8 +66,7 @@ function Site({ _siteConfig, updateSiteConfig }) {
       {editMode && (
         <div>
           <div>
-            <p>key</p>
-            <input value={siteConfig.key} onChange={updateKey} />
+            <p>key: {siteConfig.key}</p>
           </div>
           <div className="flex">
             <p>{siteConfig.path}</p>
@@ -59,28 +74,23 @@ function Site({ _siteConfig, updateSiteConfig }) {
               <Folder onClick={updatePath} />
             </Button>
           </div>
-          <div>
-            <p>Commands</p>
+          {siteConfig.commands && (
             <div>
-              {Object.keys(siteConfig.commands).map((cmd_name) => (
-                <div className="flex">
-                  <p>{cmd_name}:</p>
-                  <input
-                    onChange={(e) => updateCommands(cmd_name, e)}
-                    value={siteConfig.commands[cmd_name]}
-                  />
-                </div>
-              ))}
+              <p>Commands</p>
+              <div>
+                {Object.keys(siteConfig.commands).map((cmd_name) => (
+                  <div className="flex">
+                    <p>{cmd_name}:</p>
+                    <input
+                      onChange={(e) => updateCommands(cmd_name, e)}
+                      value={siteConfig.commands[cmd_name]}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <Button
-            onClick={() => {
-              updateSiteConfig(siteConfig);
-              setEditMode(false);
-            }}
-          >
-            Save
-          </Button>
+          )}
+          <Button onClick={saveSiteConfig}>Save</Button>
         </div>
       )}
     </Fragment>

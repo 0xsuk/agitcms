@@ -1,13 +1,3 @@
 {
-  "sites": [
-    {
-      "key": "0xsuk.com",
-      "path": "/home/null/go/src/github.com/0xsuk/0xsuk.com",
-      "commands": {
-        "create-post": "hugo new posts/`date +\"%Y/%m/%d\"`.md",
-        "start-server": "hugo server",
-        "publish": "git add . && git commit -m update && git push"
-      }
-    }
-  ]
+  "sites": []
 }
