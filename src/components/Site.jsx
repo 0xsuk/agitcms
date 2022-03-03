@@ -36,6 +36,10 @@ function Site({ _siteConfig, updateSiteConfig, isNewSite }) {
   };
 
   const saveSiteConfig = () => {
+    if (siteConfig.name == "") {
+      alert("name cannot be empty");
+      return;
+    }
     if (siteConfig.path == "") {
       alert("path cannot be empty");
       return;
@@ -57,6 +61,7 @@ function Site({ _siteConfig, updateSiteConfig, isNewSite }) {
             style={{ background: "gray" }}
             onClick={() => selectSite(siteConfig.key)}
           >
+            <h2>{siteConfig.name}</h2>
             <p>{siteConfig.key}</p>
             <p>{siteConfig.path}</p>
           </div>
@@ -65,20 +70,29 @@ function Site({ _siteConfig, updateSiteConfig, isNewSite }) {
       )}
       {editMode && (
         <div>
-          <div>
-            <p>key: {siteConfig.key}</p>
+          <div className="flex">
+            <p>name:</p>
+            <input
+              onChange={(e) => {
+                siteConfig.name = e.target.value;
+              }}
+              value={siteConfig.name}
+            />
           </div>
+          <p>key: {siteConfig.key}</p>
           <div className="flex">
             <p>{siteConfig.path}</p>
             <Button>
               <Folder onClick={updatePath} />
             </Button>
           </div>
-          {siteConfig.commands && (
+
+          {/* TODO: add new commands */}
+          <div>
+            <p>Commands</p>
             <div>
-              <p>Commands</p>
-              <div>
-                {Object.keys(siteConfig.commands).map((cmd_name) => (
+              {siteConfig.commands &&
+                Object.keys(siteConfig.commands).map((cmd_name) => (
                   <div className="flex">
                     <p>{cmd_name}:</p>
                     <input
@@ -87,9 +101,9 @@ function Site({ _siteConfig, updateSiteConfig, isNewSite }) {
                     />
                   </div>
                 ))}
-              </div>
             </div>
-          )}
+          </div>
+
           <Button onClick={saveSiteConfig}>Save</Button>
         </div>
       )}
