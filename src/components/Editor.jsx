@@ -62,7 +62,7 @@ function Editor({ filePath }) {
         });
       }
     }
-  });
+  }, [editorView]); //only triggered when editorView is ready
 
   return (
     <Fragment>

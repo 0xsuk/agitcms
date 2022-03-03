@@ -19,6 +19,7 @@ const useCodeMirror = (props) => {
       extensions: [
         EditorView.updateListener.of((update) => {
           if (update.changes) {
+            console.log("u")
             onChange(update.state);
           }
         }),
