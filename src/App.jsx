@@ -8,6 +8,7 @@ import SideBar from "./components/SideBar";
 
 export const ConfigContext = createContext();
 
+//TODO use reducer
 function App() {
   console.log("App");
   const [config, setConfig] = useState();
