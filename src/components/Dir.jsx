@@ -1,12 +1,12 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
-import { ConfigContext } from "../App";
+import { configContext } from "../context/ConfigContext";
 import Editor from "./Editor";
 import { findSiteConfigBySiteKey } from "../lib/config";
 
 function Dir() {
   console.log("Dir");
-  const { config } = useContext(ConfigContext);
+  const { config } = useContext(configContext);
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const pathname = useLocation().pathname;
   const { siteKey } = useParams();
@@ -23,7 +23,6 @@ function Dir() {
 
   useEffect(async () => {
     console.log("reloading folders");
-
     if (isDir) {
       const res = await window.electronAPI.getFilesAndFolders(currentDirPath);
       if (res.err) {

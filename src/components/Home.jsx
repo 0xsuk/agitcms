@@ -1,7 +1,7 @@
 import { Fragment, useContext, useState } from "react";
 import { Button } from "@mui/material";
 import Site from "./Site";
-import { ConfigContext } from "../App";
+import { configContext } from "../context/ConfigContext";
 
 const newSiteConfig = () => {
   return {
@@ -11,41 +11,23 @@ const newSiteConfig = () => {
 };
 
 function Home() {
-  const { config, updateConfig } = useContext(ConfigContext);
-  const [isNewSite, setIsNetSite] = useState(false);
-
-  const updateSiteConfig = (siteConfig) => {
-    const isSiteExist = !config.sites.every((site, i) => {
-      if (site.key == siteConfig.key) {
-        config.sites[i] = siteConfig;
-        return false;
-      }
-      return true;
-    });
-
-    if (!isSiteExist) {
-      if (config.sites == undefined) config.sites = [];
-      config.sites.push(siteConfig);
-      setIsNetSite(false);
-    }
-
-    updateConfig(config);
-  };
+  const { config } = useContext(configContext);
+  const [isNewSite, setIsNewSite] = useState(false);
 
   return (
     <Fragment>
       <h1>Home</h1>
       {config.sites?.map((siteConfig) => (
-        <Site _siteConfig={siteConfig} updateSiteConfig={updateSiteConfig} />
+        <Site _siteConfig={siteConfig} />
       ))}
       {isNewSite && (
         <Site
           _siteConfig={newSiteConfig()}
-          updateSiteConfig={updateSiteConfig}
           isNewSite={true}
+          setIsNewSite={setIsNewSite}
         />
       )}
-      <Button onClick={() => setIsNetSite(true)} variant="contained">
+      <Button onClick={() => setIsNewSite(true)} variant="contained">
         New
       </Button>
     </Fragment>

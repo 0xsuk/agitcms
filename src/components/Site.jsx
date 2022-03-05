@@ -1,23 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useContext } from "react";
+import { configContext } from "../context/ConfigContext";
 import { Folder } from "@mui/icons-material";
 import { Button } from "@mui/material";
 
-function Site({ _siteConfig, updateSiteConfig, isNewSite }) {
+function Site({ _siteConfig, isNewSite, setIsNewSite }) {
   const [editMode, setEditMode] = useState(
     isNewSite == undefined ? false : isNewSite
   );
   const [siteConfig, setSiteConfig] = useState(_siteConfig);
+  const { updateSiteConfig } = useContext(configContext);
   const navigate = useNavigate();
 
   const selectSite = (key) => {
     navigate("edit/" + key);
   };
 
-  // const updateKey = async (e) => {
-  //   siteConfig.key = e.target.value;
-  //   setSiteConfig(Object.assign({}, siteConfig));
-  // };
   const updatePath = async () => {
     const { folderPath, err, canceled } =
       await window.electronAPI.getFolderPath();
@@ -45,7 +43,11 @@ function Site({ _siteConfig, updateSiteConfig, isNewSite }) {
       return;
     }
 
-    updateSiteConfig(siteConfig);
+    const isSiteExist = updateSiteConfig(siteConfig);
+    if (!isSiteExist) {
+      //new site has created
+      setIsNewSite(false)
+    }
     setEditMode(false);
   };
 
@@ -74,7 +76,7 @@ function Site({ _siteConfig, updateSiteConfig, isNewSite }) {
             <p>name:</p>
             <input
               onChange={(e) => {
-                siteConfig.name = e.target.value;
+                setSiteConfig(pre => ({...pre, name: e.target.value}))
               }}
               value={siteConfig.name}
             />

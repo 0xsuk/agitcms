@@ -1,55 +1,32 @@
 import "./App.scss";
 import { Routes, Route, Outlet } from "react-router-dom";
-import { createContext, Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useContext } from "react";
+import { configContext } from "./context/ConfigContext";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import Dir from "./components/Dir";
 import SideBar from "./components/SideBar";
 
-export const ConfigContext = createContext();
-
-//TODO use reducer
 function App() {
   console.log("App");
-  const [config, setConfig] = useState();
+  const { config, loadConfig } = useContext(configContext);
+  useEffect(() => loadConfig(), []);
 
-  const updateConfig = async (config) => {
-    const err = await window.electronAPI.updateConfig(config);
-    if (err) {
-      alert(err.message);
-      return;
-    }
-    console.log("udpating config:", config);
-    setConfig(Object.assign({}, config)); //!important
-  };
-
-  useEffect(async () => {
-    const { config, err } = await window.electronAPI.loadConfig();
-    if (err) {
-      alert(err.message);
-      return;
-    }
-    console.log("configuration read", config);
-    setConfig(config);
-  }, []);
-
-  if (config == undefined) {
-    console.log("reading config");
+  if (config.sites == undefined) {
+    console.log("reading config", config);
     return <Fragment />;
   }
 
   return (
-    <ConfigContext.Provider value={{ config, updateConfig }}>
-      <Routes>
-        <Route path="/" element={<Wrapper />}>
-          <Route path="" element={<Home />}></Route>
-          <Route path="settings" element={<Settings />}></Route>
-          <Route path="edit">
-            <Route path=":siteKey/*" element={<Dir />}></Route>
-          </Route>
+    <Routes>
+      <Route path="/" element={<Wrapper />}>
+        <Route path="" element={<Home />}></Route>
+        <Route path="settings" element={<Settings />}></Route>
+        <Route path="edit">
+          <Route path=":siteKey/*" element={<Dir />}></Route>
         </Route>
-      </Routes>
-    </ConfigContext.Provider>
+      </Route>
+    </Routes>
   );
 }
 

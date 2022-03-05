@@ -1,11 +1,11 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Fragment, useContext } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { ConfigContext } from "../App";
+import { configContext } from "../context/ConfigContext";
 import { findSiteConfigBySiteKey } from "../lib/config";
 
 function SideBar() {
-  const { config } = useContext(ConfigContext);
+  const { config } = useContext(configContext);
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
   const params = useParams();
