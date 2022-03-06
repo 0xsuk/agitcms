@@ -6,10 +6,10 @@ import { Button } from "@mui/material";
 
 function Site({ _siteConfig, isNewSite, setIsNewSite }) {
   const [editMode, setEditMode] = useState(
-    isNewSite == undefined ? false : isNewSite
+    isNewSite === undefined ? false : isNewSite
   );
   const [siteConfig, setSiteConfig] = useState(_siteConfig);
-  const { updateSiteConfig } = useContext(configContext);
+  const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
   const navigate = useNavigate();
 
   const selectSite = (key) => {
@@ -34,26 +34,28 @@ function Site({ _siteConfig, isNewSite, setIsNewSite }) {
   };
 
   const saveSiteConfig = () => {
-    if (siteConfig.name == "") {
+    if (siteConfig.name === "") {
       alert("name cannot be empty");
       return;
     }
-    if (siteConfig.path == "") {
+    if (siteConfig.path === "") {
       alert("path cannot be empty");
       return;
     }
 
-    const isSiteExist = updateSiteConfig(siteConfig);
-    if (!isSiteExist) {
-      //new site has created
-      setIsNewSite(false)
-    }
+    updateSiteConfig(siteConfig);
+    if (isNewSite) setIsNewSite(false);
+    setEditMode(false);
+  };
+
+  const cancelSiteConfig = () => {
+    if (isNewSite) setIsNewSite(false);
     setEditMode(false);
   };
 
   useEffect(() => {
-    if (siteConfig.key == "") setEditMode(true);
-  }, []);
+    if (siteConfig.key === "") setEditMode(true);
+  }, [siteConfig]);
 
   return (
     <Fragment>
@@ -76,7 +78,7 @@ function Site({ _siteConfig, isNewSite, setIsNewSite }) {
             <p>name:</p>
             <input
               onChange={(e) => {
-                setSiteConfig(pre => ({...pre, name: e.target.value}))
+                setSiteConfig((pre) => ({ ...pre, name: e.target.value }));
               }}
               value={siteConfig.name}
             />
@@ -106,7 +108,11 @@ function Site({ _siteConfig, isNewSite, setIsNewSite }) {
             </div>
           </div>
 
+          <Button onClick={cancelSiteConfig}>Cancel</Button>
           <Button onClick={saveSiteConfig}>Save</Button>
+          <Button onClick={() => deleteSiteConfig(siteConfig.key)}>
+            Delete
+          </Button>
         </div>
       )}
     </Fragment>

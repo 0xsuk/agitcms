@@ -1,18 +1,18 @@
+import { Fragment, useContext, useEffect } from "react";
+import { Outlet, Route, Routes } from "react-router-dom";
 import "./App.scss";
-import { Routes, Route, Outlet } from "react-router-dom";
-import { Fragment, useEffect, useContext } from "react";
-import { configContext } from "./context/ConfigContext";
+import Dir from "./components/Dir";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
-import Dir from "./components/Dir";
 import SideBar from "./components/SideBar";
+import { configContext } from "./context/ConfigContext";
 
 function App() {
   console.log("App");
   const { config, loadConfig } = useContext(configContext);
-  useEffect(() => loadConfig(), []);
+  useEffect(() => loadConfig(), [loadConfig]);
 
-  if (config.sites == undefined) {
+  if (config.sites === undefined) {
     console.log("reading config", config);
     return <Fragment />;
   }

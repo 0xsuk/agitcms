@@ -16,22 +16,25 @@ function Dir() {
   const currentRelativeDir = pathname
     .replace("/edit/" + siteKey, "")
     .replace("/", "");
-  const isDir = currentRelativeDir == "" || currentRelativeDir.slice(-1) == "/";
+  const isDir =
+    currentRelativeDir === "" || currentRelativeDir.slice(-1) === "/";
   const currentDirPath = siteConfig.path + "/" + currentRelativeDir; // even if currentRelativeDir == "", works fine
   console.log("currentRelativeDir:", currentRelativeDir);
   console.log("currentDirPath:", currentDirPath);
 
-  useEffect(async () => {
-    console.log("reloading folders");
-    if (isDir) {
-      const res = await window.electronAPI.getFilesAndFolders(currentDirPath);
-      if (res.err) {
-        alert(res.err.message);
-        return;
+  useEffect(() => {
+    (async () => {
+      console.log("reloading folders");
+      if (isDir) {
+        const res = await window.electronAPI.getFilesAndFolders(currentDirPath);
+        if (res.err) {
+          alert(res.err.message);
+          return;
+        }
+        setFilesAndFolders(res.filesAndFolders);
       }
-      setFilesAndFolders(res.filesAndFolders);
-    }
-  }, [pathname]);
+    })();
+  }, [currentDirPath, isDir]);
 
   return (
     <Fragment>
@@ -44,7 +47,7 @@ function Dir() {
               <div>
                 <Link
                   to={
-                    currentRelativeDir == ""
+                    currentRelativeDir === ""
                       ? f.name + "/"
                       : currentRelativeDir + f.name + "/"
                   }
@@ -56,7 +59,7 @@ function Dir() {
               <div>
                 <Link
                   to={
-                    currentRelativeDir == ""
+                    currentRelativeDir === ""
                       ? f.name
                       : currentRelativeDir + f.name
                   }
