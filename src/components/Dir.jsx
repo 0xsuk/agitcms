@@ -1,5 +1,10 @@
 import { Fragment, useContext, useEffect, useState } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import {
+  Link,
+  useParams,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import Editor from "./Editor";
 import { findSiteConfigBySiteKey } from "../lib/config";
@@ -9,24 +14,22 @@ function Dir() {
   const { config } = useContext(configContext);
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const pathname = useLocation().pathname;
-  const { siteKey } = useParams();
+  const [params] = useSearchParams();
+  const siteKey = Number(useParams().siteKey);
   const siteConfig = findSiteConfigBySiteKey(config, siteKey);
-  //current directory path from project root
-  //if currentDir ends with / -> folder, else -> file (//TODO: it is possible for files with ending / to exists on win/mac)
-  const currentRelativeDir = pathname
+  const relativeDirPath = pathname
     .replace("/edit/" + siteKey, "")
-    .replace("/", "");
-  const isInDir =
-    currentRelativeDir === "" || currentRelativeDir.slice(-1) === "/";
-  const currentDirPath = siteConfig.path + "/" + currentRelativeDir; // even if currentRelativeDir == "", works fine
-  console.log("currentRelativeDir:", currentRelativeDir);
-  console.log("currentDirPath:", currentDirPath);
+    .replace("/", ""); //ex) /edit/1234/dir1/dir2 -> dir1/dir2
+  const isInDir = params.get("isDir") === "true" || relativeDirPath === "";
+  console.log("search params:", params);
+  console.log("path", siteConfig);
+  const fullDirPath = siteConfig.path + "/" + relativeDirPath; // even if relativeDirPath == "", works fine
 
   useEffect(() => {
     (async () => {
       console.log("reloading folders");
       if (isInDir) {
-        const res = await window.electronAPI.getFilesAndFolders(currentDirPath);
+        const res = await window.electronAPI.getFilesAndFolders(fullDirPath);
         if (res.err) {
           alert(res.err.message);
           return;
@@ -34,11 +37,11 @@ function Dir() {
         setFilesAndFolders(res.filesAndFolders);
       }
     })();
-  }, [currentDirPath, isInDir]);
+  }, [fullDirPath, isInDir]);
 
   return (
     <Fragment>
-      <p>{currentRelativeDir}</p>
+      <p>{relativeDirPath}</p>
 
       {isInDir &&
         filesAndFolders.map((f) => (
@@ -47,9 +50,9 @@ function Dir() {
               <div>
                 <Link
                   to={
-                    currentRelativeDir === ""
-                      ? f.name + "/"
-                      : currentRelativeDir + f.name + "/"
+                    relativeDirPath === ""
+                      ? f.name + "?isDir=true"
+                      : relativeDirPath + "/" + f.name + "?isDir=true"
                   }
                 >
                   <p style={{ color: "gray" }}>{f.name}</p>
@@ -61,9 +64,9 @@ function Dir() {
                   <div>
                     <Link
                       to={
-                        currentRelativeDir === ""
-                          ? f.name
-                          : currentRelativeDir + f.name
+                        relativeDirPath === ""
+                          ? f.name + "?isDir=false"
+                          : relativeDirPath + "/" + f.name + "?isDir=false"
                       }
                     >
                       <p>{f.name}</p>
@@ -74,7 +77,7 @@ function Dir() {
             )}
           </Fragment>
         ))}
-      {!isInDir && <Editor filePath={currentDirPath}></Editor>}
+      {!isInDir && <Editor filePath={fullDirPath}></Editor>}
     </Fragment>
   );
 }
