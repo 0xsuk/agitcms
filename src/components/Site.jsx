@@ -112,9 +112,11 @@ function Site({ _siteConfig, isNewSite, setIsNewSite }) {
 
           <Button onClick={cancelSiteConfig}>Cancel</Button>
           <Button onClick={saveSiteConfig}>Save</Button>
-          <Button onClick={() => deleteSiteConfig(siteConfig.key)}>
-            Delete
-          </Button>
+          {!isNewSite && (
+            <Button onClick={() => deleteSiteConfig(siteConfig.key)}>
+              Delete
+            </Button>
+          )}
         </div>
       )}
     </Fragment>

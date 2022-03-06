@@ -19,6 +19,7 @@ function SideBar() {
     <Fragment>
       <ArrowBackIosNew className="mui-icon" onClick={goBack} />
 
+      {/*TODO: siteConfig.pinnedDirs.map */}
       {siteConfig && (
         <div>
           <h1>{siteConfig.name}</h1>
