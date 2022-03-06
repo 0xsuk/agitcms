@@ -49,6 +49,8 @@ function Site({ _siteConfig, isNewSite, setIsNewSite }) {
   };
 
   const cancelSiteConfig = () => {
+    //siteConfig state is remains modified
+    setSiteConfig(_siteConfig);
     if (isNewSite) setIsNewSite(false);
     setEditMode(false);
   };

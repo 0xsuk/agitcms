@@ -16,7 +16,7 @@ function Dir() {
   const currentRelativeDir = pathname
     .replace("/edit/" + siteKey, "")
     .replace("/", "");
-  const isDir =
+  const isInDir =
     currentRelativeDir === "" || currentRelativeDir.slice(-1) === "/";
   const currentDirPath = siteConfig.path + "/" + currentRelativeDir; // even if currentRelativeDir == "", works fine
   console.log("currentRelativeDir:", currentRelativeDir);
@@ -25,7 +25,7 @@ function Dir() {
   useEffect(() => {
     (async () => {
       console.log("reloading folders");
-      if (isDir) {
+      if (isInDir) {
         const res = await window.electronAPI.getFilesAndFolders(currentDirPath);
         if (res.err) {
           alert(res.err.message);
@@ -34,13 +34,13 @@ function Dir() {
         setFilesAndFolders(res.filesAndFolders);
       }
     })();
-  }, [currentDirPath, isDir]);
+  }, [currentDirPath, isInDir]);
 
   return (
     <Fragment>
       <p>{currentRelativeDir}</p>
 
-      {isDir &&
+      {isInDir &&
         filesAndFolders.map((f) => (
           <Fragment>
             {f.isDir ? (
@@ -56,21 +56,25 @@ function Dir() {
                 </Link>
               </div>
             ) : (
-              <div>
-                <Link
-                  to={
-                    currentRelativeDir === ""
-                      ? f.name
-                      : currentRelativeDir + f.name
-                  }
-                >
-                  <p>{f.name}</p>
-                </Link>
-              </div>
+              <>
+                {f.extension === ".md" && (
+                  <div>
+                    <Link
+                      to={
+                        currentRelativeDir === ""
+                          ? f.name
+                          : currentRelativeDir + f.name
+                      }
+                    >
+                      <p>{f.name}</p>
+                    </Link>
+                  </div>
+                )}
+              </>
             )}
           </Fragment>
         ))}
-      {!isDir && <Editor filePath={currentDirPath}></Editor>}
+      {!isInDir && <Editor filePath={currentDirPath}></Editor>}
     </Fragment>
   );
 }

@@ -67,7 +67,7 @@ exports.readFile = async (e, filePath) => {
     const content = fs.readFileSync(filePath).toString();
     return { content, filePath, err: null, canceled: false };
   } catch (err) {
-    return { content: null, filePath: filePaths[0], err, canceled: false };
+    return { content: null, filePath: null, err, canceled: false };
   }
 };
 
@@ -87,6 +87,7 @@ exports.getFolderPath = async () => {
   }
 };
 
+//Not used
 exports.getFolders = async (e, folderPath) => {
   try {
     const dirents = fs.readdirSync(folderPath, { withFileTypes: true });
@@ -105,6 +106,7 @@ exports.getFilesAndFolders = async (e, folderPath) => {
     const filesAndFolders = dirents.map((dirent) => ({
       name: dirent.name,
       isDir: dirent.isDirectory(),
+      extension: path.extname(dirent.name).toLowerCase(),
     }));
     return { filesAndFolders, err: null };
   } catch (err) {
