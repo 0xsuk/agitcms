@@ -31,6 +31,7 @@ code {
 
 #main {
   width: 100%;
+  max-width: 700px;
   background-color: rgb(214, 210, 210);
 }
 
@@ -39,6 +40,12 @@ code {
     min-height: 50vh;
     background-color: rgb(201, 201, 201);
   }
+  width: 50%;
+}
+
+#previewer {
+  width: 50%;
+  overflow: auto;
 }
 
 .mui-icon {

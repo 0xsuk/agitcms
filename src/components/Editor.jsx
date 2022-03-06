@@ -1,13 +1,22 @@
-import { Fragment, useCallback, useEffect, useState } from "react";
+import {
+  createElement,
+  Fragment,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { Button } from "@mui/material";
 import useCodeMirror from "../lib/useCodeMirror";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import remarkGfm from "remark-gfm";
+import rehypeReact from "rehype-react";
 
 function Editor({ filePath }) {
   //doc is readonly and setSoc doest not update refContainer, use editorView.dispatch to update text
   const [doc, setDoc] = useState("");
-  const [currentFilePath, setCurrentFilePath] = useState(
-    filePath == undefined ? "" : filePath
-  );
+  const currentFilePath = filePath === undefined ? "" : filePath;
   console.log("currentFilePath is", currentFilePath);
   const handleChange = useCallback((state) => {
     setDoc(state.doc.toString());
@@ -42,39 +51,51 @@ function Editor({ filePath }) {
   //   }
   // };
 
-  useEffect(async () => {
-    if (filePath) {
-      const { content, err, canceled } = await window.electronAPI.readFile(
-        filePath
-      );
-      if (err) {
-        alert(err.message);
-        return;
+  useEffect(() => {
+    (async () => {
+      if (filePath) {
+        const { content, err, canceled } = await window.electronAPI.readFile(
+          filePath
+        );
+        if (err) {
+          alert(err.message);
+          return;
+        }
+        if (!canceled) {
+          //editorView.dispatch triggers update, thus setDoc
+          editorView.dispatch({
+            changes: {
+              from: 0,
+              to: editorView.state.doc.length,
+              insert: content,
+            },
+          });
+        }
       }
-      if (!canceled) {
-        //editorView.dispatch triggers update, thus setDoc
-        editorView.dispatch({
-          changes: {
-            from: 0,
-            to: editorView.state.doc.length,
-            insert: content,
-          },
-        });
-      }
-    }
-  }, [editorView]); //only triggered when editorView is ready
+    })();
+  }, [editorView, filePath]); //only triggered when editorView is ready
+
+  const md = unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkRehype)
+    .use(rehypeReact, { createElement, Fragment })
+    .processSync(doc).result;
+  console.log(md);
 
   return (
     <Fragment>
-      <div id="editor">
-        <h1>Editor</h1>
-        {/* <Button onClick={readFile} variant="contained">
+      <h1>Editor</h1>
+      {/* <Button onClick={readFile} variant="contained">
           Open
         </Button> */}
-        <Button onClick={saveFile} variant="contained">
-          Save
-        </Button>
-        <div ref={refContainer}></div>
+      <Button onClick={saveFile} variant="contained">
+        Save
+      </Button>
+      <div className="flex">
+        <div id="editor" ref={refContainer}></div>
+        {/* TODO: previewer */}
+        <div id="previewer">{md}</div>
       </div>
     </Fragment>
   );

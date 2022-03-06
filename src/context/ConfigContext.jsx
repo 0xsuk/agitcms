@@ -78,7 +78,6 @@ function ConfigContext({ children }) {
       value={{
         config,
         loadConfig,
-        updateConfig,
         updateSiteConfig,
         deleteSiteConfig,
       }}
