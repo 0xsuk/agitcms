@@ -11,3 +11,12 @@ export const findSiteConfigBySiteKey = (config, siteKey) => {
 
   return siteConfig;
 };
+
+export const newSiteConfig = () => {
+  return {
+    key: Date.now(),
+    path: "",
+    defaultDir: "",
+    mediaDir: "",
+  };
+};
