@@ -53,6 +53,7 @@ exports.saveFile = async (e, content, filePath) => {
   }
 };
 
+//filePath is optional
 exports.readFile = async (e, filePath) => {
   try {
     if (!filePath) {

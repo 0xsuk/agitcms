@@ -10,7 +10,6 @@ import Editor from "./Editor";
 import { findSiteConfigBySiteKey } from "../lib/config";
 
 function Dir() {
-  console.log("Dir");
   const { config } = useContext(configContext);
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const pathname = useLocation().pathname;
@@ -21,22 +20,18 @@ function Dir() {
     .replace("/edit/" + siteKey, "")
     .replace("/", ""); //ex) /edit/1234/dir1/dir2 -> dir1/dir2
   const isInDir = params.get("isDir") === "true" || relativeDirPath === "";
-  console.log("search params:", params);
-  console.log("path", siteConfig);
   const fullDirPath = siteConfig.path + "/" + relativeDirPath; // even if relativeDirPath == "", works fine
 
   useEffect(() => {
-    (async () => {
-      console.log("reloading folders");
-      if (isInDir) {
-        const res = await window.electronAPI.getFilesAndFolders(fullDirPath);
-        if (res.err) {
-          alert(res.err.message);
-          return;
-        }
-        setFilesAndFolders(res.filesAndFolders);
+    console.warn("Dir Effect");
+    if (!isInDir) return;
+    window.electronAPI.getFilesAndFolders(fullDirPath).then((res) => {
+      if (res.err) {
+        alert(res.err.message);
+        return;
       }
-    })();
+      setFilesAndFolders(res.filesAndFolders);
+    });
   }, [fullDirPath, isInDir]);
 
   return (

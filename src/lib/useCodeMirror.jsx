@@ -9,8 +9,9 @@ const useCodeMirror = (props) => {
   const { initialDoc, onChange } = props;
 
   useEffect(() => {
+    console.warn("useCodeMirror effect");
     if (!refContainer.current) {
-      console.log("refContainer is null");
+      console.warn("refContainer is null");
       return;
     }
 
@@ -19,8 +20,7 @@ const useCodeMirror = (props) => {
       extensions: [
         EditorView.updateListener.of((update) => {
           if (update.changes) {
-            console.log("u")
-            onChange(update.state);
+            onChange(update.state.doc.toString());
           }
         }),
       ],
@@ -32,7 +32,7 @@ const useCodeMirror = (props) => {
     });
 
     setEditorView(view);
-  }, [refContainer]);
+  }, []); //do I need to include refContainer as a dependency?
 
   return [refContainer, editorView];
 };

@@ -2,13 +2,13 @@ import { Fragment, useContext, useEffect } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Dir from "./components/Dir";
+import Editor from "./components/Editor";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import SideBar from "./components/SideBar";
 import { configContext } from "./context/ConfigContext";
 
 function App() {
-  console.log("App");
   const { config, loadConfig } = useContext(configContext);
   useEffect(() => loadConfig(), [loadConfig]);
 
@@ -23,6 +23,7 @@ function App() {
         <Route path="" element={<Home />}></Route>
         <Route path="settings" element={<Settings />}></Route>
         <Route path="edit">
+          <Route path="" element={<Editor />}></Route>
           <Route path=":siteKey/*" element={<Dir />}></Route>
         </Route>
       </Route>
