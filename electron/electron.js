@@ -10,6 +10,7 @@ const {
   getFolderPath,
   getFolders,
   getFilesAndFolders,
+  renameFile,
 } = require("./api");
 
 const createWindow = () => {
@@ -35,6 +36,7 @@ app.whenReady().then(() => {
   ipcMain.handle("update-config", updateConfig);
   ipcMain.handle("save-file", saveFile);
   ipcMain.handle("read-file", readFile);
+  ipcMain.handle("rename-file", renameFile);
   ipcMain.handle("get-folder-path", getFolderPath);
   ipcMain.handle("get-folders", getFolders);
   ipcMain.handle("get-files-and-folders", getFilesAndFolders);

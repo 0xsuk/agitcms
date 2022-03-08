@@ -12,15 +12,18 @@ import { findSiteConfigBySiteKey } from "../lib/config";
 function Dir() {
   const { config } = useContext(configContext);
   const [filesAndFolders, setFilesAndFolders] = useState([]);
-  const pathname = useLocation().pathname;
-  const [params] = useSearchParams();
   const siteKey = Number(useParams().siteKey);
   const siteConfig = findSiteConfigBySiteKey(config, siteKey);
+
+  //TODO: decoding URI here
+  const pathname = decodeURIComponent(useLocation().pathname);
   const relativeDirPath = pathname
     .replace("/edit/" + siteKey, "")
     .replace("/", ""); //ex) /edit/1234/dir1/dir2 -> dir1/dir2
+  const [params] = useSearchParams();
   const isInDir = params.get("isDir") === "true" || relativeDirPath === "";
   const fullDirPath = siteConfig.path + "/" + relativeDirPath; // even if relativeDirPath == "", works fine
+  const fileName = params.get("fileName"); //optional //already decoded by get method
 
   useEffect(() => {
     console.warn("Dir Effect");
@@ -58,10 +61,15 @@ function Dir() {
                 {f.extension === ".md" && (
                   <div>
                     <Link
+                      //if f.name == "some filename with space", Link url-encode it
                       to={
                         relativeDirPath === ""
-                          ? f.name + "?isDir=false"
-                          : relativeDirPath + "/" + f.name + "?isDir=false"
+                          ? f.name + "?isDir=false&fileName=" + f.name
+                          : relativeDirPath +
+                            "/" +
+                            f.name +
+                            "?isDir=false&fileName=" +
+                            f.name
                       }
                     >
                       <p>{f.name}</p>
@@ -72,7 +80,7 @@ function Dir() {
             )}
           </Fragment>
         ))}
-      {!isInDir && <Editor filePath={fullDirPath}></Editor>}
+      {!isInDir && <Editor filePath={fullDirPath} fileName={fileName}></Editor>}
     </Fragment>
   );
 }

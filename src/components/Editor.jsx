@@ -1,21 +1,50 @@
-import { createElement, Fragment, useRef, useEffect, useState } from "react";
 import { Button } from "@mui/material";
-import useCodeMirror from "../lib/useCodeMirror";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import remarkGfm from "remark-gfm";
+import {
+  createElement,
+  Fragment,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import rehypeReact from "rehype-react";
 import remarkFrontmatter from "remark-frontmatter";
+import remarkGfm from "remark-gfm";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import { unified } from "unified";
+import { configContext } from "../context/ConfigContext";
+import { findSiteConfigBySiteKey } from "../lib/config";
+import useCodeMirror from "../lib/useCodeMirror";
 
 //filePath is optional
-function Editor({ filePath }) {
-  //doc is readonly and setSoc doest not update refContainer, use editorView.dispatch to update text
-  const [doc, setDoc] = useState("");
+function Editor(props) {
+  const { filePath } = props;
+  const initialFileName = props.fileName;
+  const navigate = useNavigate();
+  const { config } = useContext(configContext);
+  const siteKey = Number(useParams().siteKey);
+  const siteConfig = findSiteConfigBySiteKey(config, siteKey);
+  const [doc, setDoc] = useState(""); //doc is readonly and setSoc doest not update refContainer, use editorView.dispatch to update text
+  const [fileName, setFileName] = useState(initialFileName);
   const [refContainer, editorView] = useCodeMirror({
     initialDoc: doc,
     onChange: setDoc,
   });
+
+  const renameFileAndNavigate = async () => {
+    const { newFilePath, err } = await window.electronAPI.renameFile(
+      filePath,
+      fileName
+    );
+    if (err) {
+      alert(err.message);
+      return;
+    }
+    const to = "/edit/" + siteKey + newFilePath.replace(siteConfig.path, "");
+    console.log("to", to);
+    navigate(to);
+  };
 
   const saveFile = async () => {
     console.log("saving", filePath, doc);
@@ -24,9 +53,9 @@ function Editor({ filePath }) {
       alert(err.message);
       return;
     }
-    if (!canceled) {
-      alert("Saved!");
-    }
+    if (canceled) return;
+    alert("Saved!");
+    fileName !== initialFileName && renameFileAndNavigate();
   };
 
   const readFile = async () => {
@@ -58,26 +87,31 @@ function Editor({ filePath }) {
       return;
     }
     readFile();
-  }, [editorView]); //triggered when editorView === undefined (first time) and editorView is set (after refContainer is set)
-
+  }, [editorView]); //eslint-disable-line
+  //triggered when editorView === undefined (first time) and editorView is set (after refContainer is set)
   const md = unified()
     .use(remarkParse)
     .use(remarkGfm)
-    .use(remarkFrontmatter)
-    //.use(remarkRehype, ["yaml", "toml"])
-    //    .use(() => (tree) => console.dir(tree))
+    .use(remarkFrontmatter, ["yaml", "toml"])
+    .use(remarkRehype)
     .use(rehypeReact, { createElement, Fragment })
     .processSync(doc).result;
-  //console.log(md);
+
+  if (!filePath) {
+    return (
+      <Fragment>
+        <h1>Editor</h1>
+        <Button onClick={readFile} variant="contained">
+          Open
+        </Button>
+      </Fragment>
+    );
+  }
 
   return (
     <Fragment>
       <h1>Editor</h1>
-      {!filePath && (
-        <Button onClick={readFile} variant="contained">
-          Open
-        </Button>
-      )}
+      <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
       <Button onClick={saveFile} variant="contained">
         Save
       </Button>

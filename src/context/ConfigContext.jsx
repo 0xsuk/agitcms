@@ -61,7 +61,6 @@ function ConfigContext({ children }) {
     (key) => {
       config.sites.every((site, i) => {
         if (site.key === key) {
-          //TODO: do something here
           config.sites.splice(i, 1);
           return false;
         }

@@ -55,6 +55,7 @@ exports.saveFile = async (e, content, filePath) => {
 
 //filePath is optional
 exports.readFile = async (e, filePath) => {
+  //TODO: url decode filePath
   try {
     if (!filePath) {
       const filePaths = dialog.showOpenDialogSync();
@@ -69,6 +70,17 @@ exports.readFile = async (e, filePath) => {
     return { content, filePath, err: null, canceled: false };
   } catch (err) {
     return { content: null, filePath: null, err, canceled: false };
+  }
+};
+
+exports.renameFile = async (e, oldFilePath, newFileName) => {
+  try {
+    const newFilePath = path.join(oldFilePath, "..", newFileName);
+    fs.renameSync(oldFilePath, newFilePath);
+
+    return { newFilePath, err: null };
+  } catch (err) {
+    return { newFilePath: null, err };
   }
 };
 
