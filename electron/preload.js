@@ -9,7 +9,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   renameFile: (filePath, newFileName) =>
     ipcRenderer.invoke("rename-file", filePath, newFileName),
   getFolderPath: () => ipcRenderer.invoke("get-folder-path"),
-  getFolders: (folderPath) => ipcRenderer.invoke("get-folders", folderPath),
   getFilesAndFolders: (folderPath) =>
     ipcRenderer.invoke("get-files-and-folders", folderPath),
 });

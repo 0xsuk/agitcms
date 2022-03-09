@@ -8,7 +8,6 @@ const {
   readFile,
   saveFile,
   getFolderPath,
-  getFolders,
   getFilesAndFolders,
   renameFile,
 } = require("./api");
@@ -38,7 +37,6 @@ app.whenReady().then(() => {
   ipcMain.handle("read-file", readFile);
   ipcMain.handle("rename-file", renameFile);
   ipcMain.handle("get-folder-path", getFolderPath);
-  ipcMain.handle("get-folders", getFolders);
   ipcMain.handle("get-files-and-folders", getFilesAndFolders);
 
   app.on("activate", () => {

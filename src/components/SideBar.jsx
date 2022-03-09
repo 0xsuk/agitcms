@@ -33,9 +33,6 @@ function SideBar() {
       <div>
         <Link to="/settings">Settings</Link>
       </div>
-      <div>
-        <Link to="edit">edit</Link>
-      </div>
     </Fragment>
   );
 }

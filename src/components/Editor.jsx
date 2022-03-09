@@ -8,7 +8,6 @@ import {
 } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import rehypeReact from "rehype-react";
-import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
@@ -17,16 +16,18 @@ import { configContext } from "../context/ConfigContext";
 import { findSiteConfigBySiteKey } from "../lib/config";
 import useCodeMirror from "../lib/useCodeMirror";
 
-//filePath is optional
+//TODO: parse yaml / toml in api.js, then setFrontMatter
+
 function Editor(props) {
-  const { filePath } = props;
-  const initialFileName = props.fileName;
+  const filePath = props.filePath; //unchanged
+  const initialFileName = props.fileName; //could be changed
+  const [fileName, setFileName] = useState(initialFileName);
   const navigate = useNavigate();
   const { config } = useContext(configContext);
   const siteKey = Number(useParams().siteKey);
   const siteConfig = findSiteConfigBySiteKey(config, siteKey);
   const [doc, setDoc] = useState(""); //doc is readonly and setSoc doest not update refContainer, use editorView.dispatch to update text
-  const [fileName, setFileName] = useState(initialFileName);
+  const [frontmatter, setFrontMatter] = useState({});
   const [refContainer, editorView] = useCodeMirror({
     initialDoc: doc,
     onChange: setDoc,
@@ -60,7 +61,7 @@ function Editor(props) {
   const readFile = async () => {
     const res = await window.electronAPI.readFile(filePath);
     if (res.err) {
-      alert(res.err.message);
+      console.log(res.err);
       return;
     }
     //editorView.dispatch triggers update, thus setDoc
@@ -71,6 +72,9 @@ function Editor(props) {
         insert: res.content,
       },
     });
+
+    setFrontMatter(res.frontmatter);
+    console.log("frontmatter:", res.frontmatter);
   };
 
   useEffect(() => {
@@ -88,29 +92,27 @@ function Editor(props) {
   const md = unified()
     .use(remarkParse)
     .use(remarkGfm)
-    .use(remarkFrontmatter, ["yaml", "toml"])
     .use(remarkRehype)
     .use(rehypeReact, { createElement, Fragment })
     .processSync(doc).result;
 
-  if (!filePath) {
-    return (
-      <Fragment>
-        <h1>Editor</h1>
-        <Button onClick={readFile} variant="contained">
-          Open
-        </Button>
-      </Fragment>
-    );
-  }
-
+  //TODO: updateFrontmatter
   return (
     <Fragment>
+      <p>{filePath}</p>
       <h1>Editor</h1>
       <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
       <Button onClick={saveFile} variant="contained">
         Save
       </Button>
+      {Object.keys(frontmatter).length !== 0 &&
+        Object.keys(frontmatter).map((key) => (
+          <div className="flex">
+            <p>{key}:</p>
+            <input value={frontmatter[key]} />
+          </div>
+        ))}
+
       <div className="flex">
         <div id="editor" ref={refContainer}></div>
         <div id="previewer">{md}</div>

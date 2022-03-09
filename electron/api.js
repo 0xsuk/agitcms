@@ -2,7 +2,7 @@ const { dialog } = require("electron");
 const fs = require("fs");
 const HOME_DIR = require("os").homedir();
 const path = require("path");
-
+const matter = require("gray-matter");
 const CONFIG_DIR = path.join(HOME_DIR, ".agitcms");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
@@ -50,15 +50,24 @@ exports.saveFile = async (e, content, filePath) => {
 
 exports.readFile = async (e, filePath) => {
   //TODO: url decode filePath
+  let doc;
   try {
     if (!filePath) {
       throw new Error("File path is not provided");
     }
 
-    const content = fs.readFileSync(filePath).toString();
-    return { content, err: null };
+    doc = fs.readFileSync(filePath).toString();
+    //TODO: matter throws an error if frontmatter format is not supported
   } catch (err) {
-    return { content: null, err };
+    return { content: null, frontmatter: null, err };
+  }
+
+  try {
+    const { content, data } = matter(doc);
+    return { content, frontmatter: data, err: null };
+  } catch (err) {
+    console.log("frontmatter format is not supported");
+    return { content: doc, frontmatter: {}, err: null };
   }
 };
 
@@ -86,19 +95,6 @@ exports.getFolderPath = async () => {
     return { folderPath: folderPaths[0], err: null, canceled: false };
   } catch (err) {
     return { folderPath: null, err, canceled: false };
-  }
-};
-
-//Not used
-exports.getFolders = async (e, folderPath) => {
-  try {
-    const dirents = fs.readdirSync(folderPath, { withFileTypes: true });
-    const folders = dirents
-      .filter((dirent) => dirent.isDirectory())
-      .map((dirent) => dirent.name);
-    return { folders, err: null };
-  } catch (err) {
-    return { folders: null, err };
   }
 };
 
