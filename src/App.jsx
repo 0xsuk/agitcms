@@ -23,7 +23,6 @@ function App() {
         <Route path="" element={<Home />}></Route>
         <Route path="settings" element={<Settings />}></Route>
         <Route path="edit">
-          <Route path="" element={<Editor />}></Route>
           <Route path=":siteKey/*" element={<Dir />}></Route>
         </Route>
       </Route>

@@ -48,34 +48,29 @@ function Editor(props) {
 
   const saveFile = async () => {
     console.log("saving", filePath, doc);
-    const { err, canceled } = await window.electronAPI.saveFile(doc, filePath);
+    const { err } = await window.electronAPI.saveFile(doc, filePath);
     if (err) {
       alert(err.message);
       return;
     }
-    if (canceled) return;
     alert("Saved!");
     fileName !== initialFileName && renameFileAndNavigate();
   };
 
   const readFile = async () => {
-    const { content, err, canceled } = await window.electronAPI.readFile(
-      filePath
-    );
-    if (err) {
-      alert(err.message);
+    const res = await window.electronAPI.readFile(filePath);
+    if (res.err) {
+      alert(res.err.message);
       return;
     }
-    if (!canceled) {
-      //editorView.dispatch triggers update, thus setDoc
-      editorView.dispatch({
-        changes: {
-          from: 0,
-          to: editorView.state.doc.length,
-          insert: content,
-        },
-      });
-    }
+    //editorView.dispatch triggers update, thus setDoc
+    editorView.dispatch({
+      changes: {
+        from: 0,
+        to: editorView.state.doc.length,
+        insert: res.content,
+      },
+    });
   };
 
   useEffect(() => {
@@ -84,6 +79,7 @@ function Editor(props) {
       return;
     }
     if (!filePath) {
+      console.log("no filePath");
       return;
     }
     readFile();

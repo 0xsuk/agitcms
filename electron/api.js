@@ -38,38 +38,27 @@ exports.updateConfig = async (e, newConfig) => {
 exports.saveFile = async (e, content, filePath) => {
   try {
     if (!filePath) {
-      filePath = dialog.showSaveDialogSync();
-    }
-
-    //if canceled
-    if (filePath == undefined) {
-      return { err: null, canceled: true };
+      throw new Error("File path is not probided");
     }
 
     fs.writeFileSync(filePath, content);
-    return { err: null, canceled: false };
+    return { err: null };
   } catch (err) {
-    return { err, canceled: false };
+    return { err };
   }
 };
 
-//filePath is optional
 exports.readFile = async (e, filePath) => {
   //TODO: url decode filePath
   try {
     if (!filePath) {
-      const filePaths = dialog.showOpenDialogSync();
-      if (filePaths == undefined) {
-        return { content: null, filePath: null, err: null, canceled: true };
-      }
-      filePath = filePaths[0];
+      throw new Error("File path is not provided");
     }
-    //if canceled
 
     const content = fs.readFileSync(filePath).toString();
-    return { content, filePath, err: null, canceled: false };
+    return { content, err: null };
   } catch (err) {
-    return { content: null, filePath: null, err, canceled: false };
+    return { content: null, err };
   }
 };
 
