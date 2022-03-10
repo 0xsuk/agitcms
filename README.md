@@ -6,7 +6,7 @@ Still under development!!
 
 TODO:
 
-- [ ] add new site(NewwSite.jsx)
+- [ ] add new site(NewSite.jsx)
 - [ ] root settings (Settings.jsx)
 - [ ] add new commands (commands.jsx)
 - [ ] add new frontmatter (frontmatter.jsx) / custom type frontmatter
