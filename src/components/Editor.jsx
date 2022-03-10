@@ -16,8 +16,6 @@ import { configContext } from "../context/ConfigContext";
 import { findSiteConfigBySiteKey } from "../lib/config";
 import useCodeMirror from "../lib/useCodeMirror";
 
-//TODO: parse yaml / toml in api.js, then setFrontMatter
-
 function Editor(props) {
   const filePath = props.filePath; //unchanged
   const initialFileName = props.fileName; //could be changed
@@ -96,7 +94,6 @@ function Editor(props) {
     .use(rehypeReact, { createElement, Fragment })
     .processSync(doc).result;
 
-  //TODO: updateFrontmatter
   return (
     <Fragment>
       <p>{filePath}</p>
@@ -109,7 +106,14 @@ function Editor(props) {
         Object.keys(frontmatter).map((key) => (
           <div className="flex">
             <p>{key}:</p>
-            <input value={frontmatter[key]} />
+            <input
+              value={frontmatter[key]}
+              onChange={(e) => {
+                const newFrontmatter = Object.assign({}, frontmatter);
+                newFrontmatter[key] = e.target.value;
+                setFrontMatter(newFrontmatter);
+              }}
+            />
           </div>
         ))}
 
