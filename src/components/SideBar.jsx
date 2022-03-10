@@ -1,18 +1,12 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Fragment, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Fragment } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { configContext } from "../context/ConfigContext";
-import { findSiteConfigBySiteKey } from "../lib/config";
+import { useSiteConfig } from "../lib/config";
 
 function SideBar() {
-  const { config } = useContext(configContext);
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
-  const params = useParams();
-  let siteConfig;
-  if (params.siteKey) {
-    siteConfig = findSiteConfigBySiteKey(config, params.siteKey);
-  }
+  const [_, siteConfig] = useSiteConfig();
 
   // useEffect(() => navigate("/edit"), []);
   return (

@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import Site from "./settings/site/Site";
 import { configContext } from "../context/ConfigContext";
 import { newSiteConfig } from "../lib/config";
+import { Link } from "react-router-dom";
 
 function Home() {
   const { config } = useContext(configContext);
@@ -12,15 +13,15 @@ function Home() {
     <Fragment>
       <h1>Home</h1>
       {config.sites?.map((siteConfig) => (
-        <Site _siteConfig={siteConfig} />
+        <div className="flex">
+          <Link to={"/edit/" + siteConfig.key}>
+            <h2>{siteConfig.name}</h2>
+          </Link>
+          <Link to={"/settings/" + siteConfig.key}>
+            <Button>Edit</Button>
+          </Link>
+        </div>
       ))}
-      {isNewSite && (
-        <Site
-          _siteConfig={newSiteConfig()}
-          isNewSite={true}
-          setIsNewSite={setIsNewSite}
-        />
-      )}
       <Button onClick={() => setIsNewSite(true)} variant="contained">
         New
       </Button>

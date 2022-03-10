@@ -21,7 +21,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Wrapper />}>
         <Route path="" element={<Home />}></Route>
-        <Route path="settings" element={<Settings />}>
+        <Route path="settings">
+          <Route path="" element={<Settings />}></Route>
           <Route path=":siteKey" element={<Site />}>
             <Route path="frontmatter"></Route>
           </Route>

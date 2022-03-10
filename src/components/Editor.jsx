@@ -12,8 +12,7 @@ import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { configContext } from "../context/ConfigContext";
-import { findSiteConfigBySiteKey } from "../lib/config";
+import { useSiteConfig } from "../lib/config";
 import useCodeMirror from "../lib/useCodeMirror";
 
 function Editor(props) {
@@ -21,9 +20,7 @@ function Editor(props) {
   const initialFileName = props.fileName; //could be changed
   const [fileName, setFileName] = useState(initialFileName);
   const navigate = useNavigate();
-  const { config } = useContext(configContext);
-  const siteKey = Number(useParams().siteKey);
-  const siteConfig = findSiteConfigBySiteKey(config, siteKey);
+  const [siteKey, siteConfig] = useSiteConfig();
   const [doc, setDoc] = useState(""); //doc is readonly and setSoc doest not update refContainer, use editorView.dispatch to update text
   const [frontmatter, setFrontMatter] = useState({});
   const [refContainer, editorView] = useCodeMirror({

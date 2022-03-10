@@ -1,19 +1,11 @@
-import { Fragment, useContext, useEffect, useState } from "react";
-import {
-  Link,
-  useParams,
-  useLocation,
-  useSearchParams,
-} from "react-router-dom";
-import { configContext } from "../context/ConfigContext";
+import { Fragment, useEffect, useState } from "react";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import Editor from "./Editor";
-import { findSiteConfigBySiteKey } from "../lib/config";
+import { useSiteConfig } from "../lib/config";
 
 function Dir() {
-  const { config } = useContext(configContext);
   const [filesAndFolders, setFilesAndFolders] = useState([]);
-  const siteKey = Number(useParams().siteKey);
-  const siteConfig = findSiteConfigBySiteKey(config, siteKey);
+  const [siteKey, siteConfig] = useSiteConfig();
 
   //TODO: decoding URI here
   const pathname = decodeURIComponent(useLocation().pathname);
