@@ -86,7 +86,6 @@ function Editor(props) {
 
   return (
     <Fragment>
-      <p>{filePath}</p>
       <h1>Editor</h1>
       <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
       <Button onClick={saveFile} variant="contained">
