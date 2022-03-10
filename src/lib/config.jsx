@@ -9,7 +9,6 @@ export const useSiteConfig = () => {
   let siteConfig;
   config.sites.every((site) => {
     if (site.key === siteKey) {
-      console.log(site);
       siteConfig = site;
       return false;
     }
