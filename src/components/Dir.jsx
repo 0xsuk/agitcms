@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Editor from "./Editor";
-import { useSiteConfig } from "../lib/config";
+import useSiteConfig from "../lib/useSiteConfig";
 
 function Dir() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);

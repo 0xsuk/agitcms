@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { useSiteConfig } from "../lib/config";
+import useSiteConfig from "../lib/useSiteConfig";
 
 function SideBar() {
   const navigate = useNavigate();

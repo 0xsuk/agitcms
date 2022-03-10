@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 
-export const useSiteConfig = () => {
+function useSiteConfig() {
   const { config } = useContext(configContext);
   const siteKey = Number(useParams().siteKey);
   if (!siteKey) return [undefined, undefined];
@@ -16,7 +16,7 @@ export const useSiteConfig = () => {
   });
 
   return [siteKey, siteConfig];
-};
+}
 
 export const newSiteConfig = () => {
   return {
@@ -26,3 +26,5 @@ export const newSiteConfig = () => {
     mediaDir: "",
   };
 };
+
+export default useSiteConfig;

@@ -1,7 +1,8 @@
 const { useState } = require("react");
-const { newSiteConfig } = require("../../../lib/config");
+const { newSiteConfig } = require("../../../lib/useSiteConfig");
 
 function NewSite() {
+  ///TODO: useSiteConfigBuffer
   const [siteConfig, setSiteConfig] = useState(newSiteConfig());
 
   return (

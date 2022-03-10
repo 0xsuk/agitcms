@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Folder } from "@mui/icons-material";
 import { Button } from "@mui/material";
-import { useSiteConfig } from "../../../lib/config";
+import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 
 function Site() {
