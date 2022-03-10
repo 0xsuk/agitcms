@@ -1,12 +1,15 @@
 import { Fragment, useContext } from "react";
 import { Button } from "@mui/material";
 import { configContext } from "../context/ConfigContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Home() {
   const { config } = useContext(configContext);
+  const navigate = useNavigate();
 
-  const addNewSite = () => {};
+  const addNewSite = () => {
+    navigate("/settings/new");
+  };
 
   return (
     <Fragment>
