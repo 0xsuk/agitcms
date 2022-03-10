@@ -1,7 +1,3 @@
----
-date: 2022-03-10T10:47:55.940Z
----
-
 # Agit CMS
 
 Open source desktop content manager for any static sites.
