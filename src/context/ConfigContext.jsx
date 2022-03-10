@@ -1,21 +1,9 @@
-import { useReducer, createContext } from "react";
-import { UPDATE_CONFIG } from "./types";
+import { useState, createContext } from "react";
 
 export const configContext = createContext();
 
-const configReducer = (config, action) => {
-  switch (action.type) {
-    case UPDATE_CONFIG:
-      const newConfig = action.payload;
-      console.log("updating config:", newConfig);
-      return { ...newConfig };
-    default:
-      throw new Error("Unexpected Action Type:", action.type);
-  }
-};
-
 function ConfigContext({ children }) {
-  const [config, dispatchConfig] = useReducer(configReducer, {});
+  const [config, setConfig] = useState({});
 
   const loadConfig = async () => {
     const res = await window.electronAPI.loadConfig();
@@ -23,7 +11,7 @@ function ConfigContext({ children }) {
       alert(res.err.message);
       return;
     }
-    dispatchConfig({ type: UPDATE_CONFIG, payload: res.config });
+    setConfig({ ...res.config });
   };
 
   const updateConfig = async (newConfig) => {
@@ -33,7 +21,7 @@ function ConfigContext({ children }) {
       alert(err.message);
       return;
     }
-    dispatchConfig({ type: UPDATE_CONFIG, payload: newConfig });
+    setConfig({ ...newConfig });
   };
 
   const updateSiteConfig = (newSiteConfig) => {
