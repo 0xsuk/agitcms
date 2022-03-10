@@ -21,6 +21,7 @@ function Editor(props) {
     onChange: setDoc,
   });
 
+  //TODO: useFileBuffer
   const renameFileAndNavigate = async () => {
     const { newFilePath, err } = await window.electronAPI.renameFile(
       filePath,
