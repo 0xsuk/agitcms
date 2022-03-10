@@ -1,11 +1,7 @@
 import { Fragment } from "react";
 
 function Settings() {
-  return (
-    <Fragment>
-      <h1>Settings</h1>
-    </Fragment>
-  );
+  return <Fragment>settings</Fragment>;
 }
 
 export default Settings;

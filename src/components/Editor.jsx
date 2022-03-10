@@ -1,18 +1,12 @@
 import { Button } from "@mui/material";
-import {
-  createElement,
-  Fragment,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { createElement, Fragment, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import rehypeReact from "rehype-react";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { useSiteConfig } from "../lib/config";
+
 import useCodeMirror from "../lib/useCodeMirror";
 
 function Editor(props) {
@@ -20,7 +14,6 @@ function Editor(props) {
   const initialFileName = props.fileName; //could be changed
   const [fileName, setFileName] = useState(initialFileName);
   const navigate = useNavigate();
-  const [siteKey, siteConfig] = useSiteConfig();
   const [doc, setDoc] = useState(""); //doc is readonly and setSoc doest not update refContainer, use editorView.dispatch to update text
   const [frontmatter, setFrontMatter] = useState({});
   const [refContainer, editorView] = useCodeMirror({
@@ -37,7 +30,7 @@ function Editor(props) {
       alert(err.message);
       return;
     }
-    const to = "/edit/" + siteKey + newFilePath.replace(siteConfig.path, "");
+    const to = "?path=" + newFilePath + "&isDir=false&fileName=" + fileName;
     console.log("to", to);
     navigate(to);
   };

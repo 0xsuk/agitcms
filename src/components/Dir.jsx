@@ -1,70 +1,59 @@
 import { Fragment, useEffect, useState } from "react";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Editor from "./Editor";
 import { useSiteConfig } from "../lib/config";
 
 function Dir() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
-  const [siteKey, siteConfig] = useSiteConfig();
-
-  //TODO: decoding URI here
-  const pathname = decodeURIComponent(useLocation().pathname);
-  const relativeDirPath = pathname
-    .replace("/edit/" + siteKey, "")
-    .replace("/", ""); //ex) /edit/1234/dir1/dir2 -> dir1/dir2
+  const [, siteConfig] = useSiteConfig();
   const [params] = useSearchParams();
-  const isInDir = params.get("isDir") === "true" || relativeDirPath === "";
-  const fullDirPath = siteConfig.path + "/" + relativeDirPath; // even if relativeDirPath == "", works fine
+
+  //current working dir or filek
+  const cwdf = params.get("path");
+  const isInRoot = cwdf === siteConfig.path;
+  const isInDir = params.get("isDir") === "true" || isInRoot;
   const fileName = params.get("fileName"); //optional //already decoded by get method
 
   useEffect(() => {
     console.warn("Dir Effect");
     if (!isInDir) return;
-    window.electronAPI.getFilesAndFolders(fullDirPath).then((res) => {
+    window.electronAPI.getFilesAndFolders(cwdf).then((res) => {
       if (res.err) {
         alert(res.err.message);
         return;
       }
       setFilesAndFolders(res.filesAndFolders);
     });
-  }, [fullDirPath, isInDir]);
+  }, [cwdf]); //eslint-disable-line
 
   return (
     <Fragment>
-      <p>{relativeDirPath}</p>
+      <p>{cwdf}</p>
 
       {isInDir &&
-        filesAndFolders.map((f) => (
+        filesAndFolders.map((df) => (
           <Fragment>
-            {f.isDir ? (
+            {df.isDir ? (
               <div>
-                <Link
-                  to={
-                    relativeDirPath === ""
-                      ? f.name + "?isDir=true"
-                      : relativeDirPath + "/" + f.name + "?isDir=true"
-                  }
-                >
-                  <p style={{ color: "gray" }}>{f.name}</p>
+                <Link to={"?path=" + cwdf + "/" + df.name + "&isDir=true"}>
+                  <p style={{ color: "gray" }}>{df.name}</p>
                 </Link>
               </div>
             ) : (
               <>
-                {f.extension === ".md" && (
+                {df.extension === ".md" && (
                   <div>
                     <Link
-                      //if f.name == "some filename with space", Link url-encode it
                       to={
-                        relativeDirPath === ""
-                          ? f.name + "?isDir=false&fileName=" + f.name
-                          : relativeDirPath +
-                            "/" +
-                            f.name +
-                            "?isDir=false&fileName=" +
-                            f.name
+                        "?path=" +
+                        cwdf +
+                        "/" +
+                        df.name +
+                        "&isDir=false&fileName=" +
+                        df.name
                       }
                     >
-                      <p>{f.name}</p>
+                      <p>{df.name}</p>
                     </Link>
                   </div>
                 )}
@@ -72,7 +61,7 @@ function Dir() {
             )}
           </Fragment>
         ))}
-      {!isInDir && <Editor filePath={fullDirPath} fileName={fileName}></Editor>}
+      {!isInDir && <Editor filePath={cwdf} fileName={fileName}></Editor>}
     </Fragment>
   );
 }

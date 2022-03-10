@@ -6,9 +6,8 @@ import { useSiteConfig } from "../lib/config";
 function SideBar() {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
-  const [_, siteConfig] = useSiteConfig();
+  const [siteKey, siteConfig] = useSiteConfig();
 
-  // useEffect(() => navigate("/edit"), []);
   return (
     <Fragment>
       <ArrowBackIosNew className="mui-icon" onClick={goBack} />
@@ -18,15 +17,19 @@ function SideBar() {
         <div>
           <h1>{siteConfig.name}</h1>
           <p>{siteConfig.path}</p>
+          <div>
+            <Link to="/">Home</Link>
+          </div>
+          <div>
+            <Link to={"/edit/" + siteKey + "?path=" + siteConfig.path}>
+              Root
+            </Link>
+          </div>
+          <div>
+            <Link to={"/settings/" + siteKey}>Settings</Link>
+          </div>
         </div>
       )}
-
-      <div>
-        <Link to="/">Home</Link>
-      </div>
-      <div>
-        <Link to="/settings">Settings</Link>
-      </div>
     </Fragment>
   );
 }

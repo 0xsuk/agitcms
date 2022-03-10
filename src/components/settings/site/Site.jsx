@@ -1,5 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { Fragment, useEffect, useState, useContext } from "react";
+import { Fragment, useState, useContext } from "react";
 import { configContext } from "../../../context/ConfigContext";
 import { Folder } from "@mui/icons-material";
 import { Button } from "@mui/material";
