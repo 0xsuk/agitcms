@@ -4,13 +4,14 @@ import "./App.scss";
 import Dir from "./components/Dir";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
-import SideBar from "./components/SideBar";
+import NewSite from "./components/settings/site/NewSite";
 import Site from "./components/settings/site/Site";
+import SideBar from "./components/SideBar";
 import { configContext } from "./context/ConfigContext";
 
 function App() {
   const { config, loadConfig } = useContext(configContext);
-  useEffect(() => loadConfig(), [loadConfig]);
+  useEffect(() => loadConfig(), []); //eslint-disable-line
 
   if (config.sites === undefined) {
     console.log("reading config", config);
@@ -23,8 +24,10 @@ function App() {
         <Route path="" element={<Home />}></Route>
         <Route path="settings">
           <Route path="" element={<Settings />}></Route>
+          <Route path="new" element={<NewSite />}></Route>
           <Route path=":siteKey" element={<Site />}>
             <Route path="frontmatter"></Route>
+            <Route path="commands"></Route>
           </Route>
         </Route>
         <Route path="edit">

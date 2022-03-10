@@ -1,4 +1,4 @@
-import { useReducer, createContext, useCallback } from "react";
+import { useReducer, createContext } from "react";
 import { UPDATE_CONFIG } from "./types";
 
 export const configContext = createContext();
@@ -17,16 +17,16 @@ const configReducer = (config, action) => {
 function ConfigContext({ children }) {
   const [config, dispatchConfig] = useReducer(configReducer, {});
 
-  const loadConfig = useCallback(async () => {
+  const loadConfig = async () => {
     const res = await window.electronAPI.loadConfig();
     if (res.err) {
       alert(res.err.message);
       return;
     }
     dispatchConfig({ type: UPDATE_CONFIG, payload: res.config });
-  }, []);
+  };
 
-  const updateConfig = useCallback(async (newConfig) => {
+  const updateConfig = async (newConfig) => {
     console.log("config:", newConfig);
     const err = await window.electronAPI.updateConfig(newConfig);
     if (err) {
@@ -34,43 +34,37 @@ function ConfigContext({ children }) {
       return;
     }
     dispatchConfig({ type: UPDATE_CONFIG, payload: newConfig });
-  }, []);
+  };
 
-  const updateSiteConfig = useCallback(
-    (newSiteConfig) => {
-      const isSiteExist = !config.sites.every((site, i) => {
-        if (site.key === newSiteConfig.key) {
-          config.sites[i] = newSiteConfig;
-          return false;
-        }
-        return true;
-      });
-
-      if (!isSiteExist) {
-        if (config.sites === undefined) config.sites = [];
-        config.sites.push(newSiteConfig);
+  const updateSiteConfig = (newSiteConfig) => {
+    const isSiteExist = !config.sites.every((site, i) => {
+      if (site.key === newSiteConfig.key) {
+        config.sites[i] = newSiteConfig;
+        return false;
       }
+      return true;
+    });
 
-      updateConfig(config);
-      return isSiteExist;
-    },
-    [config, updateConfig]
-  );
+    if (!isSiteExist) {
+      if (config.sites === undefined) config.sites = [];
+      config.sites.push(newSiteConfig);
+    }
 
-  const deleteSiteConfig = useCallback(
-    (key) => {
-      config.sites.every((site, i) => {
-        if (site.key === key) {
-          config.sites.splice(i, 1);
-          return false;
-        }
-        return true;
-      });
+    updateConfig(config);
+    return isSiteExist;
+  };
 
-      updateConfig(config);
-    },
-    [config, updateConfig]
-  );
+  const deleteSiteConfig = (key) => {
+    config.sites.every((site, i) => {
+      if (site.key === key) {
+        config.sites.splice(i, 1);
+        return false;
+      }
+      return true;
+    });
+
+    updateConfig(config);
+  };
 
   return (
     <configContext.Provider
