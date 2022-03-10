@@ -109,9 +109,8 @@ function Editor(props) {
             <input
               value={frontmatter[key]}
               onChange={(e) => {
-                const newFrontmatter = Object.assign({}, frontmatter);
-                newFrontmatter[key] = e.target.value;
-                setFrontMatter(newFrontmatter);
+                frontmatter[key] = e.target.value;
+                setFrontMatter({ ...frontmatter });
               }}
             />
           </div>

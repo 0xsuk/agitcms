@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Fragment, useEffect, useState, useContext } from "react";
-import { configContext } from "../context/ConfigContext";
+import { configContext } from "../../../context/ConfigContext";
 import { Folder } from "@mui/icons-material";
 import { Button } from "@mui/material";
 
@@ -16,7 +16,7 @@ function Site({ _siteConfig, isNewSite, setIsNewSite }) {
     navigate("edit/" + key);
   };
 
-  const updatePath = async () => {
+  const updateSitePath = async () => {
     const { folderPath, err, canceled } =
       await window.electronAPI.getFolderPath();
     if (err) {
@@ -25,12 +25,30 @@ function Site({ _siteConfig, isNewSite, setIsNewSite }) {
     }
     if (!err && !canceled) {
       siteConfig.path = folderPath;
-      setSiteConfig(Object.assign({}, siteConfig));
+      setSiteConfig({ ...siteConfig });
     }
   };
-  const updateCommands = (cmd_name, e) => {
-    siteConfig.commands[cmd_name] = e.target.value;
-    setSiteConfig(Object.assign({}, siteConfig));
+
+  const updateCommandKey = (newKey, i) => {
+    siteConfig.commands[i].key = newKey;
+    setSiteConfig({ ...siteConfig });
+  };
+  const updateCommand = (newCommand, i) => {
+    siteConfig.commands[i].command = newCommand;
+    setSiteConfig({ ...siteConfig });
+  };
+
+  const updateFrontmatterKey = (newKey, i) => {
+    siteConfig.frontmatter[i].key = newKey;
+    setSiteConfig({ ...siteConfig });
+  };
+  const updateFrontmatterType = (newType, i) => {
+    siteConfig.frontmatter[i].type = newType;
+    setSiteConfig({ ...siteConfig });
+  };
+  const updateFrontmatterDefault = (newDefault, i) => {
+    siteConfig.frontmatter[i].default = newDefault;
+    setSiteConfig({ ...siteConfig });
   };
 
   const saveSiteConfig = () => {
@@ -89,25 +107,54 @@ function Site({ _siteConfig, isNewSite, setIsNewSite }) {
           <div className="flex">
             <p>{siteConfig.path}</p>
             <Button>
-              <Folder onClick={updatePath} />
+              <Folder onClick={updateSitePath} />
             </Button>
           </div>
 
           {/* TODO: add new commands */}
           <div>
             <p>Commands</p>
+            <Button>New</Button>
             <div>
-              {siteConfig.commands &&
-                Object.keys(siteConfig.commands).map((cmd_name) => (
+              {siteConfig.commands?.length &&
+                siteConfig.commands.map((cmd_obj, i) => (
                   <div className="flex">
-                    <p>{cmd_name}:</p>
                     <input
-                      onChange={(e) => updateCommands(cmd_name, e)}
-                      value={siteConfig.commands[cmd_name]}
+                      value={cmd_obj.key}
+                      onChange={(e) => updateCommandKey(e.target.value, i)}
+                    />
+                    <input
+                      value={cmd_obj.command}
+                      onChange={(e) => updateCommand(e.target.value, i)}
                     />
                   </div>
                 ))}
             </div>
+          </div>
+
+          {/* TODO: FrontMatter */}
+          <div>
+            <p>frontmatter</p>
+            <Button>New</Button>
+            {siteConfig.frontmatter?.length &&
+              siteConfig.frontmatter.map((f, i) => (
+                <div className="flex">
+                  <input
+                    value={f.key}
+                    onChange={(e) => updateFrontmatterKey(e.target.value, i)}
+                  />
+                  <input
+                    value={f.type}
+                    onChange={(e) => updateFrontmatterType(e.target.value, i)}
+                  />
+                  <input
+                    value={f.default}
+                    onChange={(e) =>
+                      updateFrontmatterDefault(e.target.value, i)
+                    }
+                  />
+                </div>
+              ))}
           </div>
 
           <Button onClick={cancelSiteConfig}>Cancel</Button>

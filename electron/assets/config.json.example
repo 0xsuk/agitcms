@@ -1,0 +1,34 @@
+{
+  "sites": [
+    {
+      "key": 1646278487629, //Date.now() readonly
+      "name": "0xsuk.com",
+      "path": "/home/null/go/src/github.com/0xsuk/0xsuk.com",
+      "commands": [
+        {
+          "key": "start-live-server",
+          "command": "hugo server"
+        },
+        {
+          "key": "commit",
+          "command": "git add . && git commit -m update && git push"
+        }
+      ],
+      "frontmatter": [
+        {
+          "key": "title",
+          "type": "String",
+          "default": "${date}-${filename}",
+        },
+        {
+          "key": "date",
+          "type": "Date",
+          "default": "${date}"
+        },
+        {
+          "key": "images",
+          "type": "Array.Image",
+        }
+      ]
+  ]
+}

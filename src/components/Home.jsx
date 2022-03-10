@@ -1,6 +1,6 @@
 import { Fragment, useContext, useState } from "react";
 import { Button } from "@mui/material";
-import Site from "./Site";
+import Site from "./settings/site/Site";
 import { configContext } from "../context/ConfigContext";
 import { newSiteConfig } from "../lib/config";
 
