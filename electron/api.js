@@ -9,13 +9,13 @@ const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 exports.loadConfig = async () => {
   try {
     if (!fs.existsSync(CONFIG_DIR)) {
-      fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0775 });
+      fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o775 });
     }
     if (!fs.existsSync(CONFIG_FILE)) {
       const config_str = fs
         .readFileSync(path.join(__dirname, "assets", "config.json"))
         .toString();
-      fs.writeFileSync(CONFIG_FILE, config_str, { mode: 0664 });
+      fs.writeFileSync(CONFIG_FILE, config_str, { mode: 0o664 });
     }
 
     const config = JSON.parse(fs.readFileSync(CONFIG_FILE));
@@ -49,7 +49,6 @@ exports.saveFile = async (e, content, filePath) => {
 };
 
 exports.readFile = async (e, filePath) => {
-  //TODO: url decode filePath
   let doc;
   try {
     if (!filePath) {
@@ -57,7 +56,6 @@ exports.readFile = async (e, filePath) => {
     }
 
     doc = fs.readFileSync(filePath).toString();
-    //TODO: matter throws an error if frontmatter format is not supported
   } catch (err) {
     return { content: null, frontmatter: null, err };
   }
@@ -88,7 +86,7 @@ exports.getFolderPath = async () => {
       properties: ["openDirectory"],
     });
 
-    if (folderPaths == undefined) {
+    if (folderPaths === undefined) {
       return { folderPath: null, err: null, canceled: true };
     }
 
