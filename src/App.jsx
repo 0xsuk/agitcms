@@ -2,7 +2,6 @@ import { Fragment, useContext, useEffect } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Dir from "./components/Dir";
-import Editor from "./components/Editor";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import SideBar from "./components/SideBar";
