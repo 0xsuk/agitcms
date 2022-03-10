@@ -1,65 +1,26 @@
-import { Fragment, useState, useContext } from "react";
-import { configContext } from "../../../context/ConfigContext";
+import { Fragment } from "react";
 import { Folder } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useSiteConfig } from "../../../lib/config";
+import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 
 function Site() {
   const [siteKey, initialSiteConfig] = useSiteConfig();
-  const [siteConfig, setSiteConfig] = useState(initialSiteConfig);
-  const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
-
-  const updateSitePath = async () => {
-    const { folderPath, err, canceled } =
-      await window.electronAPI.getFolderPath();
-    if (err) {
-      alert(err);
-      return;
-    }
-    if (!err && !canceled) {
-      siteConfig.path = folderPath;
-      setSiteConfig({ ...siteConfig });
-    }
-  };
-
-  const updateCommandKey = (newKey, i) => {
-    siteConfig.commands[i].key = newKey;
-    setSiteConfig({ ...siteConfig });
-  };
-  const updateCommand = (newCommand, i) => {
-    siteConfig.commands[i].command = newCommand;
-    setSiteConfig({ ...siteConfig });
-  };
-
-  const updateFrontmatterKey = (newKey, i) => {
-    siteConfig.frontmatter[i].key = newKey;
-    setSiteConfig({ ...siteConfig });
-  };
-  const updateFrontmatterType = (newType, i) => {
-    siteConfig.frontmatter[i].type = newType;
-    setSiteConfig({ ...siteConfig });
-  };
-  const updateFrontmatterDefault = (newDefault, i) => {
-    siteConfig.frontmatter[i].default = newDefault;
-    setSiteConfig({ ...siteConfig });
-  };
-
-  const saveSiteConfig = () => {
-    if (siteConfig.name === "") {
-      alert("name cannot be empty");
-      return;
-    }
-    if (siteConfig.path === "") {
-      alert("path cannot be empty");
-      return;
-    }
-
-    updateSiteConfig(siteConfig);
-  };
-
-  const cancelSiteConfig = () => {
-    setSiteConfig(initialSiteConfig);
-  };
+  const [
+    siteConfig,
+    {
+      updateName,
+      updateCommand,
+      updateCommandKey,
+      updateFrontmatterDefault,
+      updateFrontmatterKey,
+      updateFrontmatterType,
+      updatePath,
+      saveSiteConfig,
+      deleteSiteConfig,
+      cancelSiteConfig,
+    },
+  ] = useSiteConfigBuffer(initialSiteConfig);
 
   return (
     <Fragment>
@@ -68,7 +29,7 @@ function Site() {
           <p>name:</p>
           <input
             onChange={(e) => {
-              setSiteConfig((pre) => ({ ...pre, name: e.target.value }));
+              updateName(e.target.value);
             }}
             value={siteConfig.name}
           />
@@ -77,7 +38,7 @@ function Site() {
         <div className="flex">
           <p>{siteConfig.path}</p>
           <Button>
-            <Folder onClick={updateSitePath} />
+            <Folder onClick={updatePath} />
           </Button>
         </div>
 
