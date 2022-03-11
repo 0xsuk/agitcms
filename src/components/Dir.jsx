@@ -5,7 +5,7 @@ import useSiteConfig from "../lib/useSiteConfig";
 
 function Dir() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
-  const [, siteConfig] = useSiteConfig();
+  const { siteConfig } = useSiteConfig();
   const [params] = useSearchParams();
 
   //current working dir or filek

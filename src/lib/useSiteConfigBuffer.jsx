@@ -1,9 +1,11 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 
 function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(initialSiteConfig);
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
+  const navigate = useNavigate();
 
   const updateName = async (newName) => {
     siteConfig.name = newName;
@@ -46,20 +48,25 @@ function useSiteConfigBuffer(initialSiteConfig) {
   };
 
   const saveSiteConfig = () => {
-    if (siteConfig.name === "") {
-      alert("name cannot be empty");
-      return;
-    }
-    if (siteConfig.path === "") {
-      alert("path cannot be empty");
-      return;
-    }
-
-    updateSiteConfig(siteConfig);
+    if (isSiteConfigValid()) updateSiteConfig(siteConfig);
   };
 
   const cancelSiteConfig = () => {
     setSiteConfig(initialSiteConfig);
+    navigate(-1);
+  };
+
+  const isSiteConfigValid = () => {
+    if (siteConfig.name === "") {
+      alert("name cannot be empty");
+      return false;
+    }
+    if (siteConfig.path === "") {
+      alert("path cannot be empty");
+      return false;
+    }
+
+    return true;
   };
 
   return [

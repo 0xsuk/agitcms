@@ -5,7 +5,9 @@ import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 
 function Site() {
-  const [siteKey, initialSiteConfig] = useSiteConfig();
+  const res = useSiteConfig();
+  const initialSiteConfig = res.siteConfig;
+  const isNew = res.isNew;
   const [
     siteConfig,
     {
@@ -25,6 +27,7 @@ function Site() {
   return (
     <Fragment>
       <div>
+        {isNew && <h1>New Site</h1>}
         <div className="flex">
           <p>name:</p>
           <input
@@ -88,7 +91,7 @@ function Site() {
 
         <Button onClick={cancelSiteConfig}>Cancel</Button>
         <Button onClick={saveSiteConfig}>Save</Button>
-        <Button onClick={() => deleteSiteConfig(siteKey)}>Delete</Button>
+        <Button onClick={() => deleteSiteConfig(siteConfig.key)}>Delete</Button>
       </div>
     </Fragment>
   );

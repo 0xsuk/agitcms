@@ -8,6 +8,7 @@ function Home() {
   const navigate = useNavigate();
 
   const addNewSite = () => {
+    //siteKey == "new"
     navigate("/settings/new");
   };
 

@@ -6,7 +6,7 @@ import useSiteConfig from "../lib/useSiteConfig";
 function SideBar() {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
-  const [siteKey, siteConfig] = useSiteConfig();
+  const { siteConfig, isNew } = useSiteConfig();
 
   return (
     <Fragment>
@@ -15,19 +15,26 @@ function SideBar() {
       {/*TODO: siteConfig.pinnedDirs.map */}
       {siteConfig && (
         <div>
+          {isNew && <h1>New Site</h1>}
           <h1>{siteConfig.name}</h1>
           <p>{siteConfig.path}</p>
           <div>
             <Link to="/">Home</Link>
           </div>
           <div>
-            <Link to={"/edit/" + siteKey + "?path=" + siteConfig.path}>
+            <Link to={"/edit/" + siteConfig.key + "?path=" + siteConfig.path}>
               Root
             </Link>
           </div>
           <div>
-            <Link to={"/settings/" + siteKey}>Settings</Link>
+            <Link to={"/settings/" + siteConfig.key}>Settings</Link>
           </div>
+        </div>
+      )}
+
+      {!siteConfig && (
+        <div>
+          <h1>Home</h1>
         </div>
       )}
     </Fragment>
