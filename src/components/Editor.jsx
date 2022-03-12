@@ -11,7 +11,7 @@ import useFileBuffer from "../lib/useFileBuffer";
 
 //filePath is a only dependency
 function Editor({ filePath }) {
-  const { file, editDoc, editFileName, editFrontmatter, readFile, saveFile } =
+  const { file, editDoc, editName, editFrontmatter, readFile, saveFile } =
     useFileBuffer(filePath);
   const [refContainer, editorView] = useCodeMirror({
     initialDoc: file.doc,
@@ -40,7 +40,7 @@ function Editor({ filePath }) {
   return (
     <Fragment>
       <h1>Editor</h1>
-      <input value={file.name} onChange={(e) => editFileName(e.target.value)} />
+      <input value={file.name} onChange={(e) => editName(e.target.value)} />
       <Button onClick={saveFile} variant="contained">
         Save
       </Button>

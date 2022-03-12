@@ -16,7 +16,7 @@ function useFileBuffer(filePath) {
   const editDoc = (doc) => {
     setFile((prev) => ({ ...prev, doc }));
   };
-  const editFileName = async (name) => {
+  const editName = async (name) => {
     setFile((prev) => ({ ...prev, name }));
   };
   const editFrontmatter = async (key, value) => {
@@ -70,7 +70,7 @@ function useFileBuffer(filePath) {
     fileName !== file.name && renameFileAndNavigate();
   };
 
-  return { file, editDoc, editFileName, editFrontmatter, readFile, saveFile };
+  return { file, editDoc, editName, editFrontmatter, readFile, saveFile };
 }
 
 export default useFileBuffer;
