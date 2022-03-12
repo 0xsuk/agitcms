@@ -9,13 +9,8 @@ import { unified } from "unified";
 
 import useCodeMirror from "../lib/useCodeMirror";
 
-function Editor(props) {
-  const filePath = props.filePath; //unchanged
-  const initialFileName = props.fileName; //could be changed
-  const [fileName, setFileName] = useState(initialFileName);
-  const navigate = useNavigate();
-  const [doc, setDoc] = useState(""); //doc is readonly and setSoc doest not update refContainer, use editorView.dispatch to update text
-  const [frontmatter, setFrontMatter] = useState({});
+//filePath is a only dependency
+function Editor({ filePath }) {
   const [refContainer, editorView] = useCodeMirror({
     initialDoc: doc,
     onChange: setDoc,

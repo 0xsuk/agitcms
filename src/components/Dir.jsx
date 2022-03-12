@@ -12,7 +12,6 @@ function Dir() {
   const cwdf = params.get("path");
   const isInRoot = cwdf === siteConfig.path;
   const isInDir = params.get("isDir") === "true" || isInRoot;
-  const fileName = params.get("fileName"); //optional //already decoded by get method
 
   useEffect(() => {
     console.warn("Dir Effect");
@@ -61,7 +60,7 @@ function Dir() {
             )}
           </Fragment>
         ))}
-      {!isInDir && <Editor filePath={cwdf} fileName={fileName}></Editor>}
+      {!isInDir && <Editor filePath={cwdf}></Editor>}
     </Fragment>
   );
 }
