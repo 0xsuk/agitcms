@@ -5,6 +5,7 @@ const path = require("path");
 const matter = require("gray-matter");
 const CONFIG_DIR = path.join(HOME_DIR, ".agitcms");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
+const YAML = require("yaml");
 
 exports.loadConfig = async () => {
   try {
@@ -35,13 +36,17 @@ exports.updateConfig = async (e, newConfig) => {
   }
 };
 
-exports.saveFile = async (e, content, filePath) => {
+exports.saveFile = async (e, doc, frontmatter, filePath) => {
   try {
     if (!filePath) {
       throw new Error("File path is not probided");
     }
 
-    fs.writeFileSync(filePath, content);
+    const yaml_str = YAML.stringify(frontmatter); //if frontmatter is {}, returns {}
+
+    if (Object.keys(frontmatter).length !== 0) doc = yaml_str + doc;
+
+    fs.writeFileSync(filePath, doc);
     return { err: null };
   } catch (err) {
     return { err };
