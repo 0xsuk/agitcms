@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
-import { createElement, Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { createElement, Fragment, useEffect } from "react";
 import rehypeReact from "rehype-react";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
@@ -8,58 +7,16 @@ import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 
 import useCodeMirror from "../lib/useCodeMirror";
+import useFileBuffer from "../lib/useFileBuffer";
 
 //filePath is a only dependency
 function Editor({ filePath }) {
+  const { file, editDoc, editFileName, editFrontmatter, readFile, saveFile } =
+    useFileBuffer(filePath);
   const [refContainer, editorView] = useCodeMirror({
-    initialDoc: doc,
-    onChange: setDoc,
+    initialDoc: file.doc,
+    onChange: editDoc,
   });
-
-  //TODO: useFileBuffer
-  const renameFileAndNavigate = async () => {
-    const { newFilePath, err } = await window.electronAPI.renameFile(
-      filePath,
-      fileName
-    );
-    if (err) {
-      alert(err.message);
-      return;
-    }
-    const to = "?path=" + newFilePath + "&isDir=false&fileName=" + fileName;
-    console.log("to", to);
-    navigate(to);
-  };
-
-  const saveFile = async () => {
-    console.log("saving", filePath, doc);
-    const { err } = await window.electronAPI.saveFile(doc, filePath);
-    if (err) {
-      alert(err.message);
-      return;
-    }
-    alert("Saved!");
-    fileName !== initialFileName && renameFileAndNavigate();
-  };
-
-  const readFile = async () => {
-    const res = await window.electronAPI.readFile(filePath);
-    if (res.err) {
-      console.log(res.err);
-      return;
-    }
-    //editorView.dispatch triggers update, thus setDoc
-    editorView.dispatch({
-      changes: {
-        from: 0,
-        to: editorView.state.doc.length,
-        insert: res.content,
-      },
-    });
-
-    setFrontMatter(res.frontmatter);
-    console.log("frontmatter:", res.frontmatter);
-  };
 
   useEffect(() => {
     console.warn("Editor Effect");
@@ -70,7 +27,7 @@ function Editor({ filePath }) {
       console.log("no filePath");
       return;
     }
-    readFile();
+    readFile(editorView);
   }, [editorView]); //eslint-disable-line
   //triggered when editorView === undefined (first time) and editorView is set (after refContainer is set)
   const md = unified()
@@ -78,24 +35,23 @@ function Editor({ filePath }) {
     .use(remarkGfm)
     .use(remarkRehype)
     .use(rehypeReact, { createElement, Fragment })
-    .processSync(doc).result;
+    .processSync(file.doc).result;
 
   return (
     <Fragment>
       <h1>Editor</h1>
-      <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
+      <input value={file.name} onChange={(e) => editFileName(e.target.value)} />
       <Button onClick={saveFile} variant="contained">
         Save
       </Button>
-      {Object.keys(frontmatter).length !== 0 &&
-        Object.keys(frontmatter).map((key) => (
+      {Object.keys(file.frontmatter).length !== 0 &&
+        Object.keys(file.frontmatter).map((key) => (
           <div className="flex">
             <p>{key}:</p>
             <input
-              value={frontmatter[key]}
+              value={file.frontmatter[key]}
               onChange={(e) => {
-                frontmatter[key] = e.target.value;
-                setFrontMatter({ ...frontmatter });
+                editFrontmatter(key, e.target.value);
               }}
             />
           </div>
