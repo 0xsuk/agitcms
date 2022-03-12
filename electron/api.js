@@ -54,23 +54,23 @@ exports.saveFile = async (e, doc, frontmatter, filePath) => {
 };
 
 exports.readFile = async (e, filePath) => {
-  let doc;
+  let content;
   try {
     if (!filePath) {
       throw new Error("File path is not provided");
     }
 
-    doc = fs.readFileSync(filePath).toString();
+    content = fs.readFileSync(filePath).toString();
   } catch (err) {
-    return { content: null, frontmatter: null, err };
+    return { doc: null, frontmatter: null, err };
   }
 
   try {
-    const { content, data } = matter(doc);
-    return { content, frontmatter: data, err: null };
+    const { content: doc, data } = matter(content);
+    return { doc, frontmatter: data, err: null };
   } catch (err) {
     console.log("frontmatter format is not supported");
-    return { content: doc, frontmatter: {}, err: null };
+    return { doc: null, frontmatter: {}, err: null };
   }
 };
 

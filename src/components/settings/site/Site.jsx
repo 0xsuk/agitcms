@@ -5,19 +5,17 @@ import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 
 function Site() {
-  const res = useSiteConfig();
-  const initialSiteConfig = res.siteConfig;
-  const isNew = res.isNew;
+  const { siteConfig: initialSiteConfig, isNew } = useSiteConfig();
   const [
     siteConfig,
     {
-      updateName,
-      updateCommand,
-      updateCommandKey,
-      updateFrontmatterDefault,
-      updateFrontmatterKey,
-      updateFrontmatterType,
-      updatePath,
+      editName,
+      editCommand,
+      editCommandKey,
+      editFrontmatterDefault,
+      editFrontmatterKey,
+      editFrontmatterType,
+      editPath,
       saveSiteConfig,
       deleteSiteConfig,
       cancelSiteConfig,
@@ -32,7 +30,7 @@ function Site() {
           <p>name:</p>
           <input
             onChange={(e) => {
-              updateName(e.target.value);
+              editName(e.target.value);
             }}
             value={siteConfig.name}
           />
@@ -41,7 +39,7 @@ function Site() {
         <div className="flex">
           <p>{siteConfig.path}</p>
           <Button>
-            <Folder onClick={updatePath} />
+            <Folder onClick={editPath} />
           </Button>
         </div>
 
@@ -55,11 +53,11 @@ function Site() {
                 <div className="flex">
                   <input
                     value={cmd_obj.key}
-                    onChange={(e) => updateCommandKey(e.target.value, i)}
+                    onChange={(e) => editCommandKey(e.target.value, i)}
                   />
                   <input
                     value={cmd_obj.command}
-                    onChange={(e) => updateCommand(e.target.value, i)}
+                    onChange={(e) => editCommand(e.target.value, i)}
                   />
                 </div>
               ))}
@@ -75,15 +73,15 @@ function Site() {
               <div className="flex">
                 <input
                   value={f.key}
-                  onChange={(e) => updateFrontmatterKey(e.target.value, i)}
+                  onChange={(e) => editFrontmatterKey(e.target.value, i)}
                 />
                 <input
                   value={f.type}
-                  onChange={(e) => updateFrontmatterType(e.target.value, i)}
+                  onChange={(e) => editFrontmatterType(e.target.value, i)}
                 />
                 <input
                   value={f.default}
-                  onChange={(e) => updateFrontmatterDefault(e.target.value, i)}
+                  onChange={(e) => editFrontmatterDefault(e.target.value, i)}
                 />
               </div>
             ))}

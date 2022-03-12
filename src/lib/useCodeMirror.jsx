@@ -3,10 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { EditorState } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
 
-const useCodeMirror = (props) => {
+const useCodeMirror = (initialDoc, onChange) => {
   const refContainer = useRef(null);
   const [editorView, setEditorView] = useState();
-  const { initialDoc, onChange } = props;
 
   useEffect(() => {
     console.warn("useCodeMirror effect");
@@ -32,7 +31,8 @@ const useCodeMirror = (props) => {
     });
 
     setEditorView(view);
-  }, []); //do I need to include refContainer as a dependency?
+  }, []); //eslint-disable-line
+  //do I need to include refContainer as a dependency?
 
   return [refContainer, editorView];
 };

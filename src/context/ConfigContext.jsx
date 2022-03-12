@@ -6,12 +6,12 @@ function ConfigContext({ children }) {
   const [config, setConfig] = useState({});
 
   const loadConfig = async () => {
-    const res = await window.electronAPI.loadConfig();
-    if (res.err) {
-      alert(res.err.message);
+    const { err, config: newConfig } = await window.electronAPI.loadConfig();
+    if (err) {
+      alert(err.message);
       return;
     }
-    setConfig({ ...res.config });
+    setConfig({ ...newConfig });
   };
 
   const updateConfig = async (newConfig) => {

@@ -13,14 +13,12 @@ import useFileBuffer from "../lib/useFileBuffer";
 function Editor({ filePath }) {
   const { file, editDoc, editName, editFrontmatter, readFile, saveFile } =
     useFileBuffer(filePath);
-  const [refContainer, editorView] = useCodeMirror({
-    initialDoc: file.doc,
-    onChange: editDoc,
-  });
+  const [refContainer, editorView] = useCodeMirror(file.doc, editDoc);
 
   useEffect(() => {
     console.warn("Editor Effect");
     if (editorView === undefined) {
+      console.log("setting editorView");
       return;
     }
     if (!filePath) {

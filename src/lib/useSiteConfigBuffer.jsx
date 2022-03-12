@@ -7,12 +7,12 @@ function useSiteConfigBuffer(initialSiteConfig) {
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
   const navigate = useNavigate();
 
-  const updateName = async (newName) => {
+  const editName = async (newName) => {
     siteConfig.name = newName;
     setSiteConfig({ ...siteConfig });
   };
 
-  const updatePath = async () => {
+  const editPath = async () => {
     const { folderPath, err, canceled } =
       await window.electronAPI.getFolderPath();
     if (err) {
@@ -25,24 +25,24 @@ function useSiteConfigBuffer(initialSiteConfig) {
     }
   };
 
-  const updateCommandKey = (newKey, i) => {
+  const editCommandKey = (newKey, i) => {
     siteConfig.commands[i].key = newKey;
     setSiteConfig({ ...siteConfig });
   };
-  const updateCommand = (newCommand, i) => {
+  const editCommand = (newCommand, i) => {
     siteConfig.commands[i].command = newCommand;
     setSiteConfig({ ...siteConfig });
   };
 
-  const updateFrontmatterKey = (newKey, i) => {
+  const editFrontmatterKey = (newKey, i) => {
     siteConfig.frontmatter[i].key = newKey;
     setSiteConfig({ ...siteConfig });
   };
-  const updateFrontmatterType = (newType, i) => {
+  const editFrontmatterType = (newType, i) => {
     siteConfig.frontmatter[i].type = newType;
     setSiteConfig({ ...siteConfig });
   };
-  const updateFrontmatterDefault = (newDefault, i) => {
+  const editFrontmatterDefault = (newDefault, i) => {
     siteConfig.frontmatter[i].default = newDefault;
     setSiteConfig({ ...siteConfig });
   };
@@ -72,13 +72,13 @@ function useSiteConfigBuffer(initialSiteConfig) {
   return [
     siteConfig,
     {
-      updateName,
-      updateCommand,
-      updateCommandKey,
-      updateFrontmatterDefault,
-      updateFrontmatterKey,
-      updateFrontmatterType,
-      updatePath,
+      editName,
+      editCommand,
+      editCommandKey,
+      editFrontmatterDefault,
+      editFrontmatterKey,
+      editFrontmatterType,
+      editPath,
       deleteSiteConfig,
       cancelSiteConfig,
       saveSiteConfig,

@@ -4,11 +4,13 @@ import { configContext } from "../context/ConfigContext";
 
 function useSiteConfig() {
   const { config } = useContext(configContext);
-  const params = useParams();
-  if (params.siteKey === "new")
+  const { siteKey: siteKey_str } = useParams();
+
+  if (siteKey_str === "new")
     return { siteConfig: newSiteConfig(), isNew: true };
-  const siteKey = Number(params.siteKey);
-  if (!siteKey) return { siteConfig: null, isNew: null };
+  if (!siteKey_str) return { siteConfig: null, isNew: null };
+
+  const siteKey = Number(siteKey_str);
   let siteConfig;
   config.sites.every((site) => {
     if (site.key === siteKey) {

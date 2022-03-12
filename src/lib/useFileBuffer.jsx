@@ -14,12 +14,13 @@ function useFileBuffer(filePath) {
   });
 
   const editDoc = (doc) => {
+    console.log("editing!,", doc);
     setFile((prev) => ({ ...prev, doc }));
   };
-  const editName = async (name) => {
+  const editName = (name) => {
     setFile((prev) => ({ ...prev, name }));
   };
-  const editFrontmatter = async (key, value) => {
+  const editFrontmatter = (key, value) => {
     setFile((prev) => ({
       ...prev,
       frontmatter: { ...prev.frontmatter, [key]: value },
@@ -27,20 +28,23 @@ function useFileBuffer(filePath) {
   };
 
   const readFile = async (editorView) => {
-    const res = await window.electronAPI.readFile(filePath);
-    if (res.err) {
-      console.log(res.err);
+    const { err, doc, frontmatter } = await window.electronAPI.readFile(
+      filePath
+    );
+    if (err) {
+      alert(err.message);
       return;
     }
+    console.log("reading file:", editorView);
     editorView.dispatch({
       changes: {
         from: 0,
-        to: editorView.state.doc.length, //calls updateDoc
-        insert: res.content,
+        to: editorView.state.doc.length, //TODO: calls updateDoc
+        insert: doc,
       },
     });
 
-    setFile((prev) => ({ ...prev, frontmatter: res.frontmatter }));
+    setFile((prev) => ({ ...prev, frontmatter }));
   };
 
   const renameFileAndNavigate = async () => {
@@ -57,6 +61,7 @@ function useFileBuffer(filePath) {
   };
 
   const saveFile = async () => {
+    console.log(file);
     const { err } = await window.electronAPI.saveFile(
       file.doc,
       file.frontmatter,
