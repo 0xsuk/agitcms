@@ -33,6 +33,10 @@ function useSiteConfigBuffer(initialSiteConfig) {
     siteConfig.commands[i].command = newCommand;
     setSiteConfig({ ...siteConfig });
   };
+  const addNewCommand = (key, command) => {
+    //TODO: setSiteConfig.commands?.push()
+    setSiteConfig.commands.push({ key, command });
+  };
 
   const editFrontmatterKey = (newKey, i) => {
     siteConfig.frontmatter[i].key = newKey;

@@ -11,7 +11,7 @@ import useFileBuffer from "../lib/useFileBuffer";
 
 //filePath is a only dependency
 function Editor({ filePath }) {
-  const { file, editDoc, editName, editFrontmatter, readFile, saveFile } =
+  const [file, { editDoc, editName, editFrontmatter, readFile, saveFile }] =
     useFileBuffer(filePath);
   const [refContainer, editorView] = useCodeMirror(file.doc, editDoc);
 

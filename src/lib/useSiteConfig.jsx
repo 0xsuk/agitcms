@@ -32,4 +32,8 @@ export const newSiteConfig = () => {
   };
 };
 
+export const useFrontmatterBuffer = () => {
+  console.log("HEY");
+};
+
 export default useSiteConfig;
