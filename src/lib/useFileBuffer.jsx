@@ -39,7 +39,7 @@ function useFileBuffer(filePath) {
     editorView.dispatch({
       changes: {
         from: 0,
-        to: editorView.state.doc.length, //TODO: calls updateDoc
+        to: editorView.state.doc.length,
         insert: doc,
       },
     });
@@ -75,7 +75,7 @@ function useFileBuffer(filePath) {
     fileName !== file.name && renameFileAndNavigate();
   };
 
-  return { file, editDoc, editName, editFrontmatter, readFile, saveFile };
+  return [file, { editDoc, editName, editFrontmatter, readFile, saveFile }];
 }
 
 export default useFileBuffer;
