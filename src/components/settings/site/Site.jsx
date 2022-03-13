@@ -12,12 +12,16 @@ function Site() {
       editName,
       editCommand,
       editCommandKey,
+      addNewCommand,
+      removeCommand,
       editFrontmatterDefault,
       editFrontmatterKey,
       editFrontmatterType,
+      addNewFrontmatter,
+      removeFrontmatter,
       editPath,
       saveSiteConfig,
-      deleteSiteConfig,
+      removeSiteConfig,
       cancelSiteConfig,
     },
   ] = useSiteConfigBuffer(initialSiteConfig);
@@ -46,9 +50,9 @@ function Site() {
         {/* TODO: add new commands */}
         <div>
           <p>Commands</p>
-          <Button>New</Button>
+          <Button onClick={addNewCommand}>New</Button>
           <div>
-            {siteConfig.commands?.length &&
+            {siteConfig.commands.length !== 0 &&
               siteConfig.commands.map((cmd_obj, i) => (
                 <div className="flex">
                   <input
@@ -59,6 +63,7 @@ function Site() {
                     value={cmd_obj.command}
                     onChange={(e) => editCommand(e.target.value, i)}
                   />
+                  <Button onClick={() => removeCommand(i)}>x</Button>
                 </div>
               ))}
           </div>
@@ -67,8 +72,8 @@ function Site() {
         {/* TODO: FrontMatter */}
         <div>
           <p>frontmatter</p>
-          <Button>New</Button>
-          {siteConfig.frontmatter?.length &&
+          <Button onClick={addNewFrontmatter}>New</Button>
+          {siteConfig.frontmatter.length !== 0 &&
             siteConfig.frontmatter.map((f, i) => (
               <div className="flex">
                 <input
@@ -83,13 +88,14 @@ function Site() {
                   value={f.default}
                   onChange={(e) => editFrontmatterDefault(e.target.value, i)}
                 />
+                <Button onClick={() => removeFrontmatter(i)}>x</Button>
               </div>
             ))}
         </div>
 
         <Button onClick={cancelSiteConfig}>Cancel</Button>
         <Button onClick={saveSiteConfig}>Save</Button>
-        <Button onClick={() => deleteSiteConfig(siteConfig.key)}>Delete</Button>
+        <Button onClick={() => removeSiteConfig(siteConfig.key)}>Delete</Button>
       </div>
     </Fragment>
   );

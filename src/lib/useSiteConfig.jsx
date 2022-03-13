@@ -29,11 +29,9 @@ export const newSiteConfig = () => {
     path: "",
     defaultDir: "",
     mediaDir: "",
+    commands: [],
+    frontmatter: [],
   };
-};
-
-export const useFrontmatterBuffer = () => {
-  console.log("HEY");
 };
 
 export default useSiteConfig;

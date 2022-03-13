@@ -6,10 +6,11 @@ function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(initialSiteConfig);
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
   const navigate = useNavigate();
+  //siteConfig !== siteConfigCopy //true
+  const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
 
   const editName = async (newName) => {
-    siteConfig.name = newName;
-    setSiteConfig({ ...siteConfig });
+    setSiteConfig({ ...siteConfig, name: newName });
   };
 
   const editPath = async () => {
@@ -20,44 +21,66 @@ function useSiteConfigBuffer(initialSiteConfig) {
       return;
     }
     if (!err && !canceled) {
-      siteConfig.path = folderPath;
-      setSiteConfig({ ...siteConfig });
+      setSiteConfig({ ...siteConfig, path: folderPath });
     }
   };
 
   const editCommandKey = (newKey, i) => {
-    siteConfig.commands[i].key = newKey;
-    setSiteConfig({ ...siteConfig });
+    siteConfigCopy.commands[i].key = newKey;
+    setSiteConfig(siteConfigCopy);
   };
   const editCommand = (newCommand, i) => {
-    siteConfig.commands[i].command = newCommand;
-    setSiteConfig({ ...siteConfig });
+    siteConfigCopy.commands[i].command = newCommand;
+    setSiteConfig(siteConfigCopy);
   };
-  const addNewCommand = (key, command) => {
-    //TODO: setSiteConfig.commands?.push()
-    setSiteConfig.commands.push({ key, command });
+  const addNewCommand = () => {
+    siteConfigCopy.commands.push({ key: "", command: "" });
+    setSiteConfig(siteConfigCopy);
+  };
+  const removeCommand = (i) => {
+    siteConfigCopy.commands.splice(i, 1);
+    setSiteConfig(siteConfigCopy);
   };
 
   const editFrontmatterKey = (newKey, i) => {
-    siteConfig.frontmatter[i].key = newKey;
-    setSiteConfig({ ...siteConfig });
+    siteConfigCopy.frontmatter[i].key = newKey;
+    setSiteConfig(siteConfigCopy);
   };
   const editFrontmatterType = (newType, i) => {
-    siteConfig.frontmatter[i].type = newType;
-    setSiteConfig({ ...siteConfig });
+    siteConfigCopy.frontmatter[i].type = newType;
+    setSiteConfig(siteConfigCopy);
   };
   const editFrontmatterDefault = (newDefault, i) => {
-    siteConfig.frontmatter[i].default = newDefault;
-    setSiteConfig({ ...siteConfig });
+    siteConfigCopy.frontmatter[i].default = newDefault;
+    setSiteConfig(siteConfigCopy);
+  };
+  const addNewFrontmatter = () => {
+    siteConfigCopy.frontmatter.push({ key: "", type: "", default: "" });
+    setSiteConfig(siteConfigCopy);
+  };
+  const removeFrontmatter = (i) => {
+    siteConfigCopy.frontmatter.splice(i, 1);
+    setSiteConfig(siteConfigCopy);
   };
 
   const saveSiteConfig = () => {
-    if (isSiteConfigValid()) updateSiteConfig(siteConfig);
+    if (!isSiteConfigValid()) {
+      return;
+    }
+    updateSiteConfig(siteConfig);
+    navigate(-1);
   };
 
   const cancelSiteConfig = () => {
+    console.log("init:", initialSiteConfig);
     setSiteConfig(initialSiteConfig);
     navigate(-1);
+  };
+
+  const removeSiteConfig = (key) => {
+    if (!window.confirm("are you sure?")) return;
+    deleteSiteConfig(key);
+    navigate("/");
   };
 
   const isSiteConfigValid = () => {
@@ -70,6 +93,35 @@ function useSiteConfigBuffer(initialSiteConfig) {
       return false;
     }
 
+    const isCommandsValid = siteConfig.commands.every((command, i) => {
+      if (command.key === "") {
+        alert(i, "th command's key is empty");
+        return false;
+      }
+      if (command.command === "") {
+        alert(i, "th command's command is empty");
+        return false;
+      }
+      return true;
+    });
+    if (!isCommandsValid) return false;
+
+    const isFrontmatterValid = siteConfig.frontmatter.every(
+      (singlematter, i) => {
+        if (singlematter.key === "") {
+          alert(i, "th frontmatter's key is empty");
+          return false;
+        }
+        if (singlematter.type === "") {
+          alert(i, "th frontmatter's type is empty");
+          return false;
+        }
+        return true;
+      }
+    );
+
+    if (!isFrontmatterValid) return false;
+
     return true;
   };
 
@@ -79,11 +131,15 @@ function useSiteConfigBuffer(initialSiteConfig) {
       editName,
       editCommand,
       editCommandKey,
+      addNewCommand,
+      removeCommand,
       editFrontmatterDefault,
       editFrontmatterKey,
       editFrontmatterType,
+      addNewFrontmatter,
+      removeFrontmatter,
       editPath,
-      deleteSiteConfig,
+      removeSiteConfig,
       cancelSiteConfig,
       saveSiteConfig,
     },
