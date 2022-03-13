@@ -8,8 +8,9 @@ TODO:
 
 - [x] add new site(Site.jsx)
 - [ ] root settings (Settings.jsx)
-- [ ] add new commands (commands.jsx)
-- [ ] add new frontmatter (frontmatter.jsx) / custom type frontmatter
+- [x] add new commands
+- [x] add new frontmatter
+- [ ] custom type frontmatter
 - [ ] frontmatter editor
 - [ ] scroll sync
 - [ ] pinned dir
