@@ -7,11 +7,11 @@ Still under development!!
 TODO:
 
 - [x] add new site(Site.jsx)
-- [ ] root settings (Settings.jsx)
 - [x] add new commands
 - [x] add new frontmatter
 - [ ] custom type frontmatter
 - [ ] frontmatter editor
+- [ ] root settings (Settings.jsx)
 - [ ] scroll sync
 - [ ] pinned dir
 - [ ] command button
