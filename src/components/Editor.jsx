@@ -8,12 +8,27 @@ import { unified } from "unified";
 
 import useCodeMirror from "../lib/useCodeMirror";
 import useFileBuffer from "../lib/useFileBuffer";
+import useSiteConfig from "../lib/useSiteConfig";
 
 //filePath is a only dependency
 function Editor({ filePath }) {
   const [file, { editDoc, editName, editFrontmatter, readFile, saveFile }] =
     useFileBuffer(filePath);
   const [refContainer, editorView] = useCodeMirror(file.doc, editDoc);
+  const { siteConfig } = useSiteConfig();
+
+  const getFrontmatterType = (key) => {
+    let type = undefined;
+    siteConfig.frontmatter.every((singlematter, i) => {
+      if (singlematter.key === key) {
+        type = singlematter.type;
+        return false;
+      }
+      return true;
+    });
+
+    return type;
+  };
 
   useEffect(() => {
     console.warn("Editor Effect");
@@ -45,7 +60,10 @@ function Editor({ filePath }) {
       {Object.keys(file.frontmatter).length !== 0 &&
         Object.keys(file.frontmatter).map((key) => (
           <div className="flex">
-            <p>{key}:</p>
+            <p>
+              {key}:({getFrontmatterType(key)})
+              {/* TODO: if getFrontmatterType === array: provide list */}
+            </p>
             <input
               value={file.frontmatter[key]}
               onChange={(e) => {

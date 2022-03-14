@@ -47,7 +47,6 @@ function Site() {
           </Button>
         </div>
 
-        {/* TODO: add new commands */}
         <div>
           <p>Commands</p>
           <Button onClick={addNewCommand}>New</Button>
@@ -69,7 +68,6 @@ function Site() {
           </div>
         </div>
 
-        {/* TODO: FrontMatter */}
         <div>
           <p>frontmatter</p>
           <Button onClick={addNewFrontmatter}>New</Button>
