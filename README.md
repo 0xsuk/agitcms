@@ -4,16 +4,18 @@ Open source desktop content manager for any static sites.
 
 Still under development!!
 
+![](.github/agitcms.gif)
+
 TODO:
 
 - [x] add new site(Site.jsx)
 - [x] add new commands
 - [x] add new frontmatter
-- [ ] custom type frontmatter
+- [x] pinned dir
 - [ ] frontmatter editor
+- [ ] custom type frontmatter
 - [ ] root settings (Settings.jsx)
-- [ ] scroll sync
-- [ ] pinned dir
 - [ ] command button
+- [ ] scroll sync
 - [ ] styling
 - [ ] image pasting
