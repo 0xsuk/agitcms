@@ -13,11 +13,30 @@ function SideBar() {
       <ArrowBackIosNew className="mui-icon" onClick={goBack} />
 
       {/*TODO: siteConfig.pinnedDirs.map */}
-      {siteConfig && (
+      {siteConfig !== null && (
         <div>
           {isNew && <h1>New Site</h1>}
           <h1>{siteConfig.name}</h1>
           <p>{siteConfig.path}</p>
+          {siteConfig.pinnedDirs.map((dir) => (
+            <div>
+              <Link
+                to={
+                  "/edit/" +
+                  siteConfig.key +
+                  "?path=" +
+                  dir.path +
+                  "&name=" +
+                  dir.name +
+                  "&isDir=" +
+                  dir.isDir
+                }
+              >
+                {dir.name}
+              </Link>
+            </div>
+          ))}
+          <br></br>
           <div>
             <Link to="/">Home</Link>
           </div>

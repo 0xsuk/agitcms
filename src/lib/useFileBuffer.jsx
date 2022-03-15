@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 function useFileBuffer(filePath) {
   const [params] = useSearchParams();
   const navigate = useNavigate();
-  const fileName = params.get("fileName");
+  const fileName = params.get("name");
   const [file, setFile] = useState({
     name: fileName,
     doc: "",
@@ -44,6 +44,7 @@ function useFileBuffer(filePath) {
       },
     });
 
+    console.log("frontmatter:", frontmatter);
     setFile((prev) => ({ ...prev, frontmatter }));
   };
 

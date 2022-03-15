@@ -29,6 +29,7 @@ export const newSiteConfig = () => {
     path: "",
     defaultDir: "",
     mediaDir: "",
+    pinnedDirs: [],
     commands: [],
     frontmatter: [],
   };

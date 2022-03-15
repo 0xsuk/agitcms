@@ -57,6 +57,7 @@ function Editor({ filePath }) {
         Save
       </Button>
       <Fragment>
+        {/* TODO: frontmatter editor */}
         {Object.keys(file.frontmatter).length !== 0 &&
           Object.keys(file.frontmatter).map((matterKey) => (
             <div className="flex">

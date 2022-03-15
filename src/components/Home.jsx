@@ -17,7 +17,15 @@ function Home() {
       <h1>Home</h1>
       {config.sites?.map((siteConfig) => (
         <div className="flex">
-          <Link to={"/edit/" + siteConfig.key + "?path=" + siteConfig.path}>
+          <Link
+            to={
+              "/edit/" +
+              siteConfig.key +
+              "?path=" +
+              siteConfig.path +
+              "&name=Root&isDir=true"
+            }
+          >
             <h2>{siteConfig.name}</h2>
           </Link>
         </div>
