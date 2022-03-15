@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { EditorState } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
+import { lineNumbers } from "@codemirror/gutter";
 
 const useCodeMirror = (initialDoc, onChange) => {
   const refContainer = useRef(null);
@@ -18,6 +19,7 @@ const useCodeMirror = (initialDoc, onChange) => {
       doc: initialDoc,
       extensions: [
         EditorView.lineWrapping,
+        lineNumbers(),
         EditorView.updateListener.of((update) => {
           if (update.changes) {
             onChange(update.state.doc.toString());

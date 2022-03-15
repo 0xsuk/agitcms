@@ -7,6 +7,7 @@
   "homepage": "./",
   "dependencies": {
     "@codemirror/commands": "^0.19.8",
+    "@codemirror/gutter": "^0.19.9",
     "@codemirror/state": "^0.19.9",
     "@codemirror/view": "^0.19.44",
     "@emotion/react": "^11.8.1",

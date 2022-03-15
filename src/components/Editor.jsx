@@ -71,16 +71,14 @@ function Editor({ filePath }) {
           ))}
       </Fragment>
 
-      <Box>
-        <Grid container spacing={0}>
-          <Grid item xs={6}>
-            <div id="editor" ref={refContainer}></div>
-          </Grid>
-          <Grid item xs={6}>
-            <div id="previewer">{md}</div>
-          </Grid>
+      <Grid container spacing={0}>
+        <Grid item xs={6}>
+          <div id="editor" ref={refContainer}></div>
         </Grid>
-      </Box>
+        <Grid item xs={6}>
+          <div id="previewer">{md}</div>
+        </Grid>
+      </Grid>
     </Fragment>
   );
 }
