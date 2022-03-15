@@ -45,7 +45,7 @@ exports.saveFile = async (e, doc, frontmatter, filePath) => {
     const yaml_str = YAML.stringify(frontmatter); //if frontmatter is {}, returns {}
 
     if (Object.keys(frontmatter).length !== 0)
-      doc = "---" + yaml_str + "---" + doc;
+      doc = "---\n" + yaml_str + "---" + doc;
 
     fs.writeFileSync(filePath, doc);
     return { err: null };
@@ -70,7 +70,7 @@ exports.readFile = async (e, filePath) => {
     const { content: doc, data } = matter(content);
     return { doc, frontmatter: data, err: null };
   } catch (err) {
-    console.log("frontmatter format is not supported");
+    console.log("frontmatter format is not supported", err);
     return { doc: null, frontmatter: {}, err: null };
   }
 };
