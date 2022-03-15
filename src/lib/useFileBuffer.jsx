@@ -20,7 +20,14 @@ function useFileBuffer(filePath) {
   const editName = (name) => {
     setFile((prev) => ({ ...prev, name }));
   };
-  const editFrontmatter = (key, value) => {
+  const editFrontmatter = (key, value, i) => {
+    if (i !== undefined) {
+      value = file.frontmatter[key].map((v, ii) => {
+        if (ii === i) return value;
+        return v;
+      });
+    }
+
     setFile((prev) => ({
       ...prev,
       frontmatter: { ...prev.frontmatter, [key]: value },

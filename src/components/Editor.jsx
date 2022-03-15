@@ -64,12 +64,21 @@ function Editor({ filePath }) {
               {key}:({getFrontmatterType(key)})
               {/* TODO: if getFrontmatterType === array: provide list */}
             </p>
-            <input
-              value={file.frontmatter[key]}
-              onChange={(e) => {
-                editFrontmatter(key, e.target.value);
-              }}
-            />
+            {getFrontmatterType(key) === "String" && (
+              <input
+                value={file.frontmatter[key]}
+                onChange={(e) => {
+                  editFrontmatter(key, e.target.value);
+                }}
+              />
+            )}
+            {getFrontmatterType(key) === "Array" &&
+              file.frontmatter[key].map((v, i) => (
+                <input
+                  value={v}
+                  onChange={(e) => editFrontmatter(key, e.target.value, i)}
+                />
+              ))}
           </div>
         ))}
 
