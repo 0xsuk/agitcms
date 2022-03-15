@@ -9,7 +9,6 @@ import { unified } from "unified";
 import useCodeMirror from "../lib/useCodeMirror";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
-
 //filePath is a only dependency
 function Editor({ filePath }) {
   const [file, { editDoc, editName, editFrontmatter, readFile, saveFile }] =
@@ -57,30 +56,20 @@ function Editor({ filePath }) {
       <Button onClick={saveFile} variant="contained">
         Save
       </Button>
-      {Object.keys(file.frontmatter).length !== 0 &&
-        Object.keys(file.frontmatter).map((key) => (
-          <div className="flex">
-            <p>
-              {key}:({getFrontmatterType(key)})
-              {/* TODO: if getFrontmatterType === array: provide list */}
-            </p>
-            {getFrontmatterType(key) === "String" && (
+      <Fragment>
+        {Object.keys(file.frontmatter).length !== 0 &&
+          Object.keys(file.frontmatter).map((matterKey) => (
+            <div className="flex">
+              <p>
+                {matterKey}:({getFrontmatterType(matterKey)})
+              </p>
               <input
-                value={file.frontmatter[key]}
-                onChange={(e) => {
-                  editFrontmatter(key, e.target.value);
-                }}
+                value={file.frontmatter[matterKey]}
+                onChange={(e) => editFrontmatter(matterKey, e.target.value)}
               />
-            )}
-            {getFrontmatterType(key) === "Array" &&
-              file.frontmatter[key].map((v, i) => (
-                <input
-                  value={v}
-                  onChange={(e) => editFrontmatter(key, e.target.value, i)}
-                />
-              ))}
-          </div>
-        ))}
+            </div>
+          ))}
+      </Fragment>
 
       <div className="flex">
         <div id="editor" ref={refContainer}></div>
