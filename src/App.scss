@@ -18,12 +18,10 @@ code {
 }
 
 #root {
-  width: 100vw;
   height: 100vh;
 }
 
 #side {
-  flex-shrink: 0; //because #side is a flex element
   width: 250px;
   height: 100vh;
   border: 1px black solid;
@@ -31,21 +29,25 @@ code {
 
 #main {
   width: 100%;
-  max-width: 700px;
   background-color: rgb(214, 210, 210);
 }
 
 #editor {
   .cm-editor {
+    padding: 10px;
     min-height: 50vh;
     background-color: rgb(201, 201, 201);
   }
-  width: 50%;
 }
 
 #previewer {
-  width: 50%;
-  overflow: auto;
+  padding: 10px;
+  // word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-all;
+  pre {
+    white-space: pre-wrap;
+  }
 }
 
 .mui-icon {

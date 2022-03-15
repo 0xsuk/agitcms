@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import { createElement, Fragment, useEffect } from "react";
 import rehypeReact from "rehype-react";
 import remarkGfm from "remark-gfm";
@@ -71,10 +71,16 @@ function Editor({ filePath }) {
           ))}
       </Fragment>
 
-      <div className="flex">
-        <div id="editor" ref={refContainer}></div>
-        <div id="previewer">{md}</div>
-      </div>
+      <Box>
+        <Grid container spacing={0}>
+          <Grid item xs={6}>
+            <div id="editor" ref={refContainer}></div>
+          </Grid>
+          <Grid item xs={6}>
+            <div id="previewer">{md}</div>
+          </Grid>
+        </Grid>
+      </Box>
     </Fragment>
   );
 }

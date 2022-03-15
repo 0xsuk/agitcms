@@ -17,6 +17,7 @@ const useCodeMirror = (initialDoc, onChange) => {
     const startState = EditorState.create({
       doc: initialDoc,
       extensions: [
+        EditorView.lineWrapping,
         EditorView.updateListener.of((update) => {
           if (update.changes) {
             onChange(update.state.doc.toString());
