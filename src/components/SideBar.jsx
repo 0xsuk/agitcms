@@ -1,23 +1,19 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Fragment } from "react";
-import { ArrowBackIosNew } from "@mui/icons-material";
 import useSiteConfig from "../lib/useSiteConfig";
 
 function SideBar() {
-  const navigate = useNavigate();
-  const goBack = () => navigate(-1);
   const { siteConfig, isNew } = useSiteConfig();
 
   return (
-    <Fragment>
-      <ArrowBackIosNew className="mui-icon" onClick={goBack} />
-
+    <div>
       {/*TODO: siteConfig.pinnedDirs.map */}
-      {siteConfig !== null && (
+      {siteConfig !== null && !isNew && (
         <div>
-          {isNew && <h1>New Site</h1>}
-          <h1>{siteConfig.name}</h1>
-          <p>{siteConfig.path}</p>
+          <p style={{ fontSize: "20px", padding: "0 10px" }}>
+            {siteConfig.name}
+          </p>
+
           {siteConfig.pinnedDirs.map((dir) => (
             <div>
               <Link
@@ -50,13 +46,7 @@ function SideBar() {
           </div>
         </div>
       )}
-
-      {!siteConfig && (
-        <div>
-          <h1>Home</h1>
-        </div>
-      )}
-    </Fragment>
+    </div>
   );
 }
 

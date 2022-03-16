@@ -1,7 +1,7 @@
 import { Fragment, useContext, useEffect } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import "./App.scss";
-import Dir from "./components/Dir";
+import Dir from "./components/Explorer";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import Site from "./components/settings/site/Site";

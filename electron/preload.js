@@ -11,4 +11,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getFolderPath: () => ipcRenderer.invoke("get-folder-path"),
   getFilesAndFolders: (folderPath) =>
     ipcRenderer.invoke("get-files-and-folders", folderPath),
+  runCommand: (path, command) =>
+    ipcRenderer.invoke("run-command", path, command),
 });

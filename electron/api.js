@@ -1,4 +1,6 @@
 const { dialog } = require("electron");
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
 const fs = require("fs");
 const HOME_DIR = require("os").homedir();
 const path = require("path");
@@ -114,4 +116,9 @@ exports.getFilesAndFolders = async (e, folderPath) => {
   } catch (err) {
     return { filesAndFolders: null, err };
   }
+};
+
+exports.runCommand = async (e, path, command) => {
+  const { stdout, stderr } = await exec("cd " + path + " && " + command);
+  return { stdout, stderr };
 };

@@ -22,14 +22,20 @@ code {
 }
 
 #side {
-  width: 250px;
+  width: 170px;
   height: 100vh;
-  border: 1px black solid;
+  flex-shrink: 0;
+  word-break: break-word;
+  padding: 5px;
+  background-color: rgb(214, 210, 210);
+  position: sticky;
+  top: 0;
 }
 
 #main {
   width: 100%;
   background-color: rgb(214, 210, 210);
+  padding: 5px;
 }
 
 #editor {

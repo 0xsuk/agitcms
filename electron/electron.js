@@ -1,3 +1,4 @@
+const { exec } = require("child_process");
 const { app, BrowserWindow } = require("electron");
 const { ipcMain } = require("electron/main");
 const path = require("path");
@@ -10,7 +11,10 @@ const {
   getFolderPath,
   getFilesAndFolders,
   renameFile,
+  runCommand,
 } = require("./api");
+
+console.log(process.cwd());
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -38,6 +42,7 @@ app.whenReady().then(() => {
   ipcMain.handle("rename-file", renameFile);
   ipcMain.handle("get-folder-path", getFolderPath);
   ipcMain.handle("get-files-and-folders", getFilesAndFolders);
+  ipcMain.handle("run-command", runCommand);
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
