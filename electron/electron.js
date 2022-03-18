@@ -15,7 +15,7 @@ const {
 } = require("./api");
 
 const CONFIG_DIR = path.join(require("os").homedir(), ".agitcms");
-const CONFIG_FILE = path.join(exports.CONFIG_DIR, "config.json");
+const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 let CONFIG = undefined;
 
 const createWindow = () => {
