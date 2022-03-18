@@ -5,12 +5,8 @@ export const configContext = createContext();
 function ConfigContext({ children }) {
   const [config, setConfig] = useState({});
 
-  const loadConfig = async () => {
-    const { err, config: newConfig } = await window.electronAPI.loadConfig();
-    if (err) {
-      alert(err.message);
-      return;
-    }
+  const readConfig = async () => {
+    const { config: newConfig } = await window.electronAPI.readConfig();
     setConfig({ ...newConfig });
   };
 
@@ -58,7 +54,7 @@ function ConfigContext({ children }) {
     <configContext.Provider
       value={{
         config,
-        loadConfig,
+        readConfig,
         updateSiteConfig,
         deleteSiteConfig,
       }}

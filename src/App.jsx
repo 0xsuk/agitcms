@@ -9,8 +9,8 @@ import SideBar from "./components/SideBar";
 import { configContext } from "./context/ConfigContext";
 
 function App() {
-  const { config, loadConfig } = useContext(configContext);
-  useEffect(() => loadConfig(), []); //eslint-disable-line
+  const { config, readConfig } = useContext(configContext);
+  useEffect(() => readConfig(), []); //eslint-disable-line
 
   if (config.sites === undefined) {
     console.log("reading config", config);
