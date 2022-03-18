@@ -27,6 +27,7 @@ function SideBar() {
               <Button onClick={() => runCommand(command)}>
                 {command.name}
               </Button>
+              {/* TODO: isCommandRunning? -> Stop button */}
             </div>
           ))}
 
