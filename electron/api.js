@@ -2,43 +2,27 @@ const { dialog } = require("electron");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const fs = require("fs");
-const HOME_DIR = require("os").homedir();
+const { CONFIG, CONFIG_FILE, setConfig } = require("./electron");
 const path = require("path");
 const matter = require("gray-matter");
-const CONFIG_DIR = path.join(HOME_DIR, ".agitcms");
-const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 const YAML = require("yaml");
 
-exports.loadConfig = async () => {
-  try {
-    if (!fs.existsSync(CONFIG_DIR)) {
-      fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o775 });
-    }
-    if (!fs.existsSync(CONFIG_FILE)) {
-      const config_str = fs
-        .readFileSync(path.join(__dirname, "assets", "config.json"))
-        .toString();
-      fs.writeFileSync(CONFIG_FILE, config_str, { mode: 0o664 });
-    }
-
-    const config = JSON.parse(fs.readFileSync(CONFIG_FILE));
-    return { config, err: null };
-  } catch (err) {
-    return { config: null, err };
-  }
+exports.readConfig = () => {
+  return { config: CONFIG };
 };
 
-exports.updateConfig = async (e, newConfig) => {
+exports.updateConfig = (e, newConfig) => {
   try {
     const config_str = JSON.stringify(newConfig);
     fs.writeFileSync(CONFIG_FILE, config_str);
+    setConfig(newConfig);
     return;
   } catch (err) {
     return err;
   }
 };
 
-exports.saveFile = async (e, doc, frontmatter, filePath) => {
+exports.saveFile = (e, doc, frontmatter, filePath) => {
   try {
     if (!filePath) {
       throw new Error("File path is not probided");
@@ -56,7 +40,7 @@ exports.saveFile = async (e, doc, frontmatter, filePath) => {
   }
 };
 
-exports.readFile = async (e, filePath) => {
+exports.readFile = (e, filePath) => {
   let content;
   try {
     if (!filePath) {
@@ -77,7 +61,7 @@ exports.readFile = async (e, filePath) => {
   }
 };
 
-exports.renameFile = async (e, oldFilePath, newFileName) => {
+exports.renameFile = (e, oldFilePath, newFileName) => {
   try {
     const newFilePath = path.join(oldFilePath, "..", newFileName);
     fs.renameSync(oldFilePath, newFilePath);
@@ -88,7 +72,7 @@ exports.renameFile = async (e, oldFilePath, newFileName) => {
   }
 };
 
-exports.getFolderPath = async () => {
+exports.getFolderPath = () => {
   try {
     const folderPaths = dialog.showOpenDialogSync({
       properties: ["openDirectory"],
@@ -104,7 +88,7 @@ exports.getFolderPath = async () => {
   }
 };
 
-exports.getFilesAndFolders = async (e, folderPath) => {
+exports.getFilesAndFolders = (e, folderPath) => {
   try {
     const dirents = fs.readdirSync(folderPath, { withFileTypes: true });
     const filesAndFolders = dirents.map((dirent) => ({
