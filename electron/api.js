@@ -2,7 +2,7 @@ const { dialog } = require("electron");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const fs = require("fs");
-const { CONFIG, CONFIG_FILE, setConfig } = require("./electron");
+const { CONFIG, CONFIG_FILE } = require("./config.js");
 const path = require("path");
 const matter = require("gray-matter");
 const YAML = require("yaml");
@@ -15,7 +15,8 @@ exports.updateConfig = (e, newConfig) => {
   try {
     const config_str = JSON.stringify(newConfig);
     fs.writeFileSync(CONFIG_FILE, config_str);
-    setConfig(newConfig);
+
+    //if config is updated, reload is required to update CONFIG variable in the main process
     return;
   } catch (err) {
     return err;
