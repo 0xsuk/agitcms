@@ -1,11 +1,10 @@
 const { dialog } = require("electron");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
 const fs = require("fs");
 const { CONFIG, CONFIG_FILE } = require("./config.js");
 const path = require("path");
 const matter = require("gray-matter");
 const YAML = require("yaml");
+const ShellProcess = require("./lib/shellprocess.js");
 
 exports.readConfig = () => {
   return { config: CONFIG };
@@ -103,7 +102,28 @@ exports.getFilesAndFolders = (e, folderPath) => {
   }
 };
 
-exports.runCommand = async (e, path, command) => {
-  const { stdout, stderr } = await exec("cd " + path + " && " + command);
-  return { stdout, stderr };
+let processes = []; //[{cid: , process: ,}]
+exports.runCommand = async (e, command, args, cwd, cid) => {
+  try {
+    processes.forEach((process) => {
+      if (process.cid === cid) {
+        throw new Error("Cannot run same command at the same time"); //OR: existing process.stopIfRunning()?
+      }
+    });
+    const process = new ShellProcess(command, args, cwd);
+    processes.push({ cid, process });
+    return { err: null };
+  } catch (err) {
+    return { err };
+  }
+};
+
+exports.stopCommand = async (e, cid) => {
+  processes.every((process) => {
+    if (process.cid === cid) {
+      process.process.stopIfRunning();
+      return false;
+    }
+    return true;
+  });
 };
