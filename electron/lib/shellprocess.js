@@ -1,9 +1,8 @@
 const { spawn } = require("child_process");
 
 class ShellProcess {
-  constructor(cmd, args, cwd) {
+  constructor(cmd, cwd) {
     this.cmd = cmd;
-    this.args = args;
     this.cwd = cwd;
     this.process = undefined;
   }
@@ -11,9 +10,14 @@ class ShellProcess {
   async run() {
     const process = spawn(this.cmd, this.args, {
       cwd: this.cwd,
+      shell: true,
     });
     this.process = process;
+    process.on("error", (err) => {
+      throw err;
+    });
     //TODO output console
+    process.stdout.on("data", (data) => console.log(data.toString()));
   }
 
   stopIfRunning() {

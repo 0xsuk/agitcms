@@ -103,15 +103,16 @@ exports.getFilesAndFolders = (e, folderPath) => {
 };
 
 let processes = []; //[{cid: , process: ,}]
-exports.runCommand = async (e, command, args, cwd, cid) => {
+exports.runCommand = async (e, command, cwd, cid) => {
   try {
     processes.forEach((process) => {
       if (process.cid === cid) {
         throw new Error("Cannot run same command at the same time"); //OR: existing process.stopIfRunning()?
       }
     });
-    const process = new ShellProcess(command, args, cwd);
+    const process = new ShellProcess(command, cwd);
     processes.push({ cid, process });
+    process.run();
     return { err: null };
   } catch (err) {
     return { err };

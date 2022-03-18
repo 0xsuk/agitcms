@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 import useSiteConfig from "../lib/useSiteConfig";
+import { Button } from "@mui/material";
 
 function SideBar() {
   const { siteConfig, isNew } = useSiteConfig();
+
+  const runCommand = async (command) => {
+    window.electronAPI.runCommand(
+      command.command,
+      siteConfig.path,
+      command.key
+    );
+  };
 
   return (
     <div>
@@ -13,6 +22,13 @@ function SideBar() {
           </p>
 
           {/*TODO: mapping commands  */}
+          {siteConfig.commands.map((command) => (
+            <div>
+              <Button onClick={() => runCommand(command)}>
+                {command.name}
+              </Button>
+            </div>
+          ))}
 
           {/* mapping pinnedDirs */}
           {siteConfig.pinnedDirs.map((dir) => (
