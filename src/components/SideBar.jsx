@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Fragment } from "react";
 import useSiteConfig from "../lib/useSiteConfig";
 
 function SideBar() {
@@ -7,13 +6,15 @@ function SideBar() {
 
   return (
     <div>
-      {/*TODO: siteConfig.pinnedDirs.map */}
       {siteConfig !== null && !isNew && (
         <div>
           <p style={{ fontSize: "20px", padding: "0 10px" }}>
             {siteConfig.name}
           </p>
 
+          {/*TODO: mapping commands  */}
+
+          {/* mapping pinnedDirs */}
           {siteConfig.pinnedDirs.map((dir) => (
             <div>
               <Link

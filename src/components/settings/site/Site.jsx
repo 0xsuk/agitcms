@@ -11,7 +11,7 @@ function Site() {
     {
       editName,
       editCommand,
-      editCommandKey,
+      editCommandName,
       addNewCommand,
       removeCommand,
       editFrontmatterDefault,
@@ -55,8 +55,8 @@ function Site() {
               siteConfig.commands.map((cmd_obj, i) => (
                 <div className="flex">
                   <input
-                    value={cmd_obj.key}
-                    onChange={(e) => editCommandKey(e.target.value, i)}
+                    value={cmd_obj.name}
+                    onChange={(e) => editCommandName(e.target.value, i)}
                   />
                   <input
                     value={cmd_obj.command}

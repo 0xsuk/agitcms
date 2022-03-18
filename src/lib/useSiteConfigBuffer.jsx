@@ -25,8 +25,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
     }
   };
 
-  const editCommandKey = (newKey, i) => {
-    siteConfigCopy.commands[i].key = newKey;
+  const editCommandName = (newName, i) => {
+    siteConfigCopy.commands[i].name = newName;
     setSiteConfig(siteConfigCopy);
   };
   const editCommand = (newCommand, i) => {
@@ -34,7 +34,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
     setSiteConfig(siteConfigCopy);
   };
   const addNewCommand = () => {
-    siteConfigCopy.commands.push({ key: "", command: "" });
+    siteConfigCopy.commands.push({ key: Date.now(), name: "", command: "" });
     setSiteConfig(siteConfigCopy);
   };
   const removeCommand = (i) => {
@@ -130,7 +130,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
     {
       editName,
       editCommand,
-      editCommandKey,
+      editCommandName,
       addNewCommand,
       removeCommand,
       editFrontmatterDefault,
