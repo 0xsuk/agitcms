@@ -5,6 +5,7 @@ import Dir from "./components/Explorer";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import Site from "./components/settings/site/Site";
+import Shell from "./components/Shell";
 import SideBar from "./components/SideBar";
 import { configContext } from "./context/ConfigContext";
 
@@ -42,6 +43,9 @@ function Wrapper() {
       </div>
       <div id="main">
         <Outlet />
+      </div>
+      <div id="extension">
+        <Shell />
       </div>
     </div>
   );
