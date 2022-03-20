@@ -102,17 +102,23 @@ exports.getFilesAndFolders = (e, folderPath) => {
   }
 };
 
-let processes = []; //[{cid: , process: ,}]
+let processes = []; //[process...]
+
 exports.runCommand = async (e, command, cwd, cid) => {
   try {
-    processes.forEach((process) => {
-      if (process.cid === cid) {
+    processes.forEach((p) => {
+      if (p.cid === cid) {
+        console.log("Cannot run same command at the same time", p.cmd);
         throw new Error("Cannot run same command at the same time"); //OR: existing process.stopIfRunning()?
       }
     });
-    const process = new ShellProcess(command, cwd);
-    processes.push({ cid, process });
+    const process = new ShellProcess(command, cwd, cid);
+    processes.push(process);
     process.run();
+    process.process.on("exit", () => {
+      console.log("exited:", process.cmd);
+      processes = processes.filter((p) => p.cid !== process.cid);
+    });
     return { err: null };
   } catch (err) {
     return { err };
@@ -120,9 +126,9 @@ exports.runCommand = async (e, command, cwd, cid) => {
 };
 
 exports.stopCommand = async (e, cid) => {
-  processes.every((process) => {
-    if (process.cid === cid) {
-      process.process.stopIfRunning();
+  processes.every((p) => {
+    if (p.cid === cid) {
+      p.stopIfRunning();
       return false;
     }
     return true;

@@ -11,6 +11,7 @@ const {
   getFilesAndFolders,
   renameFile,
   runCommand,
+  stopCommand,
 } = require("./api");
 
 const createWindow = () => {
@@ -40,6 +41,7 @@ app.whenReady().then(() => {
   ipcMain.handle("get-folder-path", getFolderPath);
   ipcMain.handle("get-files-and-folders", getFilesAndFolders);
   ipcMain.handle("run-command", runCommand);
+  ipcMain.handle("stop-command", stopCommand);
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

@@ -13,6 +13,10 @@ function SideBar() {
     );
   };
 
+  const stopCommand = async (cid) => {
+    window.electronAPI.stopCommand(cid);
+  };
+
   return (
     <div>
       {siteConfig !== null && !isNew && (
@@ -28,6 +32,7 @@ function SideBar() {
                 {command.name}
               </Button>
               {/* TODO: isCommandRunning? -> Stop button */}
+              <Button onClick={() => stopCommand(command.key)}>Stop</Button>
             </div>
           ))}
 

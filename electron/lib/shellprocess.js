@@ -23,6 +23,7 @@ class ShellProcess {
   stopIfRunning() {
     if (this.process !== undefined) {
       this.process.kill();
+      console.log("killed", this.cmd);
     }
   }
 }
