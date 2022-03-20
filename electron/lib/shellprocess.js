@@ -1,9 +1,10 @@
 const { spawn } = require("child_process");
 
 class ShellProcess {
-  constructor(cmd, cwd) {
+  constructor(cmd, cwd, cid) {
     this.cmd = cmd;
     this.cwd = cwd;
+    this.cid = cid;
     this.process = undefined;
   }
 
