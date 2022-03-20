@@ -18,7 +18,12 @@ class ShellProcess {
       throw err;
     });
     //TODO output console
-    process.stdout.on("data", (data) => console.log(data.toString()));
+    this.emitLines(process.stdout);
+
+    process.stdout.on("line", (line) => {
+      console.log(line);
+    });
+    //TODO: stderr.on data
   }
 
   stopIfRunning() {
@@ -26,6 +31,25 @@ class ShellProcess {
       this.process.kill();
       console.log("killed", this.cmd);
     }
+  }
+
+  emitLines(stream) {
+    var backlog = "";
+    stream.on("data", (data) => {
+      backlog += data;
+      var n = backlog.indexOf("\n");
+      // got a \n? emit one or more 'line' events
+      while (~n) {
+        stream.emit("line", backlog.substring(0, n));
+        backlog = backlog.substring(n + 1);
+        n = backlog.indexOf("\n");
+      }
+    });
+    stream.on("end", function () {
+      if (backlog) {
+        stream.emit("line", backlog);
+      }
+    });
   }
 }
 
