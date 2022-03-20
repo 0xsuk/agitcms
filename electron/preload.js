@@ -14,4 +14,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   runCommand: (command, cwd, cid) =>
     ipcRenderer.invoke("run-command", command, cwd, cid),
   stopCommand: (cid) => ipcRenderer.invoke("stop-command", cid),
+  onShellProcessLine: (callback) =>
+    ipcRenderer.on("shellprocess-line", callback),
 });

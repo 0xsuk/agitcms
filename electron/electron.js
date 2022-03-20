@@ -1,7 +1,5 @@
 const { app, BrowserWindow } = require("electron");
 const { ipcMain } = require("electron/main");
-const path = require("path");
-const isDev = require("electron-is-dev"); //is not a devDependencies
 const {
   readConfig,
   updateConfig,
@@ -13,22 +11,7 @@ const {
   runCommand,
   stopCommand,
 } = require("./api");
-
-const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 900,
-    height: 700,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
-
-  win.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../index.html")}` //be careful on relative path
-  );
-};
+const { createWindow } = require("./lib/window_manager");
 
 app.whenReady().then(() => {
   createWindow();

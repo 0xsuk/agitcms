@@ -1,4 +1,5 @@
 const { spawn } = require("child_process");
+const { getWindow } = require("./window_manager");
 
 class ShellProcess {
   constructor(cmd, cwd, cid) {
@@ -17,11 +18,11 @@ class ShellProcess {
     process.on("error", (err) => {
       throw err;
     });
-    //TODO output console
     this.emitLines(process.stdout);
 
     process.stdout.on("line", (line) => {
-      console.log(line);
+      const win = getWindow();
+      win?.webContents.send("shellprocess-line", { line });
     });
     //TODO: stderr.on data
   }
