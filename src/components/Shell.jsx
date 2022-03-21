@@ -1,13 +1,26 @@
-const { Fragment } = require("react");
+import { Button } from "@mui/material";
+
+const { Fragment, useState, useEffect } = require("react");
 
 function Shell() {
-  if (typeof window !== undefined) {
-    window.electronAPI.onShellProcessLine((e, data) => {
-      console.log(data.line);
-    });
-  }
+  const [lines, setLines] = useState([]);
 
-  return <Fragment></Fragment>;
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      window.electronAPI.onShellProcessLine((e, data) => {
+        setLines((prev) => [...prev, data.line]);
+      });
+    }
+  }, []);
+
+  return (
+    <Fragment>
+      <Button onClick={() => setLines([])}>Clear</Button>
+      {lines.map((line) => (
+        <p>{line}</p>
+      ))}
+    </Fragment>
+  );
 }
 
 export default Shell;
