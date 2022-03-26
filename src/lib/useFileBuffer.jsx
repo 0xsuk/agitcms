@@ -9,14 +9,9 @@ function useFileBuffer(filePath) {
   const fileName = params.get("name");
   const [file, setFile] = useState({
     name: fileName,
-    doc: "",
     frontmatter: {},
   });
 
-  const editDoc = (doc) => {
-    console.log("editing!,", doc);
-    setFile((prev) => ({ ...prev, doc }));
-  };
   const editName = (name) => {
     setFile((prev) => ({ ...prev, name }));
   };
@@ -27,7 +22,7 @@ function useFileBuffer(filePath) {
     }));
   };
 
-  const readFile = async (editorView) => {
+  const readFile = async (tuieditor) => {
     const { err, doc, frontmatter } = await window.electronAPI.readFile(
       filePath
     );
@@ -35,15 +30,7 @@ function useFileBuffer(filePath) {
       alert(err.message);
       return;
     }
-    console.log("reading file:", editorView);
-    editorView.dispatch({
-      changes: {
-        from: 0,
-        to: editorView.state.doc.length,
-        insert: doc,
-      },
-    });
-
+    tuieditor.getInstance().setMarkdown(doc);
     console.log("frontmatter:", frontmatter);
     setFile((prev) => ({ ...prev, frontmatter }));
   };
@@ -61,10 +48,10 @@ function useFileBuffer(filePath) {
     navigate(to);
   };
 
-  const saveFile = async () => {
+  const saveFile = async (tuieditor) => {
     console.log(file);
     const { err } = await window.electronAPI.saveFile(
-      file.doc,
+      tuieditor.getInstance().getMarkdown(),
       file.frontmatter,
       filePath
     );
@@ -76,7 +63,7 @@ function useFileBuffer(filePath) {
     fileName !== file.name && renameFileAndNavigate();
   };
 
-  return [file, { editDoc, editName, editFrontmatter, readFile, saveFile }];
+  return [file, { editName, editFrontmatter, readFile, saveFile }];
 }
 
 export default useFileBuffer;

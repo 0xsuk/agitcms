@@ -1,19 +1,15 @@
-import { Button, Grid } from "@mui/material";
-import { createElement, Fragment, useEffect } from "react";
-import rehypeReact from "rehype-react";
-import remarkGfm from "remark-gfm";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import { unified } from "unified";
-
-import useCodeMirror from "../lib/useCodeMirror";
+import { Button } from "@mui/material";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { Editor as Tuieditor } from "@toast-ui/react-editor";
+import { Fragment, useEffect, useRef } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
 //filePath is a only dependency
+
 function Editor({ filePath }) {
-  const [file, { editDoc, editName, editFrontmatter, readFile, saveFile }] =
+  const [file, { editName, editFrontmatter, readFile, saveFile }] =
     useFileBuffer(filePath);
-  const [refContainer, editorView] = useCodeMirror(file.doc, editDoc);
+  const editorRef = useRef();
   const { siteConfig } = useSiteConfig();
 
   const getFrontmatterType = (key) => {
@@ -30,32 +26,17 @@ function Editor({ filePath }) {
   };
 
   useEffect(() => {
-    console.warn("Editor Effect");
-    if (editorView === undefined) {
-      console.log("setting editorView");
-      return;
-    }
-    if (!filePath) {
-      console.log("no filePath");
-      return;
-    }
-    readFile(editorView);
-  }, [editorView]); //eslint-disable-line
-  //triggered when editorView === undefined (first time) and editorView is set (after refContainer is set)
-  const md = unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeReact, { createElement, Fragment })
-    .processSync(file.doc).result;
+    console.log(editorRef.current);
+    readFile(editorRef.current);
+  }, []);
 
   return (
     <Fragment>
-      {/* <div>
+      <div>
         <Button onClick={saveFile} variant="contained">
           Save
         </Button>
-      </div> */}
+      </div>
       <input value={file.name} onChange={(e) => editName(e.target.value)} />
       <Fragment>
         {/* TODO: frontmatter editor */}
@@ -72,15 +53,9 @@ function Editor({ filePath }) {
             </div>
           ))}
       </Fragment>
-
-      <Grid container spacing={0}>
-        <Grid item xs={6}>
-          <div id="editor" ref={refContainer}></div>
-        </Grid>
-        <Grid item xs={6}>
-          <div id="previewer">{md}</div>
-        </Grid>
-      </Grid>
+      <Fragment>
+        <Tuieditor previewStyle="vertical" ref={editorRef} />
+      </Fragment>
     </Fragment>
   );
 }
