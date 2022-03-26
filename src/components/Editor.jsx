@@ -51,11 +51,11 @@ function Editor({ filePath }) {
 
   return (
     <Fragment>
-      <div>
+      {/* <div>
         <Button onClick={saveFile} variant="contained">
           Save
         </Button>
-      </div>
+      </div> */}
       <input value={file.name} onChange={(e) => editName(e.target.value)} />
       <Fragment>
         {/* TODO: frontmatter editor */}

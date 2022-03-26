@@ -12,10 +12,10 @@ TODO:
 - [x] add new commands
 - [x] add new frontmatter
 - [x] pinned dir
+- [x] command button
 - [ ] frontmatter editor
-- [ ] custom type frontmatter
+  - [ ] move frontmatter editor to side of main editor
 - [ ] root settings (Settings.jsx)
-- [ ] command button
 - [ ] scroll sync
 - [ ] styling
 - [ ] image pasting

@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 
-const { Fragment, useState, useEffect } = require("react");
+const { useState, useEffect } = require("react");
 
 function Shell() {
   const [lines, setLines] = useState([]);
@@ -14,12 +14,12 @@ function Shell() {
   }, []);
 
   return (
-    <Fragment>
+    <div id="shell">
       <Button onClick={() => setLines([])}>Clear</Button>
       {lines.map((line) => (
         <p>{line}</p>
       ))}
-    </Fragment>
+    </div>
   );
 }
 
