@@ -56,9 +56,7 @@ function SideBar() {
             </div>
           ))}
           <br></br>
-          <div>
-            <Link to="/">Home</Link>
-          </div>
+
           <div>
             <Link to={"/edit/" + siteConfig.key + "?path=" + siteConfig.path}>
               Root
@@ -69,6 +67,12 @@ function SideBar() {
           </div>
         </div>
       )}
+      <div>
+        <Link to="/">Home</Link>
+      </div>
+      <div>
+        <Link to="/test">Test</Link>
+      </div>
     </div>
   );
 }
