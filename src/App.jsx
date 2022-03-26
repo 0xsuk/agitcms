@@ -7,6 +7,7 @@ import Settings from "./components/Settings";
 import Site from "./components/settings/site/Site";
 import Shell from "./components/Shell";
 import SideBar from "./components/SideBar";
+import Test from "./components/Test";
 import { configContext } from "./context/ConfigContext";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Wrapper />}>
+        <Route path="test" element={<Test />}></Route>
         <Route path="" element={<Home />}></Route>
         <Route path="settings">
           <Route path="" element={<Settings />}></Route>
