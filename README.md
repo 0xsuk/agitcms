@@ -13,6 +13,7 @@ TODO:
 - [x] add new frontmatter
 - [x] pinned dir
 - [x] command button
+- [ ] use tui instead
 - [ ] frontmatter editor
   - [ ] move frontmatter editor to side of main editor
 - [ ] root settings (Settings.jsx)
