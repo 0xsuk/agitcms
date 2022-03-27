@@ -33,7 +33,7 @@ function Editor({ filePath }) {
   return (
     <Fragment>
       <div>
-        <Button onClick={saveFile} variant="contained">
+        <Button onClick={() => saveFile(editorRef.current)} variant="contained">
           Save
         </Button>
       </div>
