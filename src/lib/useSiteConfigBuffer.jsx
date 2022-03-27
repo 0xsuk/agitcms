@@ -109,11 +109,11 @@ function useSiteConfigBuffer(initialSiteConfig) {
     const isFrontmatterValid = siteConfig.frontmatter.every(
       (singlematter, i) => {
         if (singlematter.key === "") {
-          alert(i, "th frontmatter's key is empty");
+          alert(i + 1 + "th frontmatter's key is empty");
           return false;
         }
         if (singlematter.type === "") {
-          alert(i, "th frontmatter's type is empty");
+          alert(i + 1 + "th frontmatter's type is empty");
           return false;
         }
         return true;
