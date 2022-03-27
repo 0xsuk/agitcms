@@ -68,13 +68,13 @@ function useSiteConfigBuffer(initialSiteConfig) {
       return;
     }
     updateSiteConfig(siteConfig);
-    navigate(-1);
+    // navigate(-1);
   };
 
   const cancelSiteConfig = () => {
     console.log("init:", initialSiteConfig);
     setSiteConfig(initialSiteConfig);
-    navigate(-1);
+    // navigate(-1);
   };
 
   const removeSiteConfig = (key) => {
