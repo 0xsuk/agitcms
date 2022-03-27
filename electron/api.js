@@ -108,8 +108,9 @@ exports.runCommand = async (e, command, cwd, cid) => {
   try {
     shellProcessList.forEach((p) => {
       if (p.cid === cid) {
-        console.log("Cannot run same command at the same time", p.cmd);
-        throw new Error("Cannot run same command at the same time"); //OR: existing process.stopIfRunning()?
+        const message = "Cannot run same command at the same time: " + p.cmd;
+        console.log(message);
+        throw new Error(message);
       }
     });
     const shellProcess = new ShellProcess(command, cwd, cid);
