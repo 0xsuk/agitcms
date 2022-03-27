@@ -2,7 +2,6 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Editor from "./Editor";
 import useSiteConfig from "../lib/useSiteConfig";
-import { Button } from "@mui/material";
 import { configContext } from "../context/ConfigContext";
 
 function Dir() {
@@ -16,6 +15,12 @@ function Dir() {
   const dfName = params.get("name");
   const isInRoot = cwdf === siteConfig.path;
   const isInDir = params.get("isDir") === "true" || isInRoot;
+  const isDfPinned = !siteConfig.pinnedDirs.every((df) => {
+    if (df.path === cwdf) {
+      return false;
+    }
+    return true;
+  });
 
   useEffect(() => {
     console.warn("Dir Effect");
@@ -36,14 +41,28 @@ function Dir() {
     });
   };
 
+  const removePinnedDir = (path, isDir) => {
+    const pinnedDirs = siteConfig.pinnedDirs.filter(
+      (df) => df.path !== path || df.isDir !== isDir
+    );
+    updateSiteConfig({
+      ...siteConfig,
+      pinnedDirs,
+    });
+  };
+
   return (
     <Fragment>
-      <p>
+      <div id="top-bar">
         {cwdf}{" "}
-        <Button onClick={() => addPinnedDirs(dfName, cwdf, isInDir)}>
-          Pin
-        </Button>
-      </p>
+        {isDfPinned ? (
+          <button onClick={() => removePinnedDir(cwdf, isInDir)}>Unpin</button>
+        ) : (
+          <button onClick={() => addPinnedDirs(dfName, cwdf, isInDir)}>
+            Pin
+          </button>
+        )}
+      </div>
 
       {isInDir &&
         filesAndFolders.map((df) => (
