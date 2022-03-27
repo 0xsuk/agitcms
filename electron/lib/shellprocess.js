@@ -29,6 +29,7 @@ class ShellProcess {
 
   stopIfRunning() {
     if (this.process !== undefined) {
+      this.process.stdout.emit("line", "killed");
       this.process.kill();
       console.log("killed", this.cmd);
     }
@@ -50,6 +51,7 @@ class ShellProcess {
       if (backlog) {
         stream.emit("line", backlog);
       }
+      stream.emit("line", "end");
     });
   }
 }
