@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Dir from "./components/Explorer";
@@ -12,7 +12,13 @@ import { configContext } from "./context/ConfigContext";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
-  useEffect(() => readConfig(), []); //eslint-disable-line
+  const [lines, setLines] = useState([]);
+  useEffect(() => {
+    readConfig();
+    window.electronAPI.onShellProcessLine((e, data) => {
+      setLines((prev) => [...prev, data.line]);
+    });
+  }, []); //eslint-disable-line
 
   if (config.sites === undefined) {
     console.log("reading config", config);
@@ -27,6 +33,12 @@ function App() {
         <Route path="settings">
           <Route path="" element={<Settings />}></Route>
           <Route path=":siteKey" element={<Site />}></Route>
+        </Route>
+        <Route path="shell">
+          <Route
+            path=":siteKey"
+            element={<Shell lines={lines} setLines={setLines} />}
+          ></Route>
         </Route>
         <Route path="edit">
           <Route path=":siteKey/*" element={<Dir />}></Route>
@@ -45,9 +57,6 @@ function Wrapper() {
       </div>
       <div id="main">
         <Outlet />
-      </div>
-      <div id="extension">
-        <Shell />
       </div>
     </div>
   );

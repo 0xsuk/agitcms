@@ -6,11 +6,14 @@ function SideBar() {
   const { siteConfig, isNew } = useSiteConfig();
 
   const runCommand = async (command) => {
-    window.electronAPI.runCommand(
+    const { err } = await window.electronAPI.runCommand(
       command.command,
       siteConfig.path,
       command.key
     );
+    if (err) {
+      alert(err.message);
+    }
   };
 
   const stopCommand = async (cid) => {
@@ -63,6 +66,9 @@ function SideBar() {
             </Link>
           </div>
           <div>
+            <Link to={"/shell/" + siteConfig.key}>Shell</Link>
+          </div>
+          <div>
             <Link to={"/settings/" + siteConfig.key}>Settings</Link>
           </div>
         </div>
@@ -70,6 +76,7 @@ function SideBar() {
       <div>
         <Link to="/">Home</Link>
       </div>
+
       <div>
         <Link to="/test">Test</Link>
       </div>

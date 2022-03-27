@@ -26,7 +26,6 @@ function Editor({ filePath }) {
   };
 
   useEffect(() => {
-    console.log(editorRef.current);
     readFile(editorRef.current);
   }, []);
 
@@ -54,7 +53,7 @@ function Editor({ filePath }) {
           ))}
       </Fragment>
       <Fragment>
-        <Tuieditor previewStyle="vertical" ref={editorRef} />
+        <Tuieditor previewStyle="vertical" ref={editorRef} height="100vh" />
       </Fragment>
     </Fragment>
   );

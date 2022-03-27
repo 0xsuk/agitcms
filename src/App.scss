@@ -38,25 +38,8 @@ code {
   padding: 5px;
 }
 
-#editor {
-  .cm-editor {
-    padding: 0 10px 0 0;
-    background-color: rgb(201, 201, 201);
-  }
-}
-
-#previewer {
-  padding: 10px;
-  // word-wrap: break-word;
-  white-space: pre-wrap;
-  word-break: break-all;
-  pre {
-    white-space: pre-wrap;
-  }
-}
-
 #shell {
-  width: 300px;
+  // width: 300px;
 }
 
 .mui-icon {
