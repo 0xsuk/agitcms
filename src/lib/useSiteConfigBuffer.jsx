@@ -68,6 +68,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
       return;
     }
     updateSiteConfig(siteConfig);
+    alert("Saved!");
     // navigate(-1);
   };
 
