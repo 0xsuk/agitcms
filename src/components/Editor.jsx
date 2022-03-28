@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import { border, padding } from "@mui/system";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor as TuiEditor } from "@toast-ui/react-editor";
 import { Fragment, useEffect, useRef } from "react";
@@ -27,20 +28,49 @@ function Editor({ filePath }) {
 
   const frontmatterEditor = (matterKey, matterValue, matterType) => {
     const stringEditor = (
-      <input
-        value={matterValue}
-        onChange={(e) => editFrontmatter(matterKey, e.target.value)}
-      />
-    );
-
-    return (
       <div className="flex">
-        <p>
-          {matterKey}:({matterType})
-        </p>
-        {stringEditor}
+        <p>{matterKey}:(String editor)</p>
+        <input
+          value={matterValue}
+          onChange={(e) => editFrontmatter(matterKey, e.target.value)}
+        />
       </div>
     );
+
+    const dateEditor = (
+      <div className="flex">
+        <p>{matterKey}:(Date editor)</p>
+        <input
+          value={matterValue}
+          onChange={(e) => editFrontmatter(matterKey, e.target.value)}
+          style={{ padding: "10px" }}
+        />
+      </div>
+    );
+
+    const boolEditor = (
+      <div className="flex">
+        <p>{matterKey}</p>
+        <label class="switch">
+          <input type="checkbox" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+    );
+
+    switch (matterType) {
+      case "String":
+        return stringEditor;
+
+      case "Date":
+        return dateEditor;
+
+      case "Bool":
+        return boolEditor;
+
+      default:
+        return stringEditor;
+    }
   };
 
   useEffect(() => {
