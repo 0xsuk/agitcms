@@ -24,6 +24,7 @@ function App() {
     console.log("reading config", config);
     return <Fragment />;
   }
+  console.log("configuration:", config);
 
   return (
     <Routes>
