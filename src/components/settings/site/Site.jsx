@@ -26,6 +26,8 @@ function Site() {
     },
   ] = useSiteConfigBuffer(initialSiteConfig);
 
+  console.log(siteConfig.frontmatter);
+
   return (
     <Fragment>
       <div>

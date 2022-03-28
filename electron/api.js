@@ -1,13 +1,13 @@
 const { dialog } = require("electron");
 const fs = require("fs");
-const { CONFIG, CONFIG_FILE } = require("./config.js");
+const { getConfig, CONFIG_FILE } = require("./config.js");
 const path = require("path");
 const matter = require("gray-matter");
 const YAML = require("yaml");
 const ShellProcess = require("./lib/shellprocess.js");
 
 exports.readConfig = () => {
-  return { config: CONFIG };
+  return { config: getConfig() };
 };
 
 exports.updateConfig = (e, newConfig) => {
