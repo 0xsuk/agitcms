@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor as Tuieditor } from "@toast-ui/react-editor";
+import { Editor as TuiEditor } from "@toast-ui/react-editor";
 import { Fragment, useEffect, useRef } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
@@ -25,6 +25,24 @@ function Editor({ filePath }) {
     return type;
   };
 
+  const frontmatterEditor = (matterKey, matterValue, matterType) => {
+    const stringEditor = (
+      <input
+        value={matterValue}
+        onChange={(e) => editFrontmatter(matterKey, e.target.value)}
+      />
+    );
+
+    return (
+      <div className="flex">
+        <p>
+          {matterKey}:({matterType})
+        </p>
+        {stringEditor}
+      </div>
+    );
+  };
+
   useEffect(() => {
     readFile(editorRef.current);
   }, []);
@@ -40,20 +58,16 @@ function Editor({ filePath }) {
       <Fragment>
         {/* TODO: frontmatter editor */}
         {Object.keys(file.frontmatter).length !== 0 &&
-          Object.keys(file.frontmatter).map((matterKey) => (
-            <div className="flex">
-              <p>
-                {matterKey}:({getFrontmatterType(matterKey)})
-              </p>
-              <input
-                value={file.frontmatter[matterKey]}
-                onChange={(e) => editFrontmatter(matterKey, e.target.value)}
-              />
-            </div>
-          ))}
+          Object.keys(file.frontmatter).map((matterKey) =>
+            frontmatterEditor(
+              matterKey,
+              file.frontmatter[matterKey],
+              getFrontmatterType(matterKey)
+            )
+          )}
       </Fragment>
       <Fragment>
-        <Tuieditor previewStyle="vertical" ref={editorRef} height="100vh" />
+        <TuiEditor previewStyle="vertical" ref={editorRef} height="100vh" />
       </Fragment>
     </Fragment>
   );
