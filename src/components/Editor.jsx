@@ -1,5 +1,4 @@
-import { Button } from "@mui/material";
-import { border, padding } from "@mui/system";
+import { Button, Switch } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor as TuiEditor } from "@toast-ui/react-editor";
 import { Fragment, useEffect, useRef } from "react";
@@ -51,10 +50,11 @@ function Editor({ filePath }) {
     const boolEditor = (
       <div className="flex">
         <p>{matterKey}</p>
-        <label class="switch">
-          <input type="checkbox" />
-          <span class="slider round"></span>
-        </label>
+        <Switch
+          size="small"
+          defaultChecked={matterValue}
+          onChange={() => editFrontmatter(matterKey, !matterValue)}
+        />
       </div>
     );
 
