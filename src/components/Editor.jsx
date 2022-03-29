@@ -89,7 +89,13 @@ function Editor({ filePath }) {
           Save
         </Button>
       </div>
-      <input value={file.name} onChange={(e) => editName(e.target.value)} />
+      <TextField
+        label="File name"
+        value={file.name}
+        variant="standard"
+        onChange={(e) => editName(e.target.value)}
+        fullWidth
+      />
 
       <Stack spacing={1}>
         {/* TODO: frontmatter editor */}
@@ -110,9 +116,7 @@ function Editor({ filePath }) {
             </Grid>
           ))}
       </Stack>
-      <Fragment>
-        <TuiEditor previewStyle="vertical" ref={editorRef} height="100vh" />
-      </Fragment>
+      <TuiEditor previewStyle="vertical" ref={editorRef} height="100vh" />
     </Fragment>
   );
 }
