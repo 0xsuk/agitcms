@@ -80,7 +80,7 @@ function Editor({ filePath }) {
 
   useEffect(() => {
     readFile(editorRef.current);
-  }, []);
+  }, [filePath]);
 
   return (
     <Fragment>
@@ -98,7 +98,6 @@ function Editor({ filePath }) {
       />
 
       <Stack spacing={1}>
-        {/* TODO: frontmatter editor */}
         {Object.keys(file.frontmatter).length !== 0 &&
           Object.keys(file.frontmatter).map((matterKey) => (
             <Grid container spacing={0} alignItems="center">
