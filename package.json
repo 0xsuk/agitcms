@@ -6,6 +6,7 @@
   "main": "electron/electron.js",
   "homepage": "./",
   "dependencies": {
+    "@date-io/date-fns": "^2.13.1",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.4.2",

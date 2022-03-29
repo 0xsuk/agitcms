@@ -1,9 +1,12 @@
-import { Button, Switch } from "@mui/material";
+import { Button, Grid, Stack, Switch, TextField } from "@mui/material";
+import DateAdapter from "@mui/lab/AdapterDateFns";
+import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor as TuiEditor } from "@toast-ui/react-editor";
 import { Fragment, useEffect, useRef } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
+import { LocalizationProvider } from "@mui/lab";
 //filePath is a only dependency
 
 function Editor({ filePath }) {
@@ -27,35 +30,36 @@ function Editor({ filePath }) {
 
   const frontmatterEditor = (matterKey, matterValue, matterType) => {
     const stringEditor = (
-      <div className="flex">
-        <p>{matterKey}:(String editor)</p>
-        <input
-          value={matterValue}
-          onChange={(e) => editFrontmatter(matterKey, e.target.value)}
-        />
-      </div>
+      <TextField
+        label="String"
+        value={matterValue}
+        variant="standard"
+        onChange={(e) => editFrontmatter(matterKey, e.target.value)}
+        fullWidth
+      />
     );
 
     const dateEditor = (
-      <div className="flex">
-        <p>{matterKey}:(Date editor)</p>
-        <input
+      <LocalizationProvider dateAdapter={DateAdapter}>
+        <MobileDateTimePicker
+          label="Date"
           value={matterValue}
-          onChange={(e) => editFrontmatter(matterKey, e.target.value)}
-          style={{ padding: "10px" }}
+          renderInput={(props) => <TextField {...props} />}
+          onChange={(newValue) => editFrontmatter(matterKey, newValue)}
+          ampm={false}
+          showTodayButton={true}
+          todayText="Now"
         />
-      </div>
+      </LocalizationProvider>
     );
 
     const boolEditor = (
-      <div className="flex">
-        <p>{matterKey}</p>
-        <Switch
-          size="small"
-          defaultChecked={matterValue}
-          onChange={() => editFrontmatter(matterKey, !matterValue)}
-        />
-      </div>
+      <Switch
+        aria-label="bool"
+        size="small"
+        defaultChecked={matterValue}
+        onChange={() => editFrontmatter(matterKey, !matterValue)}
+      />
     );
 
     switch (matterType) {
@@ -63,6 +67,7 @@ function Editor({ filePath }) {
         return stringEditor;
 
       case "Date":
+        console.log("matterValue:", matterValue);
         return dateEditor;
 
       case "Bool":
@@ -85,17 +90,26 @@ function Editor({ filePath }) {
         </Button>
       </div>
       <input value={file.name} onChange={(e) => editName(e.target.value)} />
-      <Fragment>
+
+      <Stack spacing={1}>
         {/* TODO: frontmatter editor */}
         {Object.keys(file.frontmatter).length !== 0 &&
-          Object.keys(file.frontmatter).map((matterKey) =>
-            frontmatterEditor(
-              matterKey,
-              file.frontmatter[matterKey],
-              getFrontmatterType(matterKey)
-            )
-          )}
-      </Fragment>
+          Object.keys(file.frontmatter).map((matterKey) => (
+            <Grid container spacing={0} alignItems="center">
+              <Grid item xs={2}>
+                <p>{matterKey}</p>
+              </Grid>
+
+              <Grid item xs={9}>
+                {frontmatterEditor(
+                  matterKey,
+                  file.frontmatter[matterKey],
+                  getFrontmatterType(matterKey)
+                )}
+              </Grid>
+            </Grid>
+          ))}
+      </Stack>
       <Fragment>
         <TuiEditor previewStyle="vertical" ref={editorRef} height="100vh" />
       </Fragment>
