@@ -30,6 +30,7 @@ function useFileBuffer(filePath) {
       alert(err.message);
       return;
     }
+    //TODO: issues ctrl-z
     tuieditor.getInstance().setMarkdown(doc);
     console.log("frontmatter:", frontmatter);
     setFile((prev) => ({ ...prev, frontmatter }));
