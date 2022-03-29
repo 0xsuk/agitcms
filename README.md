@@ -14,7 +14,12 @@ TODO:
 - [x] pinned dir
 - [x] command button
 - [x] use tui instead
+- [ ] Command stop
 - [ ] frontmatter editor
-  - [ ] move frontmatter editor to side of main editor
 - [ ] styling
 - [ ] auto move pasted image into media folder
+- [ ] root settings
+
+Issues:
+
+- [ ] Editor: Ctrl-z
