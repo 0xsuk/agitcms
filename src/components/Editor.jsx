@@ -1,4 +1,11 @@
-import { Button, Grid, Stack, Switch, TextField } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Stack,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -31,12 +38,44 @@ function Editor({ filePath }) {
   const frontmatterEditor = (matterKey, matterValue, matterType) => {
     const stringEditor = (
       <TextField
-        label="String"
+        placeholder="String"
         value={matterValue}
         variant="standard"
         onChange={(e) => editFrontmatter(matterKey, e.target.value)}
         fullWidth
       />
+    );
+    const stringOfArrayEditor = () => (
+      <>
+        <TextField
+          variant="standard"
+          id={"agit-" + matterKey + "-input"}
+          placeholder="String"
+          InputProps={{
+            endAdornment: (
+              <Button
+                onClick={() => {
+                  let ref = document.getElementById(
+                    "agit-" + matterKey + "-input"
+                  );
+                  ref.value = "";
+                  matterValue.push(ref.value);
+                  console.log("newMatter", matterValue);
+                  editFrontmatter(matterKey, matterValue);
+                  // ref.focus();
+                }}
+              >
+                ADD
+              </Button>
+            ),
+          }}
+        />
+
+        {/* matterValue can be null, if user set it to null */}
+        {matterValue?.map((v) => (
+          <p>{v} x</p>
+        ))}
+      </>
     );
 
     const dateEditor = (
@@ -62,12 +101,20 @@ function Editor({ filePath }) {
       />
     );
 
+    if (matterType.split(".")[0] === "Array") {
+      switch (matterType.split(".")[1]) {
+        case "String":
+          return stringOfArrayEditor();
+        default:
+          return stringOfArrayEditor();
+      }
+    }
+
     switch (matterType) {
       case "String":
         return stringEditor;
 
       case "Date":
-        console.log("matterValue:", matterValue);
         return dateEditor;
 
       case "Bool":
@@ -102,9 +149,8 @@ function Editor({ filePath }) {
           Object.keys(file.frontmatter).map((matterKey) => (
             <Grid container spacing={0} alignItems="center">
               <Grid item xs={2}>
-                <p>{matterKey}</p>
+                <Typography>{matterKey}</Typography>
               </Grid>
-
               <Grid item xs={9}>
                 {frontmatterEditor(
                   matterKey,
