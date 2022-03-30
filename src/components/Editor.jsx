@@ -58,10 +58,10 @@ function Editor({ filePath }) {
                   let ref = document.getElementById(
                     "agit-" + matterKey + "-input"
                   );
-                  ref.value = "";
                   matterValue.push(ref.value);
                   console.log("newMatter", matterValue);
                   editFrontmatter(matterKey, matterValue);
+                  ref.value = "";
                   // ref.focus();
                 }}
               >
@@ -127,7 +127,7 @@ function Editor({ filePath }) {
 
   useEffect(() => {
     readFile(editorRef.current);
-  }, [filePath]);
+  }, [filePath]); //eslint-disable-line
 
   return (
     <Fragment>
