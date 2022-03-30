@@ -72,8 +72,15 @@ function Editor({ filePath }) {
         />
 
         {/* matterValue can be null, if user set it to null */}
-        {matterValue?.map((v) => (
-          <p>{v} x</p>
+        {matterValue?.map((v, i) => (
+          <p
+            onClick={() => {
+              matterValue.splice(i, 1);
+              editFrontmatter(matterKey, matterValue);
+            }}
+          >
+            {v} x
+          </p>
         ))}
       </>
     );
