@@ -23,3 +23,4 @@ TODO:
 Issues:
 
 - [ ] Editor: Ctrl-z
+- [ ] case matterType is undefined
