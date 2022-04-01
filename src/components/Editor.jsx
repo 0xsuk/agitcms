@@ -108,6 +108,19 @@ function Editor({ filePath }) {
       />
     );
 
+    if (matterType === undefined) {
+      switch (typeof matterValue) {
+        case "string":
+          return stringEditor;
+        case "number":
+          return stringEditor;
+        case "boolean":
+          return boolEditor;
+        default:
+          return stringEditor;
+      }
+    }
+
     if (matterType.split(".")[0] === "Array") {
       switch (matterType.split(".")[1]) {
         case "String":
