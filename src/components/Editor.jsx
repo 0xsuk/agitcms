@@ -58,6 +58,9 @@ function Editor({ filePath }) {
                   let ref = document.getElementById(
                     "agit-" + matterKey + "-input"
                   );
+                  if (!matterValue) {
+                    matterValue = [];
+                  }
                   matterValue.push(ref.value);
                   console.log("newMatter", matterValue);
                   editFrontmatter(matterKey, matterValue);
