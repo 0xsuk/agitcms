@@ -4,7 +4,7 @@ Open source desktop content manager for any static sites.
 
 Still under development!!
 
-![](.github/agitcms.gif)
+![](.github/agitcms_leak.gif)
 
 TODO:
 
