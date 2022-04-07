@@ -161,9 +161,14 @@ function Editor({ filePath }) {
         </Button>
       </div>
       {/* Tab switcher */}
-      <div>
-        <a onClick={() => setTab("frontmatter")}>Frontmatter</a>
-        <a onClick={() => setTab("editor")}>Editor</a>
+      <div class="flex">
+        <p
+          style={{ padding: "0 10px 0 0" }}
+          onClick={() => setTab("frontmatter")}
+        >
+          Frontmatter
+        </p>
+        <p onClick={() => setTab("editor")}>Editor</p>
       </div>
       <div style={{ display: tab === "frontmatter" ? "block" : "none" }}>
         <TextField
