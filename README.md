@@ -23,3 +23,4 @@ TODO:
 Issues:
 
 - [ ] Editor: Ctrl-z
+- [ ] Tui Editor Tool Bar width
