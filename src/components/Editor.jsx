@@ -10,7 +10,7 @@ import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor as TuiEditor } from "@toast-ui/react-editor";
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
 import { LocalizationProvider } from "@mui/lab";
@@ -21,6 +21,7 @@ function Editor({ filePath }) {
     useFileBuffer(filePath);
   const editorRef = useRef();
   const { siteConfig } = useSiteConfig();
+  const [tab, setTab] = useState("frontmatter");
 
   const getFrontmatterType = (key) => {
     let type = undefined;
@@ -153,39 +154,51 @@ function Editor({ filePath }) {
   }, [filePath]); //eslint-disable-line
 
   return (
-    <Fragment>
+    <div id="editor">
       <div>
         <Button onClick={() => saveFile(editorRef.current)} variant="contained">
           Save
         </Button>
       </div>
-      <TextField
-        label="File name"
-        value={file.name}
-        variant="standard"
-        onChange={(e) => editName(e.target.value)}
-        fullWidth
-      />
+      {/* Tab switcher */}
+      <div>
+        <a onClick={() => setTab("frontmatter")}>Frontmatter</a>
+        <a onClick={() => setTab("editor")}>Editor</a>
+      </div>
+      <div style={{ display: tab === "frontmatter" ? "block" : "none" }}>
+        <TextField
+          label="File name"
+          value={file.name}
+          variant="standard"
+          onChange={(e) => editName(e.target.value)}
+          fullWidth
+        />
 
-      <Stack spacing={1}>
-        {Object.keys(file.frontmatter).length !== 0 &&
-          Object.keys(file.frontmatter).map((matterKey) => (
-            <Grid container spacing={0} alignItems="center">
-              <Grid item xs={2}>
-                <Typography>{matterKey}</Typography>
+        <Stack spacing={1}>
+          {Object.keys(file.frontmatter).length !== 0 &&
+            Object.keys(file.frontmatter).map((matterKey) => (
+              <Grid container spacing={0} alignItems="center">
+                <Grid item xs={2}>
+                  <Typography>{matterKey}</Typography>
+                </Grid>
+                <Grid item xs={9}>
+                  {frontmatterEditor(
+                    matterKey,
+                    file.frontmatter[matterKey],
+                    getFrontmatterType(matterKey)
+                  )}
+                </Grid>
               </Grid>
-              <Grid item xs={9}>
-                {frontmatterEditor(
-                  matterKey,
-                  file.frontmatter[matterKey],
-                  getFrontmatterType(matterKey)
-                )}
-              </Grid>
-            </Grid>
-          ))}
-      </Stack>
-      <TuiEditor previewStyle="vertical" ref={editorRef} height="100vh" />
-    </Fragment>
+            ))}
+        </Stack>
+      </div>
+
+      <div
+        style={{ display: tab === "editor" ? "block" : "none", flexGrow: 1 }}
+      >
+        <TuiEditor previewStyle="vertical" ref={editorRef} height="100%" />
+      </div>
+    </div>
   );
 }
 

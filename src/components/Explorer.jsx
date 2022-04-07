@@ -52,7 +52,7 @@ function Dir() {
   };
 
   return (
-    <Fragment>
+    <div id="explorer">
       <div id="top-bar">
         {cwdf}{" "}
         {isDfPinned ? (
@@ -66,7 +66,7 @@ function Dir() {
 
       {isInDir &&
         filesAndFolders.map((df) => (
-          <Fragment>
+          <>
             {df.isDir ? (
               <div>
                 <Link
@@ -102,10 +102,10 @@ function Dir() {
                 )}
               </>
             )}
-          </Fragment>
+          </>
         ))}
       {!isInDir && <Editor filePath={cwdf}></Editor>}
-    </Fragment>
+    </div>
   );
 }
 

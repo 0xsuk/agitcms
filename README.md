@@ -15,7 +15,7 @@ TODO:
 - [x] command button
 - [x] use tui instead
 - [ ] Command stop
-- [ ] frontmatter editor
+- [x] frontmatter editor
 - [ ] styling
 - [ ] auto move pasted image into media folder
 - [ ] root settings
@@ -23,4 +23,3 @@ TODO:
 Issues:
 
 - [ ] Editor: Ctrl-z
-- [ ] case matterType is undefined
