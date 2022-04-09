@@ -39,15 +39,15 @@ code {
 #main {
   width: 100%;
   background-color: rgb(250, 250, 250);
-  padding: 5px;
+  padding: 0 0 0 5px;
 }
 #explorer {
   height: 100%;
   #top-bar {
-    height: 5%;
+    height: 2%;
   }
   #editor {
-    height: 95%;
+    height: 98%;
     display: flex;
     flex-direction: column;
   }
