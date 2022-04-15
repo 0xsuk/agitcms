@@ -1,8 +1,10 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { ArrowDropDown } from "@mui/icons-material";
+import { Button, ButtonGroup } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import Editor from "./Editor";
-import useSiteConfig from "../lib/useSiteConfig";
 import { configContext } from "../context/ConfigContext";
+import useSiteConfig from "../lib/useSiteConfig";
+import Editor from "./Editor";
 
 function Dir() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
@@ -63,6 +65,14 @@ function Dir() {
           </button>
         )}
       </div>
+      {isInDir && (
+        <ButtonGroup>
+          <Button>Create New</Button>
+          <Button>
+            <ArrowDropDown />
+          </Button>
+        </ButtonGroup>
+      )}
 
       {isInDir &&
         filesAndFolders.map((df) => (
