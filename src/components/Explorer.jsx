@@ -1,6 +1,15 @@
 import { ArrowDropDown } from "@mui/icons-material";
-import { Button, ButtonGroup } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import {
+  Button,
+  ButtonGroup,
+  ClickAwayListener,
+  Grow,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+} from "@mui/material";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
@@ -53,6 +62,16 @@ function Dir() {
     });
   };
 
+  const [isNewButtonOpen, setIsNewButtonOpen] = useState(false);
+  const anchorRef = useRef(null);
+  const closeNewButton = () => {
+    setIsNewButtonOpen(false);
+  };
+
+  const toggleNewButton = () => {
+    setIsNewButtonOpen((prev) => !prev);
+  };
+
   return (
     <div id="explorer">
       <div id="top-bar">
@@ -65,13 +84,41 @@ function Dir() {
           </button>
         )}
       </div>
+      {/* TODO: */}
       {isInDir && (
-        <ButtonGroup>
-          <Button>Create New</Button>
-          <Button>
-            <ArrowDropDown />
-          </Button>
-        </ButtonGroup>
+        <>
+          <ButtonGroup>
+            <Button onClick={toggleNewButton}>Create New</Button>
+            <Button ref={anchorRef} onClick={toggleNewButton}>
+              <ArrowDropDown />
+            </Button>
+          </ButtonGroup>
+          <Popper
+            open={isNewButtonOpen}
+            disablePortal
+            transition
+            anchorEl={anchorRef.current}
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === "bottom" ? "center top" : "center bottom",
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={closeNewButton}>
+                    <MenuList>
+                      <MenuItem>File</MenuItem>
+                      <MenuItem>Folder</MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </>
       )}
 
       {isInDir &&
