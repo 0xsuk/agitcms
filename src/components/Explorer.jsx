@@ -3,11 +3,17 @@ import {
   Button,
   ButtonGroup,
   ClickAwayListener,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grow,
+  Input,
   MenuItem,
   MenuList,
   Paper,
   Popper,
+  TextField,
 } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
@@ -67,9 +73,20 @@ function Dir() {
   const closeNewButton = () => {
     setIsNewButtonOpen(false);
   };
-
   const toggleNewButton = () => {
     setIsNewButtonOpen((prev) => !prev);
+  };
+  const [isFolderDialogOpen, setIsFolderDialogOpen] = useState(false);
+  const closeFolderDialog = () => {
+    setIsFolderDialogOpen(false);
+  };
+
+  const createNewFile = () => {
+    // TODO
+  };
+  const createNewFolder = () => {
+    setIsNewButtonOpen(false);
+    setIsFolderDialogOpen(true);
   };
 
   return (
@@ -110,14 +127,31 @@ function Dir() {
                 <Paper>
                   <ClickAwayListener onClickAway={closeNewButton}>
                     <MenuList>
-                      <MenuItem>File</MenuItem>
-                      <MenuItem>Folder</MenuItem>
+                      {/* TODO */}
+                      <MenuItem onClick={createNewFile}>File</MenuItem>
+                      <MenuItem onClick={createNewFolder}>Folder</MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
               </Grow>
             )}
           </Popper>
+
+          <Dialog open={isFolderDialogOpen} onClose={closeFolderDialog}>
+            <DialogTitle>Folder Name:</DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                fullWidth
+                variant="standard"
+              ></TextField>
+            </DialogContent>
+            <DialogActions>
+              <Button>Cancel</Button>
+              <Button>Save</Button>
+            </DialogActions>
+          </Dialog>
         </>
       )}
 
