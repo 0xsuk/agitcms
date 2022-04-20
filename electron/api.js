@@ -102,6 +102,19 @@ exports.getFilesAndFolders = (e, folderPath) => {
   }
 };
 
+exports.createFolder = (e, folderPath) => {
+  try {
+    // response is folderPath
+    fs.mkdirSync(folderPath, { recursive: true });
+    return { err: null };
+  } catch (err) {
+    return { err };
+  }
+};
+exports.createFile = (e, filePath, data) => {
+  // TODO: read frontmatter, write!
+}
+
 let shellProcessList = []; //[shell process...]
 
 exports.runCommand = async (e, command, cwd, cid) => {
