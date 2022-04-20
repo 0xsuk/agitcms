@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTitle,
   Grow,
-  Input,
   MenuItem,
   MenuList,
   Paper,
@@ -81,12 +80,22 @@ function Dir() {
     setIsFolderDialogOpen(false);
   };
 
-  const createNewFile = () => {
-    // TODO
+  const createFile = (fileName) => {
+    // TODO: read default frontmatter settings here
+    const data = "sample data";
+    const filePath = cwdf + "/" + fileName;
+    window.electronAPI.createFile(filePath, data);
   };
-  const createNewFolder = () => {
-    setIsNewButtonOpen(false);
-    setIsFolderDialogOpen(true);
+
+  const createFolder = async () => {
+    const folderName = document.getElementById("agit-folder-dialog").value;
+    const folderPath = cwdf + "/" + folderName;
+    const { err } = await window.electronAPI.createFolder(folderPath);
+    if (err !== null) {
+      alert(err.message);
+      return;
+    }
+    window.location.reload()
   };
 
   return (
@@ -128,8 +137,21 @@ function Dir() {
                   <ClickAwayListener onClickAway={closeNewButton}>
                     <MenuList>
                       {/* TODO */}
-                      <MenuItem onClick={createNewFile}>File</MenuItem>
-                      <MenuItem onClick={createNewFolder}>Folder</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setIsNewButtonOpen(false);
+                        }}
+                      >
+                        File
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setIsFolderDialogOpen(true);
+                          setIsNewButtonOpen(false);
+                        }}
+                      >
+                        Folder
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
@@ -145,11 +167,19 @@ function Dir() {
                 margin="dense"
                 fullWidth
                 variant="standard"
+                id={"agit-folder-dialog"}
               ></TextField>
             </DialogContent>
             <DialogActions>
-              <Button>Cancel</Button>
-              <Button>Save</Button>
+              <Button onClick={closeFolderDialog}>Cancel</Button>
+              <Button
+                onClick={() => {
+                  createFolder();
+                  closeFolderDialog();
+                }}
+              >
+                Save
+              </Button>
             </DialogActions>
           </Dialog>
         </>
