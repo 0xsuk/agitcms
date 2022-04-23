@@ -95,7 +95,7 @@ function Dir() {
       alert(err.message);
       return;
     }
-    window.location.reload()
+    window.location.reload();
   };
 
   return (
@@ -137,13 +137,7 @@ function Dir() {
                   <ClickAwayListener onClickAway={closeNewButton}>
                     <MenuList>
                       {/* TODO */}
-                      <MenuItem
-                        onClick={() => {
-                          setIsNewButtonOpen(false);
-                        }}
-                      >
-                        File
-                      </MenuItem>
+                      <MenuItem onClick={() => {}}>File</MenuItem>
                       <MenuItem
                         onClick={() => {
                           setIsFolderDialogOpen(true);
