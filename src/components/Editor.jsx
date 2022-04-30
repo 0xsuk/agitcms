@@ -25,7 +25,7 @@ function Editor({ filePath }) {
 
   const getFrontmatterType = (key) => {
     let type = undefined;
-    siteConfig.frontmatter.every((singlematter, i) => {
+    siteConfig.frontmatter.every((singlematter) => {
       if (singlematter.key === key) {
         type = singlematter.type;
         return false;

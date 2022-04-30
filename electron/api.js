@@ -111,9 +111,17 @@ exports.createFolder = (e, folderPath) => {
     return { err };
   }
 };
-exports.createFile = (e, filePath, data) => {
+
+exports.createFile = (_, filePath, doc, frontmatter) => {
   // TODO: read frontmatter, write!
-}
+  try {
+    fs.writeFileSync(filePath, doc);
+    //TODO fromntmatter
+    return { err: null };
+  } catch (err) {
+    return { err };
+  }
+};
 
 let shellProcessList = []; //[shell process...]
 

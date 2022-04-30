@@ -3,28 +3,25 @@ import {
   Button,
   ButtonGroup,
   ClickAwayListener,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Grow,
   MenuItem,
   MenuList,
   Paper,
   Popper,
-  TextField,
 } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import Editor from "./Editor";
+import TextDialog from "./TextDialog";
 
 function Dir() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const { siteConfig } = useSiteConfig();
   const { updateSiteConfig } = useContext(configContext);
   const [params] = useSearchParams();
+  const navigate = useNavigate();
 
   //current working dir or filek
   const cwdf = params.get("path");
@@ -79,12 +76,24 @@ function Dir() {
   const closeFolderDialog = () => {
     setIsFolderDialogOpen(false);
   };
+  const [isFileDialogOpen, setIsFileDialogOpen] = useState(false);
+  const closeFileDialog = () => {
+    setIsFileDialogOpen(false);
+  };
 
-  const createFile = (fileName) => {
+  const createFile = async () => {
     // TODO: read default frontmatter settings here
+    const fileName = document.getElementById("agit-file-dialog").value;
     const data = "sample data";
     const filePath = cwdf + "/" + fileName;
-    window.electronAPI.createFile(filePath, data);
+    const { err } = await window.electronAPI.createFile(filePath, data);
+    if (err !== null) {
+      alert("createFile:", err.message);
+      return;
+    }
+    navigate(
+      "?path=" + cwdf + "/" + fileName + "?isDir=false&name=" + fileName
+    );
   };
 
   const createFolder = async () => {
@@ -110,7 +119,6 @@ function Dir() {
           </button>
         )}
       </div>
-      {/* TODO: */}
       {isInDir && (
         <>
           <ButtonGroup>
@@ -137,7 +145,14 @@ function Dir() {
                   <ClickAwayListener onClickAway={closeNewButton}>
                     <MenuList>
                       {/* TODO */}
-                      <MenuItem onClick={() => {}}>File</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setIsFileDialogOpen(true);
+                          setIsNewButtonOpen(false);
+                        }}
+                      >
+                        File
+                      </MenuItem>
                       <MenuItem
                         onClick={() => {
                           setIsFolderDialogOpen(true);
@@ -152,33 +167,22 @@ function Dir() {
               </Grow>
             )}
           </Popper>
-
-          <Dialog open={isFolderDialogOpen} onClose={closeFolderDialog}>
-            <DialogTitle>Folder Name:</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                fullWidth
-                variant="standard"
-                id={"agit-folder-dialog"}
-              ></TextField>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={closeFolderDialog}>Cancel</Button>
-              <Button
-                onClick={() => {
-                  createFolder();
-                  closeFolderDialog();
-                }}
-              >
-                Save
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <TextDialog
+            isOpen={isFileDialogOpen}
+            onClose={closeFileDialog}
+            onSave={createFile}
+            dialogTitle="File name:"
+            dialogId="agit-file-dialog"
+          />
+          <TextDialog
+            isOpen={isFolderDialogOpen}
+            onClose={closeFolderDialog}
+            onSave={createFolder}
+            dialogTitle="Folder name:"
+            dialogId="agit-folder-dialog"
+          />
         </>
       )}
-
       {isInDir &&
         filesAndFolders.map((df) => (
           <>
