@@ -92,7 +92,7 @@ function Dir() {
       return;
     }
     navigate(
-      "?path=" + cwdf + "/" + fileName + "?isDir=false&name=" + fileName
+      "?path=" + cwdf + "/" + fileName + "&isDir=false&name=" + fileName
     );
   };
 
