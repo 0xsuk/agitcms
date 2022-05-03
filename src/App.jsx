@@ -1,7 +1,7 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import "./App.scss";
-import Dir from "./components/Explorer";
+import Explorer from "./components/Explorer";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import Site from "./components/settings/site/Site";
@@ -42,7 +42,7 @@ function App() {
           ></Route>
         </Route>
         <Route path="edit">
-          <Route path=":siteKey/*" element={<Dir />}></Route>
+          <Route path=":siteKey/*" element={<Explorer />}></Route>
         </Route>
       </Route>
     </Routes>

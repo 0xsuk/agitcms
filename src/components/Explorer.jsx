@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
 import Editor from "./Editor";
 
-function Dir() {
+function Explorer() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const { siteConfig } = useSiteConfig();
   const { updateSiteConfig } = useContext(configContext);
@@ -110,4 +110,4 @@ function Dir() {
   );
 }
 
-export default Dir;
+export default Explorer;
