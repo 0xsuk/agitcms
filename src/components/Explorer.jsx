@@ -1,27 +1,15 @@
-import { ArrowDropDown } from "@mui/icons-material";
-import {
-  Button,
-  ButtonGroup,
-  ClickAwayListener,
-  Grow,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-} from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
+import CreateNewDf from "./CreateNewDf";
 import Editor from "./Editor";
-import TextDialog from "./TextDialog";
 
 function Dir() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const { siteConfig } = useSiteConfig();
   const { updateSiteConfig } = useContext(configContext);
   const [params] = useSearchParams();
-  const navigate = useNavigate();
 
   //current working dir or filek
   const cwdf = params.get("path");
@@ -64,49 +52,6 @@ function Dir() {
     });
   };
 
-  const [isNewButtonOpen, setIsNewButtonOpen] = useState(false);
-  const anchorRef = useRef(null);
-  const closeNewButton = () => {
-    setIsNewButtonOpen(false);
-  };
-  const toggleNewButton = () => {
-    setIsNewButtonOpen((prev) => !prev);
-  };
-  const [isFolderDialogOpen, setIsFolderDialogOpen] = useState(false);
-  const closeFolderDialog = () => {
-    setIsFolderDialogOpen(false);
-  };
-  const [isFileDialogOpen, setIsFileDialogOpen] = useState(false);
-  const closeFileDialog = () => {
-    setIsFileDialogOpen(false);
-  };
-
-  const createFile = async () => {
-    // TODO: read default frontmatter settings here
-    const fileName = document.getElementById("agit-file-dialog").value + ".md";
-    const data = "sample data";
-    const filePath = cwdf + "/" + fileName;
-    const { err } = await window.electronAPI.createFile(filePath, data);
-    if (err !== null) {
-      alert("createFile:", err.message);
-      return;
-    }
-    navigate(
-      "?path=" + cwdf + "/" + fileName + "&isDir=false&name=" + fileName
-    );
-  };
-
-  const createFolder = async () => {
-    const folderName = document.getElementById("agit-folder-dialog").value;
-    const folderPath = cwdf + "/" + folderName;
-    const { err } = await window.electronAPI.createFolder(folderPath);
-    if (err !== null) {
-      alert(err.message);
-      return;
-    }
-    window.location.reload();
-  };
-
   return (
     <div id="explorer">
       <div id="top-bar">
@@ -119,71 +64,7 @@ function Dir() {
           </button>
         )}
       </div>
-      {isInDir && (
-        <>
-          <ButtonGroup>
-            <Button onClick={toggleNewButton}>Create New</Button>
-            <Button ref={anchorRef} onClick={toggleNewButton}>
-              <ArrowDropDown />
-            </Button>
-          </ButtonGroup>
-          <Popper
-            open={isNewButtonOpen}
-            disablePortal
-            transition
-            anchorEl={anchorRef.current}
-          >
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                style={{
-                  transformOrigin:
-                    placement === "bottom" ? "center top" : "center bottom",
-                }}
-              >
-                <Paper>
-                  <ClickAwayListener onClickAway={closeNewButton}>
-                    <MenuList>
-                      {/* TODO */}
-                      <MenuItem
-                        onClick={() => {
-                          setIsFileDialogOpen(true);
-                          setIsNewButtonOpen(false);
-                        }}
-                      >
-                        File
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          setIsFolderDialogOpen(true);
-                          setIsNewButtonOpen(false);
-                        }}
-                      >
-                        Folder
-                      </MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
-          <TextDialog
-            isOpen={isFileDialogOpen}
-            onClose={closeFileDialog}
-            onSave={createFile}
-            dialogTitle="File name:"
-            dialogId="agit-file-dialog"
-            tailValue=".md"
-          />
-          <TextDialog
-            isOpen={isFolderDialogOpen}
-            onClose={closeFolderDialog}
-            onSave={createFolder}
-            dialogTitle="Folder name:"
-            dialogId="agit-folder-dialog"
-          />
-        </>
-      )}
+      {isInDir && <CreateNewDf cwdf={cwdf} />}
       {isInDir &&
         filesAndFolders.map((df) => (
           <>
