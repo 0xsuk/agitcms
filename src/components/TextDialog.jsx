@@ -18,6 +18,12 @@ function TextDialog({ isOpen, onClose, onSave, dialogId, dialogTitle }) {
           fullWidth
           variant="standard"
           id={dialogId}
+          onKeyPress={(e) => {
+            if (e.key == "Enter") {
+              onClose();
+              onSave();
+            }
+          }}
         ></TextField>
       </DialogContent>
       <DialogActions>
