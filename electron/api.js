@@ -112,14 +112,23 @@ exports.createFolder = (e, folderPath) => {
   }
 };
 
-exports.createFile = (_, filePath, doc, frontmatter) => {
+exports.createFile = (_, filePath, doc, frontmatter, doOverwrite) => {
   // TODO: read frontmatter, write!
   try {
+    //TODO: if file already exists, writeFileSync overwrites it implicitly
+    if (doOverwrite) {
+      fs.writeFileSync(filePath, doc);
+      return { err: null, isFileExists: null };
+    }
+    const isFileExists = fs.existsSync(filePath);
+    if (isFileExists) {
+      return { err: null, isFileExists: true };
+    }
+
     fs.writeFileSync(filePath, doc);
-    //TODO fromntmatter
-    return { err: null };
+    return { err: null, isFileExists: false };
   } catch (err) {
-    return { err };
+    return { err, isFileExists: null };
   }
 };
 
