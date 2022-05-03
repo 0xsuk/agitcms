@@ -51,6 +51,13 @@ code {
     display: flex;
     flex-direction: column;
   }
+
+  .df {
+    border-top: solid 1px #eee;
+    padding: 5px 20px;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .mui-icon {

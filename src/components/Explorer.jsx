@@ -1,4 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { Menu, MenuItem } from "@mui/material";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
@@ -66,46 +68,54 @@ function Explorer() {
       </div>
       {isInDir && <CreateNewDf cwdf={cwdf} />}
       {isInDir &&
-        filesAndFolders.map((df) => (
-          <>
-            {df.isDir ? (
-              <div>
-                <Link
-                  to={
-                    "?path=" +
-                    cwdf +
-                    "/" +
-                    df.name +
-                    "&isDir=true&name=" +
-                    df.name
-                  }
-                >
-                  <p style={{ color: "gray" }}>{df.name}</p>
-                </Link>
-              </div>
-            ) : (
-              <>
-                {df.extension === ".md" && (
-                  <div>
-                    <Link
-                      to={
-                        "?path=" +
-                        cwdf +
-                        "/" +
-                        df.name +
-                        "&isDir=false&name=" +
-                        df.name
-                      }
-                    >
-                      <p>{df.name}</p>
-                    </Link>
-                  </div>
-                )}
-              </>
-            )}
-          </>
-        ))}
+        filesAndFolders.map(
+          (df) => <Df df={df} />
+          //df.isDir ? (
+          //  <div className="df">
+          //    <Link
+          //      to={
+          //        "?path=" +
+          //        cwdf +
+          //        "/" +
+          //        df.name +
+          //        "&isDir=true&name=" +
+          //        df.name
+          //      }
+          //    >
+          //      <p style={{ color: "gray" }}>{df.name}</p>
+          //    </Link>
+          //  </div>
+          //) : (
+          //  df.extension === ".md" && <Df df={df} />
+          //)
+        )}
+
+      <div></div>
       {!isInDir && <Editor filePath={cwdf}></Editor>}
+    </div>
+  );
+}
+
+function Df({ df }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  return (
+    <div className="df">
+      <p>{df.name}</p>
+      <MoreHorizIcon
+        onClick={(e) => {
+          setAnchorEl(e.currentTarget);
+        }}
+      />
+      <Menu
+        anchorEl={anchorEl}
+        open={anchorEl !== null}
+        onClose={() => setAnchorEl(null)}
+      >
+        <MenuItem>menu Item</MenuItem>
+        <MenuItem>menu Item</MenuItem>
+        <MenuItem>menu Item</MenuItem>
+      </Menu>
     </div>
   );
 }
