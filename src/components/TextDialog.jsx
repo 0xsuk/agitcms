@@ -7,7 +7,14 @@ import {
   Button,
 } from "@mui/material";
 
-function TextDialog({ isOpen, onClose, onSave, dialogId, dialogTitle }) {
+function TextDialog({
+  isOpen,
+  onClose,
+  onSave,
+  dialogId,
+  dialogTitle,
+  tailValue,
+}) {
   return (
     <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle>{dialogTitle}</DialogTitle>
@@ -23,6 +30,9 @@ function TextDialog({ isOpen, onClose, onSave, dialogId, dialogTitle }) {
               onClose();
               onSave();
             }
+          }}
+          InputProps={{
+            endAdornment: <p>{tailValue}</p>,
           }}
         ></TextField>
       </DialogContent>

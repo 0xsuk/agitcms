@@ -83,7 +83,7 @@ function Dir() {
 
   const createFile = async () => {
     // TODO: read default frontmatter settings here
-    const fileName = document.getElementById("agit-file-dialog").value;
+    const fileName = document.getElementById("agit-file-dialog").value + ".md";
     const data = "sample data";
     const filePath = cwdf + "/" + fileName;
     const { err } = await window.electronAPI.createFile(filePath, data);
@@ -173,6 +173,7 @@ function Dir() {
             onSave={createFile}
             dialogTitle="File name:"
             dialogId="agit-file-dialog"
+            tailValue=".md"
           />
           <TextDialog
             isOpen={isFolderDialogOpen}
