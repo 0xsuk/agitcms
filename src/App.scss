@@ -54,9 +54,12 @@ code {
 
   .df {
     border-top: solid 1px #eee;
-    padding: 5px 20px;
+    padding: 10px 30px;
     display: flex;
     justify-content: space-between;
+    p {
+      font-size: 15px;
+    }
   }
 }
 
