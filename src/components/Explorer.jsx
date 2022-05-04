@@ -1,7 +1,7 @@
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Menu, MenuItem } from "@mui/material";
-import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
@@ -28,13 +28,7 @@ function Explorer() {
   useEffect(() => {
     console.warn("Dir Effect");
     if (!isInDir) return;
-    window.electronAPI.getFilesAndFolders(cwdf).then((res) => {
-      if (res.err) {
-        alert(res.err.message);
-        return;
-      }
-      setFilesAndFolders(res.filesAndFolders);
-    });
+    loadFilesAndFolders();
   }, [cwdf]); //eslint-disable-line
 
   const addPinnedDirs = (name, path, isDir) => {
@@ -54,6 +48,16 @@ function Explorer() {
     });
   };
 
+  const loadFilesAndFolders = async () => {
+    const { err, filesAndFolders } =
+      await window.electronAPI.getFilesAndFolders(cwdf);
+    if (err !== null) {
+      alert(err);
+      return;
+    }
+    setFilesAndFolders(filesAndFolders);
+  };
+
   return (
     <div id="explorer">
       <div id="top-bar">
@@ -68,53 +72,71 @@ function Explorer() {
       </div>
       {isInDir && <CreateNewDf cwdf={cwdf} />}
       {isInDir &&
-        filesAndFolders.map(
-          (df) => <Df df={df} />
-          //df.isDir ? (
-          //  <div className="df">
-          //    <Link
-          //      to={
-          //        "?path=" +
-          //        cwdf +
-          //        "/" +
-          //        df.name +
-          //        "&isDir=true&name=" +
-          //        df.name
-          //      }
-          //    >
-          //      <p style={{ color: "gray" }}>{df.name}</p>
-          //    </Link>
-          //  </div>
-          //) : (
-          //  df.extension === ".md" && <Df df={df} />
-          //)
-        )}
-
-      <div></div>
+        filesAndFolders.map((df) => (
+          <Df cwdf={cwdf} df={df} loadFilesAndFolders={loadFilesAndFolders} />
+        ))}
       {!isInDir && <Editor filePath={cwdf}></Editor>}
     </div>
   );
 }
 
-function Df({ df }) {
+function Df({ cwdf, df, loadFilesAndFolders }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  //const renameDf = async () => {};
+  const removeDf = async () => {
+    const dfPath = cwdf + "/" + df.name;
+    let err;
+    if (df.isDir) {
+      err = (await window.electronAPI.removeFolder(dfPath)).err;
+    } else {
+      err = (await window.electronAPI.removeFile(dfPath)).err;
+    }
+    if (err !== null) {
+      alert(err);
+      return;
+    }
+    loadFilesAndFolders();
+  };
+  const navigate = useNavigate();
 
   return (
-    <div className="df">
-      <p>{df.name}</p>
+    <div
+      className="df"
+      onClick={() => {
+        navigate(
+          "?path=" +
+            cwdf +
+            "/" +
+            df.name +
+            "&isDir=" +
+            df.isDir +
+            "&name=" +
+            df.name
+        );
+      }}
+    >
+      {df.isDir ? <p>{df.name}</p> : <p style={{ color: "blue" }}>{df.name}</p>}
       <MoreHorizIcon
         onClick={(e) => {
           setAnchorEl(e.currentTarget);
+          e.stopPropagation();
         }}
       />
       <Menu
         anchorEl={anchorEl}
         open={anchorEl !== null}
-        onClose={() => setAnchorEl(null)}
+        onClose={(e) => {
+          setAnchorEl(null);
+          e.stopPropagation();
+        }}
+        //on Click menuitems
+        onClick={(e) => {
+          setAnchorEl(null);
+          e.stopPropagation();
+        }}
       >
-        <MenuItem>menu Item</MenuItem>
-        <MenuItem>menu Item</MenuItem>
-        <MenuItem>menu Item</MenuItem>
+        {/*     <MenuItem onClick={renameDf}>rename</MenuItem> */}
+        <MenuItem onClick={removeDf}>delete</MenuItem>
       </Menu>
     </div>
   );

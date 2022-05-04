@@ -132,6 +132,24 @@ exports.createFile = (_, filePath, doc, frontmatter, doOverwrite) => {
   }
 };
 
+exports.removeFile = (_, filePath) => {
+  try {
+    fs.unlinkSync(filePath);
+    return { err: null };
+  } catch (err) {
+    return { err };
+  }
+};
+
+exports.removeFolder = (_, folderPath) => {
+  try {
+    fs.rmdirSync(folderPath, { recursive: true });
+    return { err: null };
+  } catch (err) {
+    return { err };
+  }
+};
+
 let shellProcessList = []; //[shell process...]
 
 exports.runCommand = async (e, command, cwd, cid) => {

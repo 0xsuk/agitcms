@@ -58,7 +58,10 @@ code {
     display: flex;
     justify-content: space-between;
     p {
-      font-size: 15px;
+      font-size: 17px;
+    }
+    &:hover {
+      cursor: pointer;
     }
   }
 }

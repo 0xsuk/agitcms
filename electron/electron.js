@@ -12,6 +12,8 @@ const {
   stopCommand,
   createFolder,
   createFile,
+  removeFile,
+  removeFolder,
 } = require("./api");
 const { createWindow } = require("./lib/window_manager");
 
@@ -25,8 +27,10 @@ app.whenReady().then(() => {
   ipcMain.handle("rename-file", renameFile);
   ipcMain.handle("get-folder-path", getFolderPath);
   ipcMain.handle("get-files-and-folders", getFilesAndFolders);
-  ipcMain.handle("create-folder", createFolder)
-  ipcMain.handle("create-file", createFile)
+  ipcMain.handle("create-folder", createFolder);
+  ipcMain.handle("create-file", createFile);
+  ipcMain.handle("remove-file", removeFile);
+  ipcMain.handle("remove-folder", removeFolder);
   ipcMain.handle("run-command", runCommand);
   ipcMain.handle("stop-command", stopCommand);
 

@@ -14,6 +14,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   createFolder: (folderPath) => ipcRenderer.invoke("create-folder", folderPath),
   createFile: (filePath, doc, frontmatter) =>
     ipcRenderer.invoke("create-file", filePath, doc, frontmatter),
+  removeFile: (filePath) => ipcRenderer.invoke("remove-file", filePath),
+  removeFolder: (folderPath) => ipcRenderer.invoke("remove-folder", folderPath),
   runCommand: (command, cwd, cid) =>
     ipcRenderer.invoke("run-command", command, cwd, cid),
   stopCommand: (cid) => ipcRenderer.invoke("stop-command", cid),
