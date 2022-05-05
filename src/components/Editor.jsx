@@ -46,6 +46,7 @@ function Editor({ filePath }) {
         fullWidth
       />
     );
+    //have to be function
     const stringOfArrayEditor = () => (
       <>
         <TextField
@@ -125,6 +126,10 @@ function Editor({ filePath }) {
     }
 
     if (matterType.split(".")[0] === "Array") {
+      if (matterValue !== null && !Array.isArray(matterValue)) {
+        console.warn(matterKey + " is not type of Array");
+        return stringEditor;
+      }
       switch (matterType.split(".")[1]) {
         case "String":
           return stringOfArrayEditor();
