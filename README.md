@@ -16,4 +16,3 @@ Issues:
 
 - [ ] Editor: Ctrl-z
 - [ ] Tui Editor Tool Bar width
-- [ ] If matterType is Array but matterValue is not actual Array, agitcms puts error
