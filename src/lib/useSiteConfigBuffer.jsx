@@ -55,7 +55,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
     setSiteConfig(siteConfigCopy);
   };
   const addNewFrontmatter = () => {
-    siteConfigCopy.frontmatter.push({ key: "", type: "", default: "" });
+    siteConfigCopy.frontmatter.push({ key: "", type: "", default: null });
     setSiteConfig(siteConfigCopy);
   };
   const removeFrontmatter = (i) => {

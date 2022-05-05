@@ -50,7 +50,6 @@ function useFileBuffer(filePath) {
   };
 
   const saveFile = async (tuieditor) => {
-    console.log(file);
     const { err } = await window.electronAPI.saveFile(
       tuieditor.getInstance().getMarkdown(),
       file.frontmatter,
