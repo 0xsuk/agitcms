@@ -10,8 +10,10 @@ import Grow from "@mui/material/Grow";
 import TextDialog from "./TextDialog";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import useSiteConfig from "../lib/useSiteConfig";
 
 function CreateNewDf({ cwdf }) {
+  const { siteConfig } = useSiteConfig();
   const navigate = useNavigate();
   const [isNewButtonOpen, setIsNewButtonOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -31,13 +33,21 @@ function CreateNewDf({ cwdf }) {
   };
 
   const createFile = async () => {
-    // TODO: read default frontmatter settings here
     const fileName = document.getElementById("agit-file-dialog").value + ".md";
-    const data = "sample data";
     const filePath = cwdf + "/" + fileName;
+    const doc = "";
+    //the default frontmatter
+    const frontmatter = {};
+    siteConfig.frontmatter.forEach((matter) => {
+      const key = matter.key;
+      const value = matter.default;
+      frontmatter[key] = value;
+    });
+
     const { err, isFileExists } = await window.electronAPI.createFile(
       filePath,
-      data
+      doc,
+      frontmatter
     );
     if (err !== null) {
       window.alert("createFile:", err.message);
@@ -48,7 +58,11 @@ function CreateNewDf({ cwdf }) {
       if (!doOverwrite) {
         return;
       }
-      const { err } = await window.electronAPI.createFile(filePath, data);
+      const { err } = await window.electronAPI.createFile(
+        filePath,
+        doc,
+        frontmatter
+      );
       if (err !== null) {
         window.alert("createFile:", err.message);
         return;

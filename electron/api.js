@@ -53,8 +53,9 @@ exports.readFile = (e, filePath) => {
   }
 
   try {
-    const { content: doc, data } = matter(content);
-    return { doc, frontmatter: data, err: null };
+    const { content: doc, data: frontmatter } = matter(content);
+    console.log(content);
+    return { doc, frontmatter, err: null };
   } catch (err) {
     console.log("frontmatter format is not supported", err);
     return { doc: null, frontmatter: {}, err: null };
@@ -113,9 +114,10 @@ exports.createFolder = (e, folderPath) => {
 };
 
 exports.createFile = (_, filePath, doc, frontmatter, doOverwrite) => {
-  // TODO: read frontmatter, write!
   try {
-    //TODO: if file already exists, writeFileSync overwrites it implicitly
+    const yaml_str = YAML.stringify(frontmatter);
+    if (Object.keys(frontmatter).length !== 0)
+      doc = "---\n" + yaml_str + "---" + doc;
     if (doOverwrite) {
       fs.writeFileSync(filePath, doc);
       return { err: null, isFileExists: null };
