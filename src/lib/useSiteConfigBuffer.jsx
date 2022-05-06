@@ -54,8 +54,20 @@ function useSiteConfigBuffer(initialSiteConfig) {
     siteConfigCopy.frontmatter[i].default = newDefault;
     setSiteConfig(siteConfigCopy);
   };
-  const addNewFrontmatter = () => {
-    siteConfigCopy.frontmatter.push({ key: "", type: "", default: null });
+  //const addNewFrontmatter = () => {
+  //  siteConfigCopy.frontmatter.push({ key: "", type: "", default: null });
+  //  setSiteConfig(siteConfigCopy);
+  //};
+  const addOrEditFrontmatter = (key, type, Default) => {
+    for (let i = 0; i < siteConfigCopy.frontmatter.length; i++) {
+      if (siteConfigCopy.frontmatter[i].key === key) {
+        siteConfigCopy.frontmatter[i] = { key, type, default: Default };
+        setSiteConfig(siteConfigCopy);
+        return;
+      }
+    }
+
+    siteConfigCopy.frontmatter.push({ key, type, default: Default });
     setSiteConfig(siteConfigCopy);
   };
   const removeFrontmatter = (i) => {
@@ -137,7 +149,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
       editFrontmatterDefault,
       editFrontmatterKey,
       editFrontmatterType,
-      addNewFrontmatter,
+      addOrEditFrontmatter,
       removeFrontmatter,
       editPath,
       removeSiteConfig,

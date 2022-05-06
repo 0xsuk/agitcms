@@ -1,8 +1,9 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Folder } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
+import FrontmatterDialog from "./FrontmatterDialog";
 
 function Site() {
   const { siteConfig: initialSiteConfig, isNew } = useSiteConfig();
@@ -14,10 +15,7 @@ function Site() {
       editCommandName,
       addNewCommand,
       removeCommand,
-      editFrontmatterDefault,
-      editFrontmatterKey,
-      editFrontmatterType,
-      addNewFrontmatter,
+      addOrEditFrontmatter,
       removeFrontmatter,
       editPath,
       saveSiteConfig,
@@ -27,6 +25,11 @@ function Site() {
   ] = useSiteConfigBuffer(initialSiteConfig);
 
   console.log(siteConfig.frontmatter);
+
+  const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
+  const closeFrontmatterDialog = () => {
+    setIsFrontmatterDialogOpen(false);
+  };
 
   return (
     <Fragment>
@@ -72,7 +75,16 @@ function Site() {
 
         <div>
           <p>frontmatter</p>
-          <Button onClick={addNewFrontmatter}>New</Button>
+          <Button onClick={() => setIsFrontmatterDialogOpen(true)}>New</Button>
+          <FrontmatterDialog
+            open={isFrontmatterDialogOpen}
+            onClose={closeFrontmatterDialog}
+            addOrEditFrontmatter={addOrEditFrontmatter}
+          />
+
+          {/* TODO: list frontmatter */}
+
+          {/*<Button onClick={addNewFrontmatter}>New</Button>
           {siteConfig.frontmatter.length !== 0 &&
             siteConfig.frontmatter.map((f, i) => (
               <div className="flex">
@@ -90,7 +102,7 @@ function Site() {
                 />
                 <Button onClick={() => removeFrontmatter(i)}>x</Button>
               </div>
-            ))}
+            ))}*/}
         </div>
 
         <Button onClick={cancelSiteConfig}>Cancel</Button>

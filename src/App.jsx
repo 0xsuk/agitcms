@@ -63,4 +63,11 @@ function Wrapper() {
   );
 }
 
+export const FrontmatterTypes = [
+  { name: "String", key: "String" },
+  { name: "Array of String", key: "Array.String" },
+  { name: "Date", key: "Date" },
+  { name: "Bool", key: "Bool" },
+];
+
 export default App;
