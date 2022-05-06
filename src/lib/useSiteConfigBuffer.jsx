@@ -75,6 +75,15 @@ function useSiteConfigBuffer(initialSiteConfig) {
     setSiteConfig(siteConfigCopy);
   };
 
+  const reorderFrontmatter = (result) => {
+    const list = Array.from(siteConfigCopy.frontmatter);
+    const [removed] = list.splice(result.source.index, 1);
+    list.splice(result.destination.index, 0, removed);
+
+    siteConfigCopy.frontmatter = list;
+    setSiteConfig(siteConfigCopy);
+  };
+
   const saveSiteConfig = () => {
     if (!isSiteConfigValid()) {
       return;
@@ -151,6 +160,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
       editFrontmatterType,
       addOrEditFrontmatter,
       removeFrontmatter,
+      reorderFrontmatter,
       editPath,
       removeSiteConfig,
       cancelSiteConfig,

@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function Site() {
   const { siteConfig: initialSiteConfig, isNew } = useSiteConfig();
@@ -17,6 +18,7 @@ function Site() {
       removeCommand,
       addOrEditFrontmatter,
       removeFrontmatter,
+      reorderFrontmatter,
       editPath,
       saveSiteConfig,
       removeSiteConfig,
@@ -82,27 +84,31 @@ function Site() {
             addOrEditFrontmatter={addOrEditFrontmatter}
           />
 
-          {/* TODO: list frontmatter */}
-
-          {/*<Button onClick={addNewFrontmatter}>New</Button>
-          {siteConfig.frontmatter.length !== 0 &&
-            siteConfig.frontmatter.map((f, i) => (
-              <div className="flex">
-                <input
-                  value={f.key}
-                  onChange={(e) => editFrontmatterKey(e.target.value, i)}
-                />
-                <input
-                  value={f.type}
-                  onChange={(e) => editFrontmatterType(e.target.value, i)}
-                />
-                <input
-                  value={f.default}
-                  onChange={(e) => editFrontmatterDefault(e.target.value, i)}
-                />
-                <Button onClick={() => removeFrontmatter(i)}>x</Button>
-              </div>
-            ))}*/}
+          <DragDropContext onDragEnd={reorderFrontmatter}>
+            <Droppable droppableId="droppable">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {siteConfig.frontmatter?.map((matter, i) => (
+                    <Draggable
+                      key={matter.key}
+                      draggableId={matter.key}
+                      index={i}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          {matter.key}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
 
         <Button onClick={cancelSiteConfig}>Cancel</Button>
