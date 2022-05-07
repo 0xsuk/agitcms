@@ -54,20 +54,17 @@ function useSiteConfigBuffer(initialSiteConfig) {
     siteConfigCopy.frontmatter[i].default = newDefault;
     setSiteConfig(siteConfigCopy);
   };
-  //const addNewFrontmatter = () => {
-  //  siteConfigCopy.frontmatter.push({ key: "", type: "", default: null });
-  //  setSiteConfig(siteConfigCopy);
-  //};
-  const addOrEditFrontmatter = (key, type, Default) => {
+  //TODO: const editFrontmatterOption
+  const addOrEditFrontmatter = (key, type, Default, option) => {
     for (let i = 0; i < siteConfigCopy.frontmatter.length; i++) {
       if (siteConfigCopy.frontmatter[i].key === key) {
-        siteConfigCopy.frontmatter[i] = { key, type, default: Default };
+        siteConfigCopy.frontmatter[i] = { key, type, default: Default, option };
         setSiteConfig(siteConfigCopy);
         return;
       }
     }
 
-    siteConfigCopy.frontmatter.push({ key, type, default: Default });
+    siteConfigCopy.frontmatter.push({ key, type, default: Default, option });
     setSiteConfig(siteConfigCopy);
   };
   const removeFrontmatter = (i) => {

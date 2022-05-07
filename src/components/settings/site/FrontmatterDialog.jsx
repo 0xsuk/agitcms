@@ -4,6 +4,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
+  FormGroup,
   MenuItem,
   Select,
   Switch,
@@ -12,6 +14,119 @@ import {
 import { useState } from "react";
 import { FrontmatterTypes } from "../../../App";
 
+function ArrayOfStringMatter({
+  handleBack,
+  Default: initialDefault,
+  Key: initialKey,
+  handleMatterSave,
+}) {
+  const [Key, setKey] = useState(initialKey);
+  const [Default, setDefault] = useState(initialDefault);
+  const [singleValue, setSingleValue] = useState("");
+  return (
+    <>
+      <DialogTitle>Set frontmatter name & default value</DialogTitle>
+      <DialogContent>
+        <TextField
+          value={Key}
+          label="name"
+          onChange={(e) => setKey(e.target.value)}
+        />
+        <TextField
+          variant="standard"
+          placeholder="String"
+          value={singleValue}
+          onChange={(e) => {
+            setSingleValue(e.target.value);
+          }}
+          InputProps={{
+            endAdornment: (
+              <Button
+                onClick={() => {
+                  //if (!Default) Default = [];
+                  if (!singleValue) return;
+                  setDefault((prev) => [...prev, singleValue]);
+                  setSingleValue(""); //null does not work
+                }}
+              >
+                ADD
+              </Button>
+            ),
+          }}
+        />
+        {Default?.map((v, i) => (
+          <p
+            onClick={() => {
+              const newDefault = JSON.parse(JSON.stringify(Default));
+              newDefault.splice(i, 1);
+              setDefault(newDefault);
+            }}
+          >
+            {v} x
+          </p>
+        ))}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleBack}>Back</Button>
+        <Button
+          onClick={() => {
+            handleMatterSave(Key, Default);
+          }}
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </>
+  );
+}
+function DateMatter({
+  handleBack,
+  Default: initialDefault,
+  Key: initialKey,
+  handleMatterSave,
+  option: initialOption,
+}) {
+  const [Key, setKey] = useState(initialKey);
+  const [Default, setDefault] = useState(initialDefault);
+  const [option, setOption] = useState(initialOption);
+  return (
+    <>
+      <DialogTitle>Set frontmatter name & default value</DialogTitle>
+      <DialogContent>
+        <TextField
+          value={Key}
+          label="name"
+          onChange={(e) => setKey(e.target.value)}
+        />
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                size="small"
+                defaultChecked={option.useNow}
+                onChange={() =>
+                  setOption((prev) => ({ ...prev, useNow: !prev.useNow }))
+                }
+              />
+            }
+            label="Use now as default"
+            //labelPlacement="top"
+          />
+        </FormGroup>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleBack}>Back</Button>
+        <Button
+          onClick={() => {
+            handleMatterSave(Key, Default, option);
+          }}
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </>
+  );
+}
 function StringMatter({
   handleBack,
   Default: initialDefault,
@@ -107,7 +222,7 @@ function TypeDialog({ handleClose, handleSave }) {
           label="Type"
         >
           {FrontmatterTypes.map((t) => (
-            <MenuItem value={t.name}>{t.name}</MenuItem>
+            <MenuItem value={t.key}>{t.name}</MenuItem>
           ))}
         </Select>
       </DialogContent>
@@ -132,8 +247,12 @@ function FrontmatterDialog({ open, onClose, addOrEditFrontmatter }) {
     onClose();
     setType(null);
   };
-  const handleMatterSave = (key, Default) => {
-    addOrEditFrontmatter(key, type, Default);
+  const handleMatterSave = (key, Default, option) => {
+    if (key === "") {
+      alert("name cannot be empty");
+      return;
+    }
+    addOrEditFrontmatter(key, type, Default, option);
     onClose();
     setType(null);
   };
@@ -162,6 +281,23 @@ function FrontmatterDialog({ open, onClose, addOrEditFrontmatter }) {
           handleMatterSave={handleMatterSave}
           Key={""}
           Default={null}
+        />
+      )}
+      {type === "Date" && (
+        <DateMatter
+          handleBack={() => setType(null)}
+          handleMatterSave={handleMatterSave}
+          Key={""}
+          Default={null}
+          option={{ useNow: true }}
+        />
+      )}
+      {type === "Array.String" && (
+        <ArrayOfStringMatter
+          handleBack={() => setType(null)}
+          handleMatterSave={handleMatterSave}
+          Key={""}
+          Default={[]}
         />
       )}
     </Dialog>
