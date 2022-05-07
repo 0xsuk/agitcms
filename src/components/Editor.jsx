@@ -47,7 +47,7 @@ function Editor({ filePath }) {
       />
     );
     //have to be function
-    const stringOfArrayEditor = () => (
+    const ArrayOfStringEditor = () => (
       <>
         <TextField
           variant="standard"
@@ -132,9 +132,9 @@ function Editor({ filePath }) {
       }
       switch (matterType.split(".")[1]) {
         case "String":
-          return stringOfArrayEditor();
+          return ArrayOfStringEditor();
         default:
-          return stringOfArrayEditor();
+          return ArrayOfStringEditor();
       }
     }
 
