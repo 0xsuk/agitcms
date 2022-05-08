@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import {
   Button,
   Dialog,
@@ -18,6 +19,7 @@ function ArrayOfStringMatter({
   handleBack,
   Default: initialDefault,
   Key: initialKey,
+  id,
   handleMatterSave,
 }) {
   const [Key, setKey] = useState(initialKey);
@@ -70,7 +72,7 @@ function ArrayOfStringMatter({
         <Button onClick={handleBack}>Back</Button>
         <Button
           onClick={() => {
-            handleMatterSave(Key, Default);
+            handleMatterSave(id, Key, Default);
           }}
         >
           Save
@@ -83,6 +85,7 @@ function DateMatter({
   handleBack,
   Default: initialDefault,
   Key: initialKey,
+  id,
   handleMatterSave,
   option: initialOption,
 }) {
@@ -118,7 +121,7 @@ function DateMatter({
         <Button onClick={handleBack}>Back</Button>
         <Button
           onClick={() => {
-            handleMatterSave(Key, Default, option);
+            handleMatterSave(id, Key, Default, option);
           }}
         >
           Save
@@ -131,6 +134,7 @@ function StringMatter({
   handleBack,
   Default: initialDefault,
   Key: initialKey,
+  id,
   handleMatterSave,
 }) {
   const [Key, setKey] = useState(initialKey);
@@ -161,7 +165,7 @@ function StringMatter({
         <Button onClick={handleBack}>Back</Button>
         <Button
           onClick={() => {
-            handleMatterSave(Key, Default);
+            handleMatterSave(id, Key, Default);
           }}
         >
           Save
@@ -175,6 +179,7 @@ function BoolMatter({
   handleBack,
   Default: initialDefault,
   Key: initialKey,
+  id,
   handleMatterSave,
 }) {
   const [Key, setKey] = useState(initialKey);
@@ -198,7 +203,7 @@ function BoolMatter({
         <Button onClick={handleBack}>Back</Button>
         <Button
           onClick={() => {
-            handleMatterSave(Key, Default);
+            handleMatterSave(id, Key, Default);
           }}
         >
           Save
@@ -240,19 +245,20 @@ function TypeDialog({ handleClose, handleSave }) {
   );
 }
 
-function FrontmatterDialog({ open, onClose, addOrEditFrontmatter }) {
+function FrontmatterDialog({ open, onClose, addFrontmatter }) {
   const [type, setType] = useState(null);
+  const id = uuid();
   //save key, default
   const handleClose = () => {
     onClose();
     setType(null);
   };
-  const handleMatterSave = (key, Default, option) => {
+  const handleMatterSave = (id, key, Default, option) => {
     if (key === "") {
       alert("name cannot be empty");
       return;
     }
-    addOrEditFrontmatter(key, type, Default, option);
+    addFrontmatter(id, key, type, Default, option);
     onClose();
     setType(null);
   };
@@ -273,6 +279,7 @@ function FrontmatterDialog({ open, onClose, addOrEditFrontmatter }) {
           handleMatterSave={handleMatterSave}
           Key={""}
           Default={false}
+          id={id}
         />
       )}
       {type === "String" && (
@@ -281,6 +288,7 @@ function FrontmatterDialog({ open, onClose, addOrEditFrontmatter }) {
           handleMatterSave={handleMatterSave}
           Key={""}
           Default={null}
+          id={id}
         />
       )}
       {type === "Date" && (
@@ -289,6 +297,7 @@ function FrontmatterDialog({ open, onClose, addOrEditFrontmatter }) {
           handleMatterSave={handleMatterSave}
           Key={""}
           Default={null}
+          id={id}
           option={{ useNow: true }}
         />
       )}
@@ -298,6 +307,7 @@ function FrontmatterDialog({ open, onClose, addOrEditFrontmatter }) {
           handleMatterSave={handleMatterSave}
           Key={""}
           Default={[]}
+          id={id}
         />
       )}
     </Dialog>

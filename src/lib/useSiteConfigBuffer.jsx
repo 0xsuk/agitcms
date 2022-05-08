@@ -55,20 +55,37 @@ function useSiteConfigBuffer(initialSiteConfig) {
     setSiteConfig(siteConfigCopy);
   };
   //TODO: const editFrontmatterOption
-  const addOrEditFrontmatter = (key, type, Default, option) => {
+  const editFrontmatter = (id, key, type, Default, option) => {
     for (let i = 0; i < siteConfigCopy.frontmatter.length; i++) {
-      if (siteConfigCopy.frontmatter[i].key === key) {
-        siteConfigCopy.frontmatter[i] = { key, type, default: Default, option };
+      if (siteConfigCopy.frontmatter[i].id === id) {
+        siteConfigCopy.frontmatter[i] = {
+          id,
+          key,
+          type,
+          default: Default,
+          option,
+        };
         setSiteConfig(siteConfigCopy);
         return;
       }
     }
+  };
 
-    siteConfigCopy.frontmatter.push({ key, type, default: Default, option });
+  const addFrontmatter = (id, key, type, Default, option) => {
+    siteConfigCopy.frontmatter.push({
+      id,
+      key,
+      type,
+      default: Default,
+      option,
+    });
     setSiteConfig(siteConfigCopy);
   };
-  const removeFrontmatter = (i) => {
-    siteConfigCopy.frontmatter.splice(i, 1);
+
+  const removeFrontmatter = (id) => {
+    siteConfigCopy.frontmatter = siteConfigCopy.frontmatter.filter(
+      (matter) => matter.id !== id
+    );
     setSiteConfig(siteConfigCopy);
   };
 
@@ -155,7 +172,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
       editFrontmatterDefault,
       editFrontmatterKey,
       editFrontmatterType,
-      addOrEditFrontmatter,
+      editFrontmatter,
+      addFrontmatter,
       removeFrontmatter,
       reorderFrontmatter,
       editPath,
