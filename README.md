@@ -14,6 +14,8 @@ TODO:
 - [ ] Command stop
 - [ ] auto move pasted image into media folder
 - [ ] root settings
+- [ ] Tab
+- [ ] Warn user trying to quit without saving
 
 Issues:
 
