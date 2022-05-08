@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useCallback, useContext, useEffect } from "react";
 import { Folder } from "@mui/icons-material";
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Button, Menu, MenuItem, Typography } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import usePrompt from "../../../lib/usePrompt";
 
 function Site() {
   const { siteConfig: initialSiteConfig, isNew } = useSiteConfig();
@@ -27,13 +28,16 @@ function Site() {
     },
   ] = useSiteConfigBuffer(initialSiteConfig);
 
-  console.log(siteConfig.frontmatter);
+  const isDirty =
+    JSON.stringify(initialSiteConfig) !== JSON.stringify(siteConfig);
 
   const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
   const closeFrontmatterDialog = () => {
     setIsFrontmatterDialogOpen(false);
   };
   const [anchorEl, setAnchorEl] = useState(null);
+
+  usePrompt("Continue without saving?", isDirty);
 
   return (
     <div id="setting-site">
@@ -77,7 +81,7 @@ function Site() {
       </div>
 
       <div>
-        <p>frontmatter</p>
+        <Typography variant="h5">Frontmatter Template</Typography>
         <Button onClick={() => setIsFrontmatterDialogOpen(true)}>New</Button>
         <FrontmatterDialog
           open={isFrontmatterDialogOpen}
@@ -111,7 +115,16 @@ function Site() {
                         <p
                           style={{
                             color: "#999",
-                            right: "300px",
+                            right: "400px",
+                            position: "absolute",
+                          }}
+                        >
+                          {String(matter.default)}
+                        </p>
+                        <p
+                          style={{
+                            color: "#999",
+                            right: "200px",
                             position: "absolute",
                           }}
                         >
