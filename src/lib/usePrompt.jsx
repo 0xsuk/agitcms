@@ -7,6 +7,7 @@ function useBlocker(blocker, when = true) {
   useEffect(() => {
     if (!when) return;
 
+    console.log("blocked!");
     const unblock = navigator.block((tx) => {
       const autoUnblockingTx = {
         ...tx,
@@ -18,6 +19,18 @@ function useBlocker(blocker, when = true) {
 
       blocker(autoUnblockingTx);
     });
+    //window.addEventListener("beforeunload", async () => {
+    //  unblock();
+    //  while (typeof window !== undefined) {
+    //    window.close();
+    //  }
+    //  //window.electronAPI.kill("CONFIRM")
+    //  //if (await window.electronAPI.confirm("Cont")) {
+    //  //  window.close();
+    //  //} else {
+    //  //  console.log("do something else");
+    //  //}
+    //});
 
     return unblock;
   }, [navigator, blocker, when]);
