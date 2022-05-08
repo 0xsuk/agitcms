@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require("electron");
 const { ipcMain } = require("electron/main");
 const {
+  confirm,
   readConfig,
   updateConfig,
   readFile,
@@ -20,6 +21,7 @@ const { createWindow } = require("./lib/window_manager");
 app.whenReady().then(() => {
   createWindow();
 
+  ipcMain.handle("confirm", confirm);
   ipcMain.handle("read-config", readConfig);
   ipcMain.handle("update-config", updateConfig);
   ipcMain.handle("save-file", saveFile);

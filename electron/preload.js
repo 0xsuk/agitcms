@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  confirm: (message) => ipcRenderer.invoke("confirm", message),
   readConfig: () => ipcRenderer.invoke("read-config"),
   updateConfig: (newConfig) => ipcRenderer.invoke("update-config", newConfig),
   saveFile: (doc, frontmatter, filePath) =>

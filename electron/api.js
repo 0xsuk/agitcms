@@ -5,6 +5,22 @@ const path = require("path");
 const matter = require("gray-matter");
 const YAML = require("yaml");
 const ShellProcess = require("./lib/shellprocess.js");
+const { getWindow } = require("./lib/window_manager");
+
+exports.confirm = async (_, message) => {
+  const win = getWindow();
+  const options = {
+    type: "question",
+    buttons: ["Cancel", "Yes"],
+    message,
+  };
+  dialog.showMessageBoxSync(win, options, (response, checkBoxChecked) => {
+    console.log(response);
+    console.log(checkBoxChecked);
+  });
+
+  return true;
+};
 
 exports.readConfig = () => {
   return { config: getConfig() };
