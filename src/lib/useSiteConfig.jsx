@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 
 function useSiteConfig() {
-  console.log("USE SITECONFIG", useRouteMatch());
+  console.log("USE SITECONFIG", useRouteMatch(), useLocation());
   const { config } = useContext(configContext);
   const { siteKey: siteKey_str } = useParams();
 

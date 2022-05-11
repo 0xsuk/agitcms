@@ -25,7 +25,9 @@ function App() {
 
   return (
     <>
-      <Route path="/" component={Wrapper}></Route>
+      <Route path="/">
+        <Wrapper />
+      </Route>
     </>
   );
 }
