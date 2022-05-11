@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { useContext } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
@@ -7,13 +8,11 @@ function useSiteConfig() {
 
   const match = useRouteMatch("/*/:siteKey");
   if (!match) return { siteConfig: null, isNew: null };
-  const { siteKey: siteKey_str } = match.params;
+  const { siteKey } = match.params;
 
-  if (!siteKey_str) return { siteConfig: null, isNew: null };
-  if (siteKey_str === "new")
-    return { siteConfig: newSiteConfig(), isNew: true };
+  if (!siteKey) return { siteConfig: null, isNew: null };
+  if (siteKey === "new") return { siteConfig: newSiteConfig(), isNew: true };
 
-  const siteKey = Number(siteKey_str);
   let siteConfig;
   config.sites.every((site) => {
     if (site.key === siteKey) {
@@ -28,7 +27,7 @@ function useSiteConfig() {
 
 export const newSiteConfig = () => {
   return {
-    key: Date.now(),
+    key: uuid(),
     path: "",
     defaultDir: "",
     mediaDir: "",
