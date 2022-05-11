@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from "react";
+import { useState } from "react";
 import { Folder } from "@mui/icons-material";
 import { Button, Menu, MenuItem, Typography } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -6,6 +6,7 @@ import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Prompt } from "react-router-dom";
 
 function Site() {
   const { siteConfig: initialSiteConfig, isNew } = useSiteConfig();
@@ -38,6 +39,7 @@ function Site() {
 
   return (
     <div id="setting-site">
+      <Prompt when={isDirty} message="Continue without saving?" />
       {isNew && <h1>New Site</h1>}
       <div className="flex">
         <p>name:</p>

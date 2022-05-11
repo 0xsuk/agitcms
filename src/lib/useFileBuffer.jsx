@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 //useCodeMirror depends on useFileBuffer's updateDoc
 //filePath is a only dependency.
 function useFileBuffer(filePath) {
-  const params = null;
   const history = useHistory();
-  const fileName = params.get("name");
+  const location = useLocation();
+  const searchparams = new URLSearchParams(location.search);
+  const fileName = searchparams.get("name");
   const [file, setFile] = useState({
     name: fileName,
     frontmatter: {},

@@ -11,12 +11,14 @@ import {
 } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor as TuiEditor } from "@toast-ui/react-editor";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
 //filePath is a only dependency
 
-function Editor({ filePath }) {
+//TODO: memo not wkring as expected
+const Editor = memo(({ filePath }) => {
+  console.log("EDITOR", filePath);
   const [file, { editName, editFrontmatter, readFile, saveFile }] =
     useFileBuffer(filePath);
   const editorRef = useRef();
@@ -209,6 +211,6 @@ function Editor({ filePath }) {
       </div>
     </div>
   );
-}
+});
 
 export default Editor;
