@@ -3,7 +3,9 @@ import useSiteConfig from "../lib/useSiteConfig";
 import { Button } from "@mui/material";
 
 function SideBar() {
+  console.log("SIDEBAR");
   const { siteConfig, isNew } = useSiteConfig();
+  console.log("siteConfig,", siteConfig);
 
   const runCommand = async (command) => {
     const { err } = await window.electronAPI.runCommand(

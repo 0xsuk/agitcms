@@ -1,23 +1,25 @@
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Menu, MenuItem } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
 import Editor from "./Editor";
 
 function Explorer() {
+  console.log("EXPLORER");
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const { siteConfig } = useSiteConfig();
   const { updateSiteConfig } = useContext(configContext);
-  const [params] = useSearchParams();
+  const location = useLocation();
+  const searchparams = new URLSearchParams(location.search);
 
   //current working dir or filek
-  const cwdf = params.get("path");
-  const dfName = params.get("name");
+  const cwdf = searchparams.get("path");
+  const dfName = searchparams.get("name");
   const isInRoot = cwdf === siteConfig.path;
-  const isInDir = params.get("isDir") === "true" || isInRoot;
+  const isInDir = searchparams.get("isDir") === "true" || isInRoot;
   const isDfPinned = !siteConfig.pinnedDirs.every((df) => {
     if (df.path === cwdf) {
       return false;
@@ -83,6 +85,7 @@ function Explorer() {
 function Df({ cwdf, df, loadFilesAndFolders }) {
   const [anchorEl, setAnchorEl] = useState(null);
   //const renameDf = async () => {};
+  const history = useHistory();
   const removeDf = async () => {
     const dfPath = cwdf + "/" + df.name;
     let err;
@@ -97,13 +100,12 @@ function Df({ cwdf, df, loadFilesAndFolders }) {
     }
     loadFilesAndFolders();
   };
-  const navigate = useNavigate();
 
   return (
     <div
       className="df"
       onClick={() => {
-        navigate(
+        history.push(
           "?path=" +
             cwdf +
             "/" +

@@ -6,7 +6,6 @@ import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import usePrompt from "../../../lib/usePrompt";
 
 function Site() {
   const { siteConfig: initialSiteConfig, isNew } = useSiteConfig();
@@ -36,8 +35,6 @@ function Site() {
     setIsFrontmatterDialogOpen(false);
   };
   const [anchorEl, setAnchorEl] = useState(null);
-
-  usePrompt("Continue without saving?", isDirty);
 
   return (
     <div id="setting-site">

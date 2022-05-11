@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useState } from "react";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
 import "./App.scss";
 import Explorer from "./components/Explorer";
 import Home from "./components/Home";
@@ -12,13 +12,10 @@ import { configContext } from "./context/ConfigContext";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
-  const [lines, setLines] = useState([]);
+
   useEffect(() => {
     readConfig();
-    window.electronAPI.onShellProcessLine((e, data) => {
-      setLines((prev) => [...prev, data.line]);
-    });
-  }, []); //eslint-disable-line
+  }, []);
 
   if (config.sites === undefined) {
     console.log("reading config", config);
@@ -27,29 +24,20 @@ function App() {
   console.log("configuration:", config);
 
   return (
-    <Routes>
-      <Route path="/" element={<Wrapper />}>
-        <Route path="test" element={<Test />}></Route>
-        <Route path="" element={<Home />}></Route>
-        <Route path="settings">
-          <Route path="" element={<Settings />}></Route>
-          <Route path=":siteKey" element={<Site />}></Route>
-        </Route>
-        <Route path="shell">
-          <Route
-            path=":siteKey"
-            element={<Shell lines={lines} setLines={setLines} />}
-          ></Route>
-        </Route>
-        <Route path="edit">
-          <Route path=":siteKey/*" element={<Explorer />}></Route>
-        </Route>
-      </Route>
-    </Routes>
+    <>
+      <Route path="/" component={Wrapper}></Route>
+    </>
   );
 }
 
 function Wrapper() {
+  console.log("WRAPPER");
+  const [lines, setLines] = useState([]);
+  useEffect(() => {
+    window.electronAPI.onShellProcessLine((e, data) => {
+      setLines((prev) => [...prev, data.line]);
+    });
+  }, []); //eslint-disable-line
   return (
     // list of workspace
     <div className="flex">
@@ -57,7 +45,24 @@ function Wrapper() {
         <SideBar />
       </div>
       <div id="main">
-        <Outlet />
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/test">
+          <Test />
+        </Route>
+        <Route exact path="/settings">
+          <Settings />
+        </Route>
+        <Route path="/settings/:siteKey">
+          <Site />
+        </Route>
+        <Route path="/shell/:siteKey">
+          <Shell lines={lines} setLines={setLines} />
+        </Route>
+        <Route path="/edit/:siteKey">
+          <Explorer />
+        </Route>
       </div>
     </div>
   );

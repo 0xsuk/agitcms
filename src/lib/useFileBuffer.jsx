@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //useCodeMirror depends on useFileBuffer's updateDoc
 //filePath is a only dependency.
 function useFileBuffer(filePath) {
-  const [params] = useSearchParams();
-  const navigate = useNavigate();
+  const params = null;
+  const history = useHistory();
   const fileName = params.get("name");
   const [file, setFile] = useState({
     name: fileName,
@@ -46,7 +46,7 @@ function useFileBuffer(filePath) {
       return;
     }
     const to = "?path=" + newFilePath + "&isDir=false&fileName=" + file.name;
-    navigate(to);
+    history.push(to);
   };
 
   const saveFile = async (tuieditor) => {

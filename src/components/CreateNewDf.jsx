@@ -9,12 +9,12 @@ import MenuList from "@mui/material/MenuList";
 import Grow from "@mui/material/Grow";
 import TextDialog from "./TextDialog";
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import useSiteConfig from "../lib/useSiteConfig";
 
 function CreateNewDf({ cwdf }) {
   const { siteConfig } = useSiteConfig();
-  const navigate = useNavigate();
+  const history = useHistory();
   const [isNewButtonOpen, setIsNewButtonOpen] = useState(false);
   const anchorRef = useRef(null);
   const closeNewButton = () => {
@@ -68,7 +68,7 @@ function CreateNewDf({ cwdf }) {
         return;
       }
     }
-    navigate(
+    history.push(
       "?path=" + cwdf + "/" + fileName + "&isDir=false&name=" + fileName
     );
   };

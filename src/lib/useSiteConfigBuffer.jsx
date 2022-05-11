@@ -1,11 +1,11 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 
 function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(initialSiteConfig);
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
-  const navigate = useNavigate();
+  const history = useHistory();
   //siteConfig !== siteConfigCopy //true
   const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
 
@@ -116,7 +116,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
   const removeSiteConfig = (key) => {
     if (!window.confirm("are you sure?")) return;
     deleteSiteConfig(key);
-    navigate("/");
+    history.push("/");
   };
 
   const isSiteConfigValid = () => {
