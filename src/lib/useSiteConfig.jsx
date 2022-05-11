@@ -1,16 +1,17 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { useRouteMatch } from "react-router-dom";
-import { useParams, useLocation } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 
 function useSiteConfig() {
-  console.log("USE SITECONFIG", useRouteMatch(), useLocation());
   const { config } = useContext(configContext);
-  const { siteKey: siteKey_str } = useParams();
 
+  const match = useRouteMatch("/*/:siteKey");
+  if (!match) return { siteConfig: null, isNew: null };
+  const { siteKey: siteKey_str } = match.params;
+
+  if (!siteKey_str) return { siteConfig: null, isNew: null };
   if (siteKey_str === "new")
     return { siteConfig: newSiteConfig(), isNew: true };
-  if (!siteKey_str) return { siteConfig: null, isNew: null };
 
   const siteKey = Number(siteKey_str);
   let siteConfig;

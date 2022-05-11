@@ -4,7 +4,6 @@ import { configContext } from "../context/ConfigContext";
 import { Link, useHistory } from "react-router-dom";
 
 function Home() {
-  console.log("HOME");
   const { config } = useContext(configContext);
   const history = useHistory();
 

@@ -6,11 +6,11 @@ import ConfigContext from "./context/ConfigContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ConfigContext>
-      <Router>
+    <Router>
+      <ConfigContext>
         <App />
-      </Router>
-    </ConfigContext>
+      </ConfigContext>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -8,7 +8,6 @@ import CreateNewDf from "./CreateNewDf";
 import Editor from "./Editor";
 
 function Explorer() {
-  console.log("EXPLORER");
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const { siteConfig } = useSiteConfig();
   const { updateSiteConfig } = useContext(configContext);

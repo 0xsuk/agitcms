@@ -21,11 +21,11 @@ function App() {
     console.log("reading config", config);
     return <Fragment />;
   }
-  console.log("configuration:", config);
 
   return (
     <>
       <Route path="/">
+        {/* component={} renders Wrapper every single time */}
         <Wrapper />
       </Route>
     </>
@@ -33,13 +33,13 @@ function App() {
 }
 
 function Wrapper() {
-  console.log("WRAPPER");
   const [lines, setLines] = useState([]);
   useEffect(() => {
-    window.electronAPI.onShellProcessLine((e, data) => {
+    window.electronAPI.onShellProcessLine((_, data) => {
       setLines((prev) => [...prev, data.line]);
     });
   }, []); //eslint-disable-line
+
   return (
     // list of workspace
     <div className="flex">
