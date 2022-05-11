@@ -30,10 +30,10 @@
     "yaml": "^1.10.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev": "concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3001 && electron .\"",
     "build": "react-scripts build && cp -r electron build/electron && electron-builder -l -c.extraMetadata.main=build/electron/electron.js --dir",
     "pack": "react-scripts build && cp -r electron build/electron && electron-builder -l -c.extraMetadata.main=build/electron/electron.js"
   },
