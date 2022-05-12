@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { Folder } from "@mui/icons-material";
-import { Button, Menu, MenuItem, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Grid,
+  Menu,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
@@ -40,139 +49,194 @@ function Site() {
   return (
     <div id="setting-site">
       <Prompt when={isDirty} message="Continue without saving?" />
-      {isNew && <h1>New Site</h1>}
-      <div className="flex">
-        <p>name:</p>
-        <input
-          onChange={(e) => {
-            editName(e.target.value);
-          }}
-          value={siteConfig.name}
-        />
-      </div>
-      <p>key: {siteConfig.key}</p>
-      <div className="flex">
-        <p>{siteConfig.path}</p>
-        <Button>
-          <Folder onClick={editPath} />
-        </Button>
-      </div>
+      {isNew && <Typography variant="h6">Create a new site</Typography>}
+      <Grid container spacing={1}>
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>
+            <Typography>Name:</Typography>
+          </Grid>
+          <Grid item>
+            <TextField
+              placeholder="Name of the site"
+              value={siteConfig.name}
+              variant="standard"
+              onChange={(e) => {
+                editName(e.target.value);
+              }}
+            />
+          </Grid>
+        </Grid>
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>
+            <Typography>Path:</Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ color: "#999" }}>
+              {siteConfig.path ? siteConfig.path : "select root folder path"}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button>
+              <Folder onClick={editPath} />
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
 
-      <div>
-        <p>Commands</p>
-        <Button onClick={addNewCommand}>New</Button>
-        <div>
-          {siteConfig.commands.length !== 0 &&
-            siteConfig.commands.map((cmd_obj, i) => (
-              <div className="flex">
-                <input
+      <Divider sx={{ padding: "20px", color: "#999" }}>optional</Divider>
+
+      <Grid container spacing={1}>
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>
+            <Typography>Command shortcuts</Typography>
+          </Grid>
+          <Grid item>
+            <Button onClick={addNewCommand}>New</Button>
+          </Grid>
+        </Grid>
+        {siteConfig.commands.length !== 0 &&
+          siteConfig.commands.map((cmd_obj, i) => (
+            <Grid item container spacing={1} alignItems="center">
+              <Grid item>
+                <TextField
                   value={cmd_obj.name}
+                  variant="standard"
                   onChange={(e) => editCommandName(e.target.value, i)}
                 />
-                <input
+              </Grid>
+              <Grid item>
+                <TextField
                   value={cmd_obj.command}
+                  variant="standard"
                   onChange={(e) => editCommand(e.target.value, i)}
                 />
+              </Grid>
+              <Grid item>
                 <Button onClick={() => removeCommand(i)}>x</Button>
-              </div>
-            ))}
-        </div>
-      </div>
+              </Grid>
+            </Grid>
+          ))}
 
-      <div>
-        <Typography variant="h5">Frontmatter Template</Typography>
-        <Button onClick={() => setIsFrontmatterDialogOpen(true)}>New</Button>
-        <FrontmatterDialog
-          open={isFrontmatterDialogOpen}
-          onClose={closeFrontmatterDialog}
-          addFrontmatter={addFrontmatter}
-        />
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>
+            <Typography>Frontmatter template</Typography>
+          </Grid>
+          <Grid item>
+            <Button onClick={() => setIsFrontmatterDialogOpen(true)}>
+              New
+            </Button>
+          </Grid>
+          <FrontmatterDialog
+            open={isFrontmatterDialogOpen}
+            onClose={closeFrontmatterDialog}
+            addFrontmatter={addFrontmatter}
+          />
+        </Grid>
 
-        <DragDropContext onDragEnd={reorderFrontmatter}>
-          <Droppable droppableId="droppable">
-            {(provided) => (
-              <div
-                className="setting-frontmatter-list"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {siteConfig.frontmatter?.map((matter, i) => (
-                  <Draggable
-                    key={matter.key}
-                    draggableId={matter.key}
-                    index={i}
-                  >
-                    {(provided) => (
-                      <div
-                        className="setting-matter"
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{ ...provided.draggableProps.style }}
-                      >
-                        <p>{matter.key}</p>
-                        <p
-                          style={{
-                            color: "#999",
-                            right: "400px",
-                            position: "absolute",
-                          }}
+        <Grid item sx={{ width: "100%" }}>
+          <DragDropContext onDragEnd={reorderFrontmatter}>
+            <Droppable droppableId="droppable">
+              {(provided) => (
+                <div
+                  className="setting-frontmatter-list"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {siteConfig.frontmatter?.map((matter, i) => (
+                    <Draggable
+                      key={matter.key}
+                      draggableId={matter.key}
+                      index={i}
+                    >
+                      {(provided) => (
+                        <div
+                          className="setting-matter"
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{ ...provided.draggableProps.style }}
                         >
-                          {String(matter.default)}
-                        </p>
-                        <p
-                          style={{
-                            color: "#999",
-                            right: "200px",
-                            position: "absolute",
-                          }}
-                        >
-                          {matter.type}
-                        </p>
-                        <MoreHorizIcon
-                          onClick={(e) => {
-                            setAnchorEl(e.currentTarget);
-                            e.stopPropagation();
-                          }}
-                        />
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={anchorEl !== null}
-                          onClose={(e) => {
-                            setAnchorEl(null);
-                            e.stopPropagation();
-                          }}
-                          //on Click menuitems
-                          onClick={(e) => {
-                            setAnchorEl(null);
-                            e.stopPropagation();
-                          }}
-                        >
-                          {/*TODO<MenuItem
+                          <p>{matter.key}</p>
+                          <p
+                            style={{
+                              color: "#999",
+                              right: "400px",
+                              position: "absolute",
+                            }}
+                          >
+                            {String(matter.default)}
+                          </p>
+                          <p
+                            style={{
+                              color: "#999",
+                              right: "200px",
+                              position: "absolute",
+                            }}
+                          >
+                            {matter.type}
+                          </p>
+                          <MoreHorizIcon
+                            onClick={(e) => {
+                              setAnchorEl(e.currentTarget);
+                              e.stopPropagation();
+                            }}
+                          />
+                          <Menu
+                            anchorEl={anchorEl}
+                            open={anchorEl !== null}
+                            onClose={(e) => {
+                              setAnchorEl(null);
+                              e.stopPropagation();
+                            }}
+                            //on Click menuitems
+                            onClick={(e) => {
+                              setAnchorEl(null);
+                              e.stopPropagation();
+                            }}
+                          >
+                            {/*TODO<MenuItem
                             onClick={() => removeFrontmatter(matter.id)}
                           >
                             edit
                           </MenuItem>*/}
-                          <MenuItem
-                            onClick={() => removeFrontmatter(matter.id)}
-                          >
-                            delete
-                          </MenuItem>
-                        </Menu>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
+                            <MenuItem
+                              onClick={() => removeFrontmatter(matter.id)}
+                            >
+                              delete
+                            </MenuItem>
+                          </Menu>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Grid>
 
-      <Button onClick={cancelSiteConfig}>Cancel</Button>
-      <Button onClick={saveSiteConfig}>Save</Button>
-      <Button onClick={() => removeSiteConfig(siteConfig.key)}>Delete</Button>
+        <Grid
+          item
+          container
+          spacing={1}
+          alignItems="center"
+          justifyContent="center"
+          sx={{ marginTop: "20px" }}
+        >
+          <Grid item>
+            <Button onClick={cancelSiteConfig}>Cancel</Button>
+          </Grid>
+          <Grid item>
+            <Button onClick={saveSiteConfig}>Save</Button>
+          </Grid>
+          <Grid item>
+            <Button onClick={() => removeSiteConfig(siteConfig.key)}>
+              Delete
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   );
 }
