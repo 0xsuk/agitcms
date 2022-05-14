@@ -6,7 +6,6 @@ import {
   Grid,
   Menu,
   MenuItem,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -16,6 +15,7 @@ import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Prompt } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function Site() {
   const { siteConfig: initialSiteConfig, isNew } = useSiteConfig();
@@ -36,6 +36,7 @@ function Site() {
       cancelSiteConfig,
     },
   ] = useSiteConfigBuffer(initialSiteConfig);
+  const history = useHistory();
 
   const isDirty =
     JSON.stringify(initialSiteConfig) !== JSON.stringify(siteConfig);
@@ -228,7 +229,15 @@ function Site() {
             <Button onClick={cancelSiteConfig}>Cancel</Button>
           </Grid>
           <Grid item>
-            <Button onClick={saveSiteConfig}>Save</Button>
+            <Button
+              onClick={() => {
+                if (saveSiteConfig() && isNew) {
+                  history.replace("/settings/" + siteConfig.key);
+                }
+              }}
+            >
+              Save
+            </Button>
           </Grid>
           <Grid item>
             <Button onClick={() => removeSiteConfig(siteConfig.key)}>

@@ -100,11 +100,12 @@ function useSiteConfigBuffer(initialSiteConfig) {
 
   const saveSiteConfig = () => {
     if (!isSiteConfigValid()) {
-      return;
+      return false;
     }
     updateSiteConfig(siteConfig);
     alert("Saved!");
     // navigate(-1);
+    return true;
   };
 
   const cancelSiteConfig = () => {
