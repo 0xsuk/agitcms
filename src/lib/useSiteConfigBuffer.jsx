@@ -6,6 +6,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(initialSiteConfig);
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
   const history = useHistory();
+  let unblock;
   //siteConfig !== siteConfigCopy //true
   const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
 
@@ -17,7 +18,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
     const { folderPath, err, canceled } =
       await window.electronAPI.getFolderPath();
     if (err) {
-      alert(err);
+      console.warn(err);
       return;
     }
     if (!err && !canceled) {
@@ -99,11 +100,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
   };
 
   const saveSiteConfig = () => {
-    if (!isSiteConfigValid()) {
-      return false;
-    }
     updateSiteConfig(siteConfig);
-    alert("Saved!");
+    console.log("Saved!");
     // navigate(-1);
     return true;
   };
@@ -118,48 +116,6 @@ function useSiteConfigBuffer(initialSiteConfig) {
     if (!window.confirm("are you sure?")) return;
     deleteSiteConfig(key);
     history.push("/");
-  };
-
-  const isSiteConfigValid = () => {
-    if (siteConfig.name === "") {
-      alert("name cannot be empty");
-      return false;
-    }
-    if (siteConfig.path === "") {
-      alert("path cannot be empty");
-      return false;
-    }
-
-    const isCommandsValid = siteConfig.commands.every((command, i) => {
-      if (command.key === "") {
-        alert(i, "th command's key is empty");
-        return false;
-      }
-      if (command.command === "") {
-        alert(i, "th command's command is empty");
-        return false;
-      }
-      return true;
-    });
-    if (!isCommandsValid) return false;
-
-    const isFrontmatterValid = siteConfig.frontmatter.every(
-      (singlematter, i) => {
-        if (singlematter.key === "") {
-          alert(i + 1 + "th frontmatter's key is empty");
-          return false;
-        }
-        if (singlematter.type === "") {
-          alert(i + 1 + "th frontmatter's type is empty");
-          return false;
-        }
-        return true;
-      }
-    );
-
-    if (!isFrontmatterValid) return false;
-
-    return true;
   };
 
   return [

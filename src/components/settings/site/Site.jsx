@@ -14,7 +14,6 @@ import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Prompt } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
 function Site() {
@@ -41,6 +40,10 @@ function Site() {
   const isDirty =
     JSON.stringify(initialSiteConfig) !== JSON.stringify(siteConfig);
 
+  if (isDirty) {
+    saveSiteConfig();
+  }
+
   const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
   const closeFrontmatterDialog = () => {
     setIsFrontmatterDialogOpen(false);
@@ -49,7 +52,6 @@ function Site() {
 
   return (
     <div id="setting-site">
-      <Prompt when={isDirty} message="Continue without saving?" />
       {isNew && <Typography variant="h6">Create a new site</Typography>}
       <Grid container spacing={1}>
         <Grid item container spacing={1} alignItems="center">
@@ -225,20 +227,6 @@ function Site() {
           justifyContent="center"
           sx={{ marginTop: "20px" }}
         >
-          <Grid item>
-            <Button onClick={cancelSiteConfig}>Cancel</Button>
-          </Grid>
-          <Grid item>
-            <Button
-              onClick={() => {
-                if (saveSiteConfig() && isNew) {
-                  history.replace("/settings/" + siteConfig.key);
-                }
-              }}
-            >
-              Save
-            </Button>
-          </Grid>
           <Grid item>
             <Button onClick={() => removeSiteConfig(siteConfig.key)}>
               Delete

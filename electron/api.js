@@ -7,19 +7,18 @@ const YAML = require("yaml");
 const ShellProcess = require("./lib/shellprocess.js");
 const { getWindow } = require("./lib/window_manager");
 
-exports.confirm = async (_, message) => {
+exports.confirm = (_, message) => {
   const win = getWindow();
   const options = {
     type: "question",
     buttons: ["Cancel", "Yes"],
     message,
   };
-  dialog.showMessageBoxSync(win, options, (response, checkBoxChecked) => {
-    console.log(response);
-    console.log(checkBoxChecked);
-  });
+  const index = dialog.showMessageBoxSync(win, options);
+  const isConfirmed = index === 1;
 
-  return true;
+  console.log("ISCONFIRMED:", isConfirmed);
+  return isConfirmed;
 };
 
 exports.readConfig = () => {

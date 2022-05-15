@@ -17,7 +17,7 @@ import useSiteConfig from "../lib/useSiteConfig";
 //filePath is a only dependency
 
 //TODO: memo not wkring as expected
-const Editor = memo(({ filePath }) => {
+function Editor({ filePath }) {
   console.log("EDITOR", filePath);
   const [file, { editName, editFrontmatter, readFile, saveFile }] =
     useFileBuffer(filePath);
@@ -211,6 +211,6 @@ const Editor = memo(({ filePath }) => {
       </div>
     </div>
   );
-});
+}
 
-export default Editor;
+export default memo(Editor, [true]);
