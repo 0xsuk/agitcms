@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import useSiteConfig from "../lib/useSiteConfig";
 
 function CreateNewDf({ cwdf }) {
-  const { siteConfig } = useSiteConfig();
+  const siteConfig = useSiteConfig();
   const history = useHistory();
   const [isNewButtonOpen, setIsNewButtonOpen] = useState(false);
   const anchorRef = useRef(null);

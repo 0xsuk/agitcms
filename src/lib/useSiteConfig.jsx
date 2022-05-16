@@ -7,11 +7,10 @@ function useSiteConfig() {
   const { config } = useContext(configContext);
 
   const match = useRouteMatch("/*/:siteKey");
-  if (!match) return { siteConfig: null, isNew: null };
+  if (!match) return null;
   const { siteKey } = match.params;
 
-  if (!siteKey) return { siteConfig: null, isNew: null };
-  if (siteKey === "new") return { siteConfig: newSiteConfig(), isNew: true };
+  if (!siteKey) return null;
 
   let siteConfig;
   config.sites.every((site) => {
@@ -22,7 +21,7 @@ function useSiteConfig() {
     return true;
   });
 
-  return { siteConfig, isNew: false };
+  return siteConfig;
 }
 
 export const newSiteConfig = () => {

@@ -3,7 +3,7 @@ import useSiteConfig from "../lib/useSiteConfig";
 import { Button } from "@mui/material";
 
 function SideBar() {
-  const { siteConfig, isNew } = useSiteConfig();
+  const siteConfig = useSiteConfig();
 
   const runCommand = async (command) => {
     const { err } = await window.electronAPI.runCommand(
@@ -22,7 +22,7 @@ function SideBar() {
 
   return (
     <div>
-      {siteConfig !== null && !isNew && (
+      {siteConfig !== null && (
         <div>
           <p style={{ fontSize: "20px", padding: "0 10px" }}>
             {siteConfig.name}

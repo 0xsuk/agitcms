@@ -9,7 +9,7 @@ import Editor from "./Editor";
 
 function Explorer() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
-  const { siteConfig } = useSiteConfig();
+  const siteConfig = useSiteConfig();
   const { updateSiteConfig } = useContext(configContext);
   const location = useLocation();
   const searchparams = new URLSearchParams(location.search);

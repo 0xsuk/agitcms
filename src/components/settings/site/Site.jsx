@@ -17,7 +17,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useHistory } from "react-router-dom";
 
 function Site() {
-  const { siteConfig: initialSiteConfig, isNew } = useSiteConfig();
+  const initialSiteConfig = useSiteConfig();
   const [
     siteConfig,
     {
@@ -52,7 +52,6 @@ function Site() {
 
   return (
     <div id="setting-site">
-      {isNew && <Typography variant="h6">Create a new site</Typography>}
       <Grid container spacing={1}>
         <Grid item container spacing={1} alignItems="center">
           <Grid item>

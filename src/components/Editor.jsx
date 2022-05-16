@@ -22,7 +22,7 @@ function Editor({ filePath }) {
   const [file, { editName, editFrontmatter, readFile, saveFile }] =
     useFileBuffer(filePath);
   const editorRef = useRef();
-  const { siteConfig } = useSiteConfig();
+  const siteConfig = useSiteConfig();
   const [tab, setTab] = useState("frontmatter");
 
   const getFrontmatterType = (key) => {
