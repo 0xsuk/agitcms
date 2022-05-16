@@ -259,8 +259,7 @@ function FrontmatterDialog({ open, onClose, addFrontmatter }) {
       return;
     }
     addFrontmatter(id, key, type, Default, option);
-    onClose();
-    setType(null);
+    handleClose();
   };
 
   return (

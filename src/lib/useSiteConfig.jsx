@@ -26,6 +26,7 @@ function useSiteConfig() {
 
 export const newSiteConfig = () => {
   return {
+    name: "",
     key: uuid(),
     path: "",
     defaultDir: "",

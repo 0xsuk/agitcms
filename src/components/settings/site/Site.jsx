@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Folder } from "@mui/icons-material";
 import {
   Button,
   Divider,
@@ -58,14 +57,7 @@ function Site() {
             <Typography>Name:</Typography>
           </Grid>
           <Grid item>
-            <TextField
-              placeholder="Name of the site"
-              value={siteConfig.name}
-              variant="standard"
-              onChange={(e) => {
-                editName(e.target.value);
-              }}
-            />
+            <Typography sx={{ color: "#999" }}>{siteConfig.name}</Typography>
           </Grid>
         </Grid>
         <Grid item container spacing={1} alignItems="center">
@@ -73,14 +65,7 @@ function Site() {
             <Typography>Path:</Typography>
           </Grid>
           <Grid item>
-            <Typography sx={{ color: "#999" }}>
-              {siteConfig.path ? siteConfig.path : "select root folder path"}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button>
-              <Folder onClick={editPath} />
-            </Button>
+            <Typography sx={{ color: "#999" }}>{siteConfig.path}</Typography>
           </Grid>
         </Grid>
       </Grid>
