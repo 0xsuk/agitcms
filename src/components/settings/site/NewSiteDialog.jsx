@@ -44,7 +44,7 @@ function NewSiteDialog({ open, onClose, addNewSite }) {
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle></DialogTitle>
+        <DialogTitle>Create New Site</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
             <Grid item container spacing={1} alignItems="center">
