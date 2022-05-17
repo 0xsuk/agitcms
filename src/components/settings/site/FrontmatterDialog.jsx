@@ -71,6 +71,7 @@ function ArrayOfStringMatter({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
+          disabled={Key === ""}
           onClick={() => {
             handleMatterSave(id, Key, Default);
           }}
@@ -120,6 +121,7 @@ function DateMatter({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
+          disabled={Key === ""}
           onClick={() => {
             handleMatterSave(id, Key, Default, option);
           }}
@@ -164,6 +166,7 @@ function StringMatter({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
+          disabled={Key === ""}
           onClick={() => {
             handleMatterSave(id, Key, Default);
           }}
@@ -202,6 +205,7 @@ function BoolMatter({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
+          disabled={Key === ""}
           onClick={() => {
             handleMatterSave(id, Key, Default);
           }}
@@ -234,6 +238,7 @@ function TypeDialog({ handleClose, handleSave }) {
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button
+          disabled={type === null}
           onClick={() => {
             handleSave(type);
           }}
@@ -254,6 +259,7 @@ function FrontmatterDialog({ open, onClose, addFrontmatter }) {
     setType(null);
   };
   const handleMatterSave = (id, key, Default, option) => {
+    //double check
     if (key === "") {
       alert("name cannot be empty");
       return;
