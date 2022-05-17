@@ -5,7 +5,6 @@ import {
   Grid,
   Menu,
   MenuItem,
-  TextField,
   Typography,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -13,7 +12,6 @@ import useSiteConfig from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useHistory } from "react-router-dom";
 import CommandDialog from "./CommandDialog";
 
 function Site() {
@@ -106,6 +104,7 @@ function Site() {
                       {(provided) => (
                         <div
                           className="setting-draggable"
+                          data-id={cmd.key}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
@@ -124,14 +123,16 @@ function Site() {
                           </p>
                           <MoreHorizIcon
                             onClick={(e) => {
-                              console.log(e.currentTarget);
                               setCommandAnchorEl(e.currentTarget);
                               e.stopPropagation();
                             }}
                           />
                           <Menu
+                            //TODO: many Menu refer to the same el
                             anchorEl={CommandAnchorEl}
-                            open={CommandAnchorEl !== null}
+                            open={
+                              CommandAnchorEl?.parentNode.dataset.id === cmd.key
+                            }
                             onClose={(e) => {
                               setCommandAnchorEl(null);
                               e.stopPropagation();
@@ -185,6 +186,7 @@ function Site() {
                       {(provided) => (
                         <div
                           className="setting-draggable"
+                          data-id={matter.id}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
@@ -217,7 +219,10 @@ function Site() {
                           />
                           <Menu
                             anchorEl={FrontmatterAnchorEl}
-                            open={FrontmatterAnchorEl !== null}
+                            open={
+                              FrontmatterAnchorEl?.parentNode.dataset.id ===
+                              matter.id
+                            }
                             onClose={(e) => {
                               setFrontmatterAnchorEl(null);
                               e.stopPropagation();
