@@ -23,7 +23,7 @@ function CommandDialog({ open, onClose, addCommand }) {
 
   const handleSave = () => {
     addCommand(key, commandName, command);
-    onClose();
+    handleClose();
   };
 
   return (
