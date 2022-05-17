@@ -34,8 +34,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
     siteConfigCopy.commands[i].command = newCommand;
     setSiteConfig(siteConfigCopy);
   };
-  const addNewCommand = () => {
-    siteConfigCopy.commands.push({ key: Date.now(), name: "", command: "" });
+  const addCommand = (key, name, command) => {
+    siteConfigCopy.commands.push({ key, name, command });
     setSiteConfig(siteConfigCopy);
   };
   const removeCommand = (i) => {
@@ -124,7 +124,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
       editName,
       editCommand,
       editCommandName,
-      addNewCommand,
+      addCommand,
       removeCommand,
       editFrontmatterDefault,
       editFrontmatterKey,

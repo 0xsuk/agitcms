@@ -14,6 +14,7 @@ import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useHistory } from "react-router-dom";
+import CommandDialog from "./CommandDialog";
 
 function Site() {
   const siteConfig = useSiteConfig();
@@ -23,7 +24,7 @@ function Site() {
       editName,
       editCommand,
       editCommandName,
-      addNewCommand,
+      addCommand,
       removeCommand,
       addFrontmatter,
       removeFrontmatter,
@@ -45,14 +46,22 @@ function Site() {
     saveSiteConfig();
   }
 
+  const [FrontmatterAnchorEl, setFrontmatterAnchorEl] = useState(null);
   const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
-  const closeFrontmatterDialog = () => {
-    setIsFrontmatterDialogOpen(false);
-  };
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [isCommandDialogOpen, setIsCommandDialogOpen] = useState(false);
 
   return (
     <div id="setting-site">
+      <FrontmatterDialog
+        open={isFrontmatterDialogOpen}
+        onClose={() => setIsFrontmatterDialogOpen(false)}
+        addFrontmatter={addFrontmatter}
+      />
+      <CommandDialog
+        open={isCommandDialogOpen}
+        onClose={() => setIsCommandDialogOpen(false)}
+        addCommand={addCommand}
+      />
       <Grid container spacing={1}>
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
@@ -84,7 +93,7 @@ function Site() {
             <Typography>Command shortcuts</Typography>
           </Grid>
           <Grid item>
-            <Button onClick={addNewCommand}>New</Button>
+            <Button onClick={() => setIsCommandDialogOpen(true)}>New</Button>
           </Grid>
         </Grid>
         {siteConfigBuffer.commands.length !== 0 &&
@@ -119,11 +128,6 @@ function Site() {
               New
             </Button>
           </Grid>
-          <FrontmatterDialog
-            open={isFrontmatterDialogOpen}
-            onClose={closeFrontmatterDialog}
-            addFrontmatter={addFrontmatter}
-          />
         </Grid>
 
         <Grid item sx={{ width: "100%" }}>
@@ -170,20 +174,20 @@ function Site() {
                           </p>
                           <MoreHorizIcon
                             onClick={(e) => {
-                              setAnchorEl(e.currentTarget);
+                              setFrontmatterAnchorEl(e.currentTarget);
                               e.stopPropagation();
                             }}
                           />
                           <Menu
-                            anchorEl={anchorEl}
-                            open={anchorEl !== null}
+                            anchorEl={FrontmatterAnchorEl}
+                            open={FrontmatterAnchorEl !== null}
                             onClose={(e) => {
-                              setAnchorEl(null);
+                              setFrontmatterAnchorEl(null);
                               e.stopPropagation();
                             }}
                             //on Click menuitems
                             onClick={(e) => {
-                              setAnchorEl(null);
+                              setFrontmatterAnchorEl(null);
                               e.stopPropagation();
                             }}
                           >
