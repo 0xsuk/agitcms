@@ -92,3 +92,11 @@ code {
 .block {
   display: block;
 }
+
+.siteName {
+  border-top: solid 1px #eee;
+  padding: 5px 20px;
+  &:hover {
+    cursor: pointer;
+  }
+}
