@@ -21,11 +21,11 @@ function Site() {
   const [
     siteConfigBuffer,
     {
-      editName,
       editCommand,
       editCommandName,
       addCommand,
       removeCommand,
+      reorderCommands,
       addFrontmatter,
       removeFrontmatter,
       reorderFrontmatter,
@@ -35,18 +35,16 @@ function Site() {
       cancelSiteConfig,
     },
   ] = useSiteConfigBuffer(siteConfig);
-  const history = useHistory();
 
   const isDirty =
     JSON.stringify(siteConfig) !== JSON.stringify(siteConfigBuffer);
 
   if (isDirty) {
-    console.log(JSON.stringify(siteConfig));
-    console.log(JSON.stringify(siteConfigBuffer));
     saveSiteConfig();
   }
 
   const [FrontmatterAnchorEl, setFrontmatterAnchorEl] = useState(null);
+  const [CommandAnchorEl, setCommandAnchorEl] = useState(null);
   const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
   const [isCommandDialogOpen, setIsCommandDialogOpen] = useState(false);
 
@@ -88,40 +86,83 @@ function Site() {
       <Divider sx={{ padding: "20px", color: "#999" }}>optional</Divider>
 
       <Grid container spacing={1}>
+        {/* Commands */}
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
-            <Typography>Command shortcuts</Typography>
+            <Typography variant="h6">Command shortcuts</Typography>
           </Grid>
           <Grid item>
             <Button onClick={() => setIsCommandDialogOpen(true)}>New</Button>
           </Grid>
         </Grid>
-        {siteConfigBuffer.commands.length !== 0 &&
-          siteConfigBuffer.commands.map((cmd_obj, i) => (
-            <Grid item container spacing={1} alignItems="center">
-              <Grid item>
-                <TextField
-                  value={cmd_obj.name}
-                  variant="standard"
-                  onChange={(e) => editCommandName(e.target.value, i)}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  value={cmd_obj.command}
-                  variant="standard"
-                  onChange={(e) => editCommand(e.target.value, i)}
-                />
-              </Grid>
-              <Grid item>
-                <Button onClick={() => removeCommand(i)}>x</Button>
-              </Grid>
-            </Grid>
-          ))}
 
+        <Grid item sx={{ width: "100%" }}>
+          <DragDropContext onDragEnd={reorderCommands}>
+            <Droppable droppableId="droppable">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {siteConfigBuffer.commands?.map((cmd, i) => (
+                    <Draggable key={cmd.key} draggableId={cmd.key} index={i}>
+                      {(provided) => (
+                        <div
+                          className="setting-draggable"
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{ ...provided.draggableProps.style }}
+                        >
+                          <p>{cmd.name}</p>
+                          <p
+                            style={{
+                              color: "#999",
+                              right: "200px",
+                              position: "absolute",
+                              maxWidth: "50%",
+                            }}
+                          >
+                            {cmd.command}
+                          </p>
+                          <MoreHorizIcon
+                            onClick={(e) => {
+                              console.log(e.currentTarget);
+                              setCommandAnchorEl(e.currentTarget);
+                              e.stopPropagation();
+                            }}
+                          />
+                          <Menu
+                            anchorEl={CommandAnchorEl}
+                            open={CommandAnchorEl !== null}
+                            onClose={(e) => {
+                              setCommandAnchorEl(null);
+                              e.stopPropagation();
+                            }}
+                            //on Click menuitems
+                            onClick={(e) => {
+                              setCommandAnchorEl(null);
+                              e.stopPropagation();
+                            }}
+                          >
+                            {/* TODO: delete not working */}
+                            <MenuItem onClick={() => removeCommand(cmd.key)}>
+                              delete
+                            </MenuItem>
+                          </Menu>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Grid>
+        {/* -Commands */}
+
+        {/* Frontmatter */}
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
-            <Typography>Frontmatter template</Typography>
+            <Typography variant="h6">Frontmatter template</Typography>
           </Grid>
           <Grid item>
             <Button onClick={() => setIsFrontmatterDialogOpen(true)}>
@@ -134,11 +175,7 @@ function Site() {
           <DragDropContext onDragEnd={reorderFrontmatter}>
             <Droppable droppableId="droppable">
               {(provided) => (
-                <div
-                  className="setting-frontmatter-list"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
+                <div {...provided.droppableProps} ref={provided.innerRef}>
                   {siteConfigBuffer.frontmatter?.map((matter, i) => (
                     <Draggable
                       key={matter.key}
@@ -147,7 +184,7 @@ function Site() {
                     >
                       {(provided) => (
                         <div
-                          className="setting-matter"
+                          className="setting-draggable"
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
@@ -191,11 +228,7 @@ function Site() {
                               e.stopPropagation();
                             }}
                           >
-                            {/*TODO<MenuItem
-                            onClick={() => removeFrontmatter(matter.id)}
-                          >
-                            edit
-                          </MenuItem>*/}
+                            {/* TODO: delete not working */}
                             <MenuItem
                               onClick={() => removeFrontmatter(matter.id)}
                             >
@@ -212,6 +245,7 @@ function Site() {
             </Droppable>
           </DragDropContext>
         </Grid>
+        {/* -Frontmatter */}
 
         <Grid
           item

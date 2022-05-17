@@ -38,8 +38,18 @@ function useSiteConfigBuffer(initialSiteConfig) {
     siteConfigCopy.commands.push({ key, name, command });
     setSiteConfig(siteConfigCopy);
   };
-  const removeCommand = (i) => {
-    siteConfigCopy.commands.splice(i, 1);
+  const removeCommand = (key) => {
+    siteConfigCopy.commands = siteConfigCopy.commands.filter(
+      (cmd) => cmd.key !== key
+    );
+    setSiteConfig(siteConfigCopy);
+  };
+  const reorderCommands = (result) => {
+    const list = Array.from(siteConfigCopy.commands);
+    const [removed] = list.splice(result.source.index, 1);
+    list.splice(result.destination.index, 0, removed);
+
+    siteConfigCopy.commands = list;
     setSiteConfig(siteConfigCopy);
   };
 
@@ -126,6 +136,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
       editCommandName,
       addCommand,
       removeCommand,
+      reorderCommands,
       editFrontmatterDefault,
       editFrontmatterKey,
       editFrontmatterType,

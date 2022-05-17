@@ -67,15 +67,13 @@ code {
 }
 
 #setting-site {
-  .setting-frontmatter-list {
-
-    .setting-matter {
-      border-top: solid 1px #eee;
-      padding: 10px 15px;
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-    }
+  .setting-draggable{
+    border-top: solid 1px #eee;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
   }
 }
 
