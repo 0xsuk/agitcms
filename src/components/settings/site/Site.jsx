@@ -16,9 +16,9 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useHistory } from "react-router-dom";
 
 function Site() {
-  const initialSiteConfig = useSiteConfig();
+  const siteConfig = useSiteConfig();
   const [
-    siteConfig,
+    siteConfigBuffer,
     {
       editName,
       editCommand,
@@ -33,13 +33,15 @@ function Site() {
       removeSiteConfig,
       cancelSiteConfig,
     },
-  ] = useSiteConfigBuffer(initialSiteConfig);
+  ] = useSiteConfigBuffer(siteConfig);
   const history = useHistory();
 
   const isDirty =
-    JSON.stringify(initialSiteConfig) !== JSON.stringify(siteConfig);
+    JSON.stringify(siteConfig) !== JSON.stringify(siteConfigBuffer);
 
   if (isDirty) {
+    console.log(JSON.stringify(siteConfig));
+    console.log(JSON.stringify(siteConfigBuffer));
     saveSiteConfig();
   }
 
@@ -57,7 +59,9 @@ function Site() {
             <Typography>Name:</Typography>
           </Grid>
           <Grid item>
-            <Typography sx={{ color: "#999" }}>{siteConfig.name}</Typography>
+            <Typography sx={{ color: "#999" }}>
+              {siteConfigBuffer.name}
+            </Typography>
           </Grid>
         </Grid>
         <Grid item container spacing={1} alignItems="center">
@@ -65,7 +69,9 @@ function Site() {
             <Typography>Path:</Typography>
           </Grid>
           <Grid item>
-            <Typography sx={{ color: "#999" }}>{siteConfig.path}</Typography>
+            <Typography sx={{ color: "#999" }}>
+              {siteConfigBuffer.path}
+            </Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -81,8 +87,8 @@ function Site() {
             <Button onClick={addNewCommand}>New</Button>
           </Grid>
         </Grid>
-        {siteConfig.commands.length !== 0 &&
-          siteConfig.commands.map((cmd_obj, i) => (
+        {siteConfigBuffer.commands.length !== 0 &&
+          siteConfigBuffer.commands.map((cmd_obj, i) => (
             <Grid item container spacing={1} alignItems="center">
               <Grid item>
                 <TextField
@@ -129,7 +135,7 @@ function Site() {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {siteConfig.frontmatter?.map((matter, i) => (
+                  {siteConfigBuffer.frontmatter?.map((matter, i) => (
                     <Draggable
                       key={matter.key}
                       draggableId={matter.key}
@@ -212,7 +218,7 @@ function Site() {
           sx={{ marginTop: "20px" }}
         >
           <Grid item>
-            <Button onClick={() => removeSiteConfig(siteConfig.key)}>
+            <Button onClick={() => removeSiteConfig(siteConfigBuffer.key)}>
               Delete
             </Button>
           </Grid>
