@@ -97,7 +97,11 @@ function SideBar() {
               className="site-link"
               onClick={() =>
                 history.push(
-                  "/edit/" + siteConfig.key + "?path=" + siteConfig.path
+                  "/edit/" +
+                    siteConfig.key +
+                    "?path=" +
+                    siteConfig.path +
+                    "&name=Root&isDir=true"
                 )
               }
             >
