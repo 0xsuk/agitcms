@@ -262,7 +262,7 @@ function Site() {
         >
           <Grid item>
             <Button onClick={() => removeSiteConfig(siteConfigBuffer.key)}>
-              Delete
+              delete site
             </Button>
           </Grid>
         </Grid>
