@@ -47,7 +47,7 @@ function useFileBuffer(filePath) {
       return;
     }
     const to = "?path=" + newFilePath + "&isDir=false&fileName=" + file.name;
-    history.push(to);
+    history.replace(to);
   };
 
   const saveFile = async (tuieditor) => {
@@ -60,7 +60,7 @@ function useFileBuffer(filePath) {
       alert(err.message);
       return;
     }
-    alert("Saved!");
+    console.log("saved");
     fileName !== file.name && renameFileAndNavigate();
   };
 

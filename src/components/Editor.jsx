@@ -19,7 +19,7 @@ function Editor({ filePath }) {
   console.log("EDITOR", filePath);
   const [file, { editName, editFrontmatter, readFile, saveFile }] =
     useFileBuffer(filePath);
-  const editorRef = useRef();
+  const editorRef = useRef(null);
   const siteConfig = useSiteConfig();
   const [tab, setTab] = useState("frontmatter");
 
@@ -203,7 +203,12 @@ function Editor({ filePath }) {
       <div
         style={{ display: tab === "editor" ? "block" : "none", flexGrow: 1 }}
       >
-        <TuiEditor previewStyle="vertical" ref={editorRef} height="100%" />
+        <TuiEditor
+          onChange={() => saveFile(editorRef.current)}
+          previewStyle="vertical"
+          ref={editorRef}
+          height="100%"
+        />
       </div>
     </div>
   );
