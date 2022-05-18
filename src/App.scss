@@ -21,9 +21,6 @@ code {
   height: 100vh;
 }
 
-#top-bar {
-  font-size: 15px;
-}
 
 #side {
   width: 170px;
@@ -34,17 +31,18 @@ code {
   background-color: rgb(250, 250, 250);
   position: sticky;
   top: 0;
+  border-right: 1px solid #eee;
 }
 
 #main {
   width: 100%;
   background-color: rgb(250, 250, 250);
-  padding: 0 0 0 5px;
 }
 #explorer {
   height: 100%;
   #top-bar {
-    height: 2%;
+    font-size: 13px;
+    color: #666;
   }
   #editor {
     height: 98%;

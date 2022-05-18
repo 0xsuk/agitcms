@@ -1,6 +1,6 @@
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, Button } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
@@ -63,13 +63,23 @@ function Explorer() {
   return (
     <div id="explorer">
       <div id="top-bar">
-        {cwdf}{" "}
+        {cwdf}
         {isDfPinned ? (
-          <button onClick={() => removePinnedDir(cwdf, isInDir)}>Unpin</button>
+          <Button
+            size="small"
+            onClick={() => removePinnedDir(cwdf, isInDir)}
+            sx={{ padding: "0", lineHeight: "unset" }}
+          >
+            Unpin
+          </Button>
         ) : (
-          <button onClick={() => addPinnedDirs(dfName, cwdf, isInDir)}>
+          <Button
+            size="small"
+            onClick={() => addPinnedDirs(dfName, cwdf, isInDir)}
+            sx={{ padding: "0", lineHeight: "unset" }}
+          >
             Pin
-          </button>
+          </Button>
         )}
       </div>
       {isInDir && <CreateNewDf cwdf={cwdf} />}

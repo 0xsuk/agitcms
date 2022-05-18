@@ -27,7 +27,10 @@ function SideBar() {
 
   return (
     <div>
-      <HomeOutlinedIcon onClick={() => history.push("/")} />
+      <HomeOutlinedIcon
+        onClick={() => history.push("/")}
+        sx={{ "&:hover": { cursor: "pointer" } }}
+      />
       {siteConfig !== null && (
         <div>
           <Typography variant="h6">{siteConfig.name}</Typography>
@@ -43,7 +46,15 @@ function SideBar() {
             </div>
           ))}
 
+          <div style={{ padding: "10px" }} />
+
           {/* mapping pinnedDirs */}
+          <Typography
+            variant="caption"
+            sx={{ fontWeight: "bold", color: "#999" }}
+          >
+            PINNED
+          </Typography>
           <div className="pinnedDirs">
             {siteConfig.pinnedDirs.map((dir) => (
               <div

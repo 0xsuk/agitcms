@@ -159,11 +159,12 @@ function Editor({ filePath }) {
 
   return (
     <div id="editor">
+      {/*  
       <div>
         <Button onClick={() => saveFile(editorRef.current)} variant="contained">
           Save
         </Button>
-      </div>
+      </div>*/}
       {/* Tab switcher */}
       <div class="flex">
         <p
@@ -174,15 +175,12 @@ function Editor({ filePath }) {
         </p>
         <p onClick={() => setTab("editor")}>Editor</p>
       </div>
-      <div style={{ display: tab === "frontmatter" ? "block" : "none" }}>
-        <TextField
-          label="File name"
-          value={file.name}
-          variant="standard"
-          onChange={(e) => editName(e.target.value)}
-          fullWidth
-        />
-
+      <div
+        style={{
+          display: tab === "frontmatter" ? "block" : "none",
+          padding: "5px",
+        }}
+      >
         <Stack spacing={1}>
           {Object.keys(file.frontmatter).length !== 0 &&
             Object.keys(file.frontmatter).map((matterKey) => (
