@@ -1,3 +1,4 @@
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Menu, MenuItem } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
@@ -116,7 +117,14 @@ function Df({ cwdf, df, loadFilesAndFolders }) {
         );
       }}
     >
-      {df.isDir ? <p>{df.name}</p> : <p style={{ color: "blue" }}>{df.name}</p>}
+      <div style={{ display: "flex" }}>
+        {df.isDir && <FolderOpenOutlinedIcon fontSize="small" />}
+        {df.isDir ? (
+          <p style={{ paddingLeft: "5px" }}>{df.name}</p>
+        ) : (
+          <p style={{ paddingLeft: "25px" }}>{df.name}</p>
+        )}
+      </div>
       <MoreHorizIcon
         onClick={(e) => {
           setAnchorEl(e.currentTarget);

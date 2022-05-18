@@ -102,22 +102,24 @@ code {
 }
 
 .pinnedDirs {
-  border-bottom: solid 1px #ddd;
+  //border-bottom: solid 1px #ddd;
   .pinnedDir {
     display: flex;
     align-items: center;  
     padding: 5px 5px 5px 0;
-    border-top: solid 1px #ddd;
+    //border-top: solid 1px #ddd;
     &:hover {
       cursor: pointer;
     }
   }
 }
 .site-links {
-  border-bottom: solid 1px #ddd;
+  //border-bottom: solid 1px #ddd;
   .site-link {
+    display: flex;
+    align-items: center;
     padding: 5px 5px 5px 0;
-    border-top: solid 1px #ddd;
+    //border-top: solid 1px #ddd;
     &:hover {
       cursor:pointer;
     }

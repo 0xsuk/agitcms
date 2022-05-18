@@ -1,3 +1,4 @@
+import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
@@ -89,6 +90,7 @@ function SideBar() {
                 )
               }
             >
+              <NotesOutlinedIcon fontSize="small" />
               <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
                 Root
               </Typography>
@@ -97,6 +99,7 @@ function SideBar() {
               className="site-link"
               onClick={() => history.push("/shell/" + siteConfig.key)}
             >
+              <NotesOutlinedIcon fontSize="small" />
               <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
                 Shell
               </Typography>
@@ -105,6 +108,7 @@ function SideBar() {
               className="site-link"
               onClick={() => history.push("/settings/" + siteConfig.key)}
             >
+              <NotesOutlinedIcon fontSize="small" />
               <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
                 Settings
               </Typography>
