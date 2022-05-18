@@ -1,6 +1,6 @@
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
-import { Link } from "react-router-dom";
 import useSiteConfig from "../lib/useSiteConfig";
 import { Button, Typography } from "@mui/material";
 import { useHistory } from "react-router-dom";
@@ -26,6 +26,7 @@ function SideBar() {
 
   return (
     <div>
+      <HomeOutlinedIcon onClick={() => history.push("/")} />
       {siteConfig !== null && (
         <div>
           <Typography variant="h6">{siteConfig.name}</Typography>
@@ -42,7 +43,7 @@ function SideBar() {
           ))}
 
           {/* mapping pinnedDirs */}
-          <div style={{ borderBottom: "solid 1px #ddd" }}>
+          <div className="pinnedDirs">
             {siteConfig.pinnedDirs.map((dir) => (
               <div
                 className="pinnedDir"
@@ -71,26 +72,46 @@ function SideBar() {
             ))}
           </div>
 
-          <div>
-            <Link to={"/edit/" + siteConfig.key + "?path=" + siteConfig.path}>
-              Root
-            </Link>
-          </div>
-          <div>
-            <Link to={"/shell/" + siteConfig.key}>Shell</Link>
-          </div>
-          <div>
-            <Link to={"/settings/" + siteConfig.key}>Settings</Link>
+          <div style={{ padding: "10px" }} />
+
+          <Typography
+            variant="caption"
+            sx={{ fontWeight: "bold", color: "#999" }}
+          >
+            SITE
+          </Typography>
+          <div className="site-links">
+            <div
+              className="site-link"
+              onClick={() =>
+                history.push(
+                  "/edit/" + siteConfig.key + "?path=" + siteConfig.path
+                )
+              }
+            >
+              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                Root
+              </Typography>
+            </div>
+            <div
+              className="site-link"
+              onClick={() => history.push("/shell/" + siteConfig.key)}
+            >
+              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                Shell
+              </Typography>
+            </div>
+            <div
+              className="site-link"
+              onClick={() => history.push("/settings/" + siteConfig.key)}
+            >
+              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                Settings
+              </Typography>
+            </div>
           </div>
         </div>
       )}
-      <div>
-        <Link to="/">Home</Link>
-      </div>
-
-      <div>
-        <Link to="/test">Test</Link>
-      </div>
     </div>
   );
 }
