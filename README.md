@@ -8,14 +8,9 @@ Still under development!!
 
 TODO:
 
-- [ ] SiteConfig Frontmatter setting experience enhancement
-  - [ ] change frontmatter order
-  - [ ] default value editor for each data type
 - [ ] Command stop
 - [ ] auto move pasted image into media folder
-- [ ] root settings
 - [ ] Tab
-- [ ] Warn user trying to quit without saving
 
 Issues:
 
