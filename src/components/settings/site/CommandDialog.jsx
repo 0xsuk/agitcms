@@ -30,16 +30,18 @@ function CommandDialog({ open, onClose, addCommand }) {
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Create New Command Shortcut</DialogTitle>
       <DialogContent>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} direction="column">
           <Grid item>
             <TextField
               placeholder="Name"
               value={commandName}
               onChange={(e) => setCommandName(e.target.value)}
+              fullWidth
             />
           </Grid>
           <Grid item>
             <TextField
+              fullWidth
               placeholder="Command"
               value={command}
               onChange={(e) => setCommand(e.target.value)}

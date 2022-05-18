@@ -5,8 +5,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
-  FormGroup,
   MenuItem,
   Select,
   Switch,
@@ -34,6 +32,7 @@ function ArrayOfStringMatter({
         <Grid container spacing={3} direction="column">
           <Grid item>
             <TextField
+              fullWidth
               value={Key}
               label="name"
               onChange={(e) => setKey(e.target.value)}
@@ -42,6 +41,7 @@ function ArrayOfStringMatter({
           <Grid item>
             <Typography>Default</Typography>
             <TextField
+              fullWidth
               variant="standard"
               placeholder="String"
               value={singleValue}
@@ -109,27 +109,21 @@ function DateMatter({
         <Grid container spacing={3} direction="column">
           <Grid item>
             <TextField
+              fullWidth
               value={Key}
               label="name"
               onChange={(e) => setKey(e.target.value)}
             />
           </Grid>
           <Grid item>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    size="small"
-                    defaultChecked={option.useNow}
-                    onChange={() =>
-                      setOption((prev) => ({ ...prev, useNow: !prev.useNow }))
-                    }
-                  />
-                }
-                label="Use now as default"
-                //labelPlacement="top"
-              />
-            </FormGroup>
+            <Typography>Use now as default:</Typography>
+            <Switch
+              size="small"
+              defaultChecked={option.useNow}
+              onChange={() =>
+                setOption((prev) => ({ ...prev, useNow: !prev.useNow }))
+              }
+            />
           </Grid>
         </Grid>
       </DialogContent>
@@ -163,6 +157,7 @@ function StringMatter({
         <Grid container spacing={3} direction="column">
           <Grid item>
             <TextField
+              fullWidth
               value={Key}
               label="name"
               onChange={(e) => setKey(e.target.value)}
@@ -170,6 +165,7 @@ function StringMatter({
           </Grid>
           <Grid item>
             <TextField
+              fullWidth
               value={Default}
               label="default"
               onChange={(e) => {
@@ -215,6 +211,7 @@ function BoolMatter({
         <Grid container direction="column" spacing={3}>
           <Grid item>
             <TextField
+              fullWidth
               value={Key}
               label="name"
               onChange={(e) => setKey(e.target.value)}
