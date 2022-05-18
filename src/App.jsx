@@ -7,7 +7,6 @@ import Settings from "./components/Settings";
 import Site from "./components/settings/site/Site";
 import Shell from "./components/Shell";
 import SideBar from "./components/SideBar";
-import Test from "./components/Test";
 import { configContext } from "./context/ConfigContext";
 
 function App() {
@@ -49,9 +48,6 @@ function Wrapper() {
       <div id="main">
         <Route exact path="/">
           <Home />
-        </Route>
-        <Route path="/test">
-          <Test />
         </Route>
         <Route exact path="/settings">
           <Settings />
