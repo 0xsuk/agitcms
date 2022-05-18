@@ -10,7 +10,9 @@ import {
   MenuItem,
   Select,
   Switch,
+  Grid,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { FrontmatterTypes } from "../../../App";
@@ -29,44 +31,51 @@ function ArrayOfStringMatter({
     <>
       <DialogTitle>Set frontmatter name & default value</DialogTitle>
       <DialogContent>
-        <TextField
-          value={Key}
-          label="name"
-          onChange={(e) => setKey(e.target.value)}
-        />
-        <TextField
-          variant="standard"
-          placeholder="String"
-          value={singleValue}
-          onChange={(e) => {
-            setSingleValue(e.target.value);
-          }}
-          InputProps={{
-            endAdornment: (
-              <Button
+        <Grid container spacing={3} direction="column">
+          <Grid item>
+            <TextField
+              value={Key}
+              label="name"
+              onChange={(e) => setKey(e.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <Typography>Default</Typography>
+            <TextField
+              variant="standard"
+              placeholder="String"
+              value={singleValue}
+              onChange={(e) => {
+                setSingleValue(e.target.value);
+              }}
+              InputProps={{
+                endAdornment: (
+                  <Button
+                    onClick={() => {
+                      //if (!Default) Default = [];
+                      if (!singleValue) return;
+                      setDefault((prev) => [...prev, singleValue]);
+                      setSingleValue(""); //null does not work
+                    }}
+                  >
+                    ADD
+                  </Button>
+                ),
+              }}
+            />
+            {Default?.map((v, i) => (
+              <p
                 onClick={() => {
-                  //if (!Default) Default = [];
-                  if (!singleValue) return;
-                  setDefault((prev) => [...prev, singleValue]);
-                  setSingleValue(""); //null does not work
+                  const newDefault = JSON.parse(JSON.stringify(Default));
+                  newDefault.splice(i, 1);
+                  setDefault(newDefault);
                 }}
               >
-                ADD
-              </Button>
-            ),
-          }}
-        />
-        {Default?.map((v, i) => (
-          <p
-            onClick={() => {
-              const newDefault = JSON.parse(JSON.stringify(Default));
-              newDefault.splice(i, 1);
-              setDefault(newDefault);
-            }}
-          >
-            {v} x
-          </p>
-        ))}
+                {v} x
+              </p>
+            ))}
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
@@ -97,26 +106,32 @@ function DateMatter({
     <>
       <DialogTitle>Set frontmatter name & default value</DialogTitle>
       <DialogContent>
-        <TextField
-          value={Key}
-          label="name"
-          onChange={(e) => setKey(e.target.value)}
-        />
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                size="small"
-                defaultChecked={option.useNow}
-                onChange={() =>
-                  setOption((prev) => ({ ...prev, useNow: !prev.useNow }))
+        <Grid container spacing={3} direction="column">
+          <Grid item>
+            <TextField
+              value={Key}
+              label="name"
+              onChange={(e) => setKey(e.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Switch
+                    size="small"
+                    defaultChecked={option.useNow}
+                    onChange={() =>
+                      setOption((prev) => ({ ...prev, useNow: !prev.useNow }))
+                    }
+                  />
                 }
+                label="Use now as default"
+                //labelPlacement="top"
               />
-            }
-            label="Use now as default"
-            //labelPlacement="top"
-          />
-        </FormGroup>
+            </FormGroup>
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
@@ -145,23 +160,29 @@ function StringMatter({
     <>
       <DialogTitle>Set frontmatter name & default value</DialogTitle>
       <DialogContent>
-        <TextField
-          value={Key}
-          label="name"
-          onChange={(e) => setKey(e.target.value)}
-        />
-        <TextField
-          value={Default}
-          label="default"
-          onChange={(e) => {
-            let value = e.target.value;
-            if (value == "") {
-              setDefault(null);
-              return;
-            }
-            setDefault(value);
-          }}
-        />
+        <Grid container spacing={3} direction="column">
+          <Grid item>
+            <TextField
+              value={Key}
+              label="name"
+              onChange={(e) => setKey(e.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              value={Default}
+              label="default"
+              onChange={(e) => {
+                let value = e.target.value;
+                if (value == "") {
+                  setDefault(null);
+                  return;
+                }
+                setDefault(value);
+              }}
+            />
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
@@ -191,16 +212,23 @@ function BoolMatter({
     <>
       <DialogTitle>Set frontmatter name & default value</DialogTitle>
       <DialogContent>
-        <TextField
-          value={Key}
-          label="name"
-          onChange={(e) => setKey(e.target.value)}
-        />
-        <Switch
-          size="small"
-          defaultChecked={Default}
-          onChange={() => setDefault((prev) => !prev)}
-        />
+        <Grid container direction="column" spacing={3}>
+          <Grid item>
+            <TextField
+              value={Key}
+              label="name"
+              onChange={(e) => setKey(e.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <Typography>Default</Typography>
+            <Switch
+              size="small"
+              defaultChecked={Default}
+              onChange={() => setDefault((prev) => !prev)}
+            />
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
@@ -228,7 +256,6 @@ function TypeDialog({ handleClose, handleSave }) {
             setType(e.target.value);
           }}
           value={type}
-          label="Type"
         >
           {FrontmatterTypes.map((t) => (
             <MenuItem value={t.key}>{t.name}</MenuItem>
