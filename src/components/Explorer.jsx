@@ -129,11 +129,7 @@ function Df({ cwdf, df, loadFilesAndFolders }) {
     >
       <div style={{ display: "flex" }}>
         {df.isDir && <FolderOpenOutlinedIcon fontSize="small" />}
-        {df.isDir ? (
-          <p style={{ paddingLeft: "5px" }}>{df.name}</p>
-        ) : (
-          <p style={{ paddingLeft: "25px" }}>{df.name}</p>
-        )}
+        <p style={{ paddingLeft: "10px" }}>{df.name}</p>
       </div>
       <MoreHorizIcon
         onClick={(e) => {
