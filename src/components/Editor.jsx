@@ -11,12 +11,10 @@ import {
 } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor as TuiEditor } from "@toast-ui/react-editor";
-import { useEffect, useRef, useState, memo } from "react";
+import { useEffect, useRef, useState } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
 //filePath is a only dependency
-
-//TODO: memo not wkring as expected
 function Editor({ filePath }) {
   console.log("EDITOR", filePath);
   const [file, { editName, editFrontmatter, readFile, saveFile }] =
@@ -213,4 +211,5 @@ function Editor({ filePath }) {
   );
 }
 
-export default memo(Editor, [true]);
+//TODO memo(Editor) cause "campare is not a function" error, when post is pinned/unpinned
+export default Editor;
