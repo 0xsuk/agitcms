@@ -40,7 +40,10 @@ function CreateNewDf({ cwdf }) {
     const frontmatter = {};
     siteConfig.frontmatter.forEach((matter) => {
       const key = matter.key;
-      const value = matter.default;
+      let value = matter.default;
+      if (matter.type === "Date" && matter.option?.useNow) {
+        value = Date.now();
+      }
       frontmatter[key] = value;
     });
 
