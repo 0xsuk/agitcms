@@ -1,9 +1,13 @@
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import { Link } from "react-router-dom";
 import useSiteConfig from "../lib/useSiteConfig";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import { useHistory } from "react-router-dom";
 
 function SideBar() {
   const siteConfig = useSiteConfig();
+  const history = useHistory();
 
   const runCommand = async (command) => {
     const { err } = await window.electronAPI.runCommand(
@@ -24,9 +28,7 @@ function SideBar() {
     <div>
       {siteConfig !== null && (
         <div>
-          <p style={{ fontSize: "20px", padding: "0 10px" }}>
-            {siteConfig.name}
-          </p>
+          <Typography variant="h6">{siteConfig.name}</Typography>
 
           {/*TODO: mapping commands  */}
           {siteConfig.commands.map((command) => (
@@ -40,25 +42,34 @@ function SideBar() {
           ))}
 
           {/* mapping pinnedDirs */}
-          {siteConfig.pinnedDirs.map((dir) => (
-            <div>
-              <Link
-                to={
-                  "/edit/" +
-                  siteConfig.key +
-                  "?path=" +
-                  dir.path +
-                  "&name=" +
-                  dir.name +
-                  "&isDir=" +
-                  dir.isDir
+          <div style={{ borderBottom: "solid 1px #ddd" }}>
+            {siteConfig.pinnedDirs.map((dir) => (
+              <div
+                className="pinnedDir"
+                onClick={() =>
+                  history.push(
+                    "/edit/" +
+                      siteConfig.key +
+                      "?path=" +
+                      dir.path +
+                      "&name=" +
+                      dir.name +
+                      "&isDir=" +
+                      dir.isDir
+                  )
                 }
               >
-                {dir.name}
-              </Link>
-            </div>
-          ))}
-          <br></br>
+                {dir.isDir ? (
+                  <FolderOpenOutlinedIcon fontSize="small" />
+                ) : (
+                  <DescriptionOutlinedIcon fontSize="small" />
+                )}
+                <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                  {dir.name}
+                </Typography>
+              </div>
+            ))}
+          </div>
 
           <div>
             <Link to={"/edit/" + siteConfig.key + "?path=" + siteConfig.path}>

@@ -53,7 +53,7 @@ code {
   }
 
   .df {
-    border-top: solid 1px #eee;
+    border-top: solid 1px #ddd;
     padding: 10px 30px;
     display: flex;
     justify-content: space-between;
@@ -68,7 +68,7 @@ code {
 
 #setting-site {
   .setting-draggable{
-    border-top: solid 1px #eee;
+    border-top: solid 1px #ddd;
     padding: 10px 15px;
     display: flex;
     justify-content: space-between;
@@ -94,9 +94,16 @@ code {
 }
 
 .siteName {
-  border-top: solid 1px #eee;
+  border-top: solid 1px #ddd;
   padding: 5px 20px;
   &:hover {
     cursor: pointer;
   }
+}
+
+.pinnedDir {
+  display: flex;
+  align-items: center;  
+  padding: 5px 5px 5px 0;
+  border-top: solid 1px #ddd;
 }
