@@ -1,5 +1,4 @@
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import Popper from "@mui/material/Popper";
 import Paper from "@mui/material/Paper";
@@ -89,12 +88,13 @@ function CreateNewDf({ cwdf }) {
 
   return (
     <>
-      <ButtonGroup>
-        <Button onClick={toggleNewButton}>Create New</Button>
-        <Button ref={anchorRef} onClick={toggleNewButton}>
-          <ArrowDropDown />
-        </Button>
-      </ButtonGroup>
+      <Button
+        onClick={toggleNewButton}
+        ref={anchorRef}
+        endIcon={<ArrowDropDown />}
+      >
+        Create New
+      </Button>
       <Popper
         open={isNewButtonOpen}
         disablePortal
