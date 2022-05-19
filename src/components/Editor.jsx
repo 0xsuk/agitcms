@@ -1,3 +1,4 @@
+//TODO: autosave frontmatter
 import { LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
@@ -153,8 +154,20 @@ function Editor({ filePath }) {
     }
   };
 
+  //order of useEffect matters
   useEffect(() => {
-    readFile(editorRef.current);
+    //not invoked, useless block
+    if (editorRef.current === null) {
+      return;
+    }
+    saveFile(editorRef.current);
+  });
+  useEffect(() => {
+    readFile(editorRef.current).then((isFrontmatterEmpty) => {
+      if (isFrontmatterEmpty) {
+        setTab("editor");
+      }
+    });
   }, [filePath]); //eslint-disable-line
 
   return (
@@ -204,7 +217,10 @@ function Editor({ filePath }) {
         style={{ display: tab === "editor" ? "block" : "none", flexGrow: 1 }}
       >
         <TuiEditor
-          onChange={() => saveFile(editorRef.current)}
+          //TODO:
+          onChange={() => {
+            saveFile(editorRef.current);
+          }}
           previewStyle="vertical"
           ref={editorRef}
           height="100%"

@@ -11,6 +11,7 @@ function useFileBuffer(filePath) {
   const [file, setFile] = useState({
     name: fileName,
     frontmatter: {},
+    isRead: false,
   });
 
   const editName = (name) => {
@@ -33,8 +34,9 @@ function useFileBuffer(filePath) {
     }
     //TODO: issues ctrl-z
     tuieditor.getInstance().setMarkdown(doc);
-    console.log("frontmatter:", frontmatter);
-    setFile((prev) => ({ ...prev, frontmatter }));
+    setFile((prev) => ({ ...prev, frontmatter, isRead: true }));
+    const isFrontmatterEmpty = JSON.stringify(frontmatter) === "{}";
+    return isFrontmatterEmpty;
   };
 
   const renameFileAndNavigate = async () => {
@@ -51,6 +53,9 @@ function useFileBuffer(filePath) {
   };
 
   const saveFile = async (tuieditor) => {
+    if (!file.isRead) {
+      return;
+    }
     const { err } = await window.electronAPI.saveFile(
       tuieditor.getInstance().getMarkdown(),
       file.frontmatter,
