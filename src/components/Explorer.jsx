@@ -27,6 +27,10 @@ function Explorer() {
     return true;
   });
 
+  let cwdfForDisplay = cwdf;
+  if (window.navigator.platform === "Win32")
+    cwdfForDisplay = cwdf.replaceAll("/", "\\");
+
   useEffect(() => {
     console.warn("Dir Effect");
     if (!isInDir) return;
@@ -63,7 +67,7 @@ function Explorer() {
   return (
     <div id="explorer">
       <div id="top-bar">
-        {cwdf}
+        {cwdfForDisplay}
         {isDfPinned ? (
           <Button
             size="small"
