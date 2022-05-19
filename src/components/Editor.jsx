@@ -201,7 +201,7 @@ function Editor({ filePath }) {
   useEffect(() => {
     readFile(editorRef.current).then((isFrontmatterEmpty) => {
       if (isFrontmatterEmpty) {
-        switchTab("frontmatter");
+        switchTab("editor");
       }
     });
   }, [filePath]); //eslint-disable-line

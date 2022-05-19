@@ -69,10 +69,9 @@ exports.readFile = (e, filePath) => {
 
   try {
     const { content: doc, data: frontmatter } = matter(content);
-    console.log(content);
     return { doc, frontmatter, err: null };
   } catch (err) {
-    console.log("frontmatter format is not supported", err);
+    console.warn("frontmatter format is not supported", err);
     return { doc: null, frontmatter: {}, err: null };
   }
 };
