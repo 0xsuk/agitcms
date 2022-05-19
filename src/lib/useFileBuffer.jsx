@@ -65,7 +65,6 @@ function useFileBuffer(filePath) {
       alert(err.message);
       return;
     }
-    console.log("saved");
     fileName !== file.name && renameFileAndNavigate();
   };
 

@@ -1,4 +1,3 @@
-//TODO: autosave frontmatter
 import { LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
@@ -22,7 +21,44 @@ function Editor({ filePath }) {
     useFileBuffer(filePath);
   const editorRef = useRef(null);
   const siteConfig = useSiteConfig();
-  const [tab, setTab] = useState("frontmatter");
+
+  const switchTab = (tab) => {
+    const frontmatterEl = document.getElementById("frontmatter-tab");
+    const editorEl = document.getElementById("editor-tab");
+    const frontmatterTabEl = document.querySelectorAll("#editor .tab")[0];
+    const editorTabEl = document.querySelectorAll("#editor .tab")[1];
+    const isFrontmatterVisible = frontmatterEl.style.display !== "none";
+
+    const frontmatterOn = () => {
+      editorEl.style.display = "none";
+      editorTabEl.style.backgroundColor = "#fff";
+      frontmatterEl.style.display = "block";
+      frontmatterTabEl.style.backgroundColor = "#89b8e640";
+    };
+
+    const editorOn = () => {
+      editorEl.style.display = "block";
+      editorTabEl.style.backgroundColor = "#89b8e640";
+      frontmatterEl.style.display = "none";
+      frontmatterTabEl.style.backgroundColor = "#fff";
+    };
+
+    switch (tab) {
+      case undefined:
+        if (isFrontmatterVisible) {
+          editorOn();
+        } else {
+          frontmatterOn();
+        }
+        break;
+      case "editor":
+        editorOn();
+        break;
+      case "frontmatter":
+        frontmatterOn();
+        break;
+    }
+  };
 
   const getFrontmatterType = (key) => {
     let type = undefined;
@@ -165,35 +201,23 @@ function Editor({ filePath }) {
   useEffect(() => {
     readFile(editorRef.current).then((isFrontmatterEmpty) => {
       if (isFrontmatterEmpty) {
-        setTab("editor");
+        switchTab("frontmatter");
       }
     });
   }, [filePath]); //eslint-disable-line
 
   return (
     <div id="editor">
-      {/*  
-      <div>
-        <Button onClick={() => saveFile(editorRef.current)} variant="contained">
-          Save
-        </Button>
-      </div>*/}
       {/* Tab switcher */}
       <div class="flex">
-        <p
-          style={{ padding: "0 10px 0 0" }}
-          onClick={() => setTab("frontmatter")}
-        >
+        <p class="tab" onClick={() => switchTab("frontmatter")}>
           Frontmatter
         </p>
-        <p onClick={() => setTab("editor")}>Editor</p>
+        <p class="tab" onClick={() => switchTab("editor")}>
+          Editor
+        </p>
       </div>
-      <div
-        style={{
-          display: tab === "frontmatter" ? "block" : "none",
-          padding: "5px",
-        }}
-      >
+      <div id="frontmatter-tab">
         <Stack spacing={1}>
           {Object.keys(file.frontmatter).length !== 0 &&
             Object.keys(file.frontmatter).map((matterKey) => (
@@ -213,9 +237,7 @@ function Editor({ filePath }) {
         </Stack>
       </div>
 
-      <div
-        style={{ display: tab === "editor" ? "block" : "none", flexGrow: 1 }}
-      >
+      <div id="editor-tab">
         <TuiEditor
           //TODO:
           onChange={() => {
