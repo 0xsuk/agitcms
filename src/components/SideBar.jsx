@@ -1,3 +1,5 @@
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -27,10 +29,23 @@ function SideBar() {
 
   return (
     <div>
-      <HomeOutlinedIcon
-        onClick={() => history.push("/")}
-        sx={{ "&:hover": { cursor: "pointer" } }}
-      />
+      <div className="flex">
+        <ArrowBackIosNewIcon
+          sx={{ "&:hover": { cursor: "pointer" } }}
+          fontSize="small"
+          onClick={history.goBack}
+        />
+        <HomeOutlinedIcon
+          fontSize="small"
+          onClick={() => history.push("/")}
+          sx={{ "&:hover": { cursor: "pointer" } }}
+        />
+        <ArrowForwardIosIcon
+          sx={{ "&:hover": { cursor: "pointer" } }}
+          fontSize="small"
+          onClick={history.goForward}
+        />
+      </div>
       {siteConfig !== null && (
         <div>
           <Typography variant="h6">{siteConfig.name}</Typography>

@@ -82,6 +82,7 @@ code {
 }
 
 #setting-site {
+  padding: 20px;
   .setting-draggable{
     border-top: solid 1px #ddd;
     padding: 10px 15px;
@@ -99,6 +100,11 @@ code {
 .flex {
   display: flex;
 }
+
+.acenter {
+  align-items: center;
+}
+
 .flex-col {
   display: flex;
   flex-direction: col;
