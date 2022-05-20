@@ -46,7 +46,7 @@ exports.saveFile = (e, doc, frontmatter, filePath) => {
     const yaml_str = YAML.stringify(frontmatter); //if frontmatter is {}, returns {}
 
     if (Object.keys(frontmatter).length !== 0)
-      doc = "---\n" + yaml_str + "---" + doc;
+      doc = "---\n" + yaml_str + "---\n" + doc;
 
     fs.writeFileSync(filePath, doc);
     return { err: null };
