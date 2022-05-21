@@ -33,6 +33,11 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx"],
+    fallback: {
+      buffer: require.resolve("buffer/"),
+    },
   },
-  plugins: [new webpack.ProvidePlugin({ React: "react" })],
+  plugins: [
+    new webpack.ProvidePlugin({ React: "react", Buffer: ["buffer", "Buffer"] }),
+  ],
 };
