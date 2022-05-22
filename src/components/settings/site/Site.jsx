@@ -67,7 +67,7 @@ function Site() {
         onClose={() => setIsCommandDialogOpen(false)}
         addCommand={addCommand}
       />
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
             <Typography>Name:</Typography>
@@ -110,6 +110,7 @@ function Site() {
                 editFrontmatterLanguage(e.target.value);
               }}
               value={siteConfigBuffer.frontmatterLanguage}
+              size="small"
             >
               {FrontmatterLanguages.map((lang) => (
                 <MenuItem value={lang}>{lang}</MenuItem>
@@ -121,7 +122,6 @@ function Site() {
           <Grid item>Frontmatter delimiter:</Grid>
           <Grid item>
             <TextField
-              variant="standard"
               size="small"
               disabled
               label="delimiter"
@@ -145,7 +145,7 @@ function Site() {
 
       <Divider sx={{ padding: "20px", color: "#999" }}>optional</Divider>
 
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         {/* Commands */}
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
