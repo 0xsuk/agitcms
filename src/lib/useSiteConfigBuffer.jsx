@@ -6,24 +6,30 @@ function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(initialSiteConfig);
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
   const history = useHistory();
-  let unblock;
   //siteConfig !== siteConfigCopy //true
   const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
 
-  const editName = async (newName) => {
-    setSiteConfig({ ...siteConfig, name: newName });
-  };
+  //const editName = async (newName) => {
+  //  setSiteConfig({ ...siteConfig, name: newName });
+  //};
 
-  const editPath = async () => {
-    const { folderPath, err, canceled } =
-      await window.electronAPI.getFolderPath();
-    if (err) {
-      console.warn(err);
-      return;
-    }
-    if (!err && !canceled) {
-      setSiteConfig({ ...siteConfig, path: folderPath });
-    }
+  //const editPath = async () => {
+  //  const { folderPath, err, canceled } =
+  //    await window.electronAPI.getFolderPath();
+  //  if (err) {
+  //    console.warn(err);
+  //    return;
+  //  }
+  //  if (!err && !canceled) {
+  //    setSiteConfig({ ...siteConfig, path: folderPath });
+  //  }
+  //};
+
+  const editShowFrontmatter = (newValue) => {
+    setSiteConfig((prev) => ({
+      ...prev,
+      showFrontmatter: newValue,
+    }));
   };
 
   const editCommandName = (newName, i) => {
@@ -116,11 +122,11 @@ function useSiteConfigBuffer(initialSiteConfig) {
     return true;
   };
 
-  const cancelSiteConfig = () => {
-    console.log("init:", initialSiteConfig);
-    setSiteConfig(initialSiteConfig);
-    // navigate(-1);
-  };
+  //const cancelSiteConfig = () => {
+  //  console.log("init:", initialSiteConfig);
+  //  setSiteConfig(initialSiteConfig);
+  //  // navigate(-1);
+  //};
 
   const removeSiteConfig = (key) => {
     if (!window.confirm("are you sure?")) return;
@@ -131,7 +137,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
   return [
     siteConfig,
     {
-      editName,
+      editShowFrontmatter,
       editCommand,
       editCommandName,
       addCommand,
@@ -144,9 +150,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
       addFrontmatter,
       removeFrontmatter,
       reorderFrontmatter,
-      editPath,
       removeSiteConfig,
-      cancelSiteConfig,
       saveSiteConfig,
     },
   ];

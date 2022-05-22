@@ -63,9 +63,12 @@ function useFileBuffer(filePath) {
   };
   const editContent = (tuieditor) => {
     const content = tuieditor.getInstance().getMarkdown();
+    const { content: doc, data: frontmatter } = matter(content, matterOption);
     setFile((prev) => ({
       ...prev,
       content,
+      doc,
+      frontmatter,
       isModified: true,
     }));
   };

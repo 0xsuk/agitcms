@@ -34,7 +34,7 @@ export const newSiteConfig = () => {
     pinnedDirs: [],
     commands: [],
     frontmatter: [],
-    showFrontmatter: true, //TODO
+    showFrontmatter: false,
   };
 };
 

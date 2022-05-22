@@ -6,6 +6,7 @@ import {
   Menu,
   MenuItem,
   Typography,
+  Switch,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import useSiteConfig from "../../../lib/useSiteConfig";
@@ -19,6 +20,7 @@ function Site() {
   const [
     siteConfigBuffer,
     {
+      editShowFrontmatter,
       editCommand,
       editCommandName,
       addCommand,
@@ -27,10 +29,8 @@ function Site() {
       addFrontmatter,
       removeFrontmatter,
       reorderFrontmatter,
-      editPath,
       saveSiteConfig,
       removeSiteConfig,
-      cancelSiteConfig,
     },
   ] = useSiteConfigBuffer(siteConfig);
 
@@ -77,6 +77,20 @@ function Site() {
             <Typography sx={{ color: "#999" }}>
               {siteConfigBuffer.path}
             </Typography>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>
+            <Typography>Show frontmatter in markdown editor:</Typography>
+          </Grid>
+          <Grid item>
+            <Switch
+              size="small"
+              defaultChecked={siteConfigBuffer.showFrontmatter}
+              onChange={(e) => {
+                editShowFrontmatter(e.target.checked);
+              }}
+            />
           </Grid>
         </Grid>
       </Grid>
