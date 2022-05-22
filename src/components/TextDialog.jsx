@@ -6,29 +6,43 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { useState } from "react";
 
 function TextDialog({
+  initialValue = "",
   isOpen,
   onClose,
   onSave,
-  dialogId,
   dialogTitle,
   tailValue,
+  isValid,
 }) {
+  const [value, setValue] = useState(initialValue);
+
+  const handleClose = () => {
+    onClose();
+    setValue("");
+  };
+
+  const handleSave = () => {
+    onClose();
+    onSave(value);
+  };
+
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>{dialogTitle}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           margin="dense"
           fullWidth
+          value={value}
           variant="standard"
-          id={dialogId}
+          onChange={(e) => setValue(e.target.value)}
           onKeyPress={(e) => {
-            if (e.key == "Enter") {
-              onClose();
-              onSave();
+            if (e.key === "Enter" && isValid(value)) {
+              handleSave();
             }
           }}
           InputProps={{
@@ -37,13 +51,8 @@ function TextDialog({
         ></TextField>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button
-          onClick={() => {
-            onClose();
-            onSave();
-          }}
-        >
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button disabled={!isValid(value)} onClick={handleSave}>
           Save
         </Button>
       </DialogActions>

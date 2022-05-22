@@ -31,8 +31,8 @@ function CreateNewDf({ cwdf }) {
     setIsFileDialogOpen(false);
   };
 
-  const createFile = async () => {
-    const fileName = document.getElementById("agit-file-dialog").value + ".md";
+  const createFile = async (value) => {
+    const fileName = value + ".md";
     const filePath = cwdf + "/" + fileName;
     const doc = "";
     //the default frontmatter
@@ -75,8 +75,7 @@ function CreateNewDf({ cwdf }) {
     );
   };
 
-  const createFolder = async () => {
-    const folderName = document.getElementById("agit-folder-dialog").value;
+  const createFolder = async (folderName) => {
     const folderPath = cwdf + "/" + folderName;
     const { err } = await window.electronAPI.createFolder(folderPath);
     if (err !== null) {
@@ -139,15 +138,15 @@ function CreateNewDf({ cwdf }) {
         onClose={closeFileDialog}
         onSave={createFile}
         dialogTitle="File name:"
-        dialogId="agit-file-dialog"
         tailValue=".md"
+        isValid={(value) => value !== ""} //TODO:
       />
       <TextDialog
         isOpen={isFolderDialogOpen}
         onClose={closeFolderDialog}
         onSave={createFolder}
         dialogTitle="Folder name:"
-        dialogId="agit-folder-dialog"
+        isValid={(value) => value !== ""} //TODO
       />
     </>
   );
