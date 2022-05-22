@@ -110,6 +110,7 @@ function Site() {
                 editFrontmatterLanguage(e.target.value);
               }}
               value={siteConfigBuffer.frontmatterLanguage}
+              size="small"
             >
               {FrontmatterLanguages.map((lang) => (
                 <MenuItem value={lang}>{lang}</MenuItem>
@@ -121,7 +122,6 @@ function Site() {
           <Grid item>Frontmatter delimiter:</Grid>
           <Grid item>
             <TextField
-              variant="standard"
               size="small"
               disabled
               label="delimiter"
