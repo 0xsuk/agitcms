@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor as TuiEditor } from "@toast-ui/react-editor";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
 //filePath is a only dependency
@@ -199,7 +199,7 @@ function FrontmatterEditor({ file, editFrontmatter, siteConfig }) {
       <Switch
         aria-label="bool"
         size="small"
-        defaultChecked={matterValue}
+        checked={matterValue}
         onChange={() => editFrontmatter(matterKey, !matterValue)}
       />
     );

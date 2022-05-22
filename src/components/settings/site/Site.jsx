@@ -86,7 +86,7 @@ function Site() {
           <Grid item>
             <Switch
               size="small"
-              defaultChecked={siteConfigBuffer.showFrontmatter}
+              checked={siteConfigBuffer.showFrontmatter}
               onChange={(e) => {
                 editShowFrontmatter(e.target.checked);
               }}
