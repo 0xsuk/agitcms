@@ -1,3 +1,4 @@
+import matter from "gray-matter";
 import { LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
@@ -16,6 +17,7 @@ import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
 //filePath is a only dependency
 function Editor({ filePath }) {
+  console.log(matter("---\ntitle: Heyheyhey\n---"));
   console.log("EDITOR", filePath);
   const [file, { editName, editFrontmatter, readFile, saveFile }] =
     useFileBuffer(filePath);

@@ -1,9 +1,9 @@
-# Agit CMS
+# agit cms
 
 Rich markdown + frontmatter editor for \*any\* static sites.  
 
-# Who Agit CMS is for
-Agit CMS is recommended for anyone
+# Who agit cms is for
+agit cms is recommended for anyone
 - who \*already\* has static sites, and writes contents in markdown (ANY static site generator supported! Hugo, Jekyll, Next.js, Gatsby.js....)
 - who needs high customizability on markdown editor
 - who needs rich frontmatter support
