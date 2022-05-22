@@ -24,17 +24,28 @@ function useSiteConfig() {
   return siteConfig;
 }
 
+export const FrontmatterTypes = [
+  { name: "String", key: "String" },
+  { name: "Array of String", key: "Array.String" },
+  { name: "Date", key: "Date" },
+  { name: "Bool", key: "Bool" },
+];
+
+export const FrontmatterLanguages = ["yaml", "toml"];
+
 export const newSiteConfig = () => {
   return {
     name: "",
     key: uuid(),
     path: "",
+    showFrontmatter: false,
+    frontmatterLanguage: "yaml",
+    frontmatterDelimiter: "---",
     defaultDir: "",
     mediaDir: "",
     pinnedDirs: [],
     commands: [],
     frontmatter: [],
-    showFrontmatter: false,
   };
 };
 

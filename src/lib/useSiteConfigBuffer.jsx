@@ -32,14 +32,27 @@ function useSiteConfigBuffer(initialSiteConfig) {
     }));
   };
 
-  const editCommandName = (newName, i) => {
-    siteConfigCopy.commands[i].name = newName;
-    setSiteConfig(siteConfigCopy);
+  const editFrontmatterLanguage = (newValue) => {
+    setSiteConfig((prev) => ({
+      ...prev,
+      frontmatterLanguage: newValue,
+    }));
   };
-  const editCommand = (newCommand, i) => {
-    siteConfigCopy.commands[i].command = newCommand;
-    setSiteConfig(siteConfigCopy);
+  const editFrontmatterDelimiter = (newValue) => {
+    setSiteConfig((prev) => ({
+      ...prev,
+      frontmatterDelimiter: newValue,
+    }));
   };
+
+  //const editCommandName = (newName, i) => {
+  //  siteConfigCopy.commands[i].name = newName;
+  //  setSiteConfig(siteConfigCopy);
+  //};
+  //const editCommand = (newCommand, i) => {
+  //  siteConfigCopy.commands[i].command = newCommand;
+  //  setSiteConfig(siteConfigCopy);
+  //};
   const addCommand = (key, name, command) => {
     siteConfigCopy.commands.push({ key, name, command });
     setSiteConfig(siteConfigCopy);
@@ -138,8 +151,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
     siteConfig,
     {
       editShowFrontmatter,
-      editCommand,
-      editCommandName,
+      editFrontmatterLanguage,
+      editFrontmatterDelimiter,
       addCommand,
       removeCommand,
       reorderCommands,

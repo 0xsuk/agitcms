@@ -7,13 +7,18 @@ import {
   MenuItem,
   Typography,
   Switch,
+  Select,
+  TextField,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import useSiteConfig from "../../../lib/useSiteConfig";
+import useSiteConfig, {
+  FrontmatterLanguages,
+} from "../../../lib/useSiteConfig";
 import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
 import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import CommandDialog from "./CommandDialog";
+import TextDialog from "../../TextDialog";
 
 function Site() {
   const siteConfig = useSiteConfig();
@@ -21,8 +26,8 @@ function Site() {
     siteConfigBuffer,
     {
       editShowFrontmatter,
-      editCommand,
-      editCommandName,
+      editFrontmatterLanguage,
+      editFrontmatterDelimiter,
       addCommand,
       removeCommand,
       reorderCommands,
@@ -45,6 +50,10 @@ function Site() {
   const [CommandAnchorEl, setCommandAnchorEl] = useState(null);
   const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
   const [isCommandDialogOpen, setIsCommandDialogOpen] = useState(false);
+  const [
+    isFrontmatterDelimiterEditorOpen,
+    setIsFrontmatterDelimiterEditorOpen,
+  ] = useState(false);
 
   return (
     <div id="setting-site">
@@ -90,6 +99,45 @@ function Site() {
               onChange={(e) => {
                 editShowFrontmatter(e.target.checked);
               }}
+            />
+          </Grid>
+        </Grid>
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>Frontmatter Language:</Grid>
+          <Grid item>
+            <Select
+              onChange={(e) => {
+                editFrontmatterLanguage(e.target.value);
+              }}
+              value={siteConfigBuffer.frontmatterLanguage}
+            >
+              {FrontmatterLanguages.map((lang) => (
+                <MenuItem value={lang}>{lang}</MenuItem>
+              ))}
+            </Select>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>Frontmatter delimiter:</Grid>
+          <Grid item>
+            <TextField
+              variant="standard"
+              size="small"
+              disabled
+              label="delimiter"
+              value={siteConfigBuffer.frontmatterDelimiter}
+              onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}
+            />
+            <Button onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}>
+              EDIT
+            </Button>
+            <TextDialog
+              initialValue={siteConfigBuffer.frontmatterDelimiter}
+              isOpen={isFrontmatterDelimiterEditorOpen}
+              onClose={() => setIsFrontmatterDelimiterEditorOpen(false)}
+              onSave={editFrontmatterDelimiter}
+              isValid={(value) => value !== ""}
+              dialogTitle="Frontmatter Delimiter"
             />
           </Grid>
         </Grid>

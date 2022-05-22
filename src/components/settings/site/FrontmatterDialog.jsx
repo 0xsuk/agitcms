@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { FrontmatterTypes } from "../../../App";
+import { FrontmatterTypes } from "../../../lib/useSiteConfig";
 
 function ArrayOfStringMatter({
   handleBack,
