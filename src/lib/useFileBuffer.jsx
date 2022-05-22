@@ -1,5 +1,25 @@
+import TOML from "@iarna/toml";
+import matter from "gray-matter";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+
+const matterOption = {
+  engines: {
+    toml: {
+      parse: TOML.parse,
+      stringify: TOML.stringify,
+    },
+  },
+  //language: "toml",
+  //delimiters: "+++",
+};
+
+//because matter.stringify always put \n at the end of output if doc does not end with \n, this function removes it
+const matterStringify = (doc, data, options) => {
+  let out = matter.stringify(doc, data, options);
+  if (doc[doc.length - 1] !== "\n") out = out.substring(0, out.length - 1);
+  return out;
+};
 
 //useCodeMirror depends on useFileBuffer's updateDoc
 //filePath is a only dependency.
@@ -10,33 +30,64 @@ function useFileBuffer(filePath) {
   const fileName = searchparams.get("name");
   const [file, setFile] = useState({
     name: fileName,
+    content: "", //include frontmatter
     frontmatter: {},
+    doc: "", //exclude frontmatter
     isRead: false,
+    isFrontmatterEmpty: false,
+    isModified: false,
   });
 
   const editName = (name) => {
     setFile((prev) => ({ ...prev, name }));
   };
   const editFrontmatter = (key, value) => {
+    file.frontmatter[key] = value;
+    const content = matterStringify(file.doc, file.frontmatter);
     setFile((prev) => ({
       ...prev,
-      frontmatter: { ...prev.frontmatter, [key]: value },
+      content,
+      frontmatter: file.frontmatter,
+      isModified: true,
+    }));
+  };
+  const editDoc = (tuieditor) => {
+    const doc = tuieditor.getInstance().getMarkdown();
+    const content = matterStringify(doc, file.frontmatter);
+    setFile((prev) => ({
+      ...prev,
+      doc,
+      content,
+      isModified: true,
+    }));
+  };
+  const editContent = (tuieditor) => {
+    const content = tuieditor.getInstance().getMarkdown();
+    setFile((prev) => ({
+      ...prev,
+      content,
+      isModified: true,
     }));
   };
 
-  const readFile = async (tuieditor) => {
-    const { err, doc, frontmatter } = await window.electronAPI.readFile(
-      filePath
-    );
+  const readFile = async () => {
+    const { content, err } = await window.electronAPI.readFile(filePath);
     if (err) {
-      alert(err.message);
+      console.warn(err.message);
       return;
     }
-    //TODO: issues ctrl-z
-    tuieditor.getInstance().setMarkdown(doc);
-    setFile((prev) => ({ ...prev, frontmatter, isRead: true }));
-    const isFrontmatterEmpty = JSON.stringify(frontmatter) === "{}";
-    return isFrontmatterEmpty;
+    const { content: doc, data: frontmatter } = matter(content, matterOption);
+    const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
+
+    console.log("readFile", content, frontmatter);
+    setFile((prev) => ({
+      ...prev,
+      content,
+      doc,
+      frontmatter,
+      isRead: true,
+      isFrontmatterEmpty,
+    }));
   };
 
   const renameFileAndNavigate = async () => {
@@ -45,30 +96,30 @@ function useFileBuffer(filePath) {
       file.name
     );
     if (err) {
-      alert(err.message);
+      console.warn(err.message);
       return;
     }
     const to = "?path=" + newFilePath + "&isDir=false&fileName=" + file.name;
     history.replace(to);
   };
 
-  const saveFile = async (tuieditor) => {
-    if (!file.isRead) {
+  const saveFile = async () => {
+    if (!file.isRead || !file.isModified) {
       return;
     }
-    const { err } = await window.electronAPI.saveFile(
-      tuieditor.getInstance().getMarkdown(),
-      file.frontmatter,
-      filePath
-    );
+    const { err } = await window.electronAPI.saveFile(filePath, file.content);
     if (err) {
-      alert(err.message);
+      console.warn(err.message);
       return;
     }
     fileName !== file.name && renameFileAndNavigate();
+    console.log("saved", file);
   };
 
-  return [file, { editName, editFrontmatter, readFile, saveFile }];
+  return [
+    file,
+    { editName, editFrontmatter, editDoc, editContent, readFile, saveFile },
+  ];
 }
 
 export default useFileBuffer;

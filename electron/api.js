@@ -2,7 +2,6 @@ const { dialog } = require("electron");
 const fs = require("fs");
 const { getConfig, CONFIG_FILE } = require("./config.js");
 const path = require("path");
-const matter = require("gray-matter");
 const YAML = require("yaml");
 const ShellProcess = require("./lib/shellprocess.js");
 const { getWindow } = require("./lib/window_manager");
@@ -37,18 +36,13 @@ exports.updateConfig = (e, newConfig) => {
   }
 };
 
-exports.saveFile = (e, doc, frontmatter, filePath) => {
+exports.saveFile = (e, filePath, content) => {
   try {
     if (!filePath) {
-      throw new Error("File path is not probided");
+      throw new Error("File path is not provided");
     }
 
-    const yaml_str = YAML.stringify(frontmatter); //if frontmatter is {}, returns {}
-
-    if (Object.keys(frontmatter).length !== 0)
-      doc = "---\n" + yaml_str + "---\n" + doc;
-
-    fs.writeFileSync(filePath, doc);
+    fs.writeFileSync(filePath, content);
     return { err: null };
   } catch (err) {
     return { err };
@@ -63,16 +57,9 @@ exports.readFile = (e, filePath) => {
     }
 
     content = fs.readFileSync(filePath).toString();
+    return { content, err: null };
   } catch (err) {
-    return { doc: null, frontmatter: null, err };
-  }
-
-  try {
-    const { content: doc, data: frontmatter } = matter(content);
-    return { doc, frontmatter, err: null };
-  } catch (err) {
-    console.warn("frontmatter format is not supported", err);
-    return { doc: null, frontmatter: {}, err: null };
+    return { content: null, err };
   }
 };
 

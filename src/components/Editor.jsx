@@ -17,10 +17,11 @@ import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
 //filePath is a only dependency
 function Editor({ filePath }) {
-  console.log(matter("---\ntitle: Heyheyhey\n---"));
   console.log("EDITOR", filePath);
-  const [file, { editName, editFrontmatter, readFile, saveFile }] =
-    useFileBuffer(filePath);
+  const [
+    file,
+    { editName, editFrontmatter, editDoc, editContent, readFile, saveFile },
+  ] = useFileBuffer(filePath);
   const editorRef = useRef(null);
   const siteConfig = useSiteConfig();
 
@@ -62,6 +63,58 @@ function Editor({ filePath }) {
     }
   };
 
+  useEffect(() => {
+    readFile(editorRef.current).then((isFrontmatterEmpty) => {
+      if (isFrontmatterEmpty) {
+        switchTab("editor");
+      }
+    });
+  }, [filePath]); //eslint-disable-line
+
+  if (!file.isRead) {
+    return <></>;
+  }
+
+  saveFile();
+
+  return (
+    <div id="editor">
+      {/* Tab switcher */}
+      <div className="flex">
+        <p className="tab" onClick={() => switchTab("frontmatter")}>
+          Frontmatter
+        </p>
+        <p className="tab" onClick={() => switchTab("editor")}>
+          Editor
+        </p>
+      </div>
+      <div id="frontmatter-tab">
+        <FrontmatterEditor
+          file={file}
+          editFrontmatter={editFrontmatter}
+          siteConfig={siteConfig}
+        />
+      </div>
+      <div id="editor-tab">
+        <TuiEditor
+          onChange={() => {
+            if (siteConfig.showFrontmatter) {
+              editContent(editorRef.current);
+            } else {
+              editDoc(editorRef.current);
+            }
+          }}
+          previewStyle="vertical"
+          ref={editorRef}
+          height="100%"
+          initialValue={siteConfig.showFrontmatter ? file.content : file.doc}
+        />
+      </div>
+    </div>
+  );
+}
+
+function FrontmatterEditor({ file, editFrontmatter, siteConfig }) {
   const getFrontmatterType = (key) => {
     let type = undefined;
     siteConfig.frontmatter.every((singlematter) => {
@@ -191,66 +244,24 @@ function Editor({ filePath }) {
         return stringEditor;
     }
   };
-
-  //order of useEffect matters
-  useEffect(() => {
-    //not invoked, useless block
-    if (editorRef.current === null) {
-      return;
-    }
-    saveFile(editorRef.current);
-  });
-  useEffect(() => {
-    readFile(editorRef.current).then((isFrontmatterEmpty) => {
-      if (isFrontmatterEmpty) {
-        switchTab("editor");
-      }
-    });
-  }, [filePath]); //eslint-disable-line
-
   return (
-    <div id="editor">
-      {/* Tab switcher */}
-      <div class="flex">
-        <p class="tab" onClick={() => switchTab("frontmatter")}>
-          Frontmatter
-        </p>
-        <p class="tab" onClick={() => switchTab("editor")}>
-          Editor
-        </p>
-      </div>
-      <div id="frontmatter-tab">
-        <Stack spacing={1}>
-          {Object.keys(file.frontmatter).length !== 0 &&
-            Object.keys(file.frontmatter).map((matterKey) => (
-              <Grid container spacing={0} alignItems="center">
-                <Grid item xs={2}>
-                  <Typography>{matterKey}</Typography>
-                </Grid>
-                <Grid item xs={9}>
-                  {frontmatterEditor(
-                    matterKey,
-                    file.frontmatter[matterKey],
-                    getFrontmatterType(matterKey)
-                  )}
-                </Grid>
-              </Grid>
-            ))}
-        </Stack>
-      </div>
-
-      <div id="editor-tab">
-        <TuiEditor
-          //TODO:
-          onChange={() => {
-            saveFile(editorRef.current);
-          }}
-          previewStyle="vertical"
-          ref={editorRef}
-          height="100%"
-        />
-      </div>
-    </div>
+    <Stack spacing={1}>
+      {Object.keys(file.frontmatter).length !== 0 &&
+        Object.keys(file.frontmatter).map((matterKey) => (
+          <Grid container spacing={0} alignItems="center">
+            <Grid item xs={2}>
+              <Typography>{matterKey}</Typography>
+            </Grid>
+            <Grid item xs={9}>
+              {frontmatterEditor(
+                matterKey,
+                file.frontmatter[matterKey],
+                getFrontmatterType(matterKey)
+              )}
+            </Grid>
+          </Grid>
+        ))}
+    </Stack>
   );
 }
 
