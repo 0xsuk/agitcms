@@ -84,7 +84,7 @@ function useSiteConfigBuffer(initialSiteConfig) {
     siteConfigCopy.frontmatter[i].default = newDefault;
     setSiteConfig(siteConfigCopy);
   };
-  //TODO: const editFrontmatterOption
+  //TODO: const editFrontmatterOption = () => {}
   const editFrontmatter = (id, key, type, Default, option) => {
     for (let i = 0; i < siteConfigCopy.frontmatter.length; i++) {
       if (siteConfigCopy.frontmatter[i].id === id) {

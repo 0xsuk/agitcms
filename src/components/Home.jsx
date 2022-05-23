@@ -8,7 +8,6 @@ import { useHistory } from "react-router-dom";
 function Home() {
   const { config, updateSiteConfig } = useContext(configContext);
   const history = useHistory();
-  //TODO
   const addNewSite = (name, path) => {
     //siteKey == "new"
     const siteConfig = newSiteConfig();
