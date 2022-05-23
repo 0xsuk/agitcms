@@ -38,7 +38,6 @@ function SideBar() {
         <div>
           <Typography variant="h6">{siteConfig.name}</Typography>
 
-          {/*TODO: mapping commands  */}
           {siteConfig.commands.map((command) => (
             <div>
               <Button onClick={() => runCommand(command)}>

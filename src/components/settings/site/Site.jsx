@@ -88,6 +88,7 @@ function Site() {
             </Typography>
           </Grid>
         </Grid>
+        {/*
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
             <Typography>Show frontmatter in markdown editor:</Typography>
@@ -101,7 +102,7 @@ function Site() {
               }}
             />
           </Grid>
-        </Grid>
+        </Grid> */}
         <Grid item container spacing={1} alignItems="center">
           <Grid item>Frontmatter Language:</Grid>
           <Grid item>
@@ -190,7 +191,6 @@ function Site() {
                             }}
                           />
                           <Menu
-                            //TODO: many Menu refer to the same el
                             anchorEl={CommandAnchorEl}
                             open={
                               CommandAnchorEl?.parentNode.dataset.id === cmd.key
@@ -205,7 +205,6 @@ function Site() {
                               e.stopPropagation();
                             }}
                           >
-                            {/* TODO: delete not working */}
                             <MenuItem onClick={() => removeCommand(cmd.key)}>
                               delete
                             </MenuItem>
@@ -295,7 +294,6 @@ function Site() {
                               e.stopPropagation();
                             }}
                           >
-                            {/* TODO: delete not working */}
                             <MenuItem
                               onClick={() => removeFrontmatter(matter.id)}
                             >
