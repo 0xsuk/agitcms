@@ -1,4 +1,3 @@
-import matter from "gray-matter";
 import { LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
@@ -11,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor as TuiEditor } from "@toast-ui/react-editor";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
+import useTuiEditor from "../lib/useTuiEditor";
 //filePath is a only dependency
 function Editor({ filePath }) {
   console.log("EDITOR", filePath);
@@ -22,8 +21,9 @@ function Editor({ filePath }) {
     file,
     { editName, editFrontmatter, editDoc, editContent, readFile, saveFile },
   ] = useFileBuffer(filePath);
-  const editorRef = useRef(null);
   const siteConfig = useSiteConfig();
+  const [editor, setEditor] = useState(null);
+  const [showFrontmatter, setShowFrontmatter] = useState(false);
 
   const switchTab = (tab) => {
     const frontmatterEl = document.getElementById("frontmatter-tab");
@@ -64,18 +64,24 @@ function Editor({ filePath }) {
   };
 
   useEffect(() => {
-    readFile(editorRef.current).then((isFrontmatterEmpty) => {
+    readFile(editor).then((isFrontmatterEmpty) => {
       if (isFrontmatterEmpty) {
         switchTab("editor");
       }
     });
   }, [filePath]); //eslint-disable-line
 
-  if (!file.isRead) {
-    return <></>;
-  }
+  useEffect(() => {
+    if (showFrontmatter) {
+      setEditor(useTuiEditor(file.content, editContent));
+    } else {
+      setEditor(useTuiEditor(file.doc, editDoc));
+    }
+  }, [file.isRead, showFrontmatter]);
 
-  saveFile();
+  if (file.isRead) {
+    saveFile();
+  }
 
   return (
     <div id="editor">
@@ -87,6 +93,9 @@ function Editor({ filePath }) {
         <p className="tab" onClick={() => switchTab("editor")}>
           Editor
         </p>
+        <Button onClick={() => setShowFrontmatter((prev) => !prev)}>
+          Frontmatter?
+        </Button>
       </div>
       <div id="frontmatter-tab">
         <FrontmatterEditor
@@ -95,21 +104,7 @@ function Editor({ filePath }) {
           siteConfig={siteConfig}
         />
       </div>
-      <div id="editor-tab">
-        <TuiEditor
-          onChange={() => {
-            if (siteConfig.showFrontmatter) {
-              editContent(editorRef.current);
-            } else {
-              editDoc(editorRef.current);
-            }
-          }}
-          previewStyle="vertical"
-          ref={editorRef}
-          height="100%"
-          initialValue={siteConfig.showFrontmatter ? file.content : file.doc}
-        />
-      </div>
+      <div id="editor-tab"></div>
     </div>
   );
 }

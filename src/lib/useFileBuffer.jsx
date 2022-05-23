@@ -52,7 +52,7 @@ function useFileBuffer(filePath) {
     }));
   };
   const editDoc = (tuieditor) => {
-    const doc = tuieditor.getInstance().getMarkdown();
+    const doc = tuieditor.getMarkdown();
     const content = matterStringify(doc, file.frontmatter);
     setFile((prev) => ({
       ...prev,
@@ -62,7 +62,7 @@ function useFileBuffer(filePath) {
     }));
   };
   const editContent = (tuieditor) => {
-    const content = tuieditor.getInstance().getMarkdown();
+    const content = tuieditor.getMarkdown();
     const { content: doc, data: frontmatter } = matter(content, matterOption);
     setFile((prev) => ({
       ...prev,
