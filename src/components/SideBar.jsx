@@ -97,23 +97,6 @@ function SideBar() {
           <div className="site-links">
             <div
               className="site-link"
-              onClick={() =>
-                history.push(
-                  "/edit/" +
-                    siteConfig.key +
-                    "?path=" +
-                    siteConfig.path +
-                    "&name=Root&isDir=true"
-                )
-              }
-            >
-              <NotesOutlinedIcon fontSize="small" />
-              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
-                Root
-              </Typography>
-            </div>
-            <div
-              className="site-link"
               onClick={() => history.push("/shell/" + siteConfig.key)}
             >
               <NotesOutlinedIcon fontSize="small" />

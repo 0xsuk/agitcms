@@ -13,6 +13,7 @@ function Home() {
     const siteConfig = newSiteConfig();
     siteConfig.name = name;
     siteConfig.path = path;
+    siteConfig.pinnedDirs = [{ name: "Root", path, isDir: true }];
     updateSiteConfig(siteConfig);
   };
 
