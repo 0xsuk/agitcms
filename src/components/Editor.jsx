@@ -16,7 +16,6 @@ import useSiteConfig from "../lib/useSiteConfig";
 import useTuiEditor from "../lib/useTuiEditor";
 //filePath is a only dependency
 function Editor({ filePath }) {
-  console.log("EDITOR", filePath);
   const [
     file,
     { editName, editFrontmatter, editDoc, editContent, readFile, saveFile },
@@ -24,6 +23,13 @@ function Editor({ filePath }) {
   const siteConfig = useSiteConfig();
   const [editor, setEditor] = useState(null);
   const [showFrontmatter, setShowFrontmatter] = useState(false);
+  console.log("EDITOR", {
+    filePath,
+    file,
+    siteConfig,
+    editor,
+    showFrontmatter,
+  });
 
   const switchTab = (tab) => {
     const frontmatterEl = document.getElementById("frontmatter-tab");
@@ -78,10 +84,11 @@ function Editor({ filePath }) {
         switchTab("editor");
       }
     });
-  }, [filePath]); //eslint-disable-line
+  }, []); //eslint-disable-line
 
   useEffect(() => {
-    console.log("setEditor");
+    if (!file.isRead) return;
+    console.log("setEditor", file);
     if (showFrontmatter) {
       setEditor(useTuiEditor(file.content, editContent));
     } else {
