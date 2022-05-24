@@ -1,4 +1,5 @@
 import { Fragment, useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Route } from "react-router-dom";
 import "./App.scss";
 import Explorer from "./components/Explorer";
@@ -8,6 +9,7 @@ import Site from "./components/settings/site/Site";
 import Shell from "./components/Shell";
 import SideBar from "./components/SideBar";
 import { configContext } from "./context/ConfigContext";
+import Test from "./Test";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
@@ -23,6 +25,7 @@ function App() {
 
   return (
     <>
+      <Link to={"/test"}>test</Link>
       <Route path="/">
         {/* component={} renders Wrapper every single time */}
         <Wrapper />
@@ -46,6 +49,9 @@ function Wrapper() {
         <SideBar />
       </div>
       <div id="main">
+        <Route path="/test">
+          <Test />
+        </Route>
         <Route exact path="/">
           <Home />
         </Route>
