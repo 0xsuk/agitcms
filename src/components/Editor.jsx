@@ -107,7 +107,7 @@ function Editor({ filePath }) {
           Editor
         </p>
         <Button onClick={() => setShowFrontmatter((prev) => !prev)}>
-          Frontmatter?
+          {showFrontmatter ? "Hide Frontmatter" : "Show Frontmatter"}
         </Button>
       </div>
       <div id="frontmatter-tab">
