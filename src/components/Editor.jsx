@@ -63,6 +63,15 @@ function Editor({ filePath }) {
     }
   };
 
+  if (file.isRead) {
+    saveFile();
+
+    //when frontmatter editor has change (meaning file.content has updated), editor content should change
+    if (showFrontmatter && file.content !== editor.getMarkdown()) {
+      editor.setMarkdown(file.content);
+    }
+  }
+
   useEffect(() => {
     readFile(editor).then((isFrontmatterEmpty) => {
       if (isFrontmatterEmpty) {
@@ -72,16 +81,13 @@ function Editor({ filePath }) {
   }, [filePath]); //eslint-disable-line
 
   useEffect(() => {
+    console.log("setEditor");
     if (showFrontmatter) {
       setEditor(useTuiEditor(file.content, editContent));
     } else {
       setEditor(useTuiEditor(file.doc, editDoc));
     }
   }, [file.isRead, showFrontmatter]);
-
-  if (file.isRead) {
-    saveFile();
-  }
 
   return (
     <div id="editor">
