@@ -8,6 +8,7 @@ import Settings from "./components/Settings";
 import Site from "./components/settings/site/Site";
 import Shell from "./components/Shell";
 import SideBar from "./components/SideBar";
+import Terminal from "./components/Terminal";
 import { configContext } from "./context/ConfigContext";
 import Test from "./Test";
 
@@ -67,6 +68,7 @@ function Wrapper() {
         <Route path="/edit/:siteKey">
           <Explorer />
         </Route>
+        {/*<Terminal /> Low Priority*/}
       </div>
     </div>
   );
