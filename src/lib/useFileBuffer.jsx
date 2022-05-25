@@ -2,17 +2,7 @@ import TOML from "@iarna/toml";
 import matter from "gray-matter";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-
-const matterOption = {
-  engines: {
-    toml: {
-      parse: TOML.parse,
-      stringify: TOML.stringify,
-    },
-  },
-  //language: "toml",
-  //delimiters: "+++",
-};
+import useSiteConfig from "./useSiteConfig";
 
 //because matter.stringify always put \n at the end of output if doc does not end with \n, this function removes it
 const matterStringify = (doc, data, options) => {
@@ -37,6 +27,20 @@ function useFileBuffer(filePath) {
     isFrontmatterEmpty: false,
     isModified: false,
   });
+  const siteConfig = useSiteConfig();
+
+  const matterOption = {
+    engines: {
+      toml: {
+        parse: TOML.parse,
+        stringify: TOML.stringify,
+      },
+    },
+    language: siteConfig.frontmatterLanguage,
+    delimiters: siteConfig.frontmatterDelimiter,
+  };
+
+  console.log("USE FILE BUFFER:", file, matterOption);
 
   const editName = (name) => {
     setFile((prev) => ({ ...prev, name }));
@@ -52,6 +56,9 @@ function useFileBuffer(filePath) {
     }));
   };
   const editDoc = (tuieditor) => {
+    //const d = tuieditor.getMarkdown();
+    //const { content: doc, data: frontmatter } = matter(d, matterOption); //ISSUE: if d contains uncompleted frontmatter edit, doc&frontmatter becomes empty, thus content becomes empty
+    //file.frontmatter = { ...file.frontmatter, ...frontmatter };
     const doc = tuieditor.getMarkdown();
     const content = matterStringify(doc, file.frontmatter);
     setFile((prev) => ({
@@ -82,7 +89,7 @@ function useFileBuffer(filePath) {
     const { content: doc, data: frontmatter } = matter(content, matterOption);
     const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
 
-    console.log("readFile", content, frontmatter);
+    console.log("readFile", { content, frontmatter, isFrontmatterEmpty });
     setFile((prev) => ({
       ...prev,
       content,
@@ -91,6 +98,8 @@ function useFileBuffer(filePath) {
       isRead: true,
       isFrontmatterEmpty,
     }));
+
+    return isFrontmatterEmpty;
   };
 
   const renameFileAndNavigate = async () => {
@@ -116,7 +125,8 @@ function useFileBuffer(filePath) {
       return;
     }
     fileName !== file.name && renameFileAndNavigate();
-    console.log("saved", file);
+    //console.log("saved", file);
+    console.log("saved"); //somehow executed twice
   };
 
   return [

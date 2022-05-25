@@ -1,6 +1,7 @@
 import { LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
+import ReactDOM from "react-dom";
 import {
   Button,
   Grid,
@@ -10,10 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
-import useTuiEditor from "../lib/useTuiEditor";
+import { Editor as Tui } from "@toast-ui/react-editor";
 //filePath is a only dependency
 function Editor({ filePath }) {
   const [
@@ -21,14 +22,10 @@ function Editor({ filePath }) {
     { editName, editFrontmatter, editDoc, editContent, readFile, saveFile },
   ] = useFileBuffer(filePath);
   const siteConfig = useSiteConfig();
-  const [editor, setEditor] = useState(null);
-  const [showFrontmatter, setShowFrontmatter] = useState(false);
   console.log("EDITOR", {
     filePath,
     file,
     siteConfig,
-    editor,
-    showFrontmatter,
   });
 
   const switchTab = (tab) => {
@@ -69,41 +66,18 @@ function Editor({ filePath }) {
     }
   };
 
-  if (file.isRead) {
-    saveFile();
-
-    //when frontmatter editor has change (meaning file.content has updated), editor content should change
-    if (showFrontmatter && file.content !== editor.getMarkdown()) {
-      editor.setMarkdown(file.content);
-    }
-  }
-
   useEffect(() => {
-    readFile(editor).then((isFrontmatterEmpty) => {
+    readFile().then((isFrontmatterEmpty) => {
       if (isFrontmatterEmpty) {
         switchTab("editor");
       }
     });
   }, []); //eslint-disable-line
-
-  useEffect(() => {
-    if (!file.isRead) return;
-    console.log("setEditor", file);
-    if (showFrontmatter) {
-      setEditor(
-        useTuiEditor(
-          file.content,
-          editContent,
-          showFrontmatter,
-          setShowFrontmatter
-        )
-      );
-    } else {
-      setEditor(
-        useTuiEditor(file.doc, editDoc, showFrontmatter, setShowFrontmatter)
-      );
-    }
-  }, [file.isRead, showFrontmatter]);
+  if (file.isRead) {
+    saveFile();
+  } else {
+    return <></>;
+  }
 
   return (
     <div id="editor">
@@ -123,7 +97,9 @@ function Editor({ filePath }) {
           siteConfig={siteConfig}
         />
       </div>
-      <div id="editor-tab"></div>
+      <div id="editor-tab">
+        <MarkdownEditor file={file} editDoc={editDoc} />
+      </div>
     </div>
   );
 }
@@ -278,5 +254,37 @@ function FrontmatterEditor({ file, editFrontmatter, siteConfig }) {
     </Stack>
   );
 }
+
+function MarkdownEditor({ file, editDoc }) {
+  const tuiRef = useRef(null);
+  return (
+    <>
+      <Tui
+        ref={tuiRef}
+        initialValue={file.doc}
+        previewStyle="vertical"
+        height="100%"
+        //frontMatter={true}
+        onChange={() => {
+          console.log("doc");
+          editDoc(tuiRef.current.getInstance());
+        }}
+        toolbarItems={[
+          ["heading", "bold", "italic", "strike"],
+          ["hr", "quote"],
+          ["ul", "ol", "task", "indent", "outdent"],
+          ["table", "image", "link"],
+          ["code", "codeblock"],
+        ]}
+      />
+    </>
+  );
+}
+
+//function createButton(dom) {
+//  const el = document.createElement("div");
+//  ReactDOM.render(dom, el);
+//  return el;
+//}
 
 export default Editor;

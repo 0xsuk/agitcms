@@ -26,7 +26,7 @@
     "@mui/icons-material": "^5.8.0",
     "@mui/lab": "^5.0.0-alpha.82",
     "@mui/material": "^5.8.0",
-    "@toast-ui/editor": "^3.1.7",
+    "@toast-ui/react-editor": "^3.1.7",
     "buffer": "^6.0.3",
     "css-loader": "^6.7.1",
     "electron-is-dev": "^2.0.0",
@@ -39,7 +39,8 @@
     "stream-browserify": "^3.0.0",
     "style-loader": "^3.3.1",
     "toml": "^3.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "xterm": "^4.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.0",
