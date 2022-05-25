@@ -90,9 +90,18 @@ function Editor({ filePath }) {
     if (!file.isRead) return;
     console.log("setEditor", file);
     if (showFrontmatter) {
-      setEditor(useTuiEditor(file.content, editContent));
+      setEditor(
+        useTuiEditor(
+          file.content,
+          editContent,
+          showFrontmatter,
+          setShowFrontmatter
+        )
+      );
     } else {
-      setEditor(useTuiEditor(file.doc, editDoc));
+      setEditor(
+        useTuiEditor(file.doc, editDoc, showFrontmatter, setShowFrontmatter)
+      );
     }
   }, [file.isRead, showFrontmatter]);
 
@@ -106,9 +115,6 @@ function Editor({ filePath }) {
         <p className="tab" onClick={() => switchTab("editor")}>
           Editor
         </p>
-        <Button onClick={() => setShowFrontmatter((prev) => !prev)}>
-          {showFrontmatter ? "Hide Frontmatter" : "Show Frontmatter"}
-        </Button>
       </div>
       <div id="frontmatter-tab">
         <FrontmatterEditor
@@ -273,5 +279,4 @@ function FrontmatterEditor({ file, editFrontmatter, siteConfig }) {
   );
 }
 
-//TODO memo(Editor) cause "campare is not a function" error, when post is pinned/unpinned
 export default Editor;
