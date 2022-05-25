@@ -5,7 +5,7 @@ function Test() {
   useEffect(() => {
     const editor = new Editor({
       el: document.getElementById("test"),
-      initialValue: "",
+      initialValue: "Test",
       height: "600px",
       frontMatter: true,
     });

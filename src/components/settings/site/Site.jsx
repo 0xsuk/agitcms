@@ -147,7 +147,7 @@ function Site() {
       <Divider sx={{ padding: "20px", color: "#999" }}>optional</Divider>
 
       <Grid container spacing={2}>
-        {/* Commands */}
+        {/* Commands 
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
             <Typography variant="h6">Command shortcuts</Typography>
@@ -219,7 +219,7 @@ function Site() {
             </Droppable>
           </DragDropContext>
         </Grid>
-        {/* -Commands */}
+         -Commands */}
 
         {/* Frontmatter */}
         <Grid item container spacing={1} alignItems="center">

@@ -38,16 +38,16 @@ function SideBar() {
         <div>
           <Typography variant="h6">{siteConfig.name}</Typography>
 
-          {siteConfig.commands.map((command) => (
+          {/*{siteConfig.commands.map((command) => (
             <div>
               <Button onClick={() => runCommand(command)}>
                 {command.name}
               </Button>
-              {/* TODO: isCommandRunning? -> Stop button */}
+               TODO: isCommandRunning? -> Stop button 
               <Button onClick={() => stopCommand(command.key)}>Stop</Button>
             </div>
-          ))}
-
+            ))} 
+          */}
           <div style={{ padding: "10px" }} />
 
           {/* mapping pinnedDirs */}
