@@ -6,7 +6,6 @@ import Explorer from "./components/Explorer";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import Site from "./components/settings/site/Site";
-import Shell from "./components/Shell";
 import SideBar from "./components/SideBar";
 import Terminal from "./components/Terminal";
 import { configContext } from "./context/ConfigContext";
@@ -36,13 +35,6 @@ function App() {
 }
 
 function Wrapper() {
-  const [lines, setLines] = useState([]);
-  useEffect(() => {
-    window.electronAPI.onShellProcessLine((_, data) => {
-      setLines((prev) => [...prev, data.line]);
-    });
-  }, []); //eslint-disable-line
-
   return (
     // list of workspace
     <div className="flex">
@@ -62,13 +54,10 @@ function Wrapper() {
         <Route path="/settings/:siteKey">
           <Site />
         </Route>
-        <Route path="/shell/:siteKey">
-          <Shell lines={lines} setLines={setLines} />
-        </Route>
         <Route path="/edit/:siteKey">
           <Explorer />
         </Route>
-        {/*<Terminal /> Low Priority*/}
+        <Terminal />
       </div>
     </div>
   );
