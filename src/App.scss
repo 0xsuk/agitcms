@@ -37,9 +37,10 @@ code {
 #main {
   width: 100%;
   background-color: rgb(250, 250, 250);
+  position: relative;
 }
 #explorer {
-  height: 100%;
+  height: 70%;
   #top-bar {
     font-size: 13px;
     color: #666;
@@ -79,6 +80,13 @@ code {
       cursor: pointer;
     }
   }
+}
+
+#terminal {
+  width: 100%;
+  height: 30%;
+  position: absolute;
+  bottom: 0;
 }
 
 #setting-site {
