@@ -9,12 +9,12 @@ const {
   getFolderPath,
   getFilesAndFolders,
   renameFile,
-  runCommand,
-  stopCommand,
+  typeCommand,
   createFolder,
   createFile,
   removeFile,
   removeFolder,
+  spawnShell,
 } = require("./api");
 const { createWindow } = require("./lib/window_manager");
 
@@ -33,8 +33,8 @@ app.whenReady().then(() => {
   ipcMain.handle("create-file", createFile);
   ipcMain.handle("remove-file", removeFile);
   ipcMain.handle("remove-folder", removeFolder);
-  ipcMain.handle("run-command", runCommand);
-  ipcMain.handle("stop-command", stopCommand);
+  ipcMain.handle("type-command", typeCommand);
+  ipcMain.handle("spawn-shell", spawnShell);
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

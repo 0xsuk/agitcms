@@ -63,7 +63,7 @@ function SideBar() {
                 className="pinnedDir"
                 onClick={() =>
                   history.push(
-                    "/edit/" +
+                    "/site/edit/" +
                       siteConfig.key +
                       "?path=" +
                       dir.path +
@@ -97,16 +97,7 @@ function SideBar() {
           <div className="site-links">
             <div
               className="site-link"
-              onClick={() => history.push("/shell/" + siteConfig.key)}
-            >
-              <NotesOutlinedIcon fontSize="small" />
-              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
-                Shell
-              </Typography>
-            </div>
-            <div
-              className="site-link"
-              onClick={() => history.push("/settings/" + siteConfig.key)}
+              onClick={() => history.push("/site/settings/" + siteConfig.key)}
             >
               <NotesOutlinedIcon fontSize="small" />
               <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>

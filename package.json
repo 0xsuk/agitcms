@@ -5,7 +5,8 @@
   "main": "electron/electron.js",
   "scripts": {
     "start": "webpack-dev-server --mode development",
-    "dev": "concurrently \"npm run start\" \"wait-on http://localhost:3000 && electron .\""
+    "dev": "concurrently \"npm run start\" \"wait-on http://localhost:3000 && electron .\"",
+    "postinstall": "electron-rebuild -f -w node-pty"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "css-loader": "^6.7.1",
     "electron-is-dev": "^2.0.0",
     "gray-matter": "^4.0.3",
+    "node-pty": "^0.10.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2",
@@ -50,6 +52,7 @@
     "concurrently": "^7.2.0",
     "electron": "^18.2.4",
     "electron-builder": "^23.0.3",
+    "electron-rebuild": "^3.2.7",
     "wait-on": "^6.0.1",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",

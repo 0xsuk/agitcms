@@ -51,13 +51,15 @@ function Wrapper() {
         <Route exact path="/settings">
           <Settings />
         </Route>
-        <Route path="/settings/:siteKey">
+        <Route path="/site/settings/:siteKey">
           <Site />
         </Route>
-        <Route path="/edit/:siteKey">
+        <Route path="/site/edit/:siteKey">
           <Explorer />
         </Route>
-        <Terminal />
+        <Route path="/site">
+          <Terminal />
+        </Route>
       </div>
     </div>
   );

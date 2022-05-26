@@ -1,10 +1,11 @@
+const os = require("os");
 const { dialog } = require("electron");
 const fs = require("fs");
 const { getConfig, CONFIG_FILE } = require("./config.js");
 const path = require("path");
 const YAML = require("yaml");
-const ShellProcess = require("./lib/shellprocess.js");
 const { getWindow } = require("./lib/window_manager");
+const ShellProcessManager = require("./lib/shellprocess_manager.js");
 
 exports.confirm = (_, message) => {
   const win = getWindow();
@@ -153,38 +154,17 @@ exports.removeFolder = (_, folderPath) => {
   }
 };
 
-let shellProcessList = []; //[shell process...]
+const defaultShell = os.platform() === "win32" ? "powershell.exe" : "zsh"; //TODO
+const shellProcessManager = new ShellProcessManager();
 
-exports.runCommand = async (e, command, cwd, cid) => {
-  try {
-    shellProcessList.forEach((p) => {
-      if (p.cid === cid) {
-        const message = "Cannot run same command at the same time: " + p.cmd;
-        console.log(message);
-        throw new Error(message);
-      }
-    });
-    const shellProcess = new ShellProcess(command, cwd, cid);
-    shellProcessList.push(shellProcess);
-    shellProcess.run();
-    shellProcess.process.on("exit", () => {
-      console.log("exited:", shellProcess.cmd);
-      shellProcessList = shellProcessList.filter(
-        (p) => p.cid !== shellProcess.cid
-      );
-    });
-    return { err: null };
-  } catch (err) {
-    return { err };
-  }
+exports.typeCommand = (_, id, cmd) => {
+  shellProcessManager.write(id, cmd);
 };
 
-exports.stopCommand = async (e, cid) => {
-  shellProcessList.every((p) => {
-    if (p.cid === cid) {
-      p.stopIfRunning();
-      return false;
-    }
-    return true;
-  });
+exports.spawnShell = (_, cwd, shell) => {
+  if (shell === undefined) shell = defaultShell;
+  const id = shellProcessManager.spawn(cwd, shell);
+
+  console.log("shell spawned");
+  return id;
 };

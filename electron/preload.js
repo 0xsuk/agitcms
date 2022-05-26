@@ -17,9 +17,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("create-file", filePath, doc, frontmatter),
   removeFile: (filePath) => ipcRenderer.invoke("remove-file", filePath),
   removeFolder: (folderPath) => ipcRenderer.invoke("remove-folder", folderPath),
-  runCommand: (command, cwd, cid) =>
-    ipcRenderer.invoke("run-command", command, cwd, cid),
-  stopCommand: (cid) => ipcRenderer.invoke("stop-command", cid),
-  onShellProcessLine: (callback) =>
-    ipcRenderer.on("shellprocess-line", callback),
+  typeCommand: (id, cmd) => ipcRenderer.invoke("type-command", id, cmd),
+  spawnShell: (cwd, shell) => ipcRenderer.invoke("spawn-shell", cwd, shell),
+  onShellData: (callback) => ipcRenderer.on("shell-data", callback),
+  onShellExit: (callback) => ipcRenderer.on("shell-exit", callback),
 });

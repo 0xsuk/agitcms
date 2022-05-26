@@ -18,7 +18,7 @@ const createWindow = () => {
   win.loadURL(
     isDev
       ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "..", "..", "/index.html")}` //be careful on relative path
+      : `file://${path.join(__dirname, "..", "..", "/index.html")}` //be careful on relative path //TODO
   );
 };
 
