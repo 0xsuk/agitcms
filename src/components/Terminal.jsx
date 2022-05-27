@@ -17,7 +17,7 @@ function Terminal() {
     xterm.open(document.getElementById("terminal"));
     fitAddon.fit();
     window.addEventListener("resize", () => {
-      fitAddon.fit(); //TODO
+      fitAddon.fit();
     });
     window.electronAPI.onShellData((_, id, data) => {
       console.log(id, cid);

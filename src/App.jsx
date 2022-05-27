@@ -25,11 +25,11 @@ function App() {
 
   return (
     <>
-      <Link to={"/test"}>test</Link>
       <Route path="/">
         {/* component={} renders Wrapper every single time */}
         <Wrapper />
       </Route>
+      <Link to={"/test"}>test</Link>
     </>
   );
 }
