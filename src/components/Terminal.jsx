@@ -4,7 +4,7 @@ import useTerminalManager from "../lib/useTerminalManger";
 
 function Terminal() {
   const siteConfig = useSiteConfig();
-  const { init, exit, isVisible, setIsVisible, setCid, terminals, createNew } =
+  const { init, exit, isVisible, cid, setCid, terminals, createNew } =
     useTerminalManager(siteConfig);
   useEffect(() => {
     if (!siteConfig.path) return;
@@ -22,10 +22,17 @@ function Terminal() {
       <div id="terminal-header">
         {terminals.current.map((t, i) => (
           <>
-            <span onClick={() => setCid(t.id)}> {i} |</span>
+            <div
+              className="terminal-tab"
+              style={
+                cid === t.id ? { background: "white", color: "black" } : {}
+              }
+              onClick={() => setCid(t.id)}
+            >
+              {i}
+            </div>
           </>
         ))}
-        <p onClick={() => setIsVisible(false)}>toggle</p>
       </div>
       <div id="terminal-console"></div>
     </div>
