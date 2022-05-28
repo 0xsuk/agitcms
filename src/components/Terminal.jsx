@@ -1,3 +1,4 @@
+//TODO: multiple terminal
 import { useEffect, useRef, useState } from "react";
 import { Terminal as Xterm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
@@ -11,6 +12,48 @@ function Terminal() {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
 
+  const activateTerminal = (cid, el) => {
+    const xterm = new Xterm();
+    ref.current = xterm;
+    const fitAddon = new FitAddon();
+    xterm.loadAddon(fitAddon);
+    xterm.loadAddon(new WebLinksAddon());
+    xterm.open(el);
+    fitAddon.fit();
+    window.addEventListener("resize", resizeListener(fitAddon));
+    window.electronAPI.onShellData((_, id, data) => {
+      if (id === cid) {
+        xterm.write(data);
+      }
+    });
+    window.electronAPI.onShellExit((_, exitCode, signal) => {
+      setIsVisible(false);
+      xterm.dispose();
+      ref.current = null;
+
+      window.removeEventListener("resize", resizeListener(fitAddon));
+    });
+    xterm.onData((data) => {
+      //Ctrl @
+      if (data === "\x1B") {
+        setIsVisible(false);
+        return;
+      }
+      window.electronAPI.typeCommand(cid, data);
+    });
+    window.electronAPI.spawnShell(siteConfig.path, undefined).then((id) => {
+      setCid(id);
+      cid = id; //!important
+    });
+  };
+
+  const resizeListener = (fitAddon) => {
+    return () => {
+      console.log("resized");
+      fitAddon.fit();
+    };
+  };
+
   useEffect(() => {
     if (!siteConfig.path) return;
     let cid; //!important
@@ -19,38 +62,7 @@ function Terminal() {
       if (e.key === "@" && e.ctrlKey) {
         setIsVisible((prev) => !prev);
         if (ref.current !== null) return;
-        const xterm = new Xterm();
-        ref.current = xterm;
-        const fitAddon = new FitAddon();
-        xterm.loadAddon(fitAddon);
-        xterm.loadAddon(new WebLinksAddon());
-        xterm.open(el);
-        fitAddon.fit();
-        window.addEventListener("resize", () => {
-          fitAddon.fit();
-        });
-        window.electronAPI.onShellData((_, id, data) => {
-          console.log(id, cid);
-          if (id === cid) {
-            xterm.write(data);
-          }
-        });
-        window.electronAPI.onShellExit((_, exitCode, signal) => {
-          setIsVisible(false);
-          xterm.dispose();
-          ref.current = null;
-        });
-        xterm.onData((data) => {
-          if (data === "\x1B") {
-            setIsVisible(false);
-          }
-          console.log({ data });
-          window.electronAPI.typeCommand(cid, data);
-        });
-        window.electronAPI.spawnShell(siteConfig.path, undefined).then((id) => {
-          setCid(id);
-          cid = id; //!important
-        });
+        activateTerminal(cid, el);
       }
     });
   }, [siteConfig.path]);
