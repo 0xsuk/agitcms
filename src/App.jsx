@@ -29,7 +29,7 @@ function App() {
         {/* component={} renders Wrapper every single time */}
         <Wrapper />
       </Route>
-      <Link to={"/test"}>test</Link>
+      {/*<Link to={"/test"}>test</Link> */}
     </>
   );
 }

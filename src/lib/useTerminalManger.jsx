@@ -9,16 +9,28 @@ function useTerminalManager(siteConfig) {
   const [isVisible, setIsVisible] = useState(false);
   const [cid, setCid] = useState(null); //current id of terminal
   //const [terminals, setTerminals] = useState([]); //list of terminals {xterm, id}
-  const terminals = useRef([]);
+  const terminals = useRef([]); //{xterm, id, el}
+  //const [ter, setTer] = useState(terminals);
 
   console.log({ terminals });
+
+  if (cid !== null) {
+    terminals.current.every((t) => {
+      if (t.id === cid) {
+        t.el.style.display = "block";
+        return false;
+      }
+      t.el.style.display = "none";
+      return true;
+    });
+  }
 
   const createToggleListener = () => {
     return (e) => {
       if (e.key === "@" && e.ctrlKey) {
         setIsVisible((prev) => !prev);
         if (!isAnyActive.current) {
-          createNew(el);
+          createNew();
         }
       }
     };
@@ -45,6 +57,8 @@ function useTerminalManager(siteConfig) {
       terminals.current.every((t) => {
         if (t.id === id) {
           t.xterm.dispose();
+          //TODO
+          //terminals.pop
           return false;
         }
         return true;
@@ -58,7 +72,10 @@ function useTerminalManager(siteConfig) {
   };
 
   const createNew = () => {
-    const el = document.getElementById("terminal");
+    const parent = document.getElementById("terminal-console");
+    const el = document.createElement("div");
+    el.className = "terminal-instance";
+    parent.appendChild(el);
     let cid = undefined;
     const xterm = new Xterm();
     isAnyActive.current = true;
@@ -77,9 +94,10 @@ function useTerminalManager(siteConfig) {
       window.electronAPI.typeCommand(cid, data);
     });
     window.electronAPI.spawnShell(siteConfig.path, undefined).then((id) => {
-      setCid(id);
       cid = id; //!important
-      terminals.current.push({ xterm, id });
+      el.dataset.id = id;
+      terminals.current.push({ id, xterm, el });
+      setCid(id);
     });
   };
 
@@ -87,7 +105,17 @@ function useTerminalManager(siteConfig) {
     window.removeEventListener("keydown", createToggleListener());
   };
 
-  return { isAnyActive, isVisible, cid, terminals, init, createNew, exit };
+  return {
+    isAnyActive,
+    isVisible,
+    setIsVisible,
+    cid,
+    setCid,
+    terminals,
+    init,
+    createNew,
+    exit,
+  };
 }
 
 export default useTerminalManager;
