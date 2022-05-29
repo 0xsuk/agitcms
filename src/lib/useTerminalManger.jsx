@@ -54,11 +54,16 @@ function useTerminalManager(siteConfig) {
       });
     });
     window.electronAPI.onShellExit((_, id, exitCode, signal) => {
-      terminals.current.every((t) => {
+      terminals.current.every((t, i) => {
         if (t.id === id) {
           t.xterm.dispose();
-          //TODO
-          //terminals.pop
+          terminals.current.splice(i, 1);
+          if (terminals.current.length === 0) {
+            setIsVisible(false);
+            isAnyActive.current = false;
+            return false;
+          }
+          setCid(terminals.current[i]?.id || terminals.current[i - 1].id);
           return false;
         }
         return true;

@@ -9,13 +9,8 @@ function Terminal() {
   useEffect(() => {
     if (!siteConfig.path) return;
     init();
-    createNew();
-    createNew();
-    window.setCid = setCid;
     return exit;
   }, [siteConfig.path]);
-
-  console.log({ terminals });
 
   return (
     <div id="terminal" style={{ display: !isVisible && "none" }}>
@@ -33,6 +28,9 @@ function Terminal() {
             </div>
           </>
         ))}
+        <div className="terminal-tab" onClick={createNew}>
+          +
+        </div>
       </div>
       <div id="terminal-console"></div>
     </div>
