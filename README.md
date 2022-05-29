@@ -1,6 +1,6 @@
 # Agit CMS
 
-Frontend interface for static sites.  
+Frontend interface for static site generators.  
 Agit CMS is a supersimple & extensible desktop app built for better writing experience.  
 
 /eɪdʒɪt/  
@@ -10,7 +10,7 @@ Agit CMS is recommended for those
 - who need high customizability on markdown editor (custom parsing, image pasting/resize, custom snippet...)
 - who need nice frontmatter editor (Date picker, true/false toggler, and more!)
 
-Agit CMS may not be for those who needs to co-edit contents.  This project is meant for individuals who value writing experience.  
+Agit CMS may not be for those who need to co-edit contents.  This project is meant for individuals who value writing experience.  
   
 Still under active development!!
 
