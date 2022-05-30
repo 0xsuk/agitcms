@@ -45,4 +45,19 @@ module.exports = class ShellProcessManager {
   }
 
   killAll() {}
+
+  //resize(id, { cols, rows }) {
+  //  if (id === undefined || cols === undefined || rows === undefined) return;
+  //  let processObj;
+  //  this.processObjList.every((obj) => {
+  //    if (obj.id === id) {
+  //      processObj = obj;
+  //      return false;
+  //    }
+  //    return true;
+  //  });
+  //  if (processObj === undefined) return;
+  //  console.log("resize", size);
+  //  processObj.ptyProcess.resize(size.cols, size.rows);
+  //}
 };

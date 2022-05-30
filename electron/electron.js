@@ -15,6 +15,7 @@ const {
   removeFile,
   removeFolder,
   spawnShell,
+  resizeShell,
 } = require("./api");
 const { createWindow } = require("./lib/window_manager");
 
@@ -35,6 +36,7 @@ app.whenReady().then(() => {
   ipcMain.handle("remove-folder", removeFolder);
   ipcMain.handle("type-command", typeCommand);
   ipcMain.handle("spawn-shell", spawnShell);
+  //ipcMain.handle("resize-shell", resizeShell);
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

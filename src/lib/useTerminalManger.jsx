@@ -82,7 +82,7 @@ function useTerminalManager(siteConfig) {
     el.className = "terminal-instance";
     parent.appendChild(el);
     let cid = undefined;
-    const xterm = new Xterm();
+    const xterm = new Xterm({ rows: 15 });
     isAnyActive.current = true;
     const fitAddon = new FitAddon();
     xterm.loadAddon(fitAddon);
@@ -98,6 +98,10 @@ function useTerminalManager(siteConfig) {
       }
       window.electronAPI.typeCommand(cid, data);
     });
+    //xterm.onResize((size) => {
+    //  console.log("resize", size);
+    //  window.electronAPI.resizeShell(size);
+    //});
     window.electronAPI.spawnShell(siteConfig.path, undefined).then((id) => {
       cid = id; //!important
       el.dataset.id = id;

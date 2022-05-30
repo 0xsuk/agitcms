@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   removeFolder: (folderPath) => ipcRenderer.invoke("remove-folder", folderPath),
   typeCommand: (id, cmd) => ipcRenderer.invoke("type-command", id, cmd),
   spawnShell: (cwd, shell) => ipcRenderer.invoke("spawn-shell", cwd, shell),
+  resizeShell: (id, size) => ipcRenderer.invoke("resize-shell", id, size),
   onShellData: (callback) => ipcRenderer.on("shell-data", callback),
   onShellExit: (callback) => ipcRenderer.on("shell-exit", callback),
 });

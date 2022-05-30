@@ -168,3 +168,7 @@ exports.spawnShell = (_, cwd, shell) => {
   console.log("shell spawned");
   return id;
 };
+
+//exports.resizeShell = (_, id, size) => {
+//  shellProcessManager.resize(id, size);
+//};
