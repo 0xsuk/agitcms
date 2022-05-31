@@ -13,15 +13,18 @@ function useTerminalManager(siteConfig) {
   //const [ter, setTer] = useState(terminals);
 
   console.log({ terminals });
+  window.xterm = {};
 
-  if (cid !== null) {
-    terminals.current.every((t) => {
+  if (cid !== null && isVisible) {
+    terminals.current.forEach((t) => {
       if (t.id === cid) {
         t.el.style.display = "block";
-        return false;
+        setTimeout(() => {
+          t.xterm.focus();
+        }, 0); //called after forEach finishes
+        return;
       }
       t.el.style.display = "none";
-      return true;
     });
   }
 
@@ -60,6 +63,7 @@ function useTerminalManager(siteConfig) {
           terminals.current.splice(i, 1);
           if (terminals.current.length === 0) {
             setIsVisible(false);
+            setCid(null);
             isAnyActive.current = false;
             return false;
           }
