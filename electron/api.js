@@ -6,6 +6,7 @@ const path = require("path");
 const YAML = require("yaml");
 const { getWindow } = require("./lib/window_manager");
 const ShellProcessManager = require("./lib/shellprocess_manager.js");
+const MediaServer = require("./lib/mediaserver.js");
 
 exports.confirm = (_, message) => {
   const win = getWindow();
@@ -169,6 +170,8 @@ exports.spawnShell = (_, cwd, shell) => {
   return id;
 };
 
-//exports.resizeShell = (_, id, size) => {
-//  shellProcessManager.resize(id, size);
-//};
+exports.startMediaServer = (_, staticPath, publicPath) => {
+  console.log("startin", staticPath, publicPath);
+  const mediaServer = new MediaServer(staticPath, publicPath);
+  mediaServer.run();
+};

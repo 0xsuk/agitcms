@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import useFileBuffer from "../lib/useFileBuffer";
 import useSiteConfig from "../lib/useSiteConfig";
 import { Editor as Tui } from "@toast-ui/react-editor";
@@ -72,6 +72,10 @@ function Editor({ filePath }) {
         switchTab("editor");
       }
     });
+    window.electronAPI.startMediaServer(
+      siteConfig.media.staticPath,
+      siteConfig.media.publicPath
+    );
   }, []); //eslint-disable-line
   if (file.isRead) {
     saveFile();
@@ -255,6 +259,34 @@ function FrontmatterEditor({ file, editFrontmatter, siteConfig }) {
   );
 }
 
+const isURL = (url) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const defaultPlugin = () => {
+  const toHTMLRenderers = {
+    image(node, context) {
+      if (isURL(node.destination)) return context.origin();
+      const img_url = new URL(node.destination, "http://localhost:3001").href;
+      context.skipChildren();
+      return {
+        type: "openTag",
+        tagName: "img",
+        attributes: {
+          alt: "image",
+          src: img_url,
+        },
+      };
+    },
+  };
+  return { toHTMLRenderers };
+};
+
 function MarkdownEditor({ file, editDoc }) {
   const tuiRef = useRef(null);
   return (
@@ -276,6 +308,8 @@ function MarkdownEditor({ file, editDoc }) {
           ["table", "image", "link"],
           ["code", "codeblock"],
         ]}
+        extendedAutolinks
+        plugins={[defaultPlugin]}
       />
     </>
   );
