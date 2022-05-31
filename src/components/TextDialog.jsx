@@ -21,7 +21,7 @@ function TextDialog({
 
   const handleClose = () => {
     onClose();
-    setValue("");
+    setValue(initialValue);
   };
 
   const handleSave = () => {
