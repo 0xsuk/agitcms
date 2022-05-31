@@ -67,11 +67,7 @@ function Editor({ filePath }) {
   };
 
   useEffect(() => {
-    readFile().then((isFrontmatterEmpty) => {
-      if (isFrontmatterEmpty) {
-        switchTab("editor");
-      }
-    });
+    readFile();
     window.electronAPI.startMediaServer(
       siteConfig.media.staticPath,
       siteConfig.media.publicPath

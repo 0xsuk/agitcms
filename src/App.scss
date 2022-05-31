@@ -51,17 +51,17 @@ code {
     flex-direction: column;
 
     #frontmatter-tab {
+      display: none;
       padding: 5px;
     }
     #editor-tab {
-      display: none;
       flex-grow: 1;
     }
 
     .tab {
       padding: 5px;
       border: solid 1px #eee;
-      &:nth-of-type(1) {
+      &:nth-of-type(2) {
         background-color: #89b8e640;
       }
     }
