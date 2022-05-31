@@ -6,10 +6,10 @@ import {
   Menu,
   MenuItem,
   Typography,
-  Switch,
   Select,
   TextField,
 } from "@mui/material";
+import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import useSiteConfig, {
   FrontmatterLanguages,
@@ -25,12 +25,11 @@ function Site() {
   const [
     siteConfigBuffer,
     {
-      editShowFrontmatter,
+      editMediaPublicPath,
+      editMediaStaticPath,
       editFrontmatterLanguage,
       editFrontmatterDelimiter,
       addCommand,
-      removeCommand,
-      reorderCommands,
       addFrontmatter,
       removeFrontmatter,
       reorderFrontmatter,
@@ -47,7 +46,6 @@ function Site() {
   }
 
   const [FrontmatterAnchorEl, setFrontmatterAnchorEl] = useState(null);
-  const [CommandAnchorEl, setCommandAnchorEl] = useState(null);
   const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
   const [isCommandDialogOpen, setIsCommandDialogOpen] = useState(false);
   const [
@@ -88,21 +86,6 @@ function Site() {
             </Typography>
           </Grid>
         </Grid>
-        {/*
-        <Grid item container spacing={1} alignItems="center">
-          <Grid item>
-            <Typography>Show frontmatter in markdown editor:</Typography>
-          </Grid>
-          <Grid item>
-            <Switch
-              size="small"
-              checked={siteConfigBuffer.showFrontmatter}
-              onChange={(e) => {
-                editShowFrontmatter(e.target.checked);
-              }}
-            />
-          </Grid>
-        </Grid> */}
         <Grid item container spacing={1} alignItems="center">
           <Grid item>Frontmatter Language:</Grid>
           <Grid item>
@@ -146,81 +129,7 @@ function Site() {
 
       <Divider sx={{ padding: "20px", color: "#999" }}>optional</Divider>
 
-      <Grid container spacing={2}>
-        {/* Commands 
-        <Grid item container spacing={1} alignItems="center">
-          <Grid item>
-            <Typography variant="h6">Command shortcuts</Typography>
-          </Grid>
-          <Grid item>
-            <Button onClick={() => setIsCommandDialogOpen(true)}>New</Button>
-          </Grid>
-        </Grid>
-
-        <Grid item sx={{ width: "100%" }}>
-          <DragDropContext onDragEnd={reorderCommands}>
-            <Droppable droppableId="droppable">
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {siteConfigBuffer.commands?.map((cmd, i) => (
-                    <Draggable key={cmd.key} draggableId={cmd.key} index={i}>
-                      {(provided) => (
-                        <div
-                          className="setting-draggable"
-                          data-id={cmd.key}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{ ...provided.draggableProps.style }}
-                        >
-                          <p>{cmd.name}</p>
-                          <p
-                            style={{
-                              color: "#999",
-                              right: "200px",
-                              position: "absolute",
-                              maxWidth: "50%",
-                            }}
-                          >
-                            {cmd.command}
-                          </p>
-                          <MoreHorizIcon
-                            onClick={(e) => {
-                              setCommandAnchorEl(e.currentTarget);
-                              e.stopPropagation();
-                            }}
-                          />
-                          <Menu
-                            anchorEl={CommandAnchorEl}
-                            open={
-                              CommandAnchorEl?.parentNode.dataset.id === cmd.key
-                            }
-                            onClose={(e) => {
-                              setCommandAnchorEl(null);
-                              e.stopPropagation();
-                            }}
-                            //on Click menuitems
-                            onClick={(e) => {
-                              setCommandAnchorEl(null);
-                              e.stopPropagation();
-                            }}
-                          >
-                            <MenuItem onClick={() => removeCommand(cmd.key)}>
-                              delete
-                            </MenuItem>
-                          </Menu>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </Grid>
-         -Commands */}
-
+      <Grid container spacing={3}>
         {/* Frontmatter */}
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
@@ -311,6 +220,43 @@ function Site() {
           </DragDropContext>
         </Grid>
         {/* -Frontmatter */}
+
+        {/* MediaDir */}
+        <Grid item>
+          <Typography variant="h6">Media</Typography>
+        </Grid>
+
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>
+            <Typography>Media Folder Path:</Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ color: "#999" }}>
+              {siteConfigBuffer.media.staticPath === ""
+                ? "select media folder path"
+                : siteConfigBuffer.media.staticPath}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button onClick={editMediaStaticPath}>
+              <DriveFolderUploadOutlinedIcon size="small" />
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={1} alignItems="center">
+          <Grid item>
+            <Typography>Media Public Path:</Typography>
+          </Grid>
+          <Grid item>
+            <TextField
+              size="small"
+              label="public path"
+              value={siteConfigBuffer.media.publicPath}
+              onChange={(e) => editMediaPublicPath(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+        {/* -MediaDir */}
 
         <Grid
           item

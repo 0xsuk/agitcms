@@ -38,13 +38,13 @@ export const newSiteConfig = () => {
     name: "",
     key: uuid(),
     path: "",
-    //showFrontmatter: false,
     frontmatterLanguage: "yaml",
     frontmatterDelimiter: "---",
-    defaultDir: "",
-    mediaDir: "",
+    media: {
+      staticPath: "",
+      publicPath: "",
+    },
     pinnedDirs: [],
-    commands: [],
     frontmatter: [],
   };
 };

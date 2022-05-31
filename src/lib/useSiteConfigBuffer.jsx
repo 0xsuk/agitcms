@@ -9,21 +9,23 @@ function useSiteConfigBuffer(initialSiteConfig) {
   //siteConfig !== siteConfigCopy //true
   const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
 
-  //const editName = async (newName) => {
-  //  setSiteConfig({ ...siteConfig, name: newName });
-  //};
+  const editMediaPublicPath = (newValue) => {
+    siteConfigCopy.media.publicPath = newValue;
+    setSiteConfig(siteConfigCopy);
+  };
 
-  //const editPath = async () => {
-  //  const { folderPath, err, canceled } =
-  //    await window.electronAPI.getFolderPath();
-  //  if (err) {
-  //    console.warn(err);
-  //    return;
-  //  }
-  //  if (!err && !canceled) {
-  //    setSiteConfig({ ...siteConfig, path: folderPath });
-  //  }
-  //};
+  const editMediaStaticPath = async () => {
+    const { folderPath, err, canceled } =
+      await window.electronAPI.getFolderPath();
+    if (err) {
+      console.warn(err);
+      return;
+    }
+    if (!err && !canceled) {
+      siteConfigCopy.media.staticPath = folderPath;
+      setSiteConfig(siteConfigCopy);
+    }
+  };
 
   const editShowFrontmatter = (newValue) => {
     setSiteConfig((prev) => ({
@@ -150,6 +152,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
   return [
     siteConfig,
     {
+      editMediaPublicPath,
+      editMediaStaticPath,
       editShowFrontmatter,
       editFrontmatterLanguage,
       editFrontmatterDelimiter,
