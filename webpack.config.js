@@ -4,7 +4,7 @@ const webpack = require("webpack");
 module.exports = {
   entry: "./src/index.jsx",
   output: {
-    path: path.join(__dirname, "dist"),
+    path: path.join(__dirname, "build", "dist"),
     publicPath: "/",
     filename: "bundle.js",
   },

@@ -6,7 +6,10 @@
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "dev": "concurrently \"npm run start\" \"wait-on http://localhost:3000 && electron .\"",
-    "postinstall": "electron-rebuild -f -w node-pty"
+    "postinstall": "electron-rebuild -f -w node-pty",
+    "build:renderer": "rm -rf build && cp -r public build && webpack",
+    "build:electron": "cp -r electron build/electron && electron-builder -l -c.extraMetadata.main=build/electron/electron.js --dir",
+    "build": "npm run build:renderer && npm run build:electron"
   },
   "repository": {
     "type": "git",
@@ -59,5 +62,11 @@
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.0"
+  },
+  "build": {
+    "files": [
+      "build/**/*",
+      "package.json"
+    ]
   }
 }
