@@ -2,36 +2,40 @@ import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+import PermMediaOutlinedIcon from "@mui/icons-material/PermMediaOutlined";
+import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
+import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
+import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import useSiteConfig from "../lib/useSiteConfig";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useHistory } from "react-router-dom";
 
 function SideBar() {
   const siteConfig = useSiteConfig();
   const history = useHistory();
 
-  const runCommand = async (command) => {
-    const { err } = await window.electronAPI.runCommand(
-      command.command,
-      siteConfig.path,
-      command.key
-    );
-    if (err) {
-      alert(err.message);
-    }
-  };
-
-  const stopCommand = async (cid) => {
-    window.electronAPI.stopCommand(cid);
-  };
-
   return (
     <div>
       <div className="flex">
+        <ChevronLeftOutlinedIcon
+          className="hpointer"
+          fontSize="small"
+          onClick={() => history.goBack()}
+        />
+        <ChevronRightOutlinedIcon
+          className="hpointer"
+          fontSize="small"
+          onClick={() => history.goForward()}
+        />
         <HomeOutlinedIcon
           fontSize="small"
           onClick={() => history.push("/")}
-          sx={{ "&:hover": { cursor: "pointer" } }}
+          className="hpointer"
+        />
+        <ReplayOutlinedIcon
+          fontSize="small"
+          className="hpointer"
+          onClick={() => window.location.reload()}
         />
       </div>
       {siteConfig !== null && (
@@ -95,6 +99,15 @@ function SideBar() {
             SITE
           </Typography>
           <div className="site-links">
+            <div
+              className="site-link"
+              //onClick={() => history.push("/site/settings/" + siteConfig.key)}
+            >
+              <PermMediaOutlinedIcon fontSize="small" />
+              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                Media
+              </Typography>
+            </div>
             <div
               className="site-link"
               onClick={() => history.push("/site/settings/" + siteConfig.key)}
