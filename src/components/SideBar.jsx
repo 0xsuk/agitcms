@@ -14,6 +14,29 @@ function SideBar() {
   const siteConfig = useSiteConfig();
   const history = useHistory();
 
+  const copyMediaFilePath = async () => {
+    if (siteConfig.media.staticPath === "") {
+      alert("please set media folder path");
+      return;
+    }
+    const { err, filePath, canceled } = await window.electronAPI.getMediaFile(
+      siteConfig.media.staticPath,
+      siteConfig.media.publicPath
+    );
+    if (canceled) return;
+    if (err !== null) {
+      alert(err);
+      return;
+    }
+
+    const buf = document.createElement("input");
+    document.body.appendChild(buf);
+    buf.value = filePath;
+    buf.select();
+    document.execCommand("copy");
+    document.body.removeChild(buf);
+  };
+
   return (
     <div>
       <div className="flex">
@@ -42,16 +65,6 @@ function SideBar() {
         <div>
           <Typography variant="h6">{siteConfig.name}</Typography>
 
-          {/*{siteConfig.commands.map((command) => (
-            <div>
-              <Button onClick={() => runCommand(command)}>
-                {command.name}
-              </Button>
-               TODO: isCommandRunning? -> Stop button 
-              <Button onClick={() => stopCommand(command.key)}>Stop</Button>
-            </div>
-            ))} 
-          */}
           <div style={{ padding: "10px" }} />
 
           {/* mapping pinnedDirs */}
@@ -99,10 +112,7 @@ function SideBar() {
             SITE
           </Typography>
           <div className="site-links">
-            <div
-              className="site-link"
-              //onClick={() => history.push("/site/settings/" + siteConfig.key)}
-            >
+            <div className="site-link" onClick={copyMediaFilePath}>
               <PermMediaOutlinedIcon fontSize="small" />
               <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
                 Media

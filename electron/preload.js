@@ -12,6 +12,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getFolderPath: () => ipcRenderer.invoke("get-folder-path"),
   getFilesAndFolders: (folderPath) =>
     ipcRenderer.invoke("get-files-and-folders", folderPath),
+  getMediaFile: (staticPath, publicPath) =>
+    ipcRenderer.invoke("get-media-file", staticPath, publicPath),
   createFolder: (folderPath) => ipcRenderer.invoke("create-folder", folderPath),
   createFile: (filePath, doc, frontmatter) =>
     ipcRenderer.invoke("create-file", filePath, doc, frontmatter),

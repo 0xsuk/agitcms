@@ -106,6 +106,33 @@ exports.getFilesAndFolders = (e, folderPath) => {
   }
 };
 
+exports.getMediaFile = (_, staticPath, publicPath) => {
+  if (staticPath === undefined)
+    return {
+      err: new Error("static path not provided"),
+      filePath: null,
+      canceled: false,
+    };
+  try {
+    const filePaths = dialog.showOpenDialogSync({
+      defaultPath: staticPath,
+      buttonLabel: "Copy Path",
+      properties: ["openFile"],
+    });
+    if (filePaths === undefined) {
+      //canceled
+      return { err: null, filePath: null, canceled: true };
+    }
+
+    let filePath = filePaths[0];
+    filePath = path.relative(staticPath, filePath);
+    filePath = path.join(publicPath, filePath);
+    return { err: null, filePath, canceled: false };
+  } catch (err) {
+    return { err, filePath: null, canceled: false };
+  }
+};
+
 exports.createFolder = (e, folderPath) => {
   try {
     // response is folderPath
@@ -117,6 +144,7 @@ exports.createFolder = (e, folderPath) => {
 };
 
 exports.createFile = (_, filePath, doc, frontmatter, doOverwrite) => {
+  //TODO
   try {
     const yaml_str = YAML.stringify(frontmatter);
     if (Object.keys(frontmatter).length !== 0)
