@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 import "./App.scss";
 import Explorer from "./components/Explorer";
 import Home from "./components/Home";
-import Settings from "./components/Settings";
+import Settings from "./components/settings/Settings";
 import Site from "./components/settings/site/Site";
 import SideBar from "./components/SideBar";
 import Terminal from "./components/Terminal";
