@@ -8,10 +8,16 @@
     "dev": "concurrently \"npm run start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "build:renderer": "rm -rf build && cp -r public build && webpack",
-    "build:electron": "cp -r electron build/electron && electron-builder -lmw -c.extraMetadata.main=build/electron/electron.js --dir",
-    "pack:electron": "cp -r electron build/electron && electron-builder -lmw -c.extraMetadata.main=build/electron/electron.js",
-    "build": "npm run build:renderer && npm run build:electron",
-    "pack": "npm run build:renderer && npm run pack:electron"
+    "build:electron:lmw": "cp -r electron build/electron && electron-builder -lmw -c.extraMetadata.main=build/electron/electron.js --dir",
+    "pack:electron:lmw": "cp -r electron build/electron && electron-builder -lmw -c.extraMetadata.main=build/electron/electron.js",
+    "pack:electron:w": "cp -r electron build/electron && electron-builder -w -c.extraMetadata.main=build/electron/electron.js",
+    "pack:electron:m": "cp -r electron build/electron && electron-builder -m -c.extraMetadata.main=build/electron/electron.js",
+    "pack:electron:l": "cp -r electron build/electron && electron-builder -l -c.extraMetadata.main=build/electron/electron.js",
+    "build": "npm run build:renderer && npm run build:electron:lmw",
+    "pack:w": "npm run build:renderer && npm run pack:electron:w",
+    "pack:m": "npm run build:renderer && npm run pack:electron:m",
+    "pack:l": "npm run build:renderer && npm run pack:electron:l",
+    "pack": "npm run build:renderer && npm run pack:electron:lmw"
   },
   "repository": {
     "type": "git",
