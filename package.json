@@ -8,8 +8,10 @@
     "dev": "concurrently \"npm run start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-rebuild -f -w node-pty",
     "build:renderer": "rm -rf build && cp -r public build && webpack",
-    "build:electron": "cp -r electron build/electron && electron-builder -l -c.extraMetadata.main=build/electron/electron.js --dir",
-    "build": "npm run build:renderer && npm run build:electron"
+    "build:electron": "cp -r electron build/electron && electron-builder -lmw -c.extraMetadata.main=build/electron/electron.js --dir",
+    "pack:electron": "cp -r electron build/electron && electron-builder -lmw -c.extraMetadata.main=build/electron/electron.js",
+    "build": "npm run build:renderer && npm run build:electron",
+    "pack": "npm run build:renderer && npm run pack:electron"
   },
   "repository": {
     "type": "git",
