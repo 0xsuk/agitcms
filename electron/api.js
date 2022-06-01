@@ -127,6 +127,8 @@ exports.getMediaFile = (_, staticPath, publicPath) => {
     let filePath = filePaths[0];
     filePath = path.relative(staticPath, filePath);
     filePath = path.join(publicPath, filePath);
+    filePath = filePath.replaceAll("/", "\\"); //for windows
+
     return { err: null, filePath, canceled: false };
   } catch (err) {
     return { err, filePath: null, canceled: false };
