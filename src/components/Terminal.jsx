@@ -1,25 +1,17 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import useSiteConfig from "../lib/useSiteConfig";
 import useTerminalManager from "../lib/useTerminalManger";
+import { configContext } from "../context/ConfigContext";
 
 function Terminal() {
+  const { config } = useContext(configContext);
   const siteConfig = useSiteConfig();
-  const {
-    init,
-    exit,
-    winInit,
-    winExit,
-    isVisible,
-    cid,
-    setCid,
-    terminals,
-    createNew,
-  } = useTerminalManager(siteConfig);
+  const { init, exit, isVisible, cid, setCid, terminals, createNew } =
+    useTerminalManager(siteConfig);
   useEffect(() => {
     if (!siteConfig.path) return;
-    if (window.navigator.platform === "Win32") {
-      winInit();
-      return winExit;
+    if (window.navigator.platform === "Win32" && !config.useTerminal) {
+      return;
     }
     init();
     return exit;

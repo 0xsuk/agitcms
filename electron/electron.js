@@ -17,7 +17,6 @@ const {
   spawnShell,
   startMediaServer,
   getMediaFile,
-  spawnWinShell,
 } = require("./api");
 const { createWindow } = require("./lib/window_manager");
 
@@ -38,7 +37,6 @@ app.whenReady().then(() => {
   ipcMain.handle("remove-folder", removeFolder);
   ipcMain.handle("type-command", typeCommand);
   ipcMain.handle("spawn-shell", spawnShell);
-  ipcMain.handle("spawn-win-shell", spawnWinShell);
   ipcMain.handle("start-media-server", startMediaServer);
   ipcMain.handle("get-media-file", getMediaFile);
   //ipcMain.handle("resize-shell", resizeShell);

@@ -7,7 +7,6 @@ const YAML = require("yaml");
 const { getWindow } = require("./lib/window_manager");
 const ShellProcessManager = require("./lib/shellprocess_manager.js");
 const MediaServer = require("./lib/mediaserver.js");
-const exec = require("child_process").exec;
 
 exports.confirm = (_, message) => {
   const win = getWindow();
@@ -199,10 +198,6 @@ exports.spawnShell = (_, cwd, shell) => {
 
   console.log("shell spawned");
   return id;
-};
-
-exports.spawnWinShell = (_, path) => {
-  exec("powershell.exe");
 };
 
 exports.startMediaServer = (_, staticPath, publicPath) => {
