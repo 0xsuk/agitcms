@@ -10,9 +10,7 @@ function Terminal() {
     useTerminalManager(siteConfig);
   useEffect(() => {
     if (!siteConfig.path) return;
-    if (window.navigator.platform === "Win32" && !config.useTerminal) {
-      return;
-    }
+    if (!config.useTerminal) return;
     init();
     return exit;
   }, [siteConfig.path]);
