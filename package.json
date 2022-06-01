@@ -65,9 +65,27 @@
     "webpack-dev-server": "^4.9.0"
   },
   "build": {
+    "appId": "com.0xsuk.agitcms",
+    "artifactName": "agitcms_${os}_${arch}.${ext}",
     "files": [
       "build/**/*",
       "package.json"
-    ]
+    ],
+    "win": {
+      "target": {
+        "target": "nsis",
+        "arch": "x64"
+      }
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb"
+        },
+        {
+          "target": "snap"
+        }
+      ]
+    }
   }
 }
