@@ -67,12 +67,16 @@ function Editor({ filePath }) {
   };
 
   useEffect(() => {
-    readFile();
+    if (siteConfig.media.staticPath === "") return;
     window.electronAPI.startMediaServer(
       siteConfig.media.staticPath,
       siteConfig.media.publicPath
     );
-  }, []); //eslint-disable-line
+  }, [siteConfig.media.staticPath, siteConfig.media.publicPath]);
+
+  useEffect(() => {
+    readFile();
+  }, []);
   if (file.isRead) {
     saveFile();
   } else {
