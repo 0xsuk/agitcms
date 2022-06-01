@@ -4,10 +4,23 @@ import useTerminalManager from "../lib/useTerminalManger";
 
 function Terminal() {
   const siteConfig = useSiteConfig();
-  const { init, exit, isVisible, cid, setCid, terminals, createNew } =
-    useTerminalManager(siteConfig);
+  const {
+    init,
+    exit,
+    winInit,
+    winExit,
+    isVisible,
+    cid,
+    setCid,
+    terminals,
+    createNew,
+  } = useTerminalManager(siteConfig);
   useEffect(() => {
     if (!siteConfig.path) return;
+    if (window.navigator.platform === "Win32") {
+      winInit();
+      return winExit;
+    }
     init();
     return exit;
   }, [siteConfig.path]);

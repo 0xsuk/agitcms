@@ -1,5 +1,4 @@
-import { Fragment, useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Fragment, useContext, useEffect } from "react";
 import { Route } from "react-router-dom";
 import "./App.scss";
 import Explorer from "./components/Explorer";

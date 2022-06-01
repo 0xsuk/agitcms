@@ -118,6 +118,21 @@ function useTerminalManager(siteConfig) {
     window.removeEventListener("keydown", createToggleListener());
   };
 
+  const createWinListener = () => {
+    return (e) => {
+      if (e.key === "@" && e.ctrlKey) {
+        window.electronAPI.spawnWinShell(siteConfig.path);
+      }
+    };
+  };
+
+  const winInit = () => {
+    window.addEventListener("keydown", createWinListener());
+  };
+  const winExit = () => {
+    window.removeEventListener("keydown", createWinListener());
+  };
+
   return {
     isAnyActive,
     isVisible,
@@ -128,6 +143,8 @@ function useTerminalManager(siteConfig) {
     init,
     createNew,
     exit,
+    winInit,
+    winExit,
   };
 }
 
