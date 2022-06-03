@@ -3,8 +3,7 @@ It's a supersimple & ready-to-use desktop app that manages static contents in ma
 
 /eɪdʒɪt/  
 
-![image](https://user-images.githubusercontent.com/97814789/171831967-59fc55df-6aa3-4305-9f09-b57283ac6f0a.png)
-
+![image-59fc55df-6aa3-4305-9f09-b57283ac6f0a](https://user-images.githubusercontent.com/97814789/171836599-b3d0a87e-186b-4bb6-afa6-049fc9c5bd3b.png)
 
 ## Markdown / WYSIWYG / Frontmatter Editor
 Edit content in markdown/WYSIWYG editor, and modify meta data in frontmatter editor.
