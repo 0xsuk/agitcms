@@ -87,6 +87,7 @@ code {
 }
 
 #terminal {
+  z-index: 100; //greater than editor
   display: flex;
   flex-direction: column;
   position: fixed;
