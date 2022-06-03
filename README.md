@@ -25,3 +25,9 @@ Install latest binary from [Release](https://github.com/0xsuk/agitcms/releases/t
 | Linux | agitcms_linux_amd64.deb |
 
 
+# Development
+Start agitcms in your local development environment
+```
+yarn 
+yarn run dev
+```
