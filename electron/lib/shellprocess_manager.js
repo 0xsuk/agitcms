@@ -1,4 +1,4 @@
-const pty = require("node-pty");
+const pty = require("node-pty-prebuilt-multiarch");
 const { getWindow } = require("./window_manager");
 const { v4: uuid } = require("uuid");
 
