@@ -65,7 +65,7 @@
     "@babel/preset-react": "^7.17.12",
     "babel-loader": "^8.2.5",
     "concurrently": "^7.2.0",
-    "electron": "^18.2.4",
+    "electron": "^17.4.7",
     "electron-builder": "^21.2.0",
     "prebuild-install": "^7.1.0",
     "wait-on": "^6.0.1",
