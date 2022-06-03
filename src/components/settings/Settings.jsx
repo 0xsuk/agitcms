@@ -6,13 +6,6 @@ function Settings() {
   const { config, updateConfig } = useContext(configContext);
 
   const toggleUseTerminal = (newValue) => {
-    if (
-      window.navigator.platform === "Win32" &&
-      !window.confirm(
-        "You have to install some dependencies in order to use integrated terminal. Are you sure?"
-      )
-    )
-      return;
     updateConfig({ ...config, useTerminal: newValue });
   };
   return (

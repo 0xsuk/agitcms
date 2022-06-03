@@ -131,7 +131,7 @@ function SideBar() {
         </div>
       )}
 
-      {siteConfig === null && (
+      {/*siteConfig === null && (
         <>
           <div style={{ padding: "10px" }} />
           <Typography
@@ -152,7 +152,7 @@ function SideBar() {
             </div>
           </div>
         </>
-      )}
+      )*/}
     </div>
   );
 }
