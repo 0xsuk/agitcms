@@ -25,6 +25,10 @@ Install latest binary from [Release](https://github.com/0xsuk/agitcms/releases/t
 | Linux | agitcms_linux_amd64.deb |
 
 
+# Usage
+Explained here! https://0xsuk.com/posts/how-to-use-agitcms/
+
+
 # Development
 Start agitcms in your local development environment
 ```
