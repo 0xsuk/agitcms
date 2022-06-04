@@ -16,7 +16,7 @@ Press Ctrl+@ to toggle integrated terminal.
 
 
 # Install
-Install latest binary from [Release](https://github.com/0xsuk/agitcms/releases/tag/1.0.0)
+Install latest binary from [Release](https://github.com/0xsuk/agitcms/releases)
 
 | OS | binary name |
 | --- | --- |
