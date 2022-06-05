@@ -1,3 +1,4 @@
+import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 import { v4 as uuid } from "uuid";
 import {
   Button,
@@ -5,12 +6,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  MenuItem,
-  Select,
   Switch,
   Grid,
   TextField,
   Typography,
+  MenuList,
+  MenuItem,
+  Divider,
 } from "@mui/material";
 import { useState } from "react";
 import { FrontmatterTypes } from "../../../lib/useSiteConfig";
@@ -243,33 +245,21 @@ function BoolMatter({
 }
 
 function TypeDialog({ handleClose, handleSave }) {
-  const [type, setType] = useState(null);
+  //const [type, setType] = useState(null);
   return (
     <>
       <DialogTitle>Select Frontmatter Type</DialogTitle>
-      <DialogContent>
-        <Select
-          onChange={(e) => {
-            setType(e.target.value);
-          }}
-          value={type}
-        >
-          {FrontmatterTypes.map((t) => (
-            <MenuItem value={t.key}>{t.name}</MenuItem>
-          ))}
-        </Select>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button
-          disabled={type === null}
-          onClick={() => {
-            handleSave(type);
-          }}
-        >
-          Next
-        </Button>
-      </DialogActions>
+      <MenuList>
+        {FrontmatterTypes.map((t) => (
+          <>
+            <Divider></Divider>
+
+            <MenuItem value={t.key} onClick={() => handleSave(t.key)}>
+              {t.name}
+            </MenuItem>
+          </>
+        ))}
+      </MenuList>
     </>
   );
 }

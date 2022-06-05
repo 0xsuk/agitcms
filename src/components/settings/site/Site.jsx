@@ -1,3 +1,4 @@
+import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 import { useState } from "react";
 import {
   Button,
@@ -19,6 +20,7 @@ import FrontmatterDialog from "./FrontmatterDialog";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import CommandDialog from "./CommandDialog";
 import TextDialog from "../../TextDialog";
+import CustomSelect from "../../CustomSelect";
 
 function Site() {
   const siteConfig = useSiteConfig();
@@ -88,33 +90,56 @@ function Site() {
         </Grid>
         <Grid item container spacing={1} alignItems="center">
           <Grid item>Frontmatter Language:</Grid>
-          <Grid item>
-            <Select
-              onChange={(e) => {
-                editFrontmatterLanguage(e.target.value);
+          <Grid item xs={4}>
+            <CustomSelect
+              isSelected={(item) =>
+                item === siteConfigBuffer.frontmatterLanguage
+              }
+              onChange={(newValue) => {
+                editFrontmatterLanguage(newValue);
               }}
-              value={siteConfigBuffer.frontmatterLanguage}
-              size="small"
+              items={FrontmatterLanguages}
             >
-              {FrontmatterLanguages.map((lang) => (
-                <MenuItem value={lang}>{lang}</MenuItem>
-              ))}
-            </Select>
+              {({ ref, setIsOpen }) => (
+                <TextField
+                  InputProps={{
+                    readOnly: true,
+                    endAdornment: (
+                      <Button onClick={() => setIsOpen(true)} ref={ref}>
+                        <ArrowDropDown />
+                      </Button>
+                    ),
+                  }}
+                  sx={{ color: "#999" }}
+                  value={siteConfigBuffer.frontmatterLanguage}
+                  variant="filled"
+                  label="required"
+                  size="small"
+                ></TextField>
+              )}
+            </CustomSelect>
           </Grid>
         </Grid>
         <Grid item container spacing={1} alignItems="center">
-          <Grid item>Frontmatter delimiter:</Grid>
-          <Grid item>
+          <Grid item>Frontmatter delimiters:</Grid>
+          <Grid item xs={4}>
             <TextField
-              size="small"
-              disabled
-              label="delimiter"
+              InputProps={{
+                readOnly: true,
+                endAdornment: (
+                  <Button
+                    onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}
+                  >
+                    EDIT
+                  </Button>
+                ),
+              }}
+              sx={{ color: "#999" }}
               value={siteConfigBuffer.frontmatterDelimiter}
-              onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}
-            />
-            <Button onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}>
-              EDIT
-            </Button>
+              variant="filled"
+              label="required"
+              size="small"
+            ></TextField>
             <TextDialog
               initialValue={siteConfigBuffer.frontmatterDelimiter}
               isOpen={isFrontmatterDelimiterEditorOpen}
@@ -126,9 +151,7 @@ function Site() {
           </Grid>
         </Grid>
       </Grid>
-
       <Divider sx={{ padding: "20px", color: "#999" }}>optional</Divider>
-
       <Grid container spacing={3}>
         {/* Frontmatter */}
         <Grid item container spacing={1} alignItems="center">
@@ -250,7 +273,8 @@ function Site() {
           <Grid item>
             <TextField
               size="small"
-              label="public path"
+              label="optional"
+              variant="filled"
               value={siteConfigBuffer.media.publicPath}
               onChange={(e) => editMediaPublicPath(e.target.value)}
             />
