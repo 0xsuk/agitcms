@@ -33,18 +33,20 @@ function ArrayOfStringMatter({
       <DialogContent>
         <Grid container spacing={3} direction="column">
           <Grid item>
+            <Typography>Name:</Typography>
             <TextField
               fullWidth
               value={Key}
-              label="name"
+              label="required"
               onChange={(e) => setKey(e.target.value)}
+              variant="filled"
             />
           </Grid>
           <Grid item>
-            <Typography>Default</Typography>
+            <Typography>Default:</Typography>
             <TextField
               fullWidth
-              variant="standard"
+              variant="filled"
               placeholder="String"
               value={singleValue}
               onChange={(e) => {
@@ -110,10 +112,12 @@ function DateMatter({
       <DialogContent>
         <Grid container spacing={3} direction="column">
           <Grid item>
+            <Typography>Name:</Typography>
             <TextField
               fullWidth
               value={Key}
-              label="name"
+              label="required"
+              variant="filled"
               onChange={(e) => setKey(e.target.value)}
             />
           </Grid>
@@ -158,18 +162,22 @@ function StringMatter({
       <DialogContent>
         <Grid container spacing={3} direction="column">
           <Grid item>
+            <Typography>Name:</Typography>
             <TextField
               fullWidth
               value={Key}
-              label="name"
+              variant="filled"
+              label="required"
               onChange={(e) => setKey(e.target.value)}
             />
           </Grid>
           <Grid item>
+            <Typography>Default:</Typography>
             <TextField
               fullWidth
               value={Default}
-              label="default"
+              variant="filled"
+              label="optional"
               onChange={(e) => {
                 let value = e.target.value;
                 if (value == "") {
@@ -212,15 +220,17 @@ function BoolMatter({
       <DialogContent>
         <Grid container direction="column" spacing={3}>
           <Grid item>
+            <Typography>Name:</Typography>
             <TextField
               fullWidth
               value={Key}
-              label="name"
+              variant="filled"
+              label="required"
               onChange={(e) => setKey(e.target.value)}
             />
           </Grid>
           <Grid item>
-            <Typography>Default</Typography>
+            <Typography>Default:</Typography>
             <Switch
               size="small"
               defaultChecked={Default}
