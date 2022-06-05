@@ -23,7 +23,7 @@ function Home() {
   };
 
   return (
-    <Fragment>
+    <div id="home">
       <NewSiteDialog
         open={isNewSiteDialogOpen}
         onClose={closeNewSiteDialog}
@@ -60,7 +60,7 @@ function Home() {
           </Grid>
         ))}
       </Grid>
-    </Fragment>
+    </div>
   );
 }
 
