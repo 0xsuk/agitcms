@@ -7,15 +7,13 @@
     "start": "webpack-dev-server --mode development",
     "dev": "concurrently \"yarn run start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
-    "prebuild:renderer": "rm -rf build && cp -r public build",
     "build:renderer": "webpack",
-    "prepack:electron": "cp -r electron build/electron",
     "pack:electron:w": "electron-builder -w -c.extraMetadata.main=build/electron/electron.js",
     "pack:electron:m": "electron-builder -m -c.extraMetadata.main=build/electron/electron.js",
     "pack:electron:l": "electron-builder -l -c.extraMetadata.main=build/electron/electron.js",
-    "pack:w": "Remove-Item -Recurse build && Copy-Item -Recurse public build && yarn run build:renderer && Copy-Item -Recurse electron build/electron && yarn run pack:electron:w",
-    "pack:m": "yarn run prebuild:renderer && yarn run build:renderer && yarn run prepack:electron && yarn run pack:electron:m",
-    "pack:l": "yarn run prebuild:renderer && yarn run build:renderer && yarn run prepack:electron && yarn run pack:electron:l"
+    "pack:w": "if (Test-Path build) {Remove-Item -Recurse build} && Copy-Item -Recurse public build && yarn run build:renderer && Copy-Item -Recurse electron build/electron && yarn run pack:electron:w",
+    "pack:m": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && yarn run pack:electron:m",
+    "pack:l": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && yarn run pack:electron:l"
   },
   "repository": {
     "type": "git",
@@ -35,7 +33,7 @@
     "@iarna/toml": "^2.2.5",
     "@mui/icons-material": "^5.8.0",
     "@mui/lab": "^5.0.0-alpha.82",
-    "@mui/material": "^5.8.0",
+    "@mui/material": "^5.8.2",
     "@toast-ui/react-editor": "^3.1.7",
     "buffer": "^6.0.3",
     "css-loader": "^6.7.1",
