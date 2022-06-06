@@ -11,7 +11,7 @@
     "pack:electron:w": "electron-builder -w -c.extraMetadata.main=build/electron/electron.js",
     "pack:electron:m": "electron-builder -m -c.extraMetadata.main=build/electron/electron.js",
     "pack:electron:l": "electron-builder -l -c.extraMetadata.main=build/electron/electron.js",
-    "pack:w": "if (Test-Path build) {Remove-Item -Recurse build} && Copy-Item -Recurse public build && yarn run build:renderer && Copy-Item -Recurse electron build/electron && yarn run pack:electron:w",
+    "pack:w": "@powershell if (Test-Path build) {Remove-Item -Recurse build} && @powershell Copy-Item -Recurse public build && yarn run build:renderer && @powershell Copy-Item -Recurse electron build/electron && yarn run pack:electron:w",
     "pack:m": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && yarn run pack:electron:m",
     "pack:l": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && yarn run pack:electron:l"
   },
