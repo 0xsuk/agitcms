@@ -46,7 +46,7 @@ Install latest binary from [Release](https://github.com/0xsuk/agitcms/releases)
 
 
 # Usage
-Explained here! https://0xsuk.com/posts/how-to-use-agitcms/
+Explained here! https://0xsuk.com/agitcms/how-to-use-agitcms/
 
 
 # Development
