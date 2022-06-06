@@ -1,9 +1,29 @@
-# Agit CMS
-It's a supersimple & ready-to-use desktop app that manages static contents in markdown.  
+<p align="center">
+    <img src="https://github.com/0xsuk/agitcms/raw/main/public/icons/128x128.png">
+    <h1 align="center">Agit CMS</h1>
+    <p align="center">Frontmatter-aware markdown CMS</p>
+</p>
 
-/eɪdʒɪt/  
+<p align="center">
+  <a aria-label="Hugo" href="https://gohugo.io/">
+    <img src="https://img.shields.io/badge/-hugo-ff69b4">
+  </a>
+  <a aria-label="Jekyll" href="https://jekyllrb.com/">
+    <img src="https://img.shields.io/badge/-jekyll-red">
+  </a>
+  <a aria-label="Next.js" href="https://nextjs.org/">
+    <img src="https://img.shields.io/badge/-next.js-black">
+  </a>
+  <a aria-label="Gatsby.js" href="https://www.gatsbyjs.com/">
+    <img src="https://img.shields.io/badge/-gatsby.js-blueviolet">
+  </a>
+</p>
 
 ![image-59fc55df-6aa3-4305-9f09-b57283ac6f0a](https://user-images.githubusercontent.com/97814789/171836599-b3d0a87e-186b-4bb6-afa6-049fc9c5bd3b.png)
+
+
+
+/eɪdʒɪt/  
 
 ## Markdown / WYSIWYG / Frontmatter Editor
 Edit content in markdown/WYSIWYG editor, and modify meta data in frontmatter editor.
