@@ -1,7 +1,6 @@
 import { LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
-import ReactDOM from "react-dom";
 import {
   Button,
   Grid,
@@ -9,6 +8,7 @@ import {
   Switch,
   TextField,
   Typography,
+  Chip,
 } from "@mui/material";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { useEffect, useRef } from "react";
@@ -163,14 +163,13 @@ function FrontmatterEditor({ file, editFrontmatter, siteConfig }) {
         />
         {/* matterValue can be null, if user set it to null */}
         {matterValue?.map((v, i) => (
-          <p
-            onClick={() => {
+          <Chip
+            label={v}
+            onDelete={() => {
               matterValue.splice(i, 1);
               editFrontmatter(matterKey, matterValue);
             }}
-          >
-            {v} x
-          </p>
+          ></Chip>
         ))}
       </>
     );

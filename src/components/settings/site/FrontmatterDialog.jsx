@@ -1,4 +1,3 @@
-import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 import { v4 as uuid } from "uuid";
 import {
   Button,
@@ -13,6 +12,7 @@ import {
   MenuList,
   MenuItem,
   Divider,
+  Chip,
 } from "@mui/material";
 import { useState } from "react";
 import { FrontmatterTypes } from "../../../lib/useSiteConfig";
@@ -68,15 +68,14 @@ function ArrayOfStringMatter({
               }}
             />
             {Default?.map((v, i) => (
-              <p
-                onClick={() => {
+              <Chip
+                onDelete={() => {
                   const newDefault = JSON.parse(JSON.stringify(Default));
                   newDefault.splice(i, 1);
                   setDefault(newDefault);
                 }}
-              >
-                {v} x
-              </p>
+                label={v}
+              ></Chip>
             ))}
           </Grid>
         </Grid>
