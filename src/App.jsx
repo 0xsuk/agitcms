@@ -37,9 +37,7 @@ function Wrapper() {
   return (
     // list of workspace
     <div className="flex">
-      <div id="side">
-        <SideBar />
-      </div>
+      <SideBar />
       <div id="main">
         <Route path="/test">
           <Test />

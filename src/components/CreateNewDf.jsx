@@ -112,7 +112,7 @@ function CreateNewDf({ cwdf }) {
   };
 
   return (
-    <>
+    <div style={{ marginLeft: "22px" }}>
       <Button
         onClick={toggleNewButton}
         ref={anchorRef}
@@ -174,7 +174,7 @@ function CreateNewDf({ cwdf }) {
         dialogTitle="Folder name:"
         isValid={(value) => value !== ""} //TODO
       />
-    </>
+    </div>
   );
 }
 

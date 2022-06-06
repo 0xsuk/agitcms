@@ -10,10 +10,12 @@ import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import useSiteConfig from "../lib/useSiteConfig";
 import { Typography } from "@mui/material";
 import { useHistory } from "react-router-dom";
+import { useState } from "react";
 
 function SideBar() {
   const siteConfig = useSiteConfig();
   const history = useHistory();
+  const [isVisible, setIsVisible] = useState(true);
 
   const copyMediaFilePath = async () => {
     if (siteConfig.media.staticPath === "") {
@@ -38,101 +40,118 @@ function SideBar() {
     document.body.removeChild(buf);
   };
 
+  const openSidebar = () => {
+    document.getElementById("sidebar-body").style.width = "170px";
+    setIsVisible(true);
+  };
+  const closeSidebar = () => {
+    document.getElementById("sidebar-body").style.width = "170px";
+    setIsVisible(false);
+  };
+
+  const sidebarBody = document.getElementById("sidebar-body");
+  if (isVisible && sidebarBody) {
+    sidebarBody.style.display = "block";
+  } else if (!isVisible && sidebarBody) {
+    sidebarBody.style.display = "none";
+  }
+
   return (
-    <div>
-      <div className="flex">
-        <ChevronLeftOutlinedIcon
-          className="hpointer"
-          fontSize="small"
-          onClick={() => history.goBack()}
-        />
-        <ChevronRightOutlinedIcon
-          className="hpointer"
-          fontSize="small"
-          onClick={() => history.goForward()}
-        />
-        <HomeOutlinedIcon
-          fontSize="small"
-          onClick={() => history.push("/")}
-          className="hpointer"
-        />
-        <ReplayOutlinedIcon
-          fontSize="small"
-          className="hpointer"
-          onClick={() => window.location.reload()}
-        />
-      </div>
-      {siteConfig !== null && (
-        <div>
-          <Typography variant="h6">{siteConfig.name}</Typography>
+    <div id="sidebar">
+      <div id="sidebar-body">
+        <div className="flex">
+          <ChevronLeftOutlinedIcon
+            className="hpointer"
+            fontSize="small"
+            onClick={() => history.goBack()}
+          />
+          <ChevronRightOutlinedIcon
+            className="hpointer"
+            fontSize="small"
+            onClick={() => history.goForward()}
+          />
+          <HomeOutlinedIcon
+            fontSize="small"
+            onClick={() => history.push("/")}
+            className="hpointer"
+          />
+          <ReplayOutlinedIcon
+            fontSize="small"
+            className="hpointer"
+            onClick={() => window.location.reload()}
+          />
+        </div>
+        {siteConfig !== null && (
+          <div>
+            <Typography variant="h6">{siteConfig.name}</Typography>
 
-          <div style={{ padding: "10px" }} />
+            <div style={{ padding: "10px" }} />
 
-          {/* mapping pinnedDirs */}
-          <Typography
-            variant="caption"
-            sx={{ fontWeight: "bold", color: "#999" }}
-          >
-            PINNED
-          </Typography>
-          <div className="pinnedDirs">
-            {siteConfig.pinnedDirs.map((dir) => (
-              <div
-                className="pinnedDir"
-                onClick={() =>
-                  history.push(
-                    "/site/edit/" +
-                      siteConfig.key +
-                      "?path=" +
-                      dir.path +
-                      "&name=" +
-                      dir.name +
-                      "&isDir=" +
-                      dir.isDir
-                  )
-                }
-              >
-                {dir.isDir ? (
-                  <FolderOpenOutlinedIcon fontSize="small" />
-                ) : (
-                  <DescriptionOutlinedIcon fontSize="small" />
-                )}
+            {/* mapping pinnedDirs */}
+            <Typography
+              variant="caption"
+              sx={{ fontWeight: "bold", color: "#999" }}
+            >
+              PINNED
+            </Typography>
+            <div className="pinnedDirs">
+              {siteConfig.pinnedDirs.map((dir) => (
+                <div
+                  className="pinnedDir"
+                  onClick={() =>
+                    history.push(
+                      "/site/edit/" +
+                        siteConfig.key +
+                        "?path=" +
+                        dir.path +
+                        "&name=" +
+                        dir.name +
+                        "&isDir=" +
+                        dir.isDir
+                    )
+                  }
+                >
+                  {dir.isDir ? (
+                    <FolderOpenOutlinedIcon fontSize="small" />
+                  ) : (
+                    <DescriptionOutlinedIcon fontSize="small" />
+                  )}
+                  <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                    {dir.name}
+                  </Typography>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ padding: "10px" }} />
+
+            <Typography
+              variant="caption"
+              sx={{ fontWeight: "bold", color: "#999" }}
+            >
+              SITE
+            </Typography>
+            <div className="site-links">
+              <div className="site-link" onClick={copyMediaFilePath}>
+                <PermMediaOutlinedIcon fontSize="small" />
                 <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
-                  {dir.name}
+                  Media
                 </Typography>
               </div>
-            ))}
-          </div>
-
-          <div style={{ padding: "10px" }} />
-
-          <Typography
-            variant="caption"
-            sx={{ fontWeight: "bold", color: "#999" }}
-          >
-            SITE
-          </Typography>
-          <div className="site-links">
-            <div className="site-link" onClick={copyMediaFilePath}>
-              <PermMediaOutlinedIcon fontSize="small" />
-              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
-                Media
-              </Typography>
-            </div>
-            <div
-              className="site-link"
-              onClick={() => history.push("/site/settings/" + siteConfig.key)}
-            >
-              <SettingsOutlinedIcon fontSize="small" />
-              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
-                Settings
-              </Typography>
+              <div
+                className="site-link"
+                onClick={() => history.push("/site/settings/" + siteConfig.key)}
+              >
+                <SettingsOutlinedIcon fontSize="small" />
+                <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                  Settings
+                </Typography>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/*siteConfig === null && (
+        {/*siteConfig === null && (
         <>
           <div style={{ padding: "10px" }} />
           <Typography
@@ -154,6 +173,25 @@ function SideBar() {
           </div>
         </>
       )*/}
+      </div>
+      {!isVisible && (
+        <a id="sidebar-open" onClick={() => setIsVisible(true)}>
+          <span>
+            <svg viewBox="0 0 24 24">
+              <path d="m 8 5 l 8 7 l -8 7 l -1 -1 l 7 -6 l -7 -6 l 1 -1"></path>
+            </svg>
+          </span>
+        </a>
+      )}
+      {isVisible && (
+        <a id="sidebar-close" onClick={() => setIsVisible(false)}>
+          <span>
+            <svg viewBox="0 0 24 24">
+              <path d="m 16 5 l -8 7 l 8 7 l 1 -1 l -7 -6 l 7 -6 l -1 -1"></path>
+            </svg>
+          </span>
+        </a>
+      )}
     </div>
   );
 }

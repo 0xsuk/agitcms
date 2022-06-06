@@ -86,7 +86,7 @@ function Editor({ filePath }) {
   return (
     <div id="editor">
       {/* Tab switcher */}
-      <div className="flex">
+      <div id="switcher" className="flex">
         <p className="tab" onClick={() => switchTab("frontmatter")}>
           Frontmatter
         </p>
