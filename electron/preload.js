@@ -1,4 +1,9 @@
 const { contextBridge, ipcRenderer } = require("electron");
+const { Titlebar } = require("custom-electron-titlebar");
+
+window.addEventListener("DOMContentLoaded", () => {
+  new Titlebar();
+});
 
 contextBridge.exposeInMainWorld("electronAPI", {
   confirm: (message) => ipcRenderer.invoke("confirm", message),
