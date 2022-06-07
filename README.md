@@ -1,7 +1,7 @@
 <p align="center">
     <img src="https://github.com/0xsuk/agitcms/raw/main/public/icons/128x128.png">
     <h1 align="center">Agit CMS</h1>
-    <p align="center">FrontMatter-aware Markdown Editor for Static Site Generators</p>
+    <p align="center">frontmatter-aware markdown editor for static site generators</p>
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@
 
 /eɪdʒɪt/  
 
-## Markdown / WYSIWYG / Front matter Editor
+## Markdown / WYSIWYG / Frontmatter Editor
 Edit content in markdown/WYSIWYG editor, and modify meta data in front matter editor.
 
 <img src="https://user-images.githubusercontent.com/97814789/171833851-b215b036-1fd1-461b-af04-cb770efe9b97.png" width="50%"><img src="https://user-images.githubusercontent.com/97814789/171833708-d6991249-2669-4c1b-be05-190d7035c7c6.png" width="50%">
