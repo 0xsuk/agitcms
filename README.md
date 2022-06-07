@@ -1,7 +1,7 @@
 <p align="center">
     <img src="https://github.com/0xsuk/agitcms/raw/main/public/icons/128x128.png">
     <h1 align="center">Agit CMS</h1>
-    <p align="center">FrontMatter-aware markdown CMS</p>
+    <p align="center">FrontMatter-aware Markdown Editor for Static Site Generators</p>
 </p>
 
 <p align="center">
