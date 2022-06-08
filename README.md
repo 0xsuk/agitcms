@@ -1,7 +1,7 @@
 <p align="center">
     <img src="https://github.com/0xsuk/agitcms/raw/main/public/icons/128x128.png">
     <h1 align="center">Agit CMS</h1>
-    <p align="center">A hackable, frontend interface for static site generators</p>
+    <p align="center">A hackable frontend interface for static site generators</p>
 </p>
 
 <p align="center">
