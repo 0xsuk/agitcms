@@ -13,19 +13,19 @@ const matterStringify = (doc, data, options) => {
 
 //useCodeMirror depends on useFileBuffer's updateDoc
 //filePath is a only dependency.
-function useFileBuffer(filePath) {
+function useFileManager(filePath) {
   const history = useHistory();
   const location = useLocation();
   const searchparams = new URLSearchParams(location.search);
   const fileName = searchparams.get("name");
   const [file, setFile] = useState({
     name: fileName,
+    path: filePath,
     content: "", //include frontmatter
     frontmatter: {},
     doc: "", //exclude frontmatter
     isRead: false,
     isFrontmatterEmpty: false,
-    isModified: false,
   });
   const siteConfig = useSiteConfig();
 
@@ -52,7 +52,6 @@ function useFileBuffer(filePath) {
       ...prev,
       content,
       frontmatter: file.frontmatter,
-      isModified: true,
     }));
   };
   const editDoc = (tuieditor) => {
@@ -65,41 +64,33 @@ function useFileBuffer(filePath) {
       ...prev,
       doc,
       content,
-      isModified: true,
     }));
   };
-  const editContent = (tuieditor) => {
-    const content = tuieditor.getMarkdown();
+  const setContent = (content) => {
     const { content: doc, data: frontmatter } = matter(content, matterOption);
-    setFile((prev) => ({
-      ...prev,
-      content,
-      doc,
-      frontmatter,
-      isModified: true,
-    }));
-  };
-
-  const readFile = async () => {
-    const { content, err } = await window.electronAPI.readFile(filePath);
-    if (err) {
-      console.warn(err.message);
-      return;
-    }
-    const { content: doc, data: frontmatter } = matter(content, matterOption);
-    const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
-
-    console.log("readFile", { content, frontmatter, isFrontmatterEmpty });
     setFile((prev) => ({
       ...prev,
       content,
       doc,
       frontmatter,
       isRead: true,
-      isFrontmatterEmpty,
     }));
+  };
 
-    return isFrontmatterEmpty;
+  const readFile = async () => {
+    const { content, err } = await window.electronAPI.readFile(filePath);
+    //const { content: doc, data: frontmatter } = matter(content, matterOption);
+    //const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
+
+    return { content, err };
+  };
+
+  const saveFile = async () => {
+    if (!file.isRead) {
+      return;
+    }
+    const { err } = await window.electronAPI.saveFile(filePath, file.content);
+    return err;
   };
 
   const renameFileAndNavigate = async () => {
@@ -115,24 +106,15 @@ function useFileBuffer(filePath) {
     history.replace(to);
   };
 
-  const saveFile = async () => {
-    if (!file.isRead || !file.isModified) {
-      return;
-    }
-    const { err } = await window.electronAPI.saveFile(filePath, file.content);
-    if (err) {
-      console.warn(err.message);
-      return;
-    }
-    fileName !== file.name && renameFileAndNavigate();
-    //console.log("saved", file);
-    console.log("saved"); //somehow executed twice
-  };
-
-  return [
+  return {
     file,
-    { editName, editFrontmatter, editDoc, editContent, readFile, saveFile },
-  ];
+    editName,
+    editFrontmatter,
+    editDoc,
+    setContent,
+    readFile,
+    saveFile,
+  };
 }
 
-export default useFileBuffer;
+export default useFileManager;

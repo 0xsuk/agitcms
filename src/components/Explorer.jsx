@@ -6,7 +6,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
-import Editor from "./Editor";
+import EditorWrapper from "./EditorWrapper";
 
 function Explorer() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
@@ -94,7 +94,7 @@ function Explorer() {
             <Df cwdf={cwdf} df={df} loadFilesAndFolders={loadFilesAndFolders} />
           );
         })}
-      {!isInDir && <Editor filePath={cwdf}></Editor>}
+      {!isInDir && <EditorWrapper filePath={cwdf}></EditorWrapper>}
     </div>
   );
 }
