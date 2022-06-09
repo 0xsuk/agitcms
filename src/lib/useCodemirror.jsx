@@ -40,6 +40,7 @@ function useCodemirror(fileManager) {
       }
       const startState = EditorState.create({
         doc: content,
+        contentHeight: "100%",
         extensions: [
           lineNumbers(),
           highlightActiveLine(),
@@ -49,10 +50,10 @@ function useCodemirror(fileManager) {
           }),
           syntaxHighlighting(markdownHighlighting),
           EditorView.lineWrapping,
-          //EditorView.updateListener.of((update) => {
-          //  //also invoke when doc is first set
-          //  fileManager.setContent(update.state.doc.toString());
-          //}),
+          EditorView.updateListener.of((update) => {
+            //also invoke when doc is first set
+            fileManager.setContent(update.state.doc.toString());
+          }),
         ],
       });
 
