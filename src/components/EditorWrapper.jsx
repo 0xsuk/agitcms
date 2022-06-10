@@ -1,10 +1,16 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import useFileManager from "../lib/useFileManager";
 import useSiteConfig from "../lib/useSiteConfig";
 import FrontmatterEditor from "./FrontmatterEditor";
 import MarkdownEditor from "./MarkdownEditor";
 
-function EditorWrapper({ filePath }) {
+function EditorWrapper() {
+  const location = useLocation();
+  const searchparams = new URLSearchParams(location.search);
+
+  //current working dir or filek
+  const filePath = searchparams.get("path");
   const fileManager = useFileManager(filePath);
   const siteConfig = useSiteConfig();
 
@@ -17,8 +23,8 @@ function EditorWrapper({ filePath }) {
   }, [siteConfig.media.staticPath, siteConfig.media.publicPath]);
 
   return (
-    <div style={{ height: "100%" }}>
-      <button onClick={fileManager.saveFile()}>save</button>
+    <div id="editor-wrapper">
+      <button onClick={() => fileManager.saveFile()}>save</button>
       <MarkdownEditor fileManager={fileManager} siteConfig={siteConfig} />
       <FrontmatterEditor fileManager={fileManager} siteConfig={siteConfig} />
     </div>

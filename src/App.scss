@@ -19,6 +19,7 @@ code {
 
 #root {
   height: 100vh;
+  overflow: hidden;
 }
 
 
@@ -37,24 +38,55 @@ code {
   z-index: 2;
 }
 
+
+#home {
+  padding:20px;
+}
+#top-bar {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+  margin-left: 22px;
+  height: 16px;
+}
+
+#wrapper {
+  display: flex;
+  height: 100%; //=100vh
+}
 #main {
   width: 100%;
   //background-color: rgb(250, 250, 250);
 }
 
-#home {
-  padding:20px;
+#editor-wrapper {
+  height: calc(100% - 16px); // - topbar height
+  overflow: hidden;
 }
+
+#editor-markdown {
+  height: calc(100% - 21px); //TODO
+  flex: 0 0 50%;
+  padding: 0 12px 0 0 ;
+  overflow-y: auto;
+}
+
+#editor-preview {
+  height: calc(100% - 21px); //TODO
+  flex: 0 0 50%;
+  padding: 0 0 0 12px;
+  border-left: solid 1px #ddd;
+  overflow-y: auto;
+  overflow-x: hidden;
+  * {
+    overflow-x: auto;
+  }
+}
+
 
 #explorer {
   height: 100%;
   overflow: hidden;
-  #top-bar {
-    font-size: 13px;
-    color: #666;
-    white-space: nowrap;
-    margin-left: 22px;
-  }
   #editor {
     height: 98%;
     display: flex;

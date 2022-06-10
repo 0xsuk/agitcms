@@ -44,7 +44,7 @@ function Home() {
               className="siteName"
               onClick={() =>
                 history.push(
-                  "/site/edit/" +
+                  "/site/explorer/" +
                     siteConfig.key +
                     "?path=" +
                     siteConfig.path +
