@@ -1,5 +1,4 @@
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
@@ -38,15 +37,6 @@ function SideBar() {
     buf.select();
     document.execCommand("copy");
     document.body.removeChild(buf);
-  };
-
-  const openSidebar = () => {
-    document.getElementById("sidebar-body").style.width = "170px";
-    setIsVisible(true);
-  };
-  const closeSidebar = () => {
-    document.getElementById("sidebar-body").style.width = "170px";
-    setIsVisible(false);
   };
 
   const sidebarBody = document.getElementById("sidebar-body");
@@ -98,18 +88,31 @@ function SideBar() {
               {siteConfig.pinnedDirs.map((dir) => (
                 <div
                   className="pinnedDir"
-                  onClick={() =>
-                    history.push(
-                      "/site/edit/" +
-                        siteConfig.key +
-                        "?path=" +
-                        dir.path +
-                        "&name=" +
-                        dir.name +
-                        "&isDir=" +
-                        dir.isDir
-                    )
-                  }
+                  onClick={() => {
+                    if (dir.isDir) {
+                      history.push(
+                        "/site/explorer/" +
+                          siteConfig.key +
+                          "?path=" +
+                          dir.path +
+                          "&name=" +
+                          dir.name +
+                          "&isDir=" +
+                          dir.isDir
+                      );
+                    } else {
+                      history.push(
+                        "/site/editor/" +
+                          siteConfig.key +
+                          "?path=" +
+                          dir.path +
+                          "&name=" +
+                          dir.name +
+                          "&isDir=" +
+                          dir.isDir
+                      );
+                    }
+                  }}
                 >
                   {dir.isDir ? (
                     <FolderOpenOutlinedIcon fontSize="small" />

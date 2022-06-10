@@ -1,9 +1,8 @@
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Menu, MenuItem, Button } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { Menu, MenuItem } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
 import EditorWrapper from "./EditorWrapper";
@@ -11,48 +10,19 @@ import EditorWrapper from "./EditorWrapper";
 function Explorer() {
   const [filesAndFolders, setFilesAndFolders] = useState([]);
   const siteConfig = useSiteConfig();
-  const { updateSiteConfig } = useContext(configContext);
   const location = useLocation();
   const searchparams = new URLSearchParams(location.search);
 
   //current working dir or filek
   const cwdf = searchparams.get("path");
-  const dfName = searchparams.get("name");
   const isInRoot = cwdf === siteConfig.path;
   const isInDir = searchparams.get("isDir") === "true" || isInRoot;
-  const isDfPinned = !siteConfig.pinnedDirs.every((df) => {
-    if (df.path === cwdf) {
-      return false;
-    }
-    return true;
-  });
-
-  let cwdfForDisplay = cwdf;
-  if (window.navigator.platform === "Win32")
-    cwdfForDisplay = cwdf.replaceAll("/", "\\");
 
   useEffect(() => {
     console.warn("Dir Effect");
     if (!isInDir) return;
     loadFilesAndFolders();
   }, [cwdf]); //eslint-disable-line
-
-  const addPinnedDirs = (name, path, isDir) => {
-    updateSiteConfig({
-      ...siteConfig,
-      pinnedDirs: [...siteConfig.pinnedDirs, { name, path, isDir }],
-    });
-  };
-
-  const removePinnedDir = (path, isDir) => {
-    const pinnedDirs = siteConfig.pinnedDirs.filter(
-      (df) => df.path !== path || df.isDir !== isDir
-    );
-    updateSiteConfig({
-      ...siteConfig,
-      pinnedDirs,
-    });
-  };
 
   const loadFilesAndFolders = async () => {
     const { err, filesAndFolders } =
@@ -66,40 +36,18 @@ function Explorer() {
 
   return (
     <div id="explorer">
-      <div id="top-bar">
-        {cwdfForDisplay}
-        {isDfPinned ? (
-          <Button
-            size="small"
-            onClick={() => removePinnedDir(cwdf, isInDir)}
-            sx={{ padding: "0", lineHeight: "unset" }}
-          >
-            Unpin
-          </Button>
-        ) : (
-          <Button
-            size="small"
-            onClick={() => addPinnedDirs(dfName, cwdf, isInDir)}
-            sx={{ padding: "0", lineHeight: "unset" }}
-          >
-            Pin
-          </Button>
-        )}
-      </div>
       {isInDir && <CreateNewDf cwdf={cwdf} />}
       {isInDir &&
         filesAndFolders.map((df) => {
           //if (df.isDir || df.extension === ".md")
-          return (
-            <Df cwdf={cwdf} df={df} loadFilesAndFolders={loadFilesAndFolders} />
-          );
+          return <Df {...{ siteConfig, cwdf, df, loadFilesAndFolders }} />;
         })}
       {!isInDir && <EditorWrapper filePath={cwdf}></EditorWrapper>}
     </div>
   );
 }
 
-function Df({ cwdf, df, loadFilesAndFolders }) {
+function Df({ siteConfig, cwdf, df, loadFilesAndFolders }) {
   const [anchorEl, setAnchorEl] = useState(null);
   //const renameDf = async () => {};
   const history = useHistory();
@@ -122,8 +70,23 @@ function Df({ cwdf, df, loadFilesAndFolders }) {
     <div
       className="df"
       onClick={() => {
+        if (df.isDir) {
+          history.push(
+            "?path=" +
+              cwdf +
+              "/" +
+              df.name +
+              "&isDir=" +
+              df.isDir +
+              "&name=" +
+              df.name
+          );
+          return;
+        }
         history.push(
-          "?path=" +
+          "/site/editor/" +
+            siteConfig.key +
+            "?path=" +
             cwdf +
             "/" +
             df.name +

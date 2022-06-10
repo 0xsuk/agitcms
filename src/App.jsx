@@ -1,12 +1,14 @@
 import { Fragment, useContext, useEffect } from "react";
 import { Route } from "react-router-dom";
 import "./App.scss";
+import EditorWrapper from "./components/EditorWrapper";
 import Explorer from "./components/Explorer";
 import Home from "./components/Home";
 import Settings from "./components/settings/Settings";
 import Site from "./components/settings/site/Site";
 import SideBar from "./components/SideBar";
 import Terminal from "./components/Terminal";
+import TopBar from "./components/TopBar";
 import { configContext } from "./context/ConfigContext";
 import Test from "./Test";
 
@@ -36,7 +38,7 @@ function App() {
 function Wrapper() {
   return (
     // list of workspace
-    <div className="flex">
+    <div id="wrapper">
       <SideBar />
       <div id="main">
         <Route path="/test">
@@ -51,8 +53,13 @@ function Wrapper() {
         <Route path="/site/settings/:siteKey">
           <Site />
         </Route>
-        <Route path="/site/edit/:siteKey">
+        <Route path="/site/explorer/:siteKey">
+          <TopBar />
           <Explorer />
+        </Route>
+        <Route path="/site/editor/:siteKey">
+          <TopBar />
+          <EditorWrapper />
         </Route>
         <Route path="/site">
           <Terminal />
