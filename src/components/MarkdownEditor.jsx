@@ -31,7 +31,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
 
       const pos = child.position.start.offset;
       const lineInfo = editorView.lineBlockAt(pos);
-      console.log({ index, lineInfo, pos });
+      //console.log({ index, lineInfo, pos });
       const offsetTop = lineInfo.top;
       //const absoluteTop = editorView.documentTop + offsetTop;
       editorElemRelativeTopList.push(offsetTop);
@@ -47,24 +47,12 @@ function MarkdownEditor({ fileManager, siteConfig }) {
       }
     }
 
-    console.log({
-      scrollElementIndex,
-      t: editorElemRelativeTopList[1],
-      s: editor_markdown.scrollTop,
-    });
     if (
       editor_markdown.scrollTop >=
       editor_markdown.scrollHeight - editor_markdown.clientHeight //true when scroll reached the bottom
     ) {
       editor_preview.scrollTop =
         editor_preview.scrollHeight - editor_preview.clientHeight; //? scroll to the bottom
-      console.log(
-        "w",
-        editor_markdown.scrollTop -
-          (editor_markdown.scrollHeight - editor_markdown.clientHeight),
-        editor_preview.scrollTop -
-          (editor_preview.scrollHeight - editor_preview.clientHeight) //? scroll to the bottom
-      );
       return;
     }
 
