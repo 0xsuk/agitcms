@@ -46,6 +46,7 @@ function useFileManager(filePath) {
     setFile((prev) => ({ ...prev, name }));
   };
   const editFrontmatter = (key, value) => {
+    //TODO history
     file.frontmatter[key] = value;
     const content = matterStringify(file.doc, file.frontmatter);
     setFile((prev) => ({
@@ -54,27 +55,28 @@ function useFileManager(filePath) {
       frontmatter: file.frontmatter,
     }));
   };
-  const editDoc = (tuieditor) => {
-    //const d = tuieditor.getMarkdown();
-    //const { content: doc, data: frontmatter } = matter(d, matterOption); //ISSUE: if d contains uncompleted frontmatter edit, doc&frontmatter becomes empty, thus content becomes empty
-    //file.frontmatter = { ...file.frontmatter, ...frontmatter };
-    const doc = tuieditor.getMarkdown();
+  const setDoc = (doc) => {
     const content = matterStringify(doc, file.frontmatter);
     setFile((prev) => ({
       ...prev,
-      doc,
       content,
+      doc,
+      isRead: true,
     }));
   };
   const setContent = (content) => {
     const { content: doc, data: frontmatter } = matter(content, matterOption);
+    const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
     setFile((prev) => ({
       ...prev,
       content,
       doc,
       frontmatter,
       isRead: true,
+      isFrontmatterEmpty,
     }));
+
+    return { content, doc, frontmatter };
   };
 
   const readFile = async () => {
@@ -110,7 +112,7 @@ function useFileManager(filePath) {
     file,
     editName,
     editFrontmatter,
-    editDoc,
+    setDoc,
     setContent,
     readFile,
     saveFile,

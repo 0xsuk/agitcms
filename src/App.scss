@@ -61,11 +61,14 @@ code {
 
 #editor-wrapper {
   height: calc(100% - 16px); // - topbar height
-  overflow: hidden;
+}
+
+#editor-wrapper > div {
+ height: 100%;
 }
 
 #editor-markdown {
-  height: calc(100% - 21px); //TODO
+  height: calc(100% - 21*2px); //TODO
   flex: 0 0 50%;
   padding: 0 12px 0 0 ;
   overflow-y: auto;
@@ -73,7 +76,7 @@ code {
 
 #editor-preview {
   font-size: 14px; //TODO: same as codemirror
-  height: calc(100% - 21px); //TODO
+  height: calc(100% - 21*2px); //TODO
   flex: 0 0 50%;
   padding: 0 0 0 12px;
   border-left: solid 1px #ddd;

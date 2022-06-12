@@ -22,9 +22,8 @@ const isURL = (url) => {
 function MarkdownEditor({ fileManager, siteConfig }) {
   const [editorRef, editorView] = useCodemirror(fileManager);
 
-  const storeTree = () => (tree) => {
+  const defaultPlugin = () => (tree) => {
     treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
-    console.log(tree.children);
     tree.children = tree.children.map((child) => {
       if (
         child.type !== "element" ||
@@ -53,7 +52,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     console.log(editorView.lineBlockAt(1));
   };
 
-  const handleScroll = (e) => {
+  const handleScroll = () => {
     let editorElemRelativeTopList = [];
     let previewElemsAbsTopList = [];
     treeData.children.forEach((child, index) => {
@@ -61,9 +60,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
 
       const pos = child.position.start.offset;
       const lineInfo = editorView.lineBlockAt(pos);
-      //console.log({ index, lineInfo, pos });
       const offsetTop = lineInfo.top;
-      //const absoluteTop = editorView.documentTop + offsetTop;
       editorElemRelativeTopList.push(offsetTop);
       previewElemsAbsTopList.push(
         editor_preview.childNodes[index].offsetTop //absolute from window top
@@ -107,9 +104,9 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     .use(remarkMath)
     .use(remarkRehype)
     .use(rehypeMathJax)
-    .use(storeTree)
+    .use(defaultPlugin)
     .use(rehypeReact, { createElement, Fragment })
-    .processSync(fileManager.file.content).result;
+    .processSync(fileManager.file.doc).result;
 
   return (
     <>

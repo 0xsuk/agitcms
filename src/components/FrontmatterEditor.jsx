@@ -143,23 +143,25 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
     }
   };
   return (
-    <Stack spacing={1}>
-      {Object.keys(file.frontmatter).length !== 0 &&
-        Object.keys(file.frontmatter).map((matterKey) => (
-          <Grid container spacing={0} alignItems="center">
-            <Grid item xs={2}>
-              <Typography>{matterKey}</Typography>
+    <>
+      <Stack spacing={1}>
+        {Object.keys(file.frontmatter).length !== 0 &&
+          Object.keys(file.frontmatter).map((matterKey) => (
+            <Grid container spacing={0} alignItems="center">
+              <Grid item xs={2}>
+                <Typography>{matterKey}</Typography>
+              </Grid>
+              <Grid item xs={9}>
+                {frontmatterEditor(
+                  matterKey,
+                  file.frontmatter[matterKey],
+                  getFrontmatterType(matterKey)
+                )}
+              </Grid>
             </Grid>
-            <Grid item xs={9}>
-              {frontmatterEditor(
-                matterKey,
-                file.frontmatter[matterKey],
-                getFrontmatterType(matterKey)
-              )}
-            </Grid>
-          </Grid>
-        ))}
-    </Stack>
+          ))}
+      </Stack>
+    </>
   );
 }
 

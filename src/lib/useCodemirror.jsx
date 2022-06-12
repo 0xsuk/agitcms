@@ -38,9 +38,9 @@ function useCodemirror(fileManager) {
         alert(err);
         return;
       }
-      fileManager.setContent(content);
+      const { doc } = fileManager.setContent(content);
       const startState = EditorState.create({
-        doc: content,
+        doc,
         contentHeight: "100%",
         extensions: [
           lineNumbers(),
@@ -53,7 +53,7 @@ function useCodemirror(fileManager) {
           EditorView.lineWrapping,
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
-              fileManager.setContent(update.state.doc.toString());
+              fileManager.setDoc(update.state.doc.toString());
             }
           }),
         ],
