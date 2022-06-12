@@ -38,6 +38,7 @@ function useCodemirror(fileManager) {
         alert(err);
         return;
       }
+      fileManager.setContent(content);
       const startState = EditorState.create({
         doc: content,
         contentHeight: "100%",
@@ -51,8 +52,9 @@ function useCodemirror(fileManager) {
           syntaxHighlighting(markdownHighlighting),
           EditorView.lineWrapping,
           EditorView.updateListener.of((update) => {
-            //also invoke when doc is first set
-            fileManager.setContent(update.state.doc.toString());
+            if (update.docChanged) {
+              fileManager.setContent(update.state.doc.toString());
+            }
           }),
         ],
       });
