@@ -42,12 +42,13 @@ code {
 #home {
   padding:20px;
 }
+
+$top-bar-height: 16px;
 #top-bar {
   font-size: 13px;
   color: #666;
   white-space: nowrap;
-  margin-left: 22px;
-  height: 16px;
+  height: $top-bar-height;
 }
 
 #wrapper {
@@ -59,16 +60,38 @@ code {
   //background-color: rgb(250, 250, 250);
 }
 
-#editor-wrapper {
-  height: calc(100% - 16px); // - topbar height
+$editor-navigator-height: 33px;
+#editor-navigator {
+  height: $editor-navigator-height;
+  display: flex;
+  .tab {
+    font-size: 1em;
+    color: #999;
+    padding: 7px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  
 }
 
-#editor-wrapper > div {
- height: 100%;
+
+
+#editor-wrapper {
+  height: calc(100% - $top-bar-height - $editor-navigator-height); 
+  & > div {
+    height: 100%;
+  }
 }
+
+
+#editor-frontmatter-tab {
+  padding: 10px;
+}
+
 
 #editor-markdown {
-  height: calc(100% - 21*2px); //TODO
+  height: 100%;
   flex: 0 0 50%;
   padding: 0 12px 0 0 ;
   overflow-y: auto;
@@ -76,7 +99,7 @@ code {
 
 #editor-preview {
   font-size: 14px; //TODO: same as codemirror
-  height: calc(100% - 21*2px); //TODO
+  height: 100%;
   flex: 0 0 50%;
   padding: 0 0 0 12px;
   border-left: solid 1px #ddd;

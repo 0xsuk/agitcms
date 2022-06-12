@@ -12,8 +12,14 @@ import {
 } from "@mui/material";
 
 function FrontmatterEditor({ fileManager, siteConfig }) {
-  const file = fileManager.file;
-  const editFrontmatter = fileManager.editFrontmatter;
+  if (fileManager.file.isFrontmatterEmpty) {
+    return (
+      <>
+        <Typography>Frontmatter is empty</Typography>
+      </>
+    );
+  }
+
   const getFrontmatterType = (key) => {
     let type = undefined;
     siteConfig.frontmatter.every((singlematter) => {
@@ -33,7 +39,7 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
         placeholder="String"
         value={matterValue}
         variant="standard"
-        onChange={(e) => editFrontmatter(matterKey, e.target.value)}
+        onChange={(e) => fileManager.editFrontmatter(matterKey, e.target.value)}
         fullWidth
       />
     );
@@ -56,7 +62,7 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
                   }
                   matterValue.push(ref.value);
                   console.log("newMatter", matterValue);
-                  editFrontmatter(matterKey, matterValue);
+                  fileManager.editFrontmatter(matterKey, matterValue);
                   ref.value = "";
                   // ref.focus();
                 }}
@@ -72,7 +78,7 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
             label={v}
             onDelete={() => {
               matterValue.splice(i, 1);
-              editFrontmatter(matterKey, matterValue);
+              fileManager.editFrontmatter(matterKey, matterValue);
             }}
           ></Chip>
         ))}
@@ -85,7 +91,9 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
           label="Date"
           value={matterValue}
           renderInput={(props) => <TextField {...props} />}
-          onChange={(newValue) => editFrontmatter(matterKey, newValue)}
+          onChange={(newValue) =>
+            fileManager.editFrontmatter(matterKey, newValue)
+          }
           ampm={false}
           showTodayButton={true}
           todayText="Now"
@@ -98,7 +106,7 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
         aria-label="bool"
         size="small"
         checked={matterValue}
-        onChange={() => editFrontmatter(matterKey, !matterValue)}
+        onChange={() => fileManager.editFrontmatter(matterKey, !matterValue)}
       />
     );
 
@@ -145,8 +153,8 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
   return (
     <>
       <Stack spacing={1}>
-        {Object.keys(file.frontmatter).length !== 0 &&
-          Object.keys(file.frontmatter).map((matterKey) => (
+        {Object.keys(fileManager.file.frontmatter).length !== 0 &&
+          Object.keys(fileManager.file.frontmatter).map((matterKey) => (
             <Grid container spacing={0} alignItems="center">
               <Grid item xs={2}>
                 <Typography>{matterKey}</Typography>
@@ -154,7 +162,7 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
               <Grid item xs={9}>
                 {frontmatterEditor(
                   matterKey,
-                  file.frontmatter[matterKey],
+                  fileManager.file.frontmatter[matterKey],
                   getFrontmatterType(matterKey)
                 )}
               </Grid>

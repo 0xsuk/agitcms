@@ -16,29 +16,6 @@ function SideBar() {
   const history = useHistory();
   const [isVisible, setIsVisible] = useState(true);
 
-  const copyMediaFilePath = async () => {
-    if (siteConfig.media.staticPath === "") {
-      alert("please set media folder path");
-      return;
-    }
-    const { err, filePath, canceled } = await window.electronAPI.getMediaFile(
-      siteConfig.media.staticPath,
-      siteConfig.media.publicPath
-    );
-    if (canceled) return;
-    if (err !== null) {
-      alert(err);
-      return;
-    }
-
-    const buf = document.createElement("input");
-    document.body.appendChild(buf);
-    buf.value = filePath;
-    buf.select();
-    document.execCommand("copy");
-    document.body.removeChild(buf);
-  };
-
   const sidebarBody = document.getElementById("sidebar-body");
   if (isVisible && sidebarBody) {
     sidebarBody.style.display = "block";
@@ -135,12 +112,6 @@ function SideBar() {
               SITE
             </Typography>
             <div className="site-links">
-              <div className="site-link" onClick={copyMediaFilePath}>
-                <PermMediaOutlinedIcon fontSize="small" />
-                <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
-                  Media
-                </Typography>
-              </div>
               <div
                 className="site-link"
                 onClick={() => history.push("/site/settings/" + siteConfig.key)}

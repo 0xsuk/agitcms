@@ -40,6 +40,7 @@ function TopBar() {
   };
   return (
     <div id="top-bar">
+      {cwdfForDisplay}
       {isDfPinned ? (
         <Button
           size="small"
@@ -57,7 +58,6 @@ function TopBar() {
           Pin
         </Button>
       )}
-      {cwdfForDisplay}
     </div>
   );
 }

@@ -18,40 +18,67 @@ function EditorWrapper() {
 
   const switchTab = (tab) => {
     const frontmatterEl = document.getElementById("editor-frontmatter-tab");
-    const editorEl = document.getElementById("editor-markdown-tab");
-    const frontmatterTabEl = document.querySelectorAll("#editor .tab")[0];
-    const editorTabEl = document.querySelectorAll("#editor .tab")[1];
+    const markdownEl = document.getElementById("editor-markdown-tab");
+    const markdownTabEl = document.querySelectorAll(
+      "#editor-navigator > .tab"
+    )[0];
+    const frontmatterTabEl = document.querySelectorAll(
+      "#editor-navigator .tab"
+    )[1];
     const isFrontmatterVisible = frontmatterEl.style.display !== "none";
 
     const frontmatterOn = () => {
-      editorEl.style.display = "none";
-      //editorTabEl.style.backgroundColor = "#fff";
+      markdownEl.style.display = "none";
+      markdownTabEl.style.backgroundColor = "#fff";
       frontmatterEl.style.display = "block";
-      //frontmatterTabEl.style.backgroundColor = "#89b8e640";
+      frontmatterTabEl.style.backgroundColor = "#89b8e640";
     };
 
-    const editorOn = () => {
-      editorEl.style.display = "block";
-      //editorTabEl.style.backgroundColor = "#89b8e640";
+    const markdownOn = () => {
+      markdownEl.style.display = "block";
+      markdownTabEl.style.backgroundColor = "#89b8e640";
       frontmatterEl.style.display = "none";
-      //frontmatterTabEl.style.backgroundColor = "#fff";
+      frontmatterTabEl.style.backgroundColor = "#fff";
     };
 
     switch (tab) {
       case undefined:
         if (isFrontmatterVisible) {
-          editorOn();
+          markdownOn();
         } else {
           frontmatterOn();
         }
         break;
-      case "editor":
-        editorOn();
+      case "markdown":
+        markdownOn();
         break;
       case "frontmatter":
         frontmatterOn();
         break;
     }
+  };
+
+  const copyMediaFilePath = async () => {
+    if (siteConfig.media.staticPath === "") {
+      alert("please set media folder path");
+      return;
+    }
+    const { err, filePath, canceled } = await window.electronAPI.getMediaFile(
+      siteConfig.media.staticPath,
+      siteConfig.media.publicPath
+    );
+    if (canceled) return;
+    if (err !== null) {
+      alert(err);
+      return;
+    }
+
+    const buf = document.createElement("input");
+    document.body.appendChild(buf);
+    buf.value = filePath;
+    buf.select();
+    document.execCommand("copy");
+    document.body.removeChild(buf);
   };
 
   const handleSave = () => {
@@ -79,7 +106,23 @@ function EditorWrapper() {
 
   return (
     <>
-      <button onClick={() => switchTab()}>tab</button>
+      <div id="editor-navigator">
+        <div
+          className="tab"
+          style={{
+            backgroundColor: "#89b8e640",
+          }}
+          onClick={() => switchTab("markdown")}
+        >
+          Markdown
+        </div>
+        <div className="tab" onClick={() => switchTab("frontmatter")}>
+          Frontmatter
+        </div>
+        <div className="tab" onClick={copyMediaFilePath}>
+          Media
+        </div>
+      </div>
       <div id="editor-wrapper">
         <div id="editor-markdown-tab">
           <MarkdownEditor fileManager={fileManager} siteConfig={siteConfig} />
