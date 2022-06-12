@@ -72,6 +72,7 @@ code {
 }
 
 #editor-preview {
+  font-size: 14px; //TODO: same as codemirror
   height: calc(100% - 21px); //TODO
   flex: 0 0 50%;
   padding: 0 0 0 12px;

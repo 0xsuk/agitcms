@@ -10,11 +10,41 @@ import rehypeMathJax from "rehype-mathjax";
 import "github-markdown-css/github-markdown.css";
 let treeData;
 
+const isURL = (url) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 function MarkdownEditor({ fileManager, siteConfig }) {
   const [editorRef, editorView] = useCodemirror(fileManager);
 
   const storeTree = () => (tree) => {
     treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
+    console.log(tree.children);
+    tree.children = tree.children.map((child) => {
+      if (
+        child.type !== "element" ||
+        child.tagName !== "p" ||
+        child.children === undefined
+      )
+        return child;
+
+      child.children = child.children.map((c) => {
+        if (c.type !== "element" || c.tagName !== "img") return c;
+        if (isURL(c.properties.src)) return c;
+        c.properties.src = new URL(
+          c.properties.src,
+          "http://localhost:3001"
+        ).href; //TODO
+        return c;
+      });
+      return child;
+    });
+    return tree;
   };
   const editor_markdown = document.querySelector("#editor-markdown");
   const editor_preview = document.getElementById("editor-preview");
