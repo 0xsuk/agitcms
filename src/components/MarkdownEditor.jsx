@@ -1,4 +1,4 @@
-import { createElement, Fragment } from "react";
+import { createElement, Fragment, useRef } from "react";
 import useCodemirror from "../lib/useCodemirror";
 import { unified } from "unified";
 import remarkGfm from "remark-gfm";
@@ -21,6 +21,7 @@ const isURL = (url) => {
 
 function MarkdownEditor({ fileManager, siteConfig }) {
   const [editorRef, editorView] = useCodemirror(fileManager);
+  const mouseIsOn = useRef(null);
 
   const defaultPlugin = () => (tree) => {
     treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
@@ -48,28 +49,36 @@ function MarkdownEditor({ fileManager, siteConfig }) {
   const editor_markdown = document.querySelector("#editor-markdown");
   const editor_preview = document.getElementById("editor-preview");
 
-  const action = () => {
-    console.log(editorView.lineBlockAt(1));
-  };
+  const computeElemsOffsetTop = () => {
+    let editorElemOffsetTopList = [];
+    let previewElemsOffsetTopList = [];
 
-  const handleScroll = () => {
-    let editorElemRelativeTopList = [];
-    let previewElemsAbsTopList = [];
     treeData.children.forEach((child, index) => {
       if (child.type !== "element" || child.position === undefined) return;
 
       const pos = child.position.start.offset;
       const lineInfo = editorView.lineBlockAt(pos);
       const offsetTop = lineInfo.top;
-      editorElemRelativeTopList.push(offsetTop);
-      previewElemsAbsTopList.push(
-        editor_preview.childNodes[index].offsetTop //absolute from window top
+      editorElemOffsetTopList.push(offsetTop);
+      previewElemsOffsetTopList.push(
+        editor_preview.childNodes[index].offsetTop -
+          editor_preview.getBoundingClientRect().top //offsetTop from the top of editor_preview
       );
     });
-    let scrollElementIndex;
-    for (let i = 0; editorElemRelativeTopList.length > i; i++) {
-      if (editor_markdown.scrollTop < editorElemRelativeTopList[i]) {
-        scrollElementIndex = i - 1;
+
+    return [editorElemOffsetTopList, previewElemsOffsetTopList];
+  };
+  const handleMdScroll = () => {
+    console.log(mouseIsOn.current);
+    if (mouseIsOn.current !== "markdown") {
+      return;
+    }
+    const [editorElemOffsetTopList, previewElemsOffsetTopList] =
+      computeElemsOffsetTop();
+    let scrollElemIndex;
+    for (let i = 0; editorElemOffsetTopList.length > i; i++) {
+      if (editor_markdown.scrollTop < editorElemOffsetTopList[i]) {
+        scrollElemIndex = i - 1;
         break;
       }
     }
@@ -83,18 +92,44 @@ function MarkdownEditor({ fileManager, siteConfig }) {
       return;
     }
 
-    if (scrollElementIndex >= 0) {
+    if (scrollElemIndex >= 0) {
       let ratio =
-        (editor_markdown.scrollTop -
-          editorElemRelativeTopList[scrollElementIndex]) /
-        (editorElemRelativeTopList[scrollElementIndex + 1] -
-          editorElemRelativeTopList[scrollElementIndex]);
+        (editor_markdown.scrollTop - editorElemOffsetTopList[scrollElemIndex]) /
+        (editorElemOffsetTopList[scrollElemIndex + 1] -
+          editorElemOffsetTopList[scrollElemIndex]);
       editor_preview.scrollTop =
         ratio *
-          (previewElemsAbsTopList[scrollElementIndex + 1] -
-            previewElemsAbsTopList[scrollElementIndex]) +
-        previewElemsAbsTopList[scrollElementIndex] -
-        editor_preview.getBoundingClientRect().top;
+          (previewElemsOffsetTopList[scrollElemIndex + 1] -
+            previewElemsOffsetTopList[scrollElemIndex]) +
+        previewElemsOffsetTopList[scrollElemIndex];
+    }
+  };
+
+  const handlePreviewScroll = () => {
+    if (mouseIsOn.current !== "preview") {
+      return;
+    }
+    const [editorElemOffsetTopList, previewElemsOffsetTopList] =
+      computeElemsOffsetTop();
+    let scrollElemIndex;
+    for (let i = 0; previewElemsOffsetTopList.length > i; i++) {
+      if (editor_preview.scrollTop < previewElemsOffsetTopList[i]) {
+        scrollElemIndex = i - 1;
+        break;
+      }
+    }
+
+    if (scrollElemIndex >= 0) {
+      let ratio =
+        (editor_preview.scrollTop -
+          previewElemsOffsetTopList[scrollElemIndex]) /
+        (previewElemsOffsetTopList[scrollElemIndex + 1] -
+          previewElemsOffsetTopList[scrollElemIndex]);
+      editor_markdown.scrollTop =
+        ratio *
+          (editorElemOffsetTopList[scrollElemIndex + 1] -
+            editorElemOffsetTopList[scrollElemIndex]) +
+        editorElemOffsetTopList[scrollElemIndex];
     }
   };
 
@@ -110,10 +145,19 @@ function MarkdownEditor({ fileManager, siteConfig }) {
 
   return (
     <>
-      <button onClick={action}>Action</button>
       <div style={{ display: "flex", height: "100%", overflow: "hidden" }}>
-        <div id="editor-markdown" ref={editorRef} onScroll={handleScroll}></div>
-        <div id="editor-preview" className="markdown-body">
+        <div
+          id="editor-markdown"
+          ref={editorRef}
+          onScroll={handleMdScroll}
+          onMouseEnter={() => (mouseIsOn.current = "markdown")}
+        ></div>
+        <div
+          id="editor-preview"
+          className="markdown-body"
+          onScroll={handlePreviewScroll}
+          onMouseEnter={() => (mouseIsOn.current = "preview")}
+        >
           {md}
         </div>
       </div>
