@@ -46,12 +46,12 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     });
     return tree;
   };
-  const editor_markdown = document.querySelector("#editor-markdown");
-  const editor_preview = document.getElementById("editor-preview");
+  const markdownElem = document.querySelector("#editor-markdown");
+  const previewElem = document.getElementById("editor-preview");
 
   const computeElemsOffsetTop = () => {
-    let editorElemOffsetTopList = [];
-    let previewElemsOffsetTopList = [];
+    let markdownChildNodesOffsetTopList = [];
+    let previewChildNodesOffsetTopList = [];
 
     treeData.children.forEach((child, index) => {
       if (child.type !== "element" || child.position === undefined) return;
@@ -59,49 +59,50 @@ function MarkdownEditor({ fileManager, siteConfig }) {
       const pos = child.position.start.offset;
       const lineInfo = editorView.lineBlockAt(pos);
       const offsetTop = lineInfo.top;
-      editorElemOffsetTopList.push(offsetTop);
-      previewElemsOffsetTopList.push(
-        editor_preview.childNodes[index].offsetTop -
-          editor_preview.getBoundingClientRect().top //offsetTop from the top of editor_preview
+      markdownChildNodesOffsetTopList.push(offsetTop);
+      previewChildNodesOffsetTopList.push(
+        previewElem.childNodes[index].offsetTop -
+          previewElem.getBoundingClientRect().top //offsetTop from the top of editor_preview
       );
     });
 
-    return [editorElemOffsetTopList, previewElemsOffsetTopList];
+    return [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList];
   };
   const handleMdScroll = () => {
     console.log(mouseIsOn.current);
     if (mouseIsOn.current !== "markdown") {
       return;
     }
-    const [editorElemOffsetTopList, previewElemsOffsetTopList] =
+    const [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList] =
       computeElemsOffsetTop();
     let scrollElemIndex;
-    for (let i = 0; editorElemOffsetTopList.length > i; i++) {
-      if (editor_markdown.scrollTop < editorElemOffsetTopList[i]) {
+    for (let i = 0; markdownChildNodesOffsetTopList.length > i; i++) {
+      if (markdownElem.scrollTop < markdownChildNodesOffsetTopList[i]) {
         scrollElemIndex = i - 1;
         break;
       }
     }
 
     if (
-      editor_markdown.scrollTop >=
-      editor_markdown.scrollHeight - editor_markdown.clientHeight //true when scroll reached the bottom
+      markdownElem.scrollTop >=
+      markdownElem.scrollHeight - markdownElem.clientHeight //true when scroll reached the bottom
     ) {
-      editor_preview.scrollTop =
-        editor_preview.scrollHeight - editor_preview.clientHeight; //? scroll to the bottom
+      previewElem.scrollTop =
+        previewElem.scrollHeight - previewElem.clientHeight; //? scroll to the bottom
       return;
     }
 
     if (scrollElemIndex >= 0) {
       let ratio =
-        (editor_markdown.scrollTop - editorElemOffsetTopList[scrollElemIndex]) /
-        (editorElemOffsetTopList[scrollElemIndex + 1] -
-          editorElemOffsetTopList[scrollElemIndex]);
-      editor_preview.scrollTop =
+        (markdownElem.scrollTop -
+          markdownChildNodesOffsetTopList[scrollElemIndex]) /
+        (markdownChildNodesOffsetTopList[scrollElemIndex + 1] -
+          markdownChildNodesOffsetTopList[scrollElemIndex]);
+      previewElem.scrollTop =
         ratio *
-          (previewElemsOffsetTopList[scrollElemIndex + 1] -
-            previewElemsOffsetTopList[scrollElemIndex]) +
-        previewElemsOffsetTopList[scrollElemIndex];
+          (previewChildNodesOffsetTopList[scrollElemIndex + 1] -
+            previewChildNodesOffsetTopList[scrollElemIndex]) +
+        previewChildNodesOffsetTopList[scrollElemIndex];
     }
   };
 
@@ -109,11 +110,11 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     if (mouseIsOn.current !== "preview") {
       return;
     }
-    const [editorElemOffsetTopList, previewElemsOffsetTopList] =
+    const [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList] =
       computeElemsOffsetTop();
     let scrollElemIndex;
-    for (let i = 0; previewElemsOffsetTopList.length > i; i++) {
-      if (editor_preview.scrollTop < previewElemsOffsetTopList[i]) {
+    for (let i = 0; previewChildNodesOffsetTopList.length > i; i++) {
+      if (previewElem.scrollTop < previewChildNodesOffsetTopList[i]) {
         scrollElemIndex = i - 1;
         break;
       }
@@ -121,15 +122,15 @@ function MarkdownEditor({ fileManager, siteConfig }) {
 
     if (scrollElemIndex >= 0) {
       let ratio =
-        (editor_preview.scrollTop -
-          previewElemsOffsetTopList[scrollElemIndex]) /
-        (previewElemsOffsetTopList[scrollElemIndex + 1] -
-          previewElemsOffsetTopList[scrollElemIndex]);
-      editor_markdown.scrollTop =
+        (previewElem.scrollTop -
+          previewChildNodesOffsetTopList[scrollElemIndex]) /
+        (previewChildNodesOffsetTopList[scrollElemIndex + 1] -
+          previewChildNodesOffsetTopList[scrollElemIndex]);
+      markdownElem.scrollTop =
         ratio *
-          (editorElemOffsetTopList[scrollElemIndex + 1] -
-            editorElemOffsetTopList[scrollElemIndex]) +
-        editorElemOffsetTopList[scrollElemIndex];
+          (markdownChildNodesOffsetTopList[scrollElemIndex + 1] -
+            markdownChildNodesOffsetTopList[scrollElemIndex]) +
+        markdownChildNodesOffsetTopList[scrollElemIndex];
     }
   };
 

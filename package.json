@@ -27,10 +27,8 @@
   },
   "homepage": "https://github.com/0xsuk/agitcms#readme",
   "dependencies": {
-    "@codemirror/commands": "^6.0.0",
     "@codemirror/lang-markdown": "^6.0.0",
     "@codemirror/language": "^6.0.0",
-    "@codemirror/language-data": "^6.0.0",
     "@codemirror/state": "^6.0.0",
     "@codemirror/view": "^6.0.0",
     "@date-io/date-fns": "^2.14.0",
