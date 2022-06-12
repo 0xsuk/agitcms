@@ -1,85 +1,197 @@
-import { Link } from "react-router-dom";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+import PermMediaOutlinedIcon from "@mui/icons-material/PermMediaOutlined";
+import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
+import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
+import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import useSiteConfig from "../lib/useSiteConfig";
-import { Button } from "@mui/material";
+import { Typography } from "@mui/material";
+import { useHistory } from "react-router-dom";
+import { useState } from "react";
 
 function SideBar() {
-  const { siteConfig, isNew } = useSiteConfig();
+  const siteConfig = useSiteConfig();
+  const history = useHistory();
+  const [isVisible, setIsVisible] = useState(true);
 
-  const runCommand = async (command) => {
-    const { err } = await window.electronAPI.runCommand(
-      command.command,
-      siteConfig.path,
-      command.key
-    );
-    if (err) {
-      alert(err.message);
+  const copyMediaFilePath = async () => {
+    if (siteConfig.media.staticPath === "") {
+      alert("please set media folder path");
+      return;
     }
+    const { err, filePath, canceled } = await window.electronAPI.getMediaFile(
+      siteConfig.media.staticPath,
+      siteConfig.media.publicPath
+    );
+    if (canceled) return;
+    if (err !== null) {
+      alert(err);
+      return;
+    }
+
+    const buf = document.createElement("input");
+    document.body.appendChild(buf);
+    buf.value = filePath;
+    buf.select();
+    document.execCommand("copy");
+    document.body.removeChild(buf);
   };
 
-  const stopCommand = async (cid) => {
-    window.electronAPI.stopCommand(cid);
+  const openSidebar = () => {
+    document.getElementById("sidebar-body").style.width = "170px";
+    setIsVisible(true);
   };
+  const closeSidebar = () => {
+    document.getElementById("sidebar-body").style.width = "170px";
+    setIsVisible(false);
+  };
+
+  const sidebarBody = document.getElementById("sidebar-body");
+  if (isVisible && sidebarBody) {
+    sidebarBody.style.display = "block";
+  } else if (!isVisible && sidebarBody) {
+    sidebarBody.style.display = "none";
+  }
 
   return (
-    <div>
-      {siteConfig !== null && !isNew && (
-        <div>
-          <p style={{ fontSize: "20px", padding: "0 10px" }}>
-            {siteConfig.name}
-          </p>
-
-          {/*TODO: mapping commands  */}
-          {siteConfig.commands.map((command) => (
-            <div>
-              <Button onClick={() => runCommand(command)}>
-                {command.name}
-              </Button>
-              {/* TODO: isCommandRunning? -> Stop button */}
-              <Button onClick={() => stopCommand(command.key)}>Stop</Button>
-            </div>
-          ))}
-
-          {/* mapping pinnedDirs */}
-          {siteConfig.pinnedDirs.map((dir) => (
-            <div>
-              <Link
-                to={
-                  "/edit/" +
-                  siteConfig.key +
-                  "?path=" +
-                  dir.path +
-                  "&name=" +
-                  dir.name +
-                  "&isDir=" +
-                  dir.isDir
-                }
-              >
-                {dir.name}
-              </Link>
-            </div>
-          ))}
-          <br></br>
-
-          <div>
-            <Link to={"/edit/" + siteConfig.key + "?path=" + siteConfig.path}>
-              Root
-            </Link>
-          </div>
-          <div>
-            <Link to={"/shell/" + siteConfig.key}>Shell</Link>
-          </div>
-          <div>
-            <Link to={"/settings/" + siteConfig.key}>Settings</Link>
-          </div>
+    <div id="sidebar">
+      <div id="sidebar-body">
+        <div className="flex">
+          <ChevronLeftOutlinedIcon
+            className="hpointer"
+            fontSize="small"
+            onClick={() => history.goBack()}
+          />
+          <ChevronRightOutlinedIcon
+            className="hpointer"
+            fontSize="small"
+            onClick={() => history.goForward()}
+          />
+          <HomeOutlinedIcon
+            fontSize="small"
+            onClick={() => history.push("/")}
+            className="hpointer"
+          />
+          <ReplayOutlinedIcon
+            fontSize="small"
+            className="hpointer"
+            onClick={() => window.location.reload()}
+          />
         </div>
-      )}
-      <div>
-        <Link to="/">Home</Link>
-      </div>
+        {siteConfig !== null && (
+          <div>
+            <Typography variant="h6">{siteConfig.name}</Typography>
 
-      <div>
-        <Link to="/test">Test</Link>
+            <div style={{ padding: "10px" }} />
+
+            {/* mapping pinnedDirs */}
+            <Typography
+              variant="caption"
+              sx={{ fontWeight: "bold", color: "#999" }}
+            >
+              PINNED
+            </Typography>
+            <div className="pinnedDirs">
+              {siteConfig.pinnedDirs.map((dir) => (
+                <div
+                  className="pinnedDir"
+                  onClick={() =>
+                    history.push(
+                      "/site/edit/" +
+                        siteConfig.key +
+                        "?path=" +
+                        dir.path +
+                        "&name=" +
+                        dir.name +
+                        "&isDir=" +
+                        dir.isDir
+                    )
+                  }
+                >
+                  {dir.isDir ? (
+                    <FolderOpenOutlinedIcon fontSize="small" />
+                  ) : (
+                    <DescriptionOutlinedIcon fontSize="small" />
+                  )}
+                  <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                    {dir.name}
+                  </Typography>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ padding: "10px" }} />
+
+            <Typography
+              variant="caption"
+              sx={{ fontWeight: "bold", color: "#999" }}
+            >
+              SITE
+            </Typography>
+            <div className="site-links">
+              <div className="site-link" onClick={copyMediaFilePath}>
+                <PermMediaOutlinedIcon fontSize="small" />
+                <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                  Media
+                </Typography>
+              </div>
+              <div
+                className="site-link"
+                onClick={() => history.push("/site/settings/" + siteConfig.key)}
+              >
+                <SettingsOutlinedIcon fontSize="small" />
+                <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                  Settings
+                </Typography>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/*siteConfig === null && (
+        <>
+          <div style={{ padding: "10px" }} />
+          <Typography
+            variant="caption"
+            sx={{ fontWeight: "bold", color: "#999" }}
+          >
+            GLOBAL
+          </Typography>
+          <div className="site-links">
+            <div
+              className="site-link"
+              onClick={() => history.push("/settings/")}
+            >
+              <NotesOutlinedIcon fontSize="small" />
+              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                Settings
+              </Typography>
+            </div>
+          </div>
+        </>
+      )*/}
       </div>
+      {!isVisible && (
+        <a id="sidebar-open" onClick={() => setIsVisible(true)}>
+          <span>
+            <svg viewBox="0 0 24 24">
+              <path d="m 8 5 l 8 7 l -8 7 l -1 -1 l 7 -6 l -7 -6 l 1 -1"></path>
+            </svg>
+          </span>
+        </a>
+      )}
+      {isVisible && (
+        <a id="sidebar-close" onClick={() => setIsVisible(false)}>
+          <span>
+            <svg viewBox="0 0 24 24">
+              <path d="m 16 5 l -8 7 l 8 7 l 1 -1 l -7 -6 l 7 -6 l -1 -1"></path>
+            </svg>
+          </span>
+        </a>
+      )}
     </div>
   );
 }

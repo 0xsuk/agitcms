@@ -1,51 +1,35 @@
-import { Fragment, useContext, useEffect, useState } from "react";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Fragment, useContext, useEffect } from "react";
+import { Route } from "react-router-dom";
 import "./App.scss";
-import Dir from "./components/Explorer";
+import Explorer from "./components/Explorer";
 import Home from "./components/Home";
-import Settings from "./components/Settings";
+import Settings from "./components/settings/Settings";
 import Site from "./components/settings/site/Site";
-import Shell from "./components/Shell";
 import SideBar from "./components/SideBar";
-import Test from "./components/Test";
+import Terminal from "./components/Terminal";
 import { configContext } from "./context/ConfigContext";
+import Test from "./Test";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
-  const [lines, setLines] = useState([]);
+
   useEffect(() => {
     readConfig();
-    window.electronAPI.onShellProcessLine((e, data) => {
-      setLines((prev) => [...prev, data.line]);
-    });
-  }, []); //eslint-disable-line
+  }, []);
 
   if (config.sites === undefined) {
     console.log("reading config", config);
     return <Fragment />;
   }
-  console.log("configuration:", config);
 
   return (
-    <Routes>
-      <Route path="/" element={<Wrapper />}>
-        <Route path="test" element={<Test />}></Route>
-        <Route path="" element={<Home />}></Route>
-        <Route path="settings">
-          <Route path="" element={<Settings />}></Route>
-          <Route path=":siteKey" element={<Site />}></Route>
-        </Route>
-        <Route path="shell">
-          <Route
-            path=":siteKey"
-            element={<Shell lines={lines} setLines={setLines} />}
-          ></Route>
-        </Route>
-        <Route path="edit">
-          <Route path=":siteKey/*" element={<Dir />}></Route>
-        </Route>
+    <>
+      <Route path="/">
+        {/* component={} renders Wrapper every single time */}
+        <Wrapper />
       </Route>
-    </Routes>
+      {/*<Link to={"/test"}>test</Link> */}
+    </>
   );
 }
 
@@ -53,11 +37,26 @@ function Wrapper() {
   return (
     // list of workspace
     <div className="flex">
-      <div id="side">
-        <SideBar />
-      </div>
+      <SideBar />
       <div id="main">
-        <Outlet />
+        <Route path="/test">
+          <Test />
+        </Route>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route exact path="/settings">
+          <Settings />
+        </Route>
+        <Route path="/site/settings/:siteKey">
+          <Site />
+        </Route>
+        <Route path="/site/edit/:siteKey">
+          <Explorer />
+        </Route>
+        <Route path="/site">
+          <Terminal />
+        </Route>
       </div>
     </div>
   );

@@ -1,10 +1,26 @@
+const os = require("os");
 const { dialog } = require("electron");
 const fs = require("fs");
 const { getConfig, CONFIG_FILE } = require("./config.js");
 const path = require("path");
-const matter = require("gray-matter");
 const YAML = require("yaml");
-const ShellProcess = require("./lib/shellprocess.js");
+const { getWindow } = require("./lib/window_manager");
+const ShellProcessManager = require("./lib/shellprocess_manager.js");
+const MediaServer = require("./lib/mediaserver.js");
+
+exports.confirm = (_, message) => {
+  const win = getWindow();
+  const options = {
+    type: "question",
+    buttons: ["Cancel", "Yes"],
+    message,
+  };
+  const index = dialog.showMessageBoxSync(win, options);
+  const isConfirmed = index === 1;
+
+  console.log("ISCONFIRMED:", isConfirmed);
+  return isConfirmed;
+};
 
 exports.readConfig = () => {
   return { config: getConfig() };
@@ -22,18 +38,13 @@ exports.updateConfig = (e, newConfig) => {
   }
 };
 
-exports.saveFile = (e, doc, frontmatter, filePath) => {
+exports.saveFile = (e, filePath, content) => {
   try {
     if (!filePath) {
-      throw new Error("File path is not probided");
+      throw new Error("File path is not provided");
     }
 
-    const yaml_str = YAML.stringify(frontmatter); //if frontmatter is {}, returns {}
-
-    if (Object.keys(frontmatter).length !== 0)
-      doc = "---\n" + yaml_str + "---" + doc;
-
-    fs.writeFileSync(filePath, doc);
+    fs.writeFileSync(filePath, content);
     return { err: null };
   } catch (err) {
     return { err };
@@ -48,16 +59,9 @@ exports.readFile = (e, filePath) => {
     }
 
     content = fs.readFileSync(filePath).toString();
+    return { content, err: null };
   } catch (err) {
-    return { doc: null, frontmatter: null, err };
-  }
-
-  try {
-    const { content: doc, data } = matter(content);
-    return { doc, frontmatter: data, err: null };
-  } catch (err) {
-    console.log("frontmatter format is not supported", err);
-    return { doc: null, frontmatter: {}, err: null };
+    return { content: null, err };
   }
 };
 
@@ -102,38 +106,102 @@ exports.getFilesAndFolders = (e, folderPath) => {
   }
 };
 
-let shellProcessList = []; //[shell process...]
-
-exports.runCommand = async (e, command, cwd, cid) => {
+exports.getMediaFile = (_, staticPath, publicPath) => {
+  if (staticPath === undefined)
+    return {
+      err: new Error("static path not provided"),
+      filePath: null,
+      canceled: false,
+    };
   try {
-    shellProcessList.forEach((p) => {
-      if (p.cid === cid) {
-        const message = "Cannot run same command at the same time: " + p.cmd;
-        console.log(message);
-        throw new Error(message);
-      }
+    const filePaths = dialog.showOpenDialogSync({
+      defaultPath: staticPath,
+      buttonLabel: "Copy Path",
+      properties: ["openFile"],
     });
-    const shellProcess = new ShellProcess(command, cwd, cid);
-    shellProcessList.push(shellProcess);
-    shellProcess.run();
-    shellProcess.process.on("exit", () => {
-      console.log("exited:", shellProcess.cmd);
-      shellProcessList = shellProcessList.filter(
-        (p) => p.cid !== shellProcess.cid
-      );
-    });
+    if (filePaths === undefined) {
+      //canceled
+      return { err: null, filePath: null, canceled: true };
+    }
+
+    let filePath = filePaths[0];
+    filePath = path.relative(staticPath, filePath);
+    filePath = path.join(publicPath, filePath);
+    filePath = filePath.replaceAll("\\", "/"); //for windows
+
+    return { err: null, filePath, canceled: false };
+  } catch (err) {
+    return { err, filePath: null, canceled: false };
+  }
+};
+
+exports.createFolder = (e, folderPath) => {
+  try {
+    // response is folderPath
+    fs.mkdirSync(folderPath, { recursive: true });
     return { err: null };
   } catch (err) {
     return { err };
   }
 };
 
-exports.stopCommand = async (e, cid) => {
-  shellProcessList.every((p) => {
-    if (p.cid === cid) {
-      p.stopIfRunning();
-      return false;
+exports.createFile = (_, filePath, doc, frontmatter, doOverwrite) => {
+  //TODO
+  try {
+    const yaml_str = YAML.stringify(frontmatter);
+    if (Object.keys(frontmatter).length !== 0)
+      doc = "---\n" + yaml_str + "---" + doc;
+    if (doOverwrite) {
+      fs.writeFileSync(filePath, doc);
+      return { err: null, isFileExists: null };
     }
-    return true;
-  });
+    const isFileExists = fs.existsSync(filePath);
+    if (isFileExists) {
+      return { err: null, isFileExists: true };
+    }
+
+    fs.writeFileSync(filePath, doc);
+    return { err: null, isFileExists: false };
+  } catch (err) {
+    return { err, isFileExists: null };
+  }
+};
+
+exports.removeFile = (_, filePath) => {
+  try {
+    fs.unlinkSync(filePath);
+    return { err: null };
+  } catch (err) {
+    return { err };
+  }
+};
+
+exports.removeFolder = (_, folderPath) => {
+  try {
+    fs.rmdirSync(folderPath, { recursive: true });
+    return { err: null };
+  } catch (err) {
+    return { err };
+  }
+};
+
+const defaultShell = os.platform() === "win32" ? "powershell.exe" : "zsh"; //TODO
+const shellProcessManager = new ShellProcessManager();
+
+exports.typeCommand = (_, id, cmd) => {
+  shellProcessManager.write(id, cmd);
+};
+
+exports.spawnShell = (_, cwd, shell) => {
+  if (shell === undefined) shell = defaultShell;
+  const id = shellProcessManager.spawn(cwd, shell);
+
+  console.log("shell spawned");
+  return id;
+};
+
+exports.startMediaServer = (_, staticPath, publicPath) => {
+  console.log("startin", staticPath, publicPath);
+  const mediaServer = new MediaServer(staticPath, publicPath);
+  mediaServer.run();
 };

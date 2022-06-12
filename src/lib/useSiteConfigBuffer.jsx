@@ -1,44 +1,76 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 
 function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(initialSiteConfig);
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
-  const navigate = useNavigate();
+  const history = useHistory();
   //siteConfig !== siteConfigCopy //true
   const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
 
-  const editName = async (newName) => {
-    setSiteConfig({ ...siteConfig, name: newName });
+  const editMediaPublicPath = (newValue) => {
+    siteConfigCopy.media.publicPath = newValue;
+    setSiteConfig(siteConfigCopy);
   };
 
-  const editPath = async () => {
+  const editMediaStaticPath = async () => {
     const { folderPath, err, canceled } =
       await window.electronAPI.getFolderPath();
     if (err) {
-      alert(err);
+      console.warn(err);
       return;
     }
     if (!err && !canceled) {
-      setSiteConfig({ ...siteConfig, path: folderPath });
+      siteConfigCopy.media.staticPath = folderPath;
+      setSiteConfig(siteConfigCopy);
     }
   };
 
-  const editCommandName = (newName, i) => {
-    siteConfigCopy.commands[i].name = newName;
+  const editShowFrontmatter = (newValue) => {
+    setSiteConfig((prev) => ({
+      ...prev,
+      showFrontmatter: newValue,
+    }));
+  };
+
+  const editFrontmatterLanguage = (newValue) => {
+    setSiteConfig((prev) => ({
+      ...prev,
+      frontmatterLanguage: newValue,
+    }));
+  };
+  const editFrontmatterDelimiter = (newValue) => {
+    setSiteConfig((prev) => ({
+      ...prev,
+      frontmatterDelimiter: newValue,
+    }));
+  };
+
+  //const editCommandName = (newName, i) => {
+  //  siteConfigCopy.commands[i].name = newName;
+  //  setSiteConfig(siteConfigCopy);
+  //};
+  //const editCommand = (newCommand, i) => {
+  //  siteConfigCopy.commands[i].command = newCommand;
+  //  setSiteConfig(siteConfigCopy);
+  //};
+  const addCommand = (key, name, command) => {
+    siteConfigCopy.commands.push({ key, name, command });
     setSiteConfig(siteConfigCopy);
   };
-  const editCommand = (newCommand, i) => {
-    siteConfigCopy.commands[i].command = newCommand;
+  const removeCommand = (key) => {
+    siteConfigCopy.commands = siteConfigCopy.commands.filter(
+      (cmd) => cmd.key !== key
+    );
     setSiteConfig(siteConfigCopy);
   };
-  const addNewCommand = () => {
-    siteConfigCopy.commands.push({ key: Date.now(), name: "", command: "" });
-    setSiteConfig(siteConfigCopy);
-  };
-  const removeCommand = (i) => {
-    siteConfigCopy.commands.splice(i, 1);
+  const reorderCommands = (result) => {
+    const list = Array.from(siteConfigCopy.commands);
+    const [removed] = list.splice(result.source.index, 1);
+    list.splice(result.destination.index, 0, removed);
+
+    siteConfigCopy.commands = list;
     setSiteConfig(siteConfigCopy);
   };
 
@@ -54,94 +86,88 @@ function useSiteConfigBuffer(initialSiteConfig) {
     siteConfigCopy.frontmatter[i].default = newDefault;
     setSiteConfig(siteConfigCopy);
   };
-  const addNewFrontmatter = () => {
-    siteConfigCopy.frontmatter.push({ key: "", type: "", default: "" });
+  //TODO: const editFrontmatterOption = () => {}
+  const editFrontmatter = (id, key, type, Default, option) => {
+    for (let i = 0; i < siteConfigCopy.frontmatter.length; i++) {
+      if (siteConfigCopy.frontmatter[i].id === id) {
+        siteConfigCopy.frontmatter[i] = {
+          id,
+          key,
+          type,
+          default: Default,
+          option,
+        };
+        setSiteConfig(siteConfigCopy);
+        return;
+      }
+    }
+  };
+
+  const addFrontmatter = (id, key, type, Default, option) => {
+    siteConfigCopy.frontmatter.push({
+      id,
+      key,
+      type,
+      default: Default,
+      option,
+    });
     setSiteConfig(siteConfigCopy);
   };
-  const removeFrontmatter = (i) => {
-    siteConfigCopy.frontmatter.splice(i, 1);
+
+  const removeFrontmatter = (id) => {
+    siteConfigCopy.frontmatter = siteConfigCopy.frontmatter.filter(
+      (matter) => matter.id !== id
+    );
+    setSiteConfig(siteConfigCopy);
+  };
+
+  const reorderFrontmatter = (result) => {
+    const list = Array.from(siteConfigCopy.frontmatter);
+    const [removed] = list.splice(result.source.index, 1);
+    list.splice(result.destination.index, 0, removed);
+
+    siteConfigCopy.frontmatter = list;
     setSiteConfig(siteConfigCopy);
   };
 
   const saveSiteConfig = () => {
-    if (!isSiteConfigValid()) {
-      return;
-    }
     updateSiteConfig(siteConfig);
-    alert("Saved!");
+    console.log("Saved!");
     // navigate(-1);
+    return true;
   };
 
-  const cancelSiteConfig = () => {
-    console.log("init:", initialSiteConfig);
-    setSiteConfig(initialSiteConfig);
-    // navigate(-1);
-  };
+  //const cancelSiteConfig = () => {
+  //  console.log("init:", initialSiteConfig);
+  //  setSiteConfig(initialSiteConfig);
+  //  // navigate(-1);
+  //};
 
   const removeSiteConfig = (key) => {
     if (!window.confirm("are you sure?")) return;
     deleteSiteConfig(key);
-    navigate("/");
-  };
-
-  const isSiteConfigValid = () => {
-    if (siteConfig.name === "") {
-      alert("name cannot be empty");
-      return false;
-    }
-    if (siteConfig.path === "") {
-      alert("path cannot be empty");
-      return false;
-    }
-
-    const isCommandsValid = siteConfig.commands.every((command, i) => {
-      if (command.key === "") {
-        alert(i, "th command's key is empty");
-        return false;
-      }
-      if (command.command === "") {
-        alert(i, "th command's command is empty");
-        return false;
-      }
-      return true;
-    });
-    if (!isCommandsValid) return false;
-
-    const isFrontmatterValid = siteConfig.frontmatter.every(
-      (singlematter, i) => {
-        if (singlematter.key === "") {
-          alert(i + 1 + "th frontmatter's key is empty");
-          return false;
-        }
-        if (singlematter.type === "") {
-          alert(i + 1 + "th frontmatter's type is empty");
-          return false;
-        }
-        return true;
-      }
-    );
-
-    if (!isFrontmatterValid) return false;
-
-    return true;
+    history.push("/");
   };
 
   return [
     siteConfig,
     {
-      editName,
-      editCommand,
-      editCommandName,
-      addNewCommand,
+      editMediaPublicPath,
+      editMediaStaticPath,
+      editShowFrontmatter,
+      editFrontmatterLanguage,
+      editFrontmatterDelimiter,
+      addCommand,
       removeCommand,
+      reorderCommands,
       editFrontmatterDefault,
       editFrontmatterKey,
       editFrontmatterType,
-      addNewFrontmatter,
+      editFrontmatter,
+      addFrontmatter,
       removeFrontmatter,
-      editPath,
+      reorderFrontmatter,
       removeSiteConfig,
-      cancelSiteConfig,
       saveSiteConfig,
     },
   ];

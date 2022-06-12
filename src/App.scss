@@ -21,29 +21,169 @@ code {
   height: 100vh;
 }
 
-#top-bar {
-  font-size: 15px;
-}
 
-#side {
-  width: 170px;
+#sidebar {
+  #sidebar-body {
+    width: 170px;
+    padding: 5px;
+  }
   height: 100vh;
   flex-shrink: 0;
   word-break: break-word;
-  padding: 5px;
-  background-color: rgb(250, 250, 250);
+  //background-color: rgb(250, 250, 250);
   position: sticky;
   top: 0;
+  border-right: 1px solid #eee;
+  z-index: 2;
 }
 
 #main {
   width: 100%;
-  background-color: rgb(250, 250, 250);
-  padding: 5px;
+  //background-color: rgb(250, 250, 250);
 }
 
-#shell {
-  // width: 300px;
+#home {
+  padding:20px;
+}
+
+#explorer {
+  height: 100%;
+  overflow: hidden;
+  #top-bar {
+    font-size: 13px;
+    color: #666;
+    white-space: nowrap;
+    margin-left: 22px;
+  }
+  #editor {
+    height: 98%;
+    display: flex;
+    flex-direction: column;
+
+    #switcher {
+      margin-left: 25px;
+        .tab {
+          padding: 5px;
+          border: solid 1px #eee;
+          &:nth-of-type(2) {
+            background-color: #89b8e640;
+          }
+          &:hover {
+            cursor:pointer;
+          }
+        }
+    }
+
+    #frontmatter-tab {
+      display: none;
+      padding: 5px;
+    }
+    #editor-tab {
+      flex-grow: 1;
+    }
+
+
+  }
+
+  .df {
+    border-top: solid 1px #ddd;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    p {
+      font-size: 17px;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+//https://github.com/xtermjs/xterm.js/issues/3564#issuecomment-1059066813
+.xterm .xterm-viewport {
+  width: initial !important;
+}
+
+#terminal {
+  z-index: 100; //greater than editor
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  #terminal-header {
+    border-bottom: solid 1px #ddd;
+    background: black;
+    color: white;
+    .terminal-tab {
+      display: inline-block;
+      padding: 0 10px;
+      border: solid 1px #ddd;
+      border-left: none;
+    }
+  }
+}
+
+#settings {
+  padding: 20px;
+}
+#setting-site {
+  padding: 20px;
+  .setting-draggable{
+    border-top: solid 1px #ddd;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+
+#sidebar-open {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-right: -20px;
+  span {
+    display: block;
+    background: black;
+    width: 20px;
+    height: 40px;
+    border-radius: 0px 5px 5px 0px;
+    svg {
+      display: inline-block;
+      color: white;
+      height: 24px;
+      width: 24px;
+      fill: currentColor;
+      margin-top: 8px;
+      margin-left: -2px;
+    }
+  }
+}
+#sidebar-close {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  span {
+    display: block;
+    background: black;
+    width: 20px;
+    height: 40px;
+    border-radius: 5px 0px 0px 5px;
+    svg {
+      display: inline-block;
+      color: white;
+      height: 24px;
+      width: 24px;
+      fill: currentColor;
+      margin-top: 8px;
+      margin-left: -2px;
+    }
+  }
 }
 
 .mui-icon {
@@ -53,6 +193,11 @@ code {
 .flex {
   display: flex;
 }
+
+.acenter {
+  align-items: center;
+}
+
 .flex-col {
   display: flex;
   flex-direction: col;
@@ -61,3 +206,46 @@ code {
 .block {
   display: block;
 }
+
+.siteName {
+  border-top: solid 1px #ddd;
+  padding: 5px 20px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.pinnedDirs {
+  //border-bottom: solid 1px #ddd;
+  .pinnedDir {
+    display: flex;
+    align-items: center;  
+    padding: 5px 5px 5px 0;
+    //border-top: solid 1px #ddd;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+.site-links {
+  //border-bottom: solid 1px #ddd;
+  .site-link {
+    display: flex;
+    align-items: center;
+    padding: 5px 5px 5px 0;
+    //border-top: solid 1px #ddd;
+    &:hover {
+      cursor:pointer;
+    }
+  }
+}
+
+.hpointer {
+  &:hover {
+    cursor:pointer;
+  }
+}
+
+
+
+

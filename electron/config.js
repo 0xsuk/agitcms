@@ -10,9 +10,17 @@ const getConfig = () => {
       fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o775 });
     }
     if (!fs.existsSync(CONFIG_FILE)) {
-      const config_str = fs
-        .readFileSync(path.join(__dirname, "assets", "config.json"))
-        .toString();
+      const isWin = process.platform === "win32";
+      let config_str;
+      if (isWin) {
+        config_str = fs
+          .readFileSync(path.join(__dirname, "assets", "config.win.json"))
+          .toString();
+      } else {
+        config_str = fs
+          .readFileSync(path.join(__dirname, "assets", "config.unix.json"))
+          .toString();
+      }
       fs.writeFileSync(CONFIG_FILE, config_str, { mode: 0o664 });
     }
 

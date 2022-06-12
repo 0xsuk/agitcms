@@ -1,39 +1,66 @@
-import { Fragment, useContext } from "react";
-import { Button } from "@mui/material";
+import { Fragment, useContext, useState } from "react";
+import { Button, Grid, Typography } from "@mui/material";
 import { configContext } from "../context/ConfigContext";
-import { Link, useNavigate } from "react-router-dom";
+import NewSiteDialog from "./settings/site/NewSiteDialog";
+import { newSiteConfig } from "../lib/useSiteConfig";
+import { useHistory } from "react-router-dom";
 
 function Home() {
-  const { config } = useContext(configContext);
-  const navigate = useNavigate();
-
-  const addNewSite = () => {
+  const { config, updateSiteConfig } = useContext(configContext);
+  const history = useHistory();
+  const addNewSite = (name, path) => {
     //siteKey == "new"
-    navigate("/settings/new");
+    const siteConfig = newSiteConfig();
+    siteConfig.name = name;
+    siteConfig.path = path;
+    siteConfig.pinnedDirs = [{ name: "Root", path, isDir: true }];
+    updateSiteConfig(siteConfig);
+  };
+
+  const [isNewSiteDialogOpen, setIsNewSiteDialogOpen] = useState(false);
+  const closeNewSiteDialog = () => {
+    setIsNewSiteDialogOpen(false);
   };
 
   return (
-    <Fragment>
-      <h1>Home</h1>
-      {config.sites?.map((siteConfig) => (
-        <div className="flex">
-          <Link
-            to={
-              "/edit/" +
-              siteConfig.key +
-              "?path=" +
-              siteConfig.path +
-              "&name=Root&isDir=true"
-            }
-          >
-            <h2>{siteConfig.name}</h2>
-          </Link>
-        </div>
-      ))}
-      <Button onClick={addNewSite} variant="contained">
-        New
-      </Button>
-    </Fragment>
+    <div id="home">
+      <NewSiteDialog
+        open={isNewSiteDialogOpen}
+        onClose={closeNewSiteDialog}
+        addNewSite={addNewSite}
+      />
+      <Grid container spacing={1} alignItems="center">
+        <Grid item>
+          <Typography variant="h5">Home</Typography>
+        </Grid>
+        <Grid item>
+          <Button onClick={() => setIsNewSiteDialogOpen(true)}>New</Button>
+        </Grid>
+      </Grid>
+      <Grid container spacing={0} direction="column" justifyContent="center">
+        {config.sites?.map((siteConfig) => (
+          <Grid item>
+            <div
+              className="siteName"
+              onClick={() =>
+                history.push(
+                  "/site/edit/" +
+                    siteConfig.key +
+                    "?path=" +
+                    siteConfig.path +
+                    "&name=Root&isDir=true"
+                )
+              }
+            >
+              <Typography variant="h6">{siteConfig.name}</Typography>
+              <Typography variant="caption" sx={{ color: "#999" }}>
+                {siteConfig.path}
+              </Typography>
+            </div>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
   );
 }
 

@@ -32,6 +32,7 @@ function ConfigContext({ children }) {
     if (!isSiteExist) {
       if (config.sites === undefined) config.sites = [];
       config.sites.push(newSiteConfig);
+      console.log("new site created");
     }
 
     updateConfig(config);
@@ -55,6 +56,7 @@ function ConfigContext({ children }) {
       value={{
         config,
         readConfig,
+        updateConfig,
         updateSiteConfig,
         deleteSiteConfig,
       }}
