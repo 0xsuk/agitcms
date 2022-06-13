@@ -2,5 +2,6 @@
   "sites": [],
   "useTerminal": true,
   "autosave": "always",
-  "theme": "dark"
+  "theme": "dark",
+  "fontSize": "1"
 }

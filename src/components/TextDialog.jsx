@@ -16,6 +16,7 @@ function TextDialog({
   dialogTitle,
   tailValue,
   isValid,
+  type = "string",
 }) {
   const [value, setValue] = useState(initialValue);
 
@@ -34,6 +35,7 @@ function TextDialog({
       <DialogTitle>{dialogTitle}</DialogTitle>
       <DialogContent>
         <TextField
+          type={type}
           autoFocus
           margin="dense"
           fullWidth

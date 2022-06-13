@@ -125,28 +125,28 @@ function SideBar() {
           </div>
         )}
 
-        {/*siteConfig === null && (
-        <>
-          <div style={{ padding: "10px" }} />
-          <Typography
-            variant="caption"
-            sx={{ fontWeight: "bold", color: "#999" }}
-          >
-            GLOBAL
-          </Typography>
-          <div className="site-links">
-            <div
-              className="site-link"
-              onClick={() => history.push("/settings/")}
+        {siteConfig === null && (
+          <>
+            <div style={{ padding: "10px" }} />
+            <Typography
+              variant="caption"
+              sx={{ fontWeight: "bold", color: "#999" }}
             >
-              <NotesOutlinedIcon fontSize="small" />
-              <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
-                Settings
-              </Typography>
+              GLOBAL
+            </Typography>
+            <div className="site-links">
+              <div
+                className="site-link"
+                onClick={() => history.push("/settings/")}
+              >
+                <SettingsOutlinedIcon fontSize="small" />
+                <Typography variant="subtitle1" sx={{ paddingLeft: "5px" }}>
+                  Settings
+                </Typography>
+              </div>
             </div>
-          </div>
-        </>
-      )*/}
+          </>
+        )}
       </div>
       {!isVisible && (
         <a id="sidebar-open" onClick={() => setIsVisible(true)}>
