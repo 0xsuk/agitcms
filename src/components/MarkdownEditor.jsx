@@ -1,4 +1,4 @@
-import { createElement, Fragment, useRef } from "react";
+import { createElement, Fragment, useRef, useContext } from "react";
 import useCodemirror from "../lib/useCodemirror";
 import { unified } from "unified";
 import remarkGfm from "remark-gfm";
@@ -7,7 +7,7 @@ import remarkRehype from "remark-rehype";
 import rehypeReact from "rehype-react";
 import remarkMath from "remark-math";
 import rehypeMathJax from "rehype-mathjax";
-import "github-markdown-css/github-markdown.css";
+import { configContext } from "../context/ConfigContext";
 let treeData;
 
 const isURL = (url) => {
@@ -20,7 +20,18 @@ const isURL = (url) => {
 };
 
 function MarkdownEditor({ fileManager, siteConfig }) {
-  const [editorRef, editorView] = useCodemirror(fileManager);
+  const { config } = useContext(configContext);
+  if (config.theme === "dark") {
+    import(
+      /* webpackMode: "eager" */ "github-markdown-css/github-markdown-dark.css"
+    );
+  } else {
+    import(
+      /* webpackMode: "eager" */ "github-markdown-css/github-markdown-light.css"
+    );
+  }
+
+  const [editorRef, editorView] = useCodemirror({ fileManager });
   const mouseIsOn = useRef(null);
 
   const defaultPlugin = () => (tree) => {

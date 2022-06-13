@@ -1,5 +1,6 @@
 {
   "sites": [],
   "useTerminal": true,
-  "autosave": "always"
+  "autosave": "always",
+  "theme": "dark"
 }

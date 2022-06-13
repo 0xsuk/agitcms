@@ -1,4 +1,5 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import { configContext } from "../context/ConfigContext";
 import { EditorState } from "@codemirror/state";
 import {
   EditorView,
@@ -9,6 +10,7 @@ import {
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { syntaxHighlighting, HighlightStyle } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
+import { oneDark } from "@codemirror/theme-one-dark";
 
 const markdownHighlighting = HighlightStyle.define([
   { tag: tags.heading1, fontSize: "1.6em", fontWeight: "bold" },
@@ -24,7 +26,8 @@ const markdownHighlighting = HighlightStyle.define([
   },
 ]);
 
-function useCodemirror(fileManager) {
+function useCodemirror({ fileManager }) {
+  const { config } = useContext(configContext);
   const ref = useRef(null);
   const [view, setView] = useState(null);
   const fileManagerRef = useRef(null);
@@ -58,6 +61,7 @@ function useCodemirror(fileManager) {
               fileManagerRef.current.setDoc(update.state.doc.toString());
             }
           }),
+          config.theme === "dark" && oneDark,
         ],
       });
 
