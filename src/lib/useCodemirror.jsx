@@ -27,18 +27,20 @@ const markdownHighlighting = HighlightStyle.define([
 function useCodemirror(fileManager) {
   const ref = useRef(null);
   const [view, setView] = useState(null);
+  const fileManagerRef = useRef(null);
+  fileManagerRef.current = fileManager;
 
   useEffect(() => {
     if (!ref.current) {
       return;
     }
     console.log("useCodeMirror");
-    fileManager.readFile().then(({ content, err }) => {
+    fileManagerRef.current.readFile().then(({ content, err }) => {
       if (err) {
         alert(err);
         return;
       }
-      const { doc } = fileManager.setContent(content);
+      const { doc } = fileManagerRef.current.setContent(content);
       const startState = EditorState.create({
         doc,
         contentHeight: "100%",
@@ -53,7 +55,7 @@ function useCodemirror(fileManager) {
           EditorView.lineWrapping,
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
-              fileManager.setDoc(update.state.doc.toString());
+              fileManagerRef.current.setDoc(update.state.doc.toString());
             }
           }),
         ],

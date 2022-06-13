@@ -89,7 +89,6 @@ function EditorWrapper() {
       }
     });
     console.log("saved");
-    fileManager.saveFile();
   };
 
   useEffect(() => {
