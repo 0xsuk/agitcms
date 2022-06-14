@@ -13,7 +13,8 @@
     "pack:electron:l": "electron-builder -l -c.extraMetadata.main=build/electron/electron.js",
     "pack:w": "@powershell if (Test-Path build) {Remove-Item -Recurse build} && @powershell Copy-Item -Recurse public build && yarn run build:renderer && @powershell Copy-Item -Recurse electron build/electron && yarn run pack:electron:w",
     "pack:m": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && yarn run pack:electron:m",
-    "pack:l": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && yarn run pack:electron:l"
+    "pack:l": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && yarn run pack:electron:l",
+    "build:l": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && electron-builder -l -c.extraMetadata.main=build/electron/electron.js --dir"
   },
   "repository": {
     "type": "git",
@@ -42,6 +43,7 @@
     "@mui/material": "^5.8.2",
     "buffer": "^6.0.3",
     "css-loader": "^6.7.1",
+    "custom-electron-titlebar": "^4.1.0",
     "electron-is-dev": "^2.0.0",
     "github-markdown-css": "^5.1.0",
     "gray-matter": "^4.0.3",

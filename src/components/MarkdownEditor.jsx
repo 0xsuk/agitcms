@@ -150,7 +150,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     .use(remarkGfm)
     .use(remarkMath)
     .use(remarkRehype)
-    .use(rehypeMathJax)
+    //.use(rehypeMathJax) //TODO: has some trouble with webpack build
     .use(defaultPlugin)
     .use(rehypeReact, { createElement, Fragment })
     .processSync(fileManager.file.doc).result;
