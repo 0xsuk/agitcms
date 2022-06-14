@@ -112,11 +112,12 @@ function CreateNewDf({ cwdf }) {
   };
 
   return (
-    <div style={{ marginLeft: "22px" }}>
+    <div>
       <Button
         onClick={toggleNewButton}
         ref={anchorRef}
         endIcon={<ArrowDropDown />}
+        size="large"
       >
         Create New
       </Button>

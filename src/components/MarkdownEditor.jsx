@@ -163,12 +163,14 @@ function MarkdownEditor({ fileManager, siteConfig }) {
           ref={editorRef}
           onScroll={handleMdScroll}
           onMouseEnter={() => (mouseIsOn.current = "markdown")}
+          onMouseOver={() => (mouseIsOn.current = "markdown")} //in case mouse is above the element at the beginning
         ></div>
         <div
           id="editor-preview"
           className="markdown-body"
           onScroll={handlePreviewScroll}
           onMouseEnter={() => (mouseIsOn.current = "preview")}
+          onMouseOver={() => (mouseIsOn.current = "preview")}
         >
           {md}
         </div>

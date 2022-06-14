@@ -53,6 +53,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }) {
   const history = useHistory();
   const removeDf = async () => {
     const dfPath = cwdf + "/" + df.name;
+    if (!window.confirm("Delete " + dfPath + " ?")) return;
     let err;
     if (df.isDir) {
       err = (await window.electronAPI.removeFolder(dfPath)).err;

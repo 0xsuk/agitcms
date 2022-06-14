@@ -50,7 +50,9 @@ function SideBar() {
         </div>
         {siteConfig !== null && (
           <div>
-            <Typography variant="h6">{siteConfig.name}</Typography>
+            <Typography sx={{ fontWeight: "semi-bold" }}>
+              {siteConfig.name}
+            </Typography>
 
             <div style={{ padding: "10px" }} />
 

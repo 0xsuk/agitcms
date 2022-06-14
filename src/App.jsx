@@ -8,7 +8,7 @@ import Settings from "./components/settings/Settings";
 import Site from "./components/settings/site/Site";
 import SideBar from "./components/SideBar";
 import Terminal from "./components/Terminal";
-import TopBar from "./components/TopBar";
+import BottomBar from "./components/BottomBar";
 import { configContext } from "./context/ConfigContext";
 import Test from "./Test";
 
@@ -54,12 +54,12 @@ function Wrapper() {
           <Site />
         </Route>
         <Route path="/site/explorer/:siteKey">
-          <TopBar />
           <Explorer />
+          <BottomBar />
         </Route>
         <Route path="/site/editor/:siteKey">
-          <TopBar />
           <EditorWrapper />
+          <BottomBar />
         </Route>
         <Route path="/site">
           <Terminal />

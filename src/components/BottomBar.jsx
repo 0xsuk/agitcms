@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { configContext } from "../context/ConfigContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import { useLocation } from "react-router-dom";
-function TopBar() {
+function BottomBar() {
   const { updateSiteConfig } = useContext(configContext);
   const siteConfig = useSiteConfig();
   const location = useLocation();
@@ -39,8 +39,7 @@ function TopBar() {
     });
   };
   return (
-    <div id="top-bar">
-      {cwdfForDisplay}
+    <div id="bottom-bar">
       {isDfPinned ? (
         <Button
           size="small"
@@ -58,8 +57,9 @@ function TopBar() {
           Pin
         </Button>
       )}
+      {cwdfForDisplay}
     </div>
   );
 }
 
-export default TopBar;
+export default BottomBar;

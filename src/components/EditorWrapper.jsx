@@ -29,16 +29,16 @@ function EditorWrapper() {
 
     const frontmatterOn = () => {
       markdownEl.style.display = "none";
-      markdownTabEl.style.backgroundColor = "#fff";
+      markdownTabEl.style.borderBottom = "none";
       frontmatterEl.style.display = "block";
-      frontmatterTabEl.style.backgroundColor = "#89b8e640";
+      frontmatterTabEl.style.borderBottom = "solid 1px red";
     };
 
     const markdownOn = () => {
       markdownEl.style.display = "block";
-      markdownTabEl.style.backgroundColor = "#89b8e640";
+      markdownTabEl.style.borderBottom = "solid 1px red";
       frontmatterEl.style.display = "none";
-      frontmatterTabEl.style.backgroundColor = "#fff";
+      frontmatterTabEl.style.borderBottom = "none";
     };
 
     switch (tab) {
@@ -106,13 +106,7 @@ function EditorWrapper() {
   return (
     <>
       <div id="editor-navigator">
-        <div
-          className="tab"
-          style={{
-            backgroundColor: "#89b8e640",
-          }}
-          onClick={() => switchTab("markdown")}
-        >
+        <div className="tab" onClick={() => switchTab("markdown")}>
           Markdown
         </div>
         <div className="tab" onClick={() => switchTab("frontmatter")}>

@@ -1,3 +1,10 @@
+$border-default: #42424242;
+$background-default: #0d1117;
+$background-darker: #131820;
+$color-default: #c9d1d9;
+$color-darker: #7d8799;
+
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -10,6 +17,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: $background-default;
+  color: $color-default;
 }
 
 code {
@@ -17,24 +26,33 @@ code {
     monospace;
 }
 
+html {
+  color-scheme: dark;
+}
+
 #root {
   height: 100vh;
-  overflow: hidden;
 }
 
 
 #sidebar {
   #sidebar-body {
-    width: 170px;
-    padding: 5px;
+    width: 200px;
+    padding: 10px 20px;
   }
   height: 100vh;
   flex-shrink: 0;
-  word-break: break-word;
+  p,h6 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+  }
+  overflow-x: hidden;
+  overflow-y: auto;
   //background-color: rgb(250, 250, 250);
   position: sticky;
   top: 0;
-  border-right: 1px solid #eee;
+  border-right: 1px solid $border-default;
   z-index: 2;
 }
 
@@ -44,12 +62,15 @@ code {
 }
 
 
-$top-bar-height: 16px;
-#top-bar {
+$bottom-bar-height: 22px;
+#bottom-bar {
+  background: $background-darker;
+  color: $color-darker;
   font-size: 13px;
-  color: #666;
+  padding: 2px 10px 2px 20px;
   white-space: nowrap;
-  height: $top-bar-height;
+  height: $bottom-bar-height;
+  border-top: solid 1px $border-default;
 }
 
 #wrapper {
@@ -59,16 +80,23 @@ $top-bar-height: 16px;
 #main {
   width: 100%;
   //background-color: rgb(250, 250, 250);
+  overflow-x: hidden;
 }
 
-$editor-navigator-height: 33px;
+$editor-navigator-height: 44px;
 #editor-navigator {
+  background: $background-darker;
+  border-bottom: solid 1px #999;
   height: $editor-navigator-height;
   display: flex;
+  align-items: center;
   .tab {
     font-size: 1em;
-    color: #999;
-    padding: 7px;
+    padding: 12px;
+    &:nth-of-type(1) {
+      border-bottom: solid 1px red;
+    }
+
     &:hover {
       cursor: pointer;
     }
@@ -79,7 +107,8 @@ $editor-navigator-height: 33px;
 
 
 #editor-wrapper {
-  height: calc(100% - $top-bar-height - $editor-navigator-height); 
+  overflow: hidden;
+  height: calc(100% - $bottom-bar-height - $editor-navigator-height); 
   & > div {
     height: 100%;
   }
@@ -87,7 +116,8 @@ $editor-navigator-height: 33px;
 
 
 #editor-frontmatter-tab {
-  padding: 10px;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 
@@ -95,6 +125,10 @@ $editor-navigator-height: 33px;
   height: 100%;
   flex: 0 0 50%;
   overflow-y: auto;
+
+  .ͼ1 .cm-content {
+    padding: 0;
+  }
 }
 
 #editor-preview {
@@ -102,7 +136,7 @@ $editor-navigator-height: 33px;
   height: 100%;
   flex: 0 0 50%;
   padding: 0 3px 0 12px;
-  border-left: solid 1px #ddd;
+  border-left: solid 1px #424242; //same as dark color-scheme scroll bar
   overflow-y: auto;
   overflow-x: hidden;
   * {
@@ -112,41 +146,12 @@ $editor-navigator-height: 33px;
 
 
 #explorer {
-  height: 100%;
-  overflow: hidden;
-  #editor {
-    height: 98%;
-    display: flex;
-    flex-direction: column;
-
-    #switcher {
-      margin-left: 25px;
-        .tab {
-          padding: 5px;
-          border: solid 1px #eee;
-          &:nth-of-type(2) {
-            background-color: #89b8e640;
-          }
-          &:hover {
-            cursor:pointer;
-          }
-        }
-    }
-
-    #frontmatter-tab {
-      display: none;
-      padding: 5px;
-    }
-    #editor-tab {
-      flex-grow: 1;
-    }
-
-
-  }
-
+  padding: 20px;
+  height: calc(100% - $bottom-bar-height);
+  overflow: hidden auto;
   .df {
-    border-top: solid 1px #ddd;
-    padding: 10px 30px;
+    border-top: solid 1px $border-default;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     p {
@@ -189,7 +194,7 @@ $editor-navigator-height: 33px;
 #setting-site {
   padding: 20px;
   .setting-draggable{
-    border-top: solid 1px #ddd;
+    border-top: solid 1px #424242;
     padding: 10px 15px;
     display: flex;
     justify-content: space-between;
@@ -203,7 +208,8 @@ $editor-navigator-height: 33px;
   display: block;
   position: absolute;
   right: 0;
-  top: 0;
+  bottom: 0;
+  z-index: 5;
   margin-right: -20px;
   span {
     display: block;
@@ -226,7 +232,7 @@ $editor-navigator-height: 33px;
   display: block;
   position: absolute;
   right: 0;
-  top: 0;
+  bottom: 0;
   span {
     display: block;
     background: black;
@@ -267,7 +273,7 @@ $editor-navigator-height: 33px;
 }
 
 .siteName {
-  border-top: solid 1px #ddd;
+  border-top: solid 1px #424242;
   padding: 5px 20px;
   &:hover {
     cursor: pointer;
