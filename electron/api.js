@@ -76,10 +76,12 @@ exports.renameFile = (e, oldFilePath, newFileName) => {
   }
 };
 
-exports.getFolderPath = () => {
+exports.getFolderPath = (_, defaultPath) => {
   try {
+    console.log({ defaultPath });
     const folderPaths = dialog.showOpenDialogSync({
       properties: ["openDirectory"],
+      defaultPath,
     });
 
     if (folderPaths === undefined) {

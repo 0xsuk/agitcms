@@ -20,7 +20,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   readFile: (filePath) => ipcRenderer.invoke("read-file", filePath),
   renameFile: (filePath, newFileName) =>
     ipcRenderer.invoke("rename-file", filePath, newFileName),
-  getFolderPath: () => ipcRenderer.invoke("get-folder-path"),
+  getFolderPath: (defaultPath) =>
+    ipcRenderer.invoke("get-folder-path", defaultPath),
   getFilesAndFolders: (folderPath) =>
     ipcRenderer.invoke("get-files-and-folders", folderPath),
   getMediaFile: (staticPath, publicPath) =>

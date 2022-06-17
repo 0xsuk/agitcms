@@ -16,9 +16,9 @@ function useSiteConfigBuffer(initialSiteConfig) {
 
   const editMediaStaticPath = async () => {
     const { folderPath, err, canceled } =
-      await window.electronAPI.getFolderPath();
+      await window.electronAPI.getFolderPath(siteConfigCopy.path);
     if (err) {
-      console.warn(err);
+      alert(err);
       return;
     }
     if (!err && !canceled) {
