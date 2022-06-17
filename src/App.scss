@@ -1,3 +1,4 @@
+$titlebar-height: 30px;
 $border-default: #42424242;
 $background-default: #0d1117;
 $background-darker: #131820;
@@ -31,7 +32,7 @@ html {
 }
 
 #root {
-  height: 100vh;
+  height: calc(100vh - $titlebar-height);
 }
 
 
@@ -40,7 +41,7 @@ html {
     width: 200px;
     padding: 10px 20px;
   }
-  height: 100vh;
+  height: 100%;
   flex-shrink: 0;
   p,h6 {
     white-space: nowrap;
