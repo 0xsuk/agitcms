@@ -1,9 +1,14 @@
+const path = require("path");
 const { contextBridge, ipcRenderer } = require("electron");
-const { Titlebar } = require("custom-electron-titlebar");
+const { Titlebar, Color } = require("custom-electron-titlebar");
 
 window.addEventListener("DOMContentLoaded", () => {
   // Title bar implemenation
-  new Titlebar();
+  new Titlebar({
+    menu: null,
+    backgroundColor: Color.fromHex("#131820"),
+    icon: `file://${path.join(__dirname, "..", "icons", "16x16.png")}`, //works only on production
+  });
 });
 
 contextBridge.exposeInMainWorld("electronAPI", {

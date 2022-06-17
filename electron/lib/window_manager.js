@@ -15,6 +15,8 @@ const createWindow = () => {
     width: 1200,
     height: 900,
     frame: false,
+    minWidth: 400,
+    minHeight: 400,
     webPreferences: {
       preload: path.join(__dirname, "..", "preload.js"),
     },
@@ -22,7 +24,6 @@ const createWindow = () => {
 
   attachTitlebarToWindow(win);
 
-  console.log(__dirname);
 
   win.loadURL(
     isDev

@@ -39,8 +39,7 @@ function Explorer() {
       {isInDir && <CreateNewDf cwdf={cwdf} />}
       {isInDir &&
         filesAndFolders.map((df) => {
-          //if (df.isDir || df.extension === ".md")
-          return <Df {...{ siteConfig, cwdf, df, loadFilesAndFolders }} />;
+          if (df.isDir || df.extension === ".md") <Df {...{ siteConfig, cwdf, df, loadFilesAndFolders }} />;
         })}
       {!isInDir && <EditorWrapper filePath={cwdf}></EditorWrapper>}
     </div>
