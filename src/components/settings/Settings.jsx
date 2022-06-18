@@ -5,19 +5,19 @@ import {
   Divider,
   TextField,
   Button,
+  Slider,
+  Tooltip,
 } from "@mui/material";
 import { configContext } from "../../context/ConfigContext";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import CustomSelect from "../CustomSelect";
 import { ArrowDropDown } from "@mui/icons-material";
-import TextDialog from "../TextDialog";
 
 const autosaveOptions = ["always", "never"];
 const themeOptions = ["dark", "light"];
 
 function Settings() {
   const { config, updateConfig } = useContext(configContext);
-  const [isFontsizeDialogOpen, setIsFontsizeDialogOpen] = useState(false);
 
   const toggleUseTerminal = (newValue) => {
     updateConfig({ ...config, useTerminal: newValue });
@@ -31,13 +31,12 @@ function Settings() {
     updateConfig({ ...config, theme: newValue });
   };
 
-  const updateFontsize = (newValue) => {
+  const updateZoom = (newValue) => {
     newValue = Number(newValue);
-    if (newValue === 0) {
-      return;
-    }
-    updateConfig({ ...config, fontSize: newValue });
+    newValue = newValue / 100;
+    updateConfig({ ...config, zoom: newValue });
   };
+
   return (
     <div id="settings">
       <Typography variant="h5">Global Settings</Typography>
@@ -121,35 +120,34 @@ function Settings() {
         </Grid>
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
-            <Typography>Font Size:</Typography>
+            <Typography>Zoom:</Typography>
           </Grid>
-          <Grid item>
-            <TextField
-              value={config.fontSize}
-              InputProps={{
-                readOnly: true,
-                endAdornment: <p style={{ paddingLeft: "10px" }}> em</p>,
+          <Grid item sx={{ width: "200px", paddingTop: "100px" }}>
+            <Slider
+              min={60}
+              max={140}
+              valueLabelDisplay="auto"
+              marks={[{ value: 100 }]}
+              onChangeCommitted={(_, v) => {
+                updateZoom(v);
               }}
-              label="required"
-              variant="filled"
-              onClick={() => {
-                setIsFontsizeDialogOpen(true);
+              components={{
+                ValueLabel: ValueLabelComponent,
               }}
-            />
-            <TextDialog
-              type="number"
-              isOpen={isFontsizeDialogOpen}
-              isValid={(value) => Number(value) !== 0}
-              onSave={updateFontsize}
-              onClose={() => setIsFontsizeDialogOpen(false)}
-              dialogTitle={"Font size"}
-              tailValue={"em"}
-              initialValue={config.fontSize}
+              defaultValue={config.zoom * 100}
             />
           </Grid>
         </Grid>
       </Grid>
     </div>
+  );
+}
+
+function ValueLabelComponent({ value, children }) {
+  return (
+    <Tooltip title={value + "%"} placement={"bottom"}>
+      {children}
+    </Tooltip>
   );
 }
 

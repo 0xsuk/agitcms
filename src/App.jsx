@@ -19,8 +19,12 @@ function App() {
     readConfig();
   }, []);
 
-  if (config.sites === undefined) {
-    console.log("reading config", config);
+  useEffect(() => {
+    if (config === undefined) return;
+    window.electronAPI.webFrames.setZoomFactor(config.zoom);
+  }, [config]);
+
+  if (config === undefined) {
     return <Fragment />;
   }
 

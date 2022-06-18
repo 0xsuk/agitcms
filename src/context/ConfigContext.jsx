@@ -3,7 +3,7 @@ import { useState, createContext } from "react";
 export const configContext = createContext();
 
 function ConfigContext({ children }) {
-  const [config, setConfig] = useState({});
+  const [config, setConfig] = useState(undefined);
 
   const readConfig = async () => {
     const { config: newConfig } = await window.electronAPI.readConfig();
