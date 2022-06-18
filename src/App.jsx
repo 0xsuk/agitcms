@@ -36,9 +36,16 @@ function App() {
 }
 
 function Wrapper() {
+  const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+
   return (
     // list of workspace
-    <div id="wrapper">
+    <div
+      style={{
+        display: "flex",
+        height: isMac ? "calc(100vh - 22px)" : "calc(100vh - 30px)",
+      }}
+    >
       <SideBar />
       <div id="main">
         <Route path="/test">
