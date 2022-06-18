@@ -1,5 +1,5 @@
 const path = require("path");
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge, ipcRenderer, webFrame } = require("electron");
 const { Titlebar, Color } = require("custom-electron-titlebar");
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -12,6 +12,10 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  webFrames: {
+    getZoomFactor: () => webFrame.getZoomFactor(),
+    setZoomFactor: (int) => webFrame.setZoomFactor(int),
+  },
   confirm: (message) => ipcRenderer.invoke("confirm", message),
   readConfig: () => ipcRenderer.invoke("read-config"),
   updateConfig: (newConfig) => ipcRenderer.invoke("update-config", newConfig),
