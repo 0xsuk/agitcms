@@ -12,16 +12,26 @@ import { tags } from "@lezer/highlight";
 import { oneDark } from "../styles/cm-dark-theme";
 
 const markdownHighlighting = HighlightStyle.define([
-  { tag: tags.heading1, fontSize: "1.6em", fontWeight: "bold" },
+  { tag: tags.heading1, fontSize: "2.0em" },
   {
     tag: tags.heading2,
-    fontSize: "1.4em",
-    fontWeight: "bold",
+    fontSize: "1.5em",
   },
   {
     tag: tags.heading3,
-    fontSize: "1.2em",
-    fontWeight: "bold",
+    fontSize: "1.25em",
+  },
+  {
+    tag: tags.heading4,
+    fontSize: "1em",
+  },
+  {
+    tag: tags.heading5,
+    fontSize: "0.875em",
+  },
+  {
+    tag: tags.heading6,
+    fontSize: "0.85em",
   },
 ]);
 
