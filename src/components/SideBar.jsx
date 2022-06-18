@@ -37,15 +37,15 @@ function SideBar() {
             fontSize="small"
             onClick={() => history.goForward()}
           />
-          <HomeOutlinedIcon
-            fontSize="small"
-            onClick={() => history.push("/")}
-            className="hpointer"
-          />
           <ReplayOutlinedIcon
             fontSize="small"
             className="hpointer"
             onClick={() => window.location.reload()}
+          />
+          <HomeOutlinedIcon
+            fontSize="small"
+            onClick={() => history.push("/")}
+            className="hpointer"
           />
         </div>
         {siteConfig !== null && (
