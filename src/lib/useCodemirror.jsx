@@ -1,17 +1,21 @@
-import { useRef, useState, useEffect } from "react";
+import { defaultKeymap, historyKeymap, history } from "@codemirror/commands";
+import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
+import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import { EditorState } from "@codemirror/state";
 import {
   EditorView,
-  lineNumbers,
   highlightActiveLine,
   highlightActiveLineGutter,
+  keymap,
+  lineNumbers,
 } from "@codemirror/view";
-import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
-import { syntaxHighlighting, HighlightStyle } from "@codemirror/language";
+import DateFnsAdapter from "@date-io/date-fns";
 import { tags } from "@lezer/highlight";
-import { oneDark } from "../styles/cm-dark-theme";
-import useSiteConfig from "../lib/useSiteConfig";
 import path from "path";
+import { useEffect, useRef, useState } from "react";
+import useSiteConfig from "../lib/useSiteConfig";
+import { oneDark } from "../styles/cm-dark-theme";
+const dateFns = new DateFnsAdapter();
 
 const markdownHighlighting = HighlightStyle.define([
   { tag: tags.heading1, fontSize: "2.0em" },
@@ -50,7 +54,6 @@ function useCodemirror({ fileManager }) {
       return;
     }
 
-    console.log("useCodeMirror");
     fileManagerRef.current.readFile().then(({ content, err }) => {
       if (err) {
         alert(err);
@@ -61,23 +64,27 @@ function useCodemirror({ fileManager }) {
         doc,
         contentHeight: "100%",
         extensions: [
+          keymap.of([...defaultKeymap, ...historyKeymap]),
           lineNumbers(),
           highlightActiveLine(),
           highlightActiveLineGutter(),
+          history(),
           markdown({
             base: markdownLanguage, //Support GFM
+            addKeymap: true,
           }),
           syntaxHighlighting(markdownHighlighting),
           EditorView.lineWrapping,
           EditorView.updateListener.of((update) => {
-            console.log({ transaction: update.transactions });
+            console.log(update.transactions);
             if (update.docChanged) {
               fileManagerRef.current.setDoc(update.state.doc.toString());
             }
           }),
           oneDark,
           EditorView.domEventHandlers({
-            paste(pasteEvent) {
+            paste(pasteEvent, view) {
+              if (!siteConfig.media.staticPath) return;
               const item = pasteEvent.clipboardData.items[0];
               if (item.type.indexOf("image") === 0) {
                 //image
@@ -85,13 +92,23 @@ function useCodemirror({ fileManager }) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                   window.electronAPI.saveImage(
-                    path.join(siteConfig.media.staticPath, "image.png"), //TODO
+                    path.join(
+                      siteConfig.media.staticPath,
+                      dateFns.formatByString(
+                        dateFns.date(),
+                        "yyyy-MM-dd-HH:mm:ss"
+                      ) + ".png"
+                    ), //TODO
                     e.target.result
                   );
                 };
 
                 //reader.readAsDataURL(blob);
                 reader.readAsBinaryString(blob);
+
+                //TODO:
+                //insert
+                console.log(view);
               }
             },
           }),

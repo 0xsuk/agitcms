@@ -963,6 +963,16 @@
     "@codemirror/view" "^6.0.0"
     "@lezer/common" "^1.0.0"
 
+"@codemirror/commands@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/commands/-/commands-6.0.0.tgz#9eaa4d53e9cdb2e13da52c8a03636a9f9ad45d2b"
+  integrity sha512-nVJDPiCQXWXj5AZxqNVXyIM3nOYauF4Dko9NGPSwgVdK+lXWJQhI5LGhS/AvdG5b7u7/pTQBkrQmzkLWRBF62A==
+  dependencies:
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+    "@lezer/common" "^1.0.0"
+
 "@codemirror/lang-css@^6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@codemirror/lang-css/-/lang-css-6.0.0.tgz#e66d087a4e52e334da4f5b3dfab47dbbdc5f6b15"
@@ -1036,16 +1046,6 @@
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@codemirror/state/-/state-6.0.0.tgz#baac0d050ce9271259b0997e1693469c044deb3f"
   integrity sha512-UjP/jB2dz7B+1L+eiCm8YWhM1zBkFM2zUyp8hhtpvgmuOFmoWjwqHnICQmM34HNPBqMPcVY9ZcqJcOhDrB+dBQ==
-
-"@codemirror/theme-one-dark@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@codemirror/theme-one-dark/-/theme-one-dark-6.0.0.tgz#81a999a568217f68522bd8846cbf7210ca2a59df"
-  integrity sha512-jTCfi1I8QT++3m21Ui6sU8qwu3F/hLv161KLxfvkV1cYWSBwyUanmQFs89ChobQjBHi2x7s2k71wF9WYvE8fdw==
-  dependencies:
-    "@codemirror/language" "^6.0.0"
-    "@codemirror/state" "^6.0.0"
-    "@codemirror/view" "^6.0.0"
-    "@lezer/highlight" "^1.0.0"
 
 "@codemirror/view@^6.0.0":
   version "6.0.0"
