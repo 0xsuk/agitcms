@@ -17,6 +17,7 @@ const {
   spawnShell,
   startMediaServer,
   getMediaFile,
+  saveImage,
 } = require("./api");
 const { createWindow } = require("./lib/window_manager");
 
@@ -39,6 +40,7 @@ app.whenReady().then(() => {
   ipcMain.handle("spawn-shell", spawnShell);
   ipcMain.handle("start-media-server", startMediaServer);
   ipcMain.handle("get-media-file", getMediaFile);
+  ipcMain.handle("save-image", saveImage);
   //ipcMain.handle("resize-shell", resizeShell);
 
   app.on("activate", () => {

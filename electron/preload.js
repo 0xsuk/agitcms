@@ -40,6 +40,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   resizeShell: (id, size) => ipcRenderer.invoke("resize-shell", id, size),
   startMediaServer: (staticPath, publicPath) =>
     ipcRenderer.invoke("start-media-server", staticPath, publicPath),
+  saveImage: (filePath, binary) =>
+    ipcRenderer.invoke("save-image", filePath, binary),
   onShellData: (callback) => ipcRenderer.on("shell-data", callback),
   onShellExit: (callback) => ipcRenderer.on("shell-exit", callback),
 });

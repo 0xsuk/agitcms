@@ -10,6 +10,8 @@ import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { syntaxHighlighting, HighlightStyle } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
 import { oneDark } from "../styles/cm-dark-theme";
+import useSiteConfig from "../lib/useSiteConfig";
+import path from "path";
 
 const markdownHighlighting = HighlightStyle.define([
   { tag: tags.heading1, fontSize: "2.0em" },
@@ -41,10 +43,13 @@ function useCodemirror({ fileManager }) {
   const fileManagerRef = useRef(null);
   fileManagerRef.current = fileManager;
 
+  const siteConfig = useSiteConfig();
+
   useEffect(() => {
     if (!ref.current) {
       return;
     }
+
     console.log("useCodeMirror");
     fileManagerRef.current.readFile().then(({ content, err }) => {
       if (err) {
@@ -71,6 +76,25 @@ function useCodemirror({ fileManager }) {
             }
           }),
           oneDark,
+          EditorView.domEventHandlers({
+            paste(pasteEvent) {
+              const item = pasteEvent.clipboardData.items[0];
+              if (item.type.indexOf("image") === 0) {
+                //image
+                const blob = item.getAsFile();
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  window.electronAPI.saveImage(
+                    path.join(siteConfig.media.staticPath, "image.png"), //TODO
+                    e.target.result
+                  );
+                };
+
+                //reader.readAsDataURL(blob);
+                reader.readAsBinaryString(blob);
+              }
+            },
+          }),
         ],
       });
 

@@ -207,3 +207,7 @@ exports.startMediaServer = (_, staticPath, publicPath) => {
   const mediaServer = new MediaServer(staticPath, publicPath);
   mediaServer.run();
 };
+
+exports.saveImage = (_, filePath, binary) => {
+  fs.writeFileSync(filePath, binary, "binary");
+};
