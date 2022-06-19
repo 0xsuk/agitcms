@@ -4,8 +4,8 @@ import "./App.scss";
 import EditorWrapper from "./components/EditorWrapper";
 import Explorer from "./components/Explorer";
 import Home from "./components/Home";
-import Settings from "./components/settings/Settings";
-import Site from "./components/settings/site/Site";
+import Settings from "./components/Settings";
+import SiteSettigs from "./components/SiteSettings";
 import SideBar from "./components/SideBar";
 import Terminal from "./components/Terminal";
 import BottomBar from "./components/BottomBar";
@@ -62,7 +62,7 @@ function Wrapper() {
           <Settings />
         </Route>
         <Route path="/site/settings/:siteKey">
-          <Site />
+          <SiteSettigs />
         </Route>
         <Route path="/site/explorer/:siteKey">
           <Explorer />

@@ -1,17 +1,17 @@
-import {
-  Grid,
-  Typography,
-  Switch,
-  Divider,
-  TextField,
-  Button,
-  Slider,
-  Tooltip,
-} from "@mui/material";
-import { configContext } from "../../context/ConfigContext";
-import { useContext } from "react";
-import CustomSelect from "../CustomSelect";
 import { ArrowDropDown } from "@mui/icons-material";
+import {
+  Button,
+  Divider,
+  Grid,
+  Slider,
+  Switch,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useContext } from "react";
+import { configContext } from "../context/ConfigContext";
+import CustomSelect from "./CustomSelect";
 
 const autosaveOptions = ["always", "never"];
 const themeOptions = ["dark", "light"];

@@ -1,25 +1,23 @@
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
-import { useState } from "react";
+import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   Button,
   Divider,
   Grid,
   Menu,
   MenuItem,
-  Typography,
   TextField,
+  Typography,
 } from "@mui/material";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import useSiteConfig, {
-  FrontmatterLanguages,
-} from "../../../lib/useSiteConfig";
-import useSiteConfigBuffer from "../../../lib/useSiteConfigBuffer";
-import FrontmatterDialog from "./FrontmatterDialog";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import useSiteConfig, { FrontmatterLanguages } from "../lib/useSiteConfig";
+import useSiteConfigBuffer from "../lib/useSiteConfigBuffer";
 import CommandDialog from "./CommandDialog";
-import TextDialog from "../../TextDialog";
-import CustomSelect from "../../CustomSelect";
+import CustomSelect from "./CustomSelect";
+import FrontmatterDialog from "./FrontmatterDialog";
+import TextDialog from "./TextDialog";
 
 function Site() {
   const siteConfig = useSiteConfig();

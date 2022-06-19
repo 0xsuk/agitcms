@@ -15,7 +15,7 @@ import {
   Chip,
 } from "@mui/material";
 import { useState } from "react";
-import { FrontmatterTypes } from "../../../lib/useSiteConfig";
+import { FrontmatterTypes } from "../lib/useSiteConfig";
 
 function ArrayOfStringMatter({
   handleBack,
