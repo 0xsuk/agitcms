@@ -88,27 +88,38 @@ function useCodemirror({ fileManager }) {
               const item = pasteEvent.clipboardData.items[0];
               if (item.type.indexOf("image") === 0) {
                 //image
+                const fileName =
+                  dateFns.formatByString(
+                    dateFns.date(),
+                    "yyyy-MM-dd-HH:mm:ss"
+                  ) + ".png";
                 const blob = item.getAsFile();
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                  window.electronAPI.saveImage(
-                    path.join(
-                      siteConfig.media.staticPath,
-                      dateFns.formatByString(
-                        dateFns.date(),
-                        "yyyy-MM-dd-HH:mm:ss"
-                      ) + ".png"
-                    ), //TODO
+                reader.onload = async (e) => {
+                  const err = await window.electronAPI.saveImage(
+                    path.join(siteConfig.media.staticPath, fileName), //TODO
                     e.target.result
                   );
+                  if (err) {
+                    alert(err);
+                    return;
+                  }
+
+                  const position =
+                    view.state.selection.ranges[view.state.selection.mainIndex]
+                      .to;
+                  view.dispatch({
+                    changes: {
+                      from: position,
+                      insert:
+                        "![](" +
+                        path.join(siteConfig.media.publicPath, fileName) +
+                        ")",
+                    },
+                  });
                 };
 
-                //reader.readAsDataURL(blob);
                 reader.readAsBinaryString(blob);
-
-                //TODO:
-                //insert
-                console.log(view);
               }
             },
           }),

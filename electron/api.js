@@ -18,7 +18,6 @@ exports.confirm = (_, message) => {
   const index = dialog.showMessageBoxSync(win, options);
   const isConfirmed = index === 1;
 
-  console.log("ISCONFIRMED:", isConfirmed);
   return isConfirmed;
 };
 
@@ -78,7 +77,6 @@ exports.renameFile = (e, oldFilePath, newFileName) => {
 
 exports.getFolderPath = (_, defaultPath) => {
   try {
-    console.log({ defaultPath });
     const folderPaths = dialog.showOpenDialogSync({
       properties: ["openDirectory"],
       defaultPath,
@@ -198,16 +196,19 @@ exports.spawnShell = (_, cwd, shell) => {
   if (shell === undefined) shell = defaultShell;
   const id = shellProcessManager.spawn(cwd, shell);
 
-  console.log("shell spawned");
   return id;
 };
 
 exports.startMediaServer = (_, staticPath, publicPath) => {
-  console.log("startin", staticPath, publicPath);
   const mediaServer = new MediaServer(staticPath, publicPath);
   mediaServer.run();
 };
 
 exports.saveImage = (_, filePath, binary) => {
-  fs.writeFileSync(filePath, binary, "binary");
+  try {
+    fs.writeFileSync(filePath, binary, "binary");
+    return null;
+  } catch (err) {
+    return err;
+  }
 };

@@ -47,6 +47,8 @@ let currentServer = undefined;
 module.exports = class MediaServer {
   constructor(staticPath, publicPath) {
     this.staticPath = staticPath;
+    if (!publicPath) publicPath = "/";
+    if (publicPath[0] !== "/") publicPath = "/" + publicPath;
     this.publicPath = publicPath;
     if (currentServer !== undefined) {
       currentServer.close();
@@ -59,27 +61,8 @@ module.exports = class MediaServer {
     setPort(defaultPort).then((port) => {
       currentServer = http.createServer((req, res) => {
         const parsedUrl = url.parse(req.url);
-
-        //if (parsedUrl.pathname === "/") {
-        //  var filesLink = "<ul>";
-        //  res.setHeader("Content-type", "text/html");
-        //  var filesList = fs.readdirSync(this.staticPath);
-        //  filesList.forEach((element) => {
-        //    if (fs.statSync(path.join(this.staticPath, element)).isFile()) {
-        //      filesLink += `<br/><li><a href='./${element}'>${element}</a></li>`; //TODO
-        //    }
-        //  });
-
-        //  filesLink += "</ul>";
-
-        //  res.end("<h1>List of files:</h1> " + filesLink);
-        //}
-
         const sanitizePath = path.relative(this.publicPath, parsedUrl.pathname);
-
         let pathname = path.join(this.staticPath, sanitizePath);
-
-        console.log(pathname, parsedUrl.pathname, sanitizePath);
 
         if (!fs.existsSync(pathname)) {
           res.statusCode = 404;
