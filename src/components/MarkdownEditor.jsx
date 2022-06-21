@@ -1,13 +1,13 @@
-import { createElement, Fragment, useRef, useContext } from "react";
-import useCodemirror from "../lib/useCodemirror";
-import { unified } from "unified";
+import { createElement, Fragment, useContext, useRef } from "react";
+import rehypeReact from "rehype-react";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeMathJaxSvg from "rehype-mathjax";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import rehypeReact from "rehype-react";
-import remarkMath from "remark-math";
-import rehypeMathJax from "rehype-mathjax";
+import { unified } from "unified";
 import { configContext } from "../context/ConfigContext";
+import useCodemirror from "../lib/useCodemirror";
 let treeData;
 
 const isURL = (url) => {
@@ -57,7 +57,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     });
     return tree;
   };
-  const markdownElem = document.querySelector("#editor-markdown");
+  const markdownElem = document.getElementById("editor-markdown");
   const previewElem = document.getElementById("editor-preview");
 
   const computeElemsOffsetTop = () => {
@@ -80,7 +80,6 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     return [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList];
   };
   const handleMdScroll = () => {
-    console.log(mouseIsOn.current);
     if (mouseIsOn.current !== "markdown") {
       return;
     }
@@ -150,9 +149,9 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     .use(remarkGfm)
     .use(remarkMath)
     .use(remarkRehype)
-    //.use(rehypeMathJax) //TODO: has some trouble with webpack build
-    .use(defaultPlugin)
+    .use(rehypeMathJaxSvg) //TODO: has some trouble with webpack build
     .use(rehypeReact, { createElement, Fragment })
+    .use(defaultPlugin)
     .processSync(fileManager.file.doc).result;
 
   return (
