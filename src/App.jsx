@@ -22,6 +22,8 @@ function App() {
   useEffect(() => {
     if (config === undefined) return;
     window.electronAPI.webFrames.setZoomFactor(config.zoom);
+    //TODO: theme toggle
+    //TODO: auto save
   }, [config]);
 
   if (config === undefined) {

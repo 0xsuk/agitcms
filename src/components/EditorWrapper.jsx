@@ -88,7 +88,6 @@ function EditorWrapper() {
         return;
       }
     });
-    console.log("saved");
   };
 
   useEffect(() => {

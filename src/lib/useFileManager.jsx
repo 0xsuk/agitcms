@@ -105,6 +105,7 @@ function useFileManager(filePath) {
       return;
     }
     const { err } = await window.electronAPI.saveFile(filePath, file.content);
+    if (!err) console.log("saved", file);
     return err;
   };
 

@@ -1,4 +1,11 @@
-import { createElement, Fragment, useContext, useRef } from "react";
+import {
+  createElement,
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import rehypeReact from "rehype-react";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -21,6 +28,10 @@ const isURL = (url) => {
 };
 
 function MarkdownEditor({ fileManager, siteConfig }) {
+  useEffect(() => {
+    console.log("MarkdownEditor");
+  }, []);
+
   const { config } = useContext(configContext);
   if (config.theme === "dark") {
     import(
@@ -35,33 +46,36 @@ function MarkdownEditor({ fileManager, siteConfig }) {
   const [editorRef, editorView] = useCodemirror({ fileManager });
   const mouseIsOn = useRef(null);
 
-  const defaultPlugin = () => (tree) => {
-    treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
-    tree.children = tree.children.map((child) => {
-      if (
-        child.type !== "element" ||
-        child.tagName !== "p" ||
-        child.children === undefined
-      )
-        return child;
+  const defaultPlugin = useCallback(
+    () => (tree) => {
+      treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
+      tree.children = tree.children.map((child) => {
+        if (
+          child.type !== "element" ||
+          child.tagName !== "p" ||
+          child.children === undefined
+        )
+          return child;
 
-      child.children = child.children.map((c) => {
-        if (c.type !== "element" || c.tagName !== "img") return c;
-        if (isURL(c.properties.src)) return c;
-        c.properties.src = new URL(
-          c.properties.src,
-          "http://localhost:3001"
-        ).href; //TODO -> port configuration
-        return c;
+        child.children = child.children.map((c) => {
+          if (c.type !== "element" || c.tagName !== "img") return c;
+          if (isURL(c.properties.src)) return c;
+          c.properties.src = new URL(
+            c.properties.src,
+            "http://localhost:3001"
+          ).href; //TODO -> port configuration
+          return c;
+        });
+        return child;
       });
-      return child;
-    });
-    return tree;
-  };
+      return tree;
+    },
+    []
+  );
   const markdownElem = document.getElementById("editor-markdown");
   const previewElem = document.getElementById("editor-preview");
 
-  const computeElemsOffsetTop = () => {
+  const computeElemsOffsetTop = useCallback(() => {
     let markdownChildNodesOffsetTopList = [];
     let previewChildNodesOffsetTopList = [];
 
@@ -80,8 +94,8 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     });
 
     return [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList];
-  };
-  const handleMdScroll = () => {
+  }, [editorView]);
+  const handleMdScroll = useCallback(() => {
     if (mouseIsOn.current !== "markdown") {
       return;
     }
@@ -117,9 +131,9 @@ function MarkdownEditor({ fileManager, siteConfig }) {
             previewChildNodesOffsetTopList[scrollElemIndex]) +
         previewChildNodesOffsetTopList[scrollElemIndex];
     }
-  };
+  }, [editorView]);
 
-  const handlePreviewScroll = () => {
+  const handlePreviewScroll = useCallback(() => {
     if (mouseIsOn.current !== "preview") {
       return;
     }
@@ -145,7 +159,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
             markdownChildNodesOffsetTopList[scrollElemIndex]) +
         markdownChildNodesOffsetTopList[scrollElemIndex];
     }
-  };
+  }, [editorView]);
 
   const md = unified()
     .use(remarkParse)
