@@ -9,6 +9,7 @@ import { unified } from "unified";
 import { configContext } from "../context/ConfigContext";
 import useCodemirror from "../lib/useCodemirror";
 let treeData;
+const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
 const isURL = (url) => {
   try {
@@ -72,7 +73,8 @@ function MarkdownEditor({ fileManager, siteConfig }) {
       const offsetTop = lineInfo.top;
       markdownChildNodesOffsetTopList.push(offsetTop);
       previewChildNodesOffsetTopList.push(
-        previewElem.childNodes[index].offsetTop -
+        previewElem.childNodes[index].offsetTop +
+          (isMac ? 22 : 30) - //Window titlebar height
           previewElem.getBoundingClientRect().top //offsetTop from the top of editor_preview
       );
     });
@@ -85,6 +87,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     }
     const [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList] =
       computeElemsOffsetTop();
+
     let scrollElemIndex;
     for (let i = 0; markdownChildNodesOffsetTopList.length > i; i++) {
       if (markdownElem.scrollTop < markdownChildNodesOffsetTopList[i]) {
@@ -156,7 +159,14 @@ function MarkdownEditor({ fileManager, siteConfig }) {
 
   return (
     <>
-      <div style={{ display: "flex", height: "100%", overflow: "hidden" }}>
+      <div
+        style={{
+          display: "flex",
+          height: "100%",
+          overflow: "hidden",
+          paddingTop: "5px",
+        }}
+      >
         <div
           id="editor-markdown"
           ref={editorRef}

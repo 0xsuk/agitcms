@@ -1,4 +1,4 @@
-const { BrowserWindow } = require("electron");
+const { Menu, BrowserWindow } = require("electron");
 const isDev = require("electron-is-dev"); //is not a devDependencies
 const path = require("path");
 const {
@@ -11,6 +11,8 @@ let win = undefined;
 setupTitlebar();
 
 const createWindow = () => {
+  //Menu.setApplicationMenu(null);
+
   win = new BrowserWindow({
     width: 1200,
     height: 900,
