@@ -65,12 +65,12 @@ function Wrapper() {
           <SiteSettigs />
         </Route>
         <Route path="/site/explorer/:siteKey">
-          <Explorer />
           <BottomBar />
+          <Explorer />
         </Route>
         <Route path="/site/editor/:siteKey">
-          <EditorWrapper />
           <BottomBar />
+          <EditorWrapper />
         </Route>
         <Route path="/site">
           <Terminal />

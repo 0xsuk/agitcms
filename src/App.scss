@@ -63,15 +63,27 @@ html {
 }
 
 
-$bottom-bar-height: 22px;
+$bottom-bar-height: 15px;
 #bottom-bar {
   background: $background-darker;
   color: $color-darker;
-  font-size: 13px;
-  padding: 2px 10px 2px 20px;
-  white-space: nowrap;
+  font-size: 12px;
+  padding: 0 5px;
   height: $bottom-bar-height;
   border-top: solid 1px $border-default;
+  display: flex;
+  button {
+    font-size: 12px;
+  }
+  span {
+    unicode-bidi: bidi-override; 
+    direction: rtl;
+    text-align: left;
+    width: calc(100% - 31px - 30px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 #main {

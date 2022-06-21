@@ -25,6 +25,7 @@ function useFileManager(filePath) {
     frontmatter: {},
     doc: "", //exclude frontmatter
     isRead: false,
+    isModified: false,
     isFrontmatterEmpty: false,
   });
   const siteConfig = useSiteConfig();
@@ -61,10 +62,29 @@ function useFileManager(filePath) {
       ...prev,
       content,
       doc,
-      isRead: true,
+      isModified: true,
     }));
   };
-  const setContent = (content) => {
+  //const setContent = (content) => {
+  //  const { content: doc, data: frontmatter } = matter(content, matterOption);
+  //  const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
+  //  setFile((prev) => ({
+  //    ...prev,
+  //    content,
+  //    doc,
+  //    frontmatter,
+  //    isRead: true,
+  //    isFrontmatterEmpty,
+  //  }));
+
+  //  return { content, doc, frontmatter };
+  //};
+
+  const readFile = async () => {
+    const { content, err } = await window.electronAPI.readFile(filePath);
+    if (err) {
+      return { err };
+    }
     const { content: doc, data: frontmatter } = matter(content, matterOption);
     const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
     setFile((prev) => ({
@@ -73,22 +93,15 @@ function useFileManager(filePath) {
       doc,
       frontmatter,
       isRead: true,
+      isModified: false,
       isFrontmatterEmpty,
     }));
 
-    return { content, doc, frontmatter };
-  };
-
-  const readFile = async () => {
-    const { content, err } = await window.electronAPI.readFile(filePath);
-    //const { content: doc, data: frontmatter } = matter(content, matterOption);
-    //const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
-
-    return { content, err };
+    return { content, doc, frontmatter, err };
   };
 
   const saveFile = async () => {
-    if (!file.isRead) {
+    if (!file.isRead || !file.isModified) {
       return;
     }
     const { err } = await window.electronAPI.saveFile(filePath, file.content);
@@ -113,7 +126,6 @@ function useFileManager(filePath) {
     editName,
     editFrontmatter,
     setDoc,
-    setContent,
     readFile,
     saveFile,
   };

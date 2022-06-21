@@ -19,7 +19,6 @@ function Explorer() {
   const isInDir = searchparams.get("isDir") === "true" || isInRoot;
 
   useEffect(() => {
-    console.warn("Dir Effect");
     if (!isInDir) return;
     loadFilesAndFolders();
   }, [cwdf]); //eslint-disable-line

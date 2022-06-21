@@ -54,12 +54,11 @@ function useCodemirror({ fileManager }) {
       return;
     }
 
-    fileManagerRef.current.readFile().then(({ content, err }) => {
+    fileManagerRef.current.readFile().then(({ doc, err }) => {
       if (err) {
         alert(err);
         return;
       }
-      const { doc } = fileManagerRef.current.setContent(content);
       const startState = EditorState.create({
         doc,
         contentHeight: "100%",

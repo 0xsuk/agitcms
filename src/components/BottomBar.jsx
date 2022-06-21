@@ -19,8 +19,12 @@ function BottomBar() {
     return true;
   });
   let cwdfForDisplay = cwdf;
+
   if (window.navigator.platform === "Win32")
     cwdfForDisplay = cwdf.replaceAll("/", "\\");
+
+  //reverse cwdfForDisplay
+  cwdfForDisplay = cwdfForDisplay.split("").reverse().join("");
 
   const addPinnedDirs = (name, path, isDir) => {
     updateSiteConfig({
@@ -57,7 +61,7 @@ function BottomBar() {
           Pin
         </Button>
       )}
-      {cwdfForDisplay}
+      <span>{cwdfForDisplay}</span>
     </div>
   );
 }
