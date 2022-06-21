@@ -162,7 +162,12 @@ function useSiteConfigBuffer(initialSiteConfig) {
   //};
 
   const removeSiteConfig = (key) => {
-    if (!window.confirm("are you sure?")) return;
+    if (
+      !window.confirm(
+        "Delete this site from Agit CMS? Local site folder will not be lost."
+      )
+    )
+      return;
     deleteSiteConfig(key);
     history.push("/");
   };

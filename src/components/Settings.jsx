@@ -71,12 +71,14 @@ function Settings() {
                 <TextField
                   InputProps={{
                     readOnly: true,
-                    endAdornment: (
-                      <Button onClick={() => setIsOpen(true)} ref={ref}>
-                        <ArrowDropDown />
-                      </Button>
-                    ),
+                    // endAdornment: (
+                    //   <Button onClick={() => setIsOpen(true)} ref={ref}>
+                    //     <ArrowDropDown />
+                    //   </Button>
+                    // ),
                   }}
+                  onClick={() => setIsOpen(true)}
+                  ref={ref}
                   sx={{ color: "#999" }}
                   value={config.autosave}
                   variant="filled"
@@ -102,12 +104,14 @@ function Settings() {
                 <TextField
                   InputProps={{
                     readOnly: true,
-                    endAdornment: (
-                      <Button onClick={() => setIsOpen(true)} ref={ref}>
-                        <ArrowDropDown />
-                      </Button>
-                    ),
+                    //endAdornment: (
+                    //  <Button onClick={() => setIsOpen(true)} ref={ref}>
+                    //    <ArrowDropDown />
+                    //  </Button>
+                    //),
                   }}
+                  onClick={() => setIsOpen(true)}
+                  ref={ref}
                   sx={{ color: "#999" }}
                   value={config.theme}
                   variant="filled"
