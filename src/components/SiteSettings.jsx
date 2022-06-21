@@ -1,4 +1,5 @@
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
+import DragHandleOutlinedIcon from "@mui/icons-material/DragHandleOutlined";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
@@ -12,7 +13,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import useSiteConfig, { FrontmatterLanguages } from "../lib/useSiteConfig";
+import useSiteConfig, {
+  FrontmatterLanguages,
+  FrontmatterTypeToName,
+} from "../lib/useSiteConfig";
 import useSiteConfigBuffer from "../lib/useSiteConfigBuffer";
 import CommandDialog from "./CommandDialog";
 import CustomSelect from "./CustomSelect";
@@ -179,29 +183,42 @@ function Site() {
                           data-id={matter.id}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          {...provided.dragHandleProps}
                           style={{ ...provided.draggableProps.style }}
                         >
-                          <p>{matter.key}</p>
+                          <p className="dotdotdot" style={{ width: "20%" }}>
+                            {matter.key}
+                          </p>
                           <p
+                            className="dotdotdot"
                             style={{
                               color: "#999",
-                              right: "400px",
-                              position: "absolute",
+                              width: "20%",
+                              marginLeft: "5px",
+                            }}
+                          >
+                            {FrontmatterTypeToName(matter.type)}
+                          </p>
+                          <p
+                            className="dotdotdot"
+                            style={{
+                              color: "#999",
+                              marginLeft: "5px",
                             }}
                           >
                             {String(matter.default)}
                           </p>
-                          <p
+                          <div
                             style={{
-                              color: "#999",
-                              right: "200px",
                               position: "absolute",
+                              right: "60px",
+                              color: "#999",
                             }}
+                            {...provided.dragHandleProps}
                           >
-                            {matter.type}
-                          </p>
+                            <DragHandleOutlinedIcon />
+                          </div>
                           <MoreHorizIcon
+                            sx={{ position: "absolute", right: "20px" }}
                             onClick={(e) => {
                               setFrontmatterAnchorEl(e.currentTarget);
                               e.stopPropagation();

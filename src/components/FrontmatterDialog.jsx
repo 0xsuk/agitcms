@@ -263,7 +263,7 @@ function TypeDialog({ handleClose, handleSave }) {
           <>
             <Divider></Divider>
 
-            <MenuItem value={t.key} onClick={() => handleSave(t.key)}>
+            <MenuItem value={t.type} onClick={() => handleSave(t.type)}>
               {t.name}
             </MenuItem>
           </>

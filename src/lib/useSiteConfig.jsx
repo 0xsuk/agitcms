@@ -25,11 +25,19 @@ function useSiteConfig() {
 }
 
 export const FrontmatterTypes = [
-  { name: "String", key: "String" },
-  { name: "Array of String", key: "Array.String" },
-  { name: "Date", key: "Date" },
-  { name: "Bool", key: "Bool" },
+  { name: "String", type: "String" },
+  { name: "Array of String", type: "Array.String" },
+  { name: "Date", type: "Date" },
+  { name: "Bool", type: "Bool" },
 ];
+
+export const FrontmatterTypeToName = (type) => {
+  for (let i = 0; FrontmatterTypes.length > i; i++) {
+    if (FrontmatterTypes[i].type === type) {
+      return FrontmatterTypes[i].name;
+    }
+  }
+};
 
 export const FrontmatterLanguages = ["yaml", "toml"];
 

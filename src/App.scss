@@ -195,7 +195,6 @@ $editor-navigator-height: 44px;
     border-top: solid 1px #424242;
     padding: 10px 15px;
     display: flex;
-    justify-content: space-between;
     position: relative;
     overflow: hidden;
   }
@@ -307,6 +306,12 @@ $editor-navigator-height: 44px;
   &:hover {
     cursor:pointer;
   }
+}
+
+.dotdotdot {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
 }
 
 
