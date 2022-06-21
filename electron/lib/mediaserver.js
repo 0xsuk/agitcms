@@ -58,27 +58,28 @@ module.exports = class MediaServer {
 
   run() {
     if (this.staticPath === undefined) return;
-    setPort(defaultPort).then((port) => {
-      currentServer = http.createServer((req, res) => {
-        const parsedUrl = url.parse(req.url);
-        const sanitizePath = path.relative(this.publicPath, parsedUrl.pathname);
-        let pathname = path.join(this.staticPath, sanitizePath);
+    //TODO: setPort(defaultPort).then((port) => {
+    const port = defaultPort;
+    currentServer = http.createServer((req, res) => {
+      const parsedUrl = url.parse(req.url);
+      const sanitizePath = path.relative(this.publicPath, parsedUrl.pathname);
+      let pathname = path.join(this.staticPath, sanitizePath);
 
-        if (!fs.existsSync(pathname)) {
-          res.statusCode = 404;
-          res.end(`File ${pathname} not found!`);
-        } else {
-          fs.readFile(pathname, function (err, data) {
-            if (err) {
-              res.statusCode = 500;
-              res.end(`Error in getting the file.`);
-            } else {
-              res.end(data);
-            }
-          });
-        }
-      });
-      currentServer.listen(port);
+      if (!fs.existsSync(pathname)) {
+        res.statusCode = 404;
+        res.end(`File ${pathname} not found!`);
+      } else {
+        fs.readFile(pathname, function (err, data) {
+          if (err) {
+            res.statusCode = 500;
+            res.end(`Error in getting the file.`);
+          } else {
+            res.end(data);
+          }
+        });
+      }
     });
+    currentServer.listen(port);
+    //});
   }
 };

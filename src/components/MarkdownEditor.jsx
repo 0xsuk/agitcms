@@ -50,7 +50,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
         c.properties.src = new URL(
           c.properties.src,
           "http://localhost:3001"
-        ).href; //TODO
+        ).href; //TODO -> port configuration
         return c;
       });
       return child;
@@ -149,7 +149,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     .use(remarkGfm)
     .use(remarkMath)
     .use(remarkRehype)
-    .use(rehypeMathJaxSvg) //TODO: has some trouble with webpack build
+    .use(rehypeMathJaxSvg)
     .use(rehypeReact, { createElement, Fragment })
     .use(defaultPlugin)
     .processSync(fileManager.file.doc).result;
