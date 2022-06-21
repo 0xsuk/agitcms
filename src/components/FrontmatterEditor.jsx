@@ -34,9 +34,9 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
   };
 
   const frontmatterEditor = (matterKey, matterValue, matterType) => {
-    const stringEditor = (
+    const textEditor = (
       <TextField
-        placeholder="String"
+        placeholder="Text"
         value={matterValue}
         variant="standard"
         onChange={(e) => fileManager.editFrontmatter(matterKey, e.target.value)}
@@ -44,12 +44,12 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
       />
     );
     //have to be function
-    const ArrayOfStringEditor = () => (
+    const arrayOfTextEditor = () => (
       <>
         <TextField
           variant="standard"
           id={"agit-" + matterKey + "-input"}
-          placeholder="String"
+          placeholder="Text"
           InputProps={{
             endAdornment: (
               <Button
@@ -85,6 +85,17 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
       </>
     );
 
+    const multilineTextEditor = (
+      <TextField
+        placeholder="Multiline Text"
+        value={matterValue}
+        variant="outlined"
+        onChange={(e) => fileManager.editFrontmatter(matterKey, e.target.value)}
+        fullWidth
+        multiline
+      />
+    );
+
     const dateEditor = (
       <LocalizationProvider dateAdapter={DateAdapter}>
         <MobileDateTimePicker
@@ -111,34 +122,45 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
     );
 
     if (matterType === undefined) {
-      switch (typeof matterValue) {
-        case "string":
-          return stringEditor;
-        case "number":
-          return stringEditor;
-        case "boolean":
-          return boolEditor;
-        default:
-          return stringEditor;
+      if (Array.isArray(matterValue)) {
+        return arrayOfTextEditor();
       }
+
+      if (Object.prototype.toString.call(matterValue) === "[object Date]") {
+        return dateEditor;
+      }
+
+      if (typeof matterValue === "string") {
+        if (matterValue.includes("\n")) {
+          return multilineTextEditor;
+        }
+        return textEditor;
+      }
+
+      if (typeof matterValue === "boolean") return boolEditor;
+
+      return textEditor;
     }
 
     if (matterType.split(".")[0] === "Array") {
       if (matterValue !== null && !Array.isArray(matterValue)) {
-        console.warn(matterKey + " is not type of Array");
-        return stringEditor;
+        alert(matterKey + " is not type of Array");
+        return textEditor;
       }
       switch (matterType.split(".")[1]) {
-        case "String":
-          return ArrayOfStringEditor();
+        case "Text":
+          return arrayOfTextEditor();
         default:
-          return ArrayOfStringEditor();
+          return arrayOfTextEditor();
       }
     }
 
     switch (matterType) {
-      case "String":
-        return stringEditor;
+      case "Text":
+        return textEditor;
+
+      case "Multiline-Text":
+        return multilineTextEditor;
 
       case "Date":
         return dateEditor;
@@ -147,16 +169,16 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
         return boolEditor;
 
       default:
-        return stringEditor;
+        return textEditor;
     }
   };
   return (
     <>
-      <Stack spacing={1}>
+      <Stack spacing={2}>
         {Object.keys(fileManager.file.frontmatter).length !== 0 &&
           Object.keys(fileManager.file.frontmatter).map((matterKey) => (
             <Grid container spacing={0} alignItems="center">
-              <Grid item xs={2}>
+              <Grid item xs={3}>
                 <Typography>{matterKey}</Typography>
               </Grid>
               <Grid item xs={9}>

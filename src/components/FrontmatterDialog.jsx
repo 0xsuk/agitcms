@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import { FrontmatterTypes } from "../lib/useSiteConfig";
 
-function ArrayOfStringMatter({
+function ArrayOfTextMatter({
   handleBack,
   Default: initialDefault,
   Key: initialKey,
@@ -146,7 +146,7 @@ function DateMatter({
     </>
   );
 }
-function StringMatter({
+function TextMatter({
   handleBack,
   Default: initialDefault,
   Key: initialKey,
@@ -203,6 +203,64 @@ function StringMatter({
     </>
   );
 }
+const MultilineTextMatter = ({
+  handleBack,
+  Default: initialDefault,
+  Key: initialKey,
+  id,
+  handleMatterSave,
+}) => {
+  const [Key, setKey] = useState(initialKey);
+  const [Default, setDefault] = useState(initialDefault);
+  return (
+    <>
+      <DialogTitle>Set frontmatter name & default value</DialogTitle>
+      <DialogContent>
+        <Grid container spacing={3} direction="column">
+          <Grid item>
+            <Typography>Name:</Typography>
+            <TextField
+              fullWidth
+              value={Key}
+              variant="filled"
+              label="required"
+              onChange={(e) => setKey(e.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <Typography>Default:</Typography>
+            <TextField
+              fullWidth
+              multiline
+              value={Default}
+              variant="filled"
+              label="optional"
+              onChange={(e) => {
+                let value = e.target.value;
+                if (value == "") {
+                  setDefault(null);
+                  return;
+                }
+                setDefault(value);
+              }}
+            />
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleBack}>Back</Button>
+        <Button
+          disabled={Key === ""}
+          onClick={() => {
+            handleMatterSave(id, Key, Default);
+          }}
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </>
+  );
+};
 
 function BoolMatter({
   handleBack,
@@ -301,21 +359,31 @@ function FrontmatterDialog({ open, onClose, addFrontmatter }) {
         />
       )}
       {/* Edit matter key&default*/}
-      {type === "Bool" && (
-        <BoolMatter
-          handleBack={() => setType(null)}
-          handleMatterSave={handleMatterSave}
-          Key={""}
-          Default={false}
-          id={id}
-        />
-      )}
-      {type === "String" && (
-        <StringMatter
+      {type === "Text" && (
+        <TextMatter
           handleBack={() => setType(null)}
           handleMatterSave={handleMatterSave}
           Key={""}
           Default={null}
+          id={id}
+        />
+      )}
+      {type === "Multiline-Text" && (
+        <MultilineTextMatter
+          handleBack={() => setType(null)}
+          handleMatterSave={handleMatterSave}
+          Key={""}
+          Default={null}
+          id={id}
+        />
+      )}
+
+      {type === "Array.Text" && (
+        <ArrayOfTextMatter
+          handleBack={() => setType(null)}
+          handleMatterSave={handleMatterSave}
+          Key={""}
+          Default={[]}
           id={id}
         />
       )}
@@ -329,12 +397,12 @@ function FrontmatterDialog({ open, onClose, addFrontmatter }) {
           option={{ useNow: true }}
         />
       )}
-      {type === "Array.String" && (
-        <ArrayOfStringMatter
+      {type === "Bool" && (
+        <BoolMatter
           handleBack={() => setType(null)}
           handleMatterSave={handleMatterSave}
           Key={""}
-          Default={[]}
+          Default={false}
           id={id}
         />
       )}

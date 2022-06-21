@@ -25,8 +25,9 @@ function useSiteConfig() {
 }
 
 export const FrontmatterTypes = [
-  { name: "String", type: "String" },
-  { name: "Array of String", type: "Array.String" },
+  { name: "Text", type: "Text" },
+  { name: "List of Text", type: "Array.Text" },
+  { name: "Multiline Text", type: "Multiline-Text" },
   { name: "Date", type: "Date" },
   { name: "Bool", type: "Bool" },
 ];
