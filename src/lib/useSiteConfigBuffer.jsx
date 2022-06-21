@@ -9,6 +9,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
   //siteConfig !== siteConfigCopy //true
   const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
 
+  console.log(siteConfig);
+
   const editMediaPublicPath = (newValue) => {
     siteConfigCopy.media.publicPath = newValue;
     setSiteConfig(siteConfigCopy);
@@ -130,6 +132,22 @@ function useSiteConfigBuffer(initialSiteConfig) {
     setSiteConfig(siteConfigCopy);
   };
 
+  const removePinnedDir = (path, isDir) => {
+    const pinnedDirs = siteConfigCopy.pinnedDirs.filter(
+      (df) => df.path !== path || df.isDir !== isDir
+    );
+
+    siteConfigCopy.pinnedDirs = pinnedDirs;
+    setSiteConfig(siteConfigCopy);
+  };
+  const reorderPinnedDirs = (result) => {
+    const newPinnedDirs = Array.from(siteConfigCopy.pinnedDirs);
+    const [removed] = newPinnedDirs.splice(result.source.index, 1);
+    newPinnedDirs.splice(result.destination.index, 0, removed);
+    siteConfigCopy.pinnedDirs = newPinnedDirs; //important (prevent lag)
+    setSiteConfig(siteConfigCopy);
+  };
+
   const saveSiteConfig = () => {
     updateSiteConfig(siteConfig);
     console.log("Saved!");
@@ -149,28 +167,28 @@ function useSiteConfigBuffer(initialSiteConfig) {
     history.push("/");
   };
 
-  return [
+  return {
     siteConfig,
-    {
-      editMediaPublicPath,
-      editMediaStaticPath,
-      editShowFrontmatter,
-      editFrontmatterLanguage,
-      editFrontmatterDelimiter,
-      addCommand,
-      removeCommand,
-      reorderCommands,
-      editFrontmatterDefault,
-      editFrontmatterKey,
-      editFrontmatterType,
-      editFrontmatter,
-      addFrontmatter,
-      removeFrontmatter,
-      reorderFrontmatter,
-      removeSiteConfig,
-      saveSiteConfig,
-    },
-  ];
+    editMediaPublicPath,
+    editMediaStaticPath,
+    editShowFrontmatter,
+    editFrontmatterLanguage,
+    editFrontmatterDelimiter,
+    addCommand,
+    removeCommand,
+    reorderCommands,
+    editFrontmatterDefault,
+    editFrontmatterKey,
+    editFrontmatterType,
+    editFrontmatter,
+    addFrontmatter,
+    removeFrontmatter,
+    reorderFrontmatter,
+    removePinnedDir,
+    reorderPinnedDirs,
+    removeSiteConfig,
+    saveSiteConfig,
+  };
 }
 
 export default useSiteConfigBuffer;

@@ -1,14 +1,14 @@
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
-import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
-import useSiteConfig from "../lib/useSiteConfig";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { Typography } from "@mui/material";
-import { useHistory } from "react-router-dom";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
+import useSiteConfig from "../lib/useSiteConfig";
 
 function SideBar() {
   const siteConfig = useSiteConfig();

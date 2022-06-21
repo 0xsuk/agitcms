@@ -1,6 +1,8 @@
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 import DragHandleOutlinedIcon from "@mui/icons-material/DragHandleOutlined";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   Button,
@@ -25,21 +27,21 @@ import TextDialog from "./TextDialog";
 
 function Site() {
   const siteConfig = useSiteConfig();
-  const [
-    siteConfigBuffer,
-    {
-      editMediaPublicPath,
-      editMediaStaticPath,
-      editFrontmatterLanguage,
-      editFrontmatterDelimiter,
-      addCommand,
-      addFrontmatter,
-      removeFrontmatter,
-      reorderFrontmatter,
-      saveSiteConfig,
-      removeSiteConfig,
-    },
-  ] = useSiteConfigBuffer(siteConfig);
+  const {
+    siteConfig: siteConfigBuffer,
+    editMediaPublicPath,
+    editMediaStaticPath,
+    editFrontmatterLanguage,
+    editFrontmatterDelimiter,
+    addCommand,
+    addFrontmatter,
+    removeFrontmatter,
+    reorderFrontmatter,
+    removePinnedDir,
+    reorderPinnedDirs,
+    saveSiteConfig,
+    removeSiteConfig,
+  } = useSiteConfigBuffer(siteConfig);
 
   const isDirty =
     JSON.stringify(siteConfig) !== JSON.stringify(siteConfigBuffer);
@@ -49,6 +51,7 @@ function Site() {
   }
 
   const [FrontmatterAnchorEl, setFrontmatterAnchorEl] = useState(null);
+  const [PinnedDirsAnchorEl, setPinnedDirsAnchorEl] = useState(null);
   const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
   const [isCommandDialogOpen, setIsCommandDialogOpen] = useState(false);
   const [
@@ -105,12 +108,14 @@ function Site() {
                 <TextField
                   InputProps={{
                     readOnly: true,
-                    endAdornment: (
-                      <Button onClick={() => setIsOpen(true)} ref={ref}>
-                        <ArrowDropDown />
-                      </Button>
-                    ),
+                    //endAdornment: (
+                    //  <Button onClick={() => setIsOpen(true)} ref={ref}>
+                    //    <ArrowDropDown />
+                    //  </Button>
+                    //),
                   }}
+                  onClick={() => setIsOpen(true)}
+                  ref={ref}
                   sx={{ color: "#999" }}
                   value={siteConfigBuffer.frontmatterLanguage}
                   variant="filled"
@@ -127,19 +132,20 @@ function Site() {
             <TextField
               InputProps={{
                 readOnly: true,
-                endAdornment: (
-                  <Button
-                    onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}
-                  >
-                    EDIT
-                  </Button>
-                ),
+                //endAdornment: (
+                //  <Button
+                //    onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}
+                //  >
+                //    EDIT
+                //  </Button>
+                //),
               }}
               sx={{ color: "#999" }}
               value={siteConfigBuffer.frontmatterDelimiter}
               variant="filled"
               label="required"
               size="small"
+              onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}
             ></TextField>
             <TextDialog
               initialValue={siteConfigBuffer.frontmatterDelimiter}
@@ -168,22 +174,18 @@ function Site() {
 
         <Grid item sx={{ width: "100%" }}>
           <DragDropContext onDragEnd={reorderFrontmatter}>
-            <Droppable droppableId="droppable">
+            <Droppable droppableId="frontmatter">
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {siteConfigBuffer.frontmatter?.map((matter, i) => (
-                    <Draggable
-                      key={matter.key}
-                      draggableId={matter.key}
-                      index={i}
-                    >
+                    <Draggable draggableId={"frontmatter" + i} index={i}>
                       {(provided) => (
                         <div
                           className="setting-draggable"
-                          data-id={matter.id}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           style={{ ...provided.draggableProps.style }}
+                          data-id={matter.id} //used by Menu
                         >
                           <p className="dotdotdot" style={{ width: "20%" }}>
                             {matter.key}
@@ -211,7 +213,6 @@ function Site() {
                             style={{
                               position: "absolute",
                               right: "60px",
-                              color: "#999",
                             }}
                             {...provided.dragHandleProps}
                           >
@@ -295,6 +296,97 @@ function Site() {
           </Grid>
         </Grid>
         {/* -MediaDir */}
+
+        <Grid item container spacing={1} direction="column">
+          <Grid item>
+            <Typography variant="h6">Pinned Folders or Files</Typography>
+          </Grid>
+          <Grid
+            item
+            sx={{
+              width: "100%", //important
+            }}
+          >
+            <DragDropContext onDragEnd={reorderPinnedDirs}>
+              <Droppable droppableId="pinnedDirs">
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {siteConfigBuffer.pinnedDirs.map((df, i) => (
+                      <Draggable
+                        //key={matter.key}
+                        draggableId={"pinnedDirs" + i}
+                        index={i}
+                      >
+                        {(provided) => (
+                          <div
+                            {...provided.draggableProps}
+                            style={{ ...provided.draggableProps.style }}
+                            ref={provided.innerRef}
+                            className="setting-draggable"
+                            data-id={df.path}
+                          >
+                            {df.isDir ? (
+                              <FolderOpenOutlinedIcon fontSize="small" />
+                            ) : (
+                              <DescriptionOutlinedIcon fontSize="small" />
+                            )}
+                            <p
+                              className="dotdotdot"
+                              style={{
+                                paddingLeft: "5px",
+                                width: "calc(100% - 100px)",
+                              }}
+                            >
+                              {df.name}
+                            </p>
+                            <div
+                              {...provided.dragHandleProps}
+                              style={{ position: "absolute", right: "60px" }}
+                            >
+                              <DragHandleOutlinedIcon />
+                            </div>
+                            <MoreHorizIcon
+                              sx={{ position: "absolute", right: "20px" }}
+                              onClick={(e) => {
+                                setPinnedDirsAnchorEl(e.currentTarget);
+                                e.stopPropagation();
+                              }}
+                            />
+                            <Menu
+                              anchorEl={PinnedDirsAnchorEl}
+                              open={
+                                PinnedDirsAnchorEl?.parentNode.dataset.id ===
+                                df.path
+                              }
+                              onClose={(e) => {
+                                setPinnedDirsAnchorEl(null);
+                                e.stopPropagation();
+                              }}
+                              //on Click menuitems
+                              onClick={(e) => {
+                                setPinnedDirsAnchorEl(null);
+                                e.stopPropagation();
+                              }}
+                            >
+                              <MenuItem
+                                onClick={() =>
+                                  removePinnedDir(df.path, df.isDir)
+                                }
+                              >
+                                delete
+                              </MenuItem>
+                            </Menu>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Grid>
+        </Grid>
 
         <Grid
           item
