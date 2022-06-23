@@ -34,7 +34,6 @@ const createWindow = () => {
         : `file://${path.join(__dirname, "..", "..", "/index.html")}` //be careful on relative path //TODO
     )
     .then(() => {
-      console.log("hye");
       win.webContents.setWindowOpenHandler(({ url }) => {
         console.log(url);
         shell.openExternal(url);

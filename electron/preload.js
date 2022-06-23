@@ -1,4 +1,3 @@
-const path = require("path");
 const { contextBridge, ipcRenderer, webFrame } = require("electron");
 const { Titlebar, Color } = require("custom-electron-titlebar");
 
@@ -7,7 +6,6 @@ window.addEventListener("DOMContentLoaded", () => {
   new Titlebar({
     menu: null,
     backgroundColor: Color.fromHex("#131820"),
-    icon: `file://${path.join(__dirname, "..", "icons", "16x16.png")}`,
   });
 });
 
