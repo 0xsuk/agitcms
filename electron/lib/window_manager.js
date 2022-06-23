@@ -1,4 +1,4 @@
-const { Menu, BrowserWindow } = require("electron");
+const { shell, BrowserWindow } = require("electron");
 const isDev = require("electron-is-dev"); //is not a devDependencies
 const path = require("path");
 const {
@@ -27,11 +27,20 @@ const createWindow = () => {
 
   attachTitlebarToWindow(win);
 
-  win.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "..", "..", "/index.html")}` //be careful on relative path //TODO
-  );
+  win
+    .loadURL(
+      isDev
+        ? "http://localhost:3000"
+        : `file://${path.join(__dirname, "..", "..", "/index.html")}` //be careful on relative path //TODO
+    )
+    .then(() => {
+      console.log("hye");
+      win.webContents.setWindowOpenHandler(({ url }) => {
+        console.log(url);
+        shell.openExternal(url);
+        return { action: "deny" };
+      });
+    });
 };
 
 const getWindow = () => win;

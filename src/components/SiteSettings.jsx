@@ -1,7 +1,6 @@
-import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import DragHandleOutlinedIcon from "@mui/icons-material/DragHandleOutlined";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
@@ -23,6 +22,8 @@ import useSiteConfigBuffer from "../lib/useSiteConfigBuffer";
 import CommandDialog from "./CommandDialog";
 import CustomSelect from "./CustomSelect";
 import FrontmatterDialog from "./FrontmatterDialog";
+import HelpLink from "./HelpLink";
+import { helpLinks } from "./Settings";
 import TextDialog from "./TextDialog";
 
 function Site() {
@@ -169,6 +170,9 @@ function Site() {
             <Button onClick={() => setIsFrontmatterDialogOpen(true)}>
               New
             </Button>
+          </Grid>
+          <Grid item>
+            <HelpLink url={helpLinks.frontmatterTemplate} />
           </Grid>
         </Grid>
 
