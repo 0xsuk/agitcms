@@ -1,5 +1,5 @@
 {
-  "name": "Agit CMS",
+  "name": "agitcms",
   "version": "1.0.0",
   "description": "Rich markdown + frontmatter editor for \\*any\\* static sites.",
   "main": "electron/electron.js",
