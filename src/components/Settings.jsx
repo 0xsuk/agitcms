@@ -16,9 +16,7 @@ import CustomSelect from "./CustomSelect";
 const autosaveOptions = ["always", "never"];
 const themeOptions = ["dark", "light"];
 
-export const helpLinks = {
-  frontmatterTemplate: "",
-};
+export const helpLinks = {};
 
 function Settings() {
   const { config, updateConfig } = useContext(configContext);

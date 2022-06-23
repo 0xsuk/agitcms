@@ -72,6 +72,8 @@ function Site() {
         onClose={() => setIsCommandDialogOpen(false)}
         addCommand={addCommand}
       />
+      <Typography variant="h5">Settings</Typography>
+      <Divider sx={{ marginBottom: "20px" }} />
       <Grid container spacing={2}>
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
@@ -170,9 +172,6 @@ function Site() {
             <Button onClick={() => setIsFrontmatterDialogOpen(true)}>
               New
             </Button>
-          </Grid>
-          <Grid item>
-            <HelpLink url={helpLinks.frontmatterTemplate} />
           </Grid>
         </Grid>
 
