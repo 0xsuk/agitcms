@@ -48,6 +48,7 @@ function useFileManager(filePath) {
   };
   const editFrontmatter = (key, value) => {
     //TODO history
+    //TODO: nest
     file.frontmatter[key] = value;
     const content = matterStringify(file.doc, file.frontmatter);
     setFile((prev) => ({

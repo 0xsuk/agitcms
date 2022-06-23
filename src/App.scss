@@ -6,6 +6,27 @@ $color-default: #c9d1d9;
 $color-darker: #7d8799;
 
 
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: $background-darker;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #333b48;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #536074;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

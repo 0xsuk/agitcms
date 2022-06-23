@@ -147,6 +147,14 @@ function MarkdownEditor({ fileManager, siteConfig }) {
       }
     }
 
+    if (
+      previewElem.scrollTop >=
+      previewElem.scrollHeight - previewElem.clientHeight //true when scroll reached the bottom
+    ) {
+      markdownElem.scrollTop =
+        markdownElem.scrollHeight - markdownElem.clientHeight; //? scroll to the bottom
+      return;
+    }
     if (scrollElemIndex >= 0) {
       let ratio =
         (previewElem.scrollTop -
