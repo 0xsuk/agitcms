@@ -1,6 +1,4 @@
-import { ArrowDropDown } from "@mui/icons-material";
 import {
-  Button,
   Divider,
   Grid,
   Slider,
@@ -13,8 +11,8 @@ import { useContext } from "react";
 import { configContext } from "../context/ConfigContext";
 import CustomSelect from "./CustomSelect";
 
-const autosaveOptions = ["always", "never"];
-const themeOptions = ["dark", "light"];
+const autosaveOptions = ["always"];
+const themeOptions = ["dark"];
 
 export const helpLinks = {};
 

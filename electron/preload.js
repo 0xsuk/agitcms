@@ -7,7 +7,7 @@ window.addEventListener("DOMContentLoaded", () => {
   new Titlebar({
     menu: null,
     backgroundColor: Color.fromHex("#131820"),
-    icon: `file://${path.join(__dirname, "..", "icons", "16x16.png")}`, //works only on production
+    //icon: `file://${path.join(__dirname, "..", "icons", "16x16.png")}`, //html icon <link /> is enough
   });
 });
 
