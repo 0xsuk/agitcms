@@ -1,7 +1,7 @@
 {
   "name": "agitcms",
   "version": "1.0.0",
-  "description": "Rich markdown + frontmatter editor for \\*any\\* static sites.",
+  "description": "A desktop based headless CMS for markdown blogs",
   "main": "electron/electron.js",
   "scripts": {
     "start": "webpack-dev-server --mode development",
@@ -20,7 +20,12 @@
     "type": "git",
     "url": "git+https://github.com/0xsuk/agitcms.git"
   },
-  "keywords": [],
+  "keywords": [
+    "Headless CMS",
+    "Hugo",
+    "Jekyll",
+    "Static Sites Generator"
+  ],
   "author": "0xsuk <iam0xsuk@gmail.com>",
   "license": "ISC",
   "bugs": {
@@ -112,7 +117,6 @@
     }
   },
   "resolutions": {
-    "@codemirror/state": "^6.0.0",
     "node-abi": "^3.22.0"
   }
 }

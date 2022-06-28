@@ -31,7 +31,7 @@ const createWindow = () => {
     .loadURL(
       isDev
         ? "http://localhost:3000"
-        : `file://${path.join(__dirname, "..", "..", "/index.html")}` //be careful on relative path //TODO
+        : `file://${path.join(__dirname, "..", "..", "/index.html")}` //be careful on relative path
     )
     .then(() => {
       win.webContents.setWindowOpenHandler(({ url }) => {
