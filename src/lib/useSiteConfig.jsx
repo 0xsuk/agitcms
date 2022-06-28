@@ -24,22 +24,6 @@ function useSiteConfig() {
   return siteConfig;
 }
 
-export const FrontmatterTypes = [
-  { name: "Text", type: "Text" },
-  { name: "List of Text", type: "Array.Text" },
-  { name: "Multiline Text", type: "Multiline-Text" },
-  { name: "Date", type: "Date" },
-  { name: "Bool", type: "Bool" },
-];
-
-export const FrontmatterTypeToName = (type) => {
-  for (let i = 0; FrontmatterTypes.length > i; i++) {
-    if (FrontmatterTypes[i].type === type) {
-      return FrontmatterTypes[i].name;
-    }
-  }
-};
-
 export const FrontmatterLanguages = ["yaml", "toml"];
 
 export const newSiteConfig = () => {

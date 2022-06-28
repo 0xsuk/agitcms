@@ -10,32 +10,7 @@ import TextDialog from "./TextDialog";
 import { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import useSiteConfig from "../lib/useSiteConfig";
-
-function toIsoString(date) {
-  var tzo = -date.getTimezoneOffset(),
-    dif = tzo >= 0 ? "+" : "-",
-    pad = function (num) {
-      return (num < 10 ? "0" : "") + num;
-    };
-
-  return (
-    date.getFullYear() +
-    "-" +
-    pad(date.getMonth() + 1) +
-    "-" +
-    pad(date.getDate()) +
-    "T" +
-    pad(date.getHours()) +
-    ":" +
-    pad(date.getMinutes()) +
-    ":" +
-    pad(date.getSeconds()) +
-    dif +
-    pad(Math.floor(Math.abs(tzo) / 60)) +
-    ":" +
-    pad(Math.abs(tzo) % 60)
-  );
-}
+import { fillFrontmatterJson, genContent } from "../lib/frontmatterInterface";
 
 function CreateNewDf({ cwdf }) {
   const siteConfig = useSiteConfig();
@@ -62,37 +37,28 @@ function CreateNewDf({ cwdf }) {
     const filePath = cwdf + "/" + fileName;
     const doc = "";
     //the default frontmatter
-    const frontmatter = {};
-    siteConfig.frontmatter.forEach((matter) => {
-      const key = matter.key;
-      let value = matter.default;
-      if (matter.type === "Date" && matter.option?.useNow) {
-        value = toIsoString(new Date());
-      }
-      frontmatter[key] = value;
-    });
+    const frontmatter = fillFrontmatterJson(siteConfig.frontmatter);
+    const content = genContent(siteConfig, doc, frontmatter);
 
     const { err, isFileExists } = await window.electronAPI.createFile(
       filePath,
-      doc,
-      frontmatter
+      content
     );
     if (err !== null) {
-      window.alert("createFile:", err.message);
+      window.alert(err.message);
       return;
     }
     if (isFileExists) {
-      const doOverwrite = window.confirm("File already exists! Overwrite?");
-      if (!doOverwrite) {
+      if (!window.confirm("File already exists! Overwrite?")) {
         return;
       }
       const { err } = await window.electronAPI.createFile(
         filePath,
-        doc,
-        frontmatter
+        content,
+        true
       );
       if (err !== null) {
-        window.alert("createFile:", err.message);
+        window.alert(err.message);
         return;
       }
     }

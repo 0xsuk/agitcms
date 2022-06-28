@@ -1,15 +1,20 @@
 import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
+import {
+  updateFrontmatterConfig,
+  removeFrontmatterConfig,
+  reorderFrontmatterConfig,
+} from "../lib/frontmatterInterface";
 
 function useSiteConfigBuffer(initialSiteConfig) {
-  const [siteConfig, setSiteConfig] = useState(initialSiteConfig);
+  const [siteConfig, setSiteConfig] = useState(
+    JSON.parse(JSON.stringify(initialSiteConfig)) //since siteConfig reference to initialSiteConfig, modifying siteConfig changes the initialSiteConfig(which is useSiteConfig())
+  );
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
   const history = useHistory();
   //siteConfig !== siteConfigCopy //true
   const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
-
-  console.log(siteConfig);
 
   const editMediaPublicPath = (newValue) => {
     siteConfigCopy.media.publicPath = newValue;
@@ -49,35 +54,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
     }));
   };
 
-  //const editCommandName = (newName, i) => {
-  //  siteConfigCopy.commands[i].name = newName;
-  //  setSiteConfig(siteConfigCopy);
-  //};
-  //const editCommand = (newCommand, i) => {
-  //  siteConfigCopy.commands[i].command = newCommand;
-  //  setSiteConfig(siteConfigCopy);
-  //};
-  const addCommand = (key, name, command) => {
-    siteConfigCopy.commands.push({ key, name, command });
-    setSiteConfig(siteConfigCopy);
-  };
-  const removeCommand = (key) => {
-    siteConfigCopy.commands = siteConfigCopy.commands.filter(
-      (cmd) => cmd.key !== key
-    );
-    setSiteConfig(siteConfigCopy);
-  };
-  const reorderCommands = (result) => {
-    const list = Array.from(siteConfigCopy.commands);
-    const [removed] = list.splice(result.source.index, 1);
-    list.splice(result.destination.index, 0, removed);
-
-    siteConfigCopy.commands = list;
-    setSiteConfig(siteConfigCopy);
-  };
-
-  const editFrontmatterKey = (newKey, i) => {
-    siteConfigCopy.frontmatter[i].key = newKey;
+  const editFrontmatterName = (newName, i) => {
+    siteConfigCopy.frontmatter[i].name = newName;
     setSiteConfig(siteConfigCopy);
   };
   const editFrontmatterType = (newType, i) => {
@@ -105,30 +83,30 @@ function useSiteConfigBuffer(initialSiteConfig) {
     }
   };
 
-  const addFrontmatter = (id, key, type, Default, option) => {
-    siteConfigCopy.frontmatter.push({
-      id,
-      key,
-      type,
-      default: Default,
-      option,
-    });
-    setSiteConfig(siteConfigCopy);
-  };
-
-  const removeFrontmatter = (id) => {
-    siteConfigCopy.frontmatter = siteConfigCopy.frontmatter.filter(
-      (matter) => matter.id !== id
+  const saveFrontmatter = (newChildMetainfo, parentKeys) => {
+    siteConfigCopy.frontmatter = updateFrontmatterConfig(
+      siteConfigCopy.frontmatter,
+      parentKeys,
+      newChildMetainfo
     );
     setSiteConfig(siteConfigCopy);
   };
 
-  const reorderFrontmatter = (result) => {
-    const list = Array.from(siteConfigCopy.frontmatter);
-    const [removed] = list.splice(result.source.index, 1);
-    list.splice(result.destination.index, 0, removed);
+  const removeFrontmatter = (key, parentKeys) => {
+    siteConfigCopy.frontmatter = removeFrontmatterConfig(
+      siteConfigCopy.frontmatter,
+      parentKeys,
+      key
+    );
+    setSiteConfig(siteConfigCopy);
+  };
 
-    siteConfigCopy.frontmatter = list;
+  const reorderFrontmatter = (result, parentKeys) => {
+    siteConfigCopy.frontmatter = reorderFrontmatterConfig(
+      siteConfigCopy.frontmatter,
+      result,
+      parentKeys
+    );
     setSiteConfig(siteConfigCopy);
   };
 
@@ -155,12 +133,6 @@ function useSiteConfigBuffer(initialSiteConfig) {
     return true;
   };
 
-  //const cancelSiteConfig = () => {
-  //  console.log("init:", initialSiteConfig);
-  //  setSiteConfig(initialSiteConfig);
-  //  // navigate(-1);
-  //};
-
   const removeSiteConfig = (key) => {
     if (
       !window.confirm(
@@ -179,14 +151,11 @@ function useSiteConfigBuffer(initialSiteConfig) {
     editShowFrontmatter,
     editFrontmatterLanguage,
     editFrontmatterDelimiter,
-    addCommand,
-    removeCommand,
-    reorderCommands,
     editFrontmatterDefault,
-    editFrontmatterKey,
+    editFrontmatterName,
     editFrontmatterType,
     editFrontmatter,
-    addFrontmatter,
+    saveFrontmatter,
     removeFrontmatter,
     reorderFrontmatter,
     removePinnedDir,

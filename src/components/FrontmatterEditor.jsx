@@ -3,16 +3,23 @@ import DateAdapter from "@mui/lab/AdapterDateFns";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
 import {
   Button,
+  Chip,
   Grid,
   Stack,
   Switch,
   TextField,
   Typography,
-  Chip,
 } from "@mui/material";
+import {
+  FrontmatterTypes,
+  generateFrontmatterTree,
+} from "../lib/frontmatterInterface";
 
-function FrontmatterEditor({ fileManager, siteConfig }) {
-  if (fileManager.file.isFrontmatterEmpty) {
+function FrontmatterEditor({
+  fileManager: { file, updateFrontmatter },
+  siteConfig,
+}) {
+  if (!file.isRead || file.isFrontmatterEmpty) {
     return (
       <>
         <Typography>Frontmatter is empty</Typography>
@@ -20,176 +27,153 @@ function FrontmatterEditor({ fileManager, siteConfig }) {
     );
   }
 
-  const getFrontmatterType = (key) => {
-    let type = undefined;
-    siteConfig.frontmatter.every((singlematter) => {
-      if (singlematter.key === key) {
-        type = singlematter.type;
-        return false;
+  const frontmatterTree = generateFrontmatterTree(siteConfig, file.frontmatter);
+  const textEditor = (node, parentNames) => (
+    <TextField
+      placeholder={FrontmatterTypes.Text}
+      value={node.value}
+      variant="standard"
+      onChange={(e) =>
+        updateFrontmatter(node.name, e.target.value, parentNames)
       }
-      return true;
-    });
-
-    return type;
-  };
-
-  const frontmatterEditor = (matterKey, matterValue, matterType) => {
-    const textEditor = (
+      fullWidth
+    />
+  );
+  //have to be function
+  const arrayOfTextEditor = (node, parentNames) => (
+    <>
       <TextField
-        placeholder="Text"
-        value={matterValue}
+        placeholder={FrontmatterTypes.Text}
         variant="standard"
-        onChange={(e) => fileManager.editFrontmatter(matterKey, e.target.value)}
-        fullWidth
+        id={"agit-" + node.name + "-input"}
+        InputProps={{
+          endAdornment: (
+            <Button
+              onClick={() => {
+                let ref = document.getElementById(
+                  "agit-" + node.name + "-input"
+                );
+                if (!node.value) {
+                  node.value = [];
+                }
+                node.value.push(ref.value);
+                updateFrontmatter(node.name, node.value, parentNames);
+                ref.value = "";
+                // ref.focus();
+              }}
+            >
+              ADD
+            </Button>
+          ),
+        }}
       />
-    );
-    //have to be function
-    const arrayOfTextEditor = () => (
-      <>
-        <TextField
-          variant="standard"
-          id={"agit-" + matterKey + "-input"}
-          placeholder="Text"
-          InputProps={{
-            endAdornment: (
-              <Button
-                onClick={() => {
-                  let ref = document.getElementById(
-                    "agit-" + matterKey + "-input"
-                  );
-                  if (!matterValue) {
-                    matterValue = [];
-                  }
-                  matterValue.push(ref.value);
-                  console.log("newMatter", matterValue);
-                  fileManager.editFrontmatter(matterKey, matterValue);
-                  ref.value = "";
-                  // ref.focus();
-                }}
-              >
-                ADD
-              </Button>
-            ),
+      {/* matterValue can be null, if user set it to null */}
+      {node.value?.map((v, i) => (
+        <Chip
+          label={v}
+          onDelete={() => {
+            node.value.splice(i, 1);
+            updateFrontmatter(node.name, node.value, parentNames);
           }}
-        />
-        {/* matterValue can be null, if user set it to null */}
-        {matterValue?.map((v, i) => (
-          <Chip
-            label={v}
-            onDelete={() => {
-              matterValue.splice(i, 1);
-              fileManager.editFrontmatter(matterKey, matterValue);
-            }}
-          ></Chip>
-        ))}
+        ></Chip>
+      ))}
+    </>
+  );
+
+  const multilineTextEditor = (node, parentNames) => (
+    <TextField
+      placeholder={FrontmatterTypes.MultilineText}
+      value={node.value}
+      variant="outlined"
+      onChange={(e) =>
+        updateFrontmatter(node.name, e.target.value, parentNames)
+      }
+      fullWidth
+      multiline
+    />
+  );
+
+  const dateEditor = (node, parentNames) => (
+    <LocalizationProvider dateAdapter={DateAdapter}>
+      <MobileDateTimePicker
+        label={FrontmatterTypes.Date}
+        value={node.value}
+        renderInput={(props) => <TextField {...props} />}
+        onChange={(newValue) =>
+          updateFrontmatter(node.name, newValue, parentNames)
+        }
+        ampm={false}
+        showTodayButton={true}
+        todayText="Now"
+      />
+    </LocalizationProvider>
+  );
+
+  const boolEditor = (node, parentNames) => (
+    <Switch
+      aria-label="bool"
+      size="small"
+      checked={node.value}
+      onChange={() => updateFrontmatter(node.name, !node.value, parentNames)}
+    />
+  );
+  const nestEditor = (node, parentNames) => {
+    if (parentNames === undefined) parentNames = [];
+    return (
+      <>
+        <Stack spacing={1}>
+          <Typography>{node.name}</Typography>
+          {node.children?.map((childNode) => (
+            <div style={{ marginLeft: "10px" }}>
+              {frontmatterEditor(childNode, [...parentNames, node.name])}
+            </div>
+          ))}
+        </Stack>
       </>
     );
+  };
 
-    const multilineTextEditor = (
-      <TextField
-        placeholder="Multiline Text"
-        value={matterValue}
-        variant="outlined"
-        onChange={(e) => fileManager.editFrontmatter(matterKey, e.target.value)}
-        fullWidth
-        multiline
-      />
+  const wrap = (node, elem) => {
+    return (
+      <Grid container spacing={0} alignItems="center">
+        <Grid item xs={3}>
+          <Typography>{node.name}</Typography>
+        </Grid>
+        <Grid item xs={9}>
+          {elem}
+        </Grid>
+      </Grid>
     );
+  };
 
-    const dateEditor = (
-      <LocalizationProvider dateAdapter={DateAdapter}>
-        <MobileDateTimePicker
-          label="Date"
-          value={matterValue}
-          renderInput={(props) => <TextField {...props} />}
-          onChange={(newValue) =>
-            fileManager.editFrontmatter(matterKey, newValue)
-          }
-          ampm={false}
-          showTodayButton={true}
-          todayText="Now"
-        />
-      </LocalizationProvider>
-    );
+  const frontmatterEditor = (node, parentNames) => {
+    switch (node.type) {
+      case FrontmatterTypes.Text:
+        return wrap(node, textEditor(node, parentNames));
 
-    const boolEditor = (
-      <Switch
-        aria-label="bool"
-        size="small"
-        checked={matterValue}
-        onChange={() => fileManager.editFrontmatter(matterKey, !matterValue)}
-      />
-    );
+      case FrontmatterTypes.ListOfText:
+        return wrap(node, arrayOfTextEditor(node, parentNames));
 
-    if (matterType === undefined) {
-      if (Array.isArray(matterValue)) {
-        return arrayOfTextEditor();
-      }
+      case FrontmatterTypes.MultilineText:
+        return wrap(node, multilineTextEditor(node, parentNames));
 
-      if (Object.prototype.toString.call(matterValue) === "[object Date]") {
-        return dateEditor;
-      }
+      case FrontmatterTypes.Date:
+        return wrap(node, dateEditor(node, parentNames));
 
-      if (typeof matterValue === "string") {
-        if (matterValue.includes("\n")) {
-          return multilineTextEditor;
-        }
-        return textEditor;
-      }
+      case FrontmatterTypes.Bool:
+        return wrap(node, boolEditor(node, parentNames));
 
-      if (typeof matterValue === "boolean") return boolEditor;
-
-      return textEditor;
-    }
-
-    if (matterType.split(".")[0] === "Array") {
-      if (matterValue !== null && !Array.isArray(matterValue)) {
-        alert(matterKey + " is not type of Array");
-        return textEditor;
-      }
-      switch (matterType.split(".")[1]) {
-        case "Text":
-          return arrayOfTextEditor();
-        default:
-          return arrayOfTextEditor();
-      }
-    }
-
-    switch (matterType) {
-      case "Text":
-        return textEditor;
-
-      case "Multiline-Text":
-        return multilineTextEditor;
-
-      case "Date":
-        return dateEditor;
-
-      case "Bool":
-        return boolEditor;
-
-      default:
-        return textEditor;
+      case FrontmatterTypes.Nest:
+        return nestEditor(node, parentNames);
     }
   };
+
   return (
     <>
       <Stack spacing={2}>
-        {Object.keys(fileManager.file.frontmatter).length !== 0 &&
-          Object.keys(fileManager.file.frontmatter).map((matterKey) => (
-            <Grid container spacing={0} alignItems="center">
-              <Grid item xs={3}>
-                <Typography>{matterKey}</Typography>
-              </Grid>
-              <Grid item xs={9}>
-                {frontmatterEditor(
-                  matterKey,
-                  fileManager.file.frontmatter[matterKey],
-                  getFrontmatterType(matterKey)
-                )}
-              </Grid>
-            </Grid>
-          ))}
+        {frontmatterTree.children.map((node) => (
+          <> {frontmatterEditor(node)}</>
+        ))}
       </Stack>
     </>
   );

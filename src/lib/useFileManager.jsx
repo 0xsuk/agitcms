@@ -1,15 +1,8 @@
-import TOML from "@iarna/toml";
-import matter from "gray-matter";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import { genContent, parseContent } from "./frontmatterInterface";
 import useSiteConfig from "./useSiteConfig";
-
-//because matter.stringify always put \n at the end of output if doc does not end with \n, this function removes it
-const matterStringify = (doc, data, options) => {
-  let out = matter.stringify(doc, data, options);
-  if (doc[doc.length - 1] !== "\n") out = out.substring(0, out.length - 1);
-  return out;
-};
+import { updateFrontmatterJson } from "./frontmatterInterface";
 
 //useCodeMirror depends on useFileBuffer's updateDoc
 //filePath is a only dependency.
@@ -26,39 +19,31 @@ function useFileManager(filePath) {
     doc: "", //exclude frontmatter
     isRead: false,
     isModified: false,
-    isFrontmatterEmpty: false,
+    isFrontmatterEmpty: true,
   });
   const siteConfig = useSiteConfig();
-
-  const matterOption = {
-    engines: {
-      toml: {
-        parse: TOML.parse,
-        stringify: TOML.stringify,
-      },
-    },
-    language: siteConfig.frontmatterLanguage,
-    delimiters: siteConfig.frontmatterDelimiter,
-  };
-
-  console.log("USE FILE BUFFER:", file, matterOption);
 
   const editName = (name) => {
     setFile((prev) => ({ ...prev, name }));
   };
-  const editFrontmatter = (key, value) => {
-    //TODO history
-    //TODO: nest
-    file.frontmatter[key] = value;
-    const content = matterStringify(file.doc, file.frontmatter);
+  const updateFrontmatter = (name, value, parentNames) => {
+    const newFrontmatter = updateFrontmatterJson(
+      file.frontmatter,
+      value,
+      name,
+      parentNames
+    );
+    const content = genContent(siteConfig, file.doc, newFrontmatter);
+
     setFile((prev) => ({
       ...prev,
       content,
-      frontmatter: file.frontmatter,
+      frontmatter: newFrontmatter,
+      isModified: true,
     }));
   };
   const setDoc = (doc) => {
-    const content = matterStringify(doc, file.frontmatter);
+    const content = genContent(siteConfig, doc, file.frontmatter);
     setFile((prev) => ({
       ...prev,
       content,
@@ -66,27 +51,13 @@ function useFileManager(filePath) {
       isModified: true,
     }));
   };
-  //const setContent = (content) => {
-  //  const { content: doc, data: frontmatter } = matter(content, matterOption);
-  //  const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
-  //  setFile((prev) => ({
-  //    ...prev,
-  //    content,
-  //    doc,
-  //    frontmatter,
-  //    isRead: true,
-  //    isFrontmatterEmpty,
-  //  }));
-
-  //  return { content, doc, frontmatter };
-  //};
 
   const readFile = async () => {
     const { content, err } = await window.electronAPI.readFile(filePath);
     if (err) {
       return { err };
     }
-    const { content: doc, data: frontmatter } = matter(content, matterOption);
+    const { doc, frontmatter } = parseContent(siteConfig, content);
     const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
     setFile((prev) => ({
       ...prev,
@@ -126,7 +97,7 @@ function useFileManager(filePath) {
   return {
     file,
     editName,
-    editFrontmatter,
+    updateFrontmatter,
     setDoc,
     readFile,
     saveFile,

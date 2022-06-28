@@ -15,16 +15,15 @@ import {
   Chip,
 } from "@mui/material";
 import { useState } from "react";
-import { FrontmatterTypes } from "../lib/useSiteConfig";
+import { FrontmatterTypes } from "../lib/frontmatterInterface";
 
 function ArrayOfTextMatter({
   handleBack,
   Default: initialDefault,
-  Key: initialKey,
-  id,
+  name: initialName,
   handleMatterSave,
 }) {
-  const [Key, setKey] = useState(initialKey);
+  const [name, setName] = useState(initialName);
   const [Default, setDefault] = useState(initialDefault);
   const [singleValue, setSingleValue] = useState("");
   return (
@@ -36,9 +35,9 @@ function ArrayOfTextMatter({
             <Typography>Name:</Typography>
             <TextField
               fullWidth
-              value={Key}
+              value={name}
               label="required"
-              onChange={(e) => setKey(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               variant="filled"
             />
           </Grid>
@@ -83,9 +82,9 @@ function ArrayOfTextMatter({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
-          disabled={Key === ""}
+          disabled={name === ""}
           onClick={() => {
-            handleMatterSave(id, Key, Default);
+            handleMatterSave(name, Default);
           }}
         >
           Save
@@ -97,12 +96,11 @@ function ArrayOfTextMatter({
 function DateMatter({
   handleBack,
   Default: initialDefault,
-  Key: initialKey,
-  id,
+  name: initialName,
   handleMatterSave,
   option: initialOption,
 }) {
-  const [Key, setKey] = useState(initialKey);
+  const [name, setName] = useState(initialName);
   const [Default, setDefault] = useState(initialDefault);
   const [option, setOption] = useState(initialOption);
   return (
@@ -114,10 +112,10 @@ function DateMatter({
             <Typography>Name:</Typography>
             <TextField
               fullWidth
-              value={Key}
+              value={name}
               label="required"
               variant="filled"
-              onChange={(e) => setKey(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             />
           </Grid>
           <Grid item>
@@ -135,9 +133,9 @@ function DateMatter({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
-          disabled={Key === ""}
+          disabled={name === ""}
           onClick={() => {
-            handleMatterSave(id, Key, Default, option);
+            handleMatterSave(name, Default, option);
           }}
         >
           Save
@@ -149,11 +147,10 @@ function DateMatter({
 function TextMatter({
   handleBack,
   Default: initialDefault,
-  Key: initialKey,
-  id,
+  name: initialName,
   handleMatterSave,
 }) {
-  const [Key, setKey] = useState(initialKey);
+  const [name, setName] = useState(initialName);
   const [Default, setDefault] = useState(initialDefault);
   return (
     <>
@@ -164,10 +161,10 @@ function TextMatter({
             <Typography>Name:</Typography>
             <TextField
               fullWidth
-              value={Key}
+              value={name}
               variant="filled"
               label="required"
-              onChange={(e) => setKey(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             />
           </Grid>
           <Grid item>
@@ -192,9 +189,9 @@ function TextMatter({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
-          disabled={Key === ""}
+          disabled={name === ""}
           onClick={() => {
-            handleMatterSave(id, Key, Default);
+            handleMatterSave(name, Default);
           }}
         >
           Save
@@ -206,11 +203,10 @@ function TextMatter({
 const MultilineTextMatter = ({
   handleBack,
   Default: initialDefault,
-  Key: initialKey,
-  id,
+  name: initialName,
   handleMatterSave,
 }) => {
-  const [Key, setKey] = useState(initialKey);
+  const [name, setName] = useState(initialName);
   const [Default, setDefault] = useState(initialDefault);
   return (
     <>
@@ -221,10 +217,10 @@ const MultilineTextMatter = ({
             <Typography>Name:</Typography>
             <TextField
               fullWidth
-              value={Key}
+              value={name}
               variant="filled"
               label="required"
-              onChange={(e) => setKey(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             />
           </Grid>
           <Grid item>
@@ -250,9 +246,9 @@ const MultilineTextMatter = ({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
-          disabled={Key === ""}
+          disabled={name === ""}
           onClick={() => {
-            handleMatterSave(id, Key, Default);
+            handleMatterSave(name, Default);
           }}
         >
           Save
@@ -265,11 +261,10 @@ const MultilineTextMatter = ({
 function BoolMatter({
   handleBack,
   Default: initialDefault,
-  Key: initialKey,
-  id,
+  name: initialName,
   handleMatterSave,
 }) {
-  const [Key, setKey] = useState(initialKey);
+  const [name, setName] = useState(initialName);
   const [Default, setDefault] = useState(initialDefault);
   return (
     <>
@@ -280,10 +275,10 @@ function BoolMatter({
             <Typography>Name:</Typography>
             <TextField
               fullWidth
-              value={Key}
+              value={name}
               variant="filled"
               label="required"
-              onChange={(e) => setKey(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             />
           </Grid>
           <Grid item>
@@ -299,9 +294,48 @@ function BoolMatter({
       <DialogActions>
         <Button onClick={handleBack}>Back</Button>
         <Button
-          disabled={Key === ""}
+          disabled={name === ""}
           onClick={() => {
-            handleMatterSave(id, Key, Default);
+            handleMatterSave(name, Default);
+          }}
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </>
+  );
+}
+
+function NestMatter({
+  handleBack,
+  handleMatterSave,
+  name: initialName,
+  Default,
+}) {
+  const [name, setName] = useState(initialName);
+  return (
+    <>
+      <DialogTitle>Set frontmatter name & default value</DialogTitle>
+      <DialogContent>
+        <Grid container direction="column" spacing={3}>
+          <Grid item>
+            <Typography>Name:</Typography>
+            <TextField
+              fullWidth
+              value={name}
+              variant="filled"
+              label="required"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleBack}>Back</Button>
+        <Button
+          disabled={name === ""}
+          onClick={() => {
+            handleMatterSave(name, Default);
           }}
         >
           Save
@@ -317,12 +351,12 @@ function TypeDialog({ handleClose, handleSave }) {
     <>
       <DialogTitle>Select Frontmatter Type</DialogTitle>
       <MenuList>
-        {FrontmatterTypes.map((t) => (
+        {Object.values(FrontmatterTypes).map((type) => (
           <>
             <Divider></Divider>
 
-            <MenuItem value={t.type} onClick={() => handleSave(t.type)}>
-              {t.name}
+            <MenuItem value={type} onClick={() => handleSave(type)}>
+              {type}
             </MenuItem>
           </>
         ))}
@@ -331,21 +365,31 @@ function TypeDialog({ handleClose, handleSave }) {
   );
 }
 
-function FrontmatterDialog({ open, onClose, addFrontmatter }) {
-  const [type, setType] = useState(null);
-  const id = uuid();
+function FrontmatterDialog({ open, onClose, saveFrontmatter, metainfo }) {
+  const initialType = metainfo ? metainfo.type : null;
+  const [type, setType] = useState(initialType);
+  let key = metainfo ? metainfo.key : uuid();
   //save key, default
   const handleClose = () => {
     onClose();
-    setType(null);
+    setType(initialType);
   };
-  const handleMatterSave = (id, key, Default, option) => {
+  const handleMatterSave = (name, Default, option) => {
     //double check
-    if (key === "") {
+    if (name === "") {
       alert("name cannot be empty");
       return;
     }
-    addFrontmatter(id, key, type, Default, option);
+
+    const newChildMetainfo = {
+      name,
+      key,
+      type,
+      default: Default,
+      option,
+    };
+
+    saveFrontmatter(newChildMetainfo);
     handleClose();
   };
 
@@ -359,51 +403,54 @@ function FrontmatterDialog({ open, onClose, addFrontmatter }) {
         />
       )}
       {/* Edit matter key&default*/}
-      {type === "Text" && (
+      {type === FrontmatterTypes.Text && (
         <TextMatter
           handleBack={() => setType(null)}
           handleMatterSave={handleMatterSave}
-          Key={""}
+          name={""}
           Default={null}
-          id={id}
         />
       )}
-      {type === "Multiline-Text" && (
+      {type === FrontmatterTypes.MultilineText && (
         <MultilineTextMatter
           handleBack={() => setType(null)}
           handleMatterSave={handleMatterSave}
-          Key={""}
+          name={""}
           Default={null}
-          id={id}
         />
       )}
 
-      {type === "Array.Text" && (
+      {type === FrontmatterTypes.ListOfText && (
         <ArrayOfTextMatter
-          handleBack={() => setType(null)}
+          handleBack={() => setType(initialType)}
           handleMatterSave={handleMatterSave}
-          Key={""}
+          name={""}
           Default={[]}
-          id={id}
         />
       )}
-      {type === "Date" && (
+      {type === FrontmatterTypes.Date && (
         <DateMatter
-          handleBack={() => setType(null)}
+          handleBack={() => setType(initialType)}
           handleMatterSave={handleMatterSave}
-          Key={""}
+          name={""}
           Default={null}
-          id={id}
           option={{ useNow: true }}
         />
       )}
-      {type === "Bool" && (
+      {type === FrontmatterTypes.Bool && (
         <BoolMatter
-          handleBack={() => setType(null)}
+          handleBack={() => setType(initialType)}
           handleMatterSave={handleMatterSave}
-          Key={""}
+          name={""}
           Default={false}
-          id={id}
+        />
+      )}
+      {type === FrontmatterTypes.Nest && (
+        <NestMatter
+          handleBack={() => setType(initialType)}
+          handleMatterSave={handleMatterSave}
+          name={""}
+          Default={[]}
         />
       )}
     </Dialog>

@@ -145,12 +145,9 @@ exports.createFolder = (e, folderPath) => {
   }
 };
 
-exports.createFile = (_, filePath, doc, frontmatter, doOverwrite) => {
-  //TODO
+exports.createFile = (_, filePath, content, doOverwrite) => {
+  //TODO remove this block
   try {
-    const yaml_str = YAML.stringify(frontmatter);
-    if (Object.keys(frontmatter).length !== 0)
-      doc = "---\n" + yaml_str + "---" + doc;
     if (doOverwrite) {
       fs.writeFileSync(filePath, doc);
       return { err: null, isFileExists: null };
@@ -160,7 +157,7 @@ exports.createFile = (_, filePath, doc, frontmatter, doOverwrite) => {
       return { err: null, isFileExists: true };
     }
 
-    fs.writeFileSync(filePath, doc);
+    fs.writeFileSync(filePath, content);
     return { err: null, isFileExists: false };
   } catch (err) {
     return { err, isFileExists: null };

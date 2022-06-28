@@ -1,3 +1,4 @@
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import DragHandleOutlinedIcon from "@mui/icons-material/DragHandleOutlined";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
@@ -10,21 +11,179 @@ import {
   Menu,
   MenuItem,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import useSiteConfig, {
-  FrontmatterLanguages,
-  FrontmatterTypeToName,
-} from "../lib/useSiteConfig";
+import { v4 as uuid } from "uuid";
+import { FrontmatterTypes } from "../lib/frontmatterInterface";
+import useSiteConfig, { FrontmatterLanguages } from "../lib/useSiteConfig";
 import useSiteConfigBuffer from "../lib/useSiteConfigBuffer";
-import CommandDialog from "./CommandDialog";
 import CustomSelect from "./CustomSelect";
 import FrontmatterDialog from "./FrontmatterDialog";
-import HelpLink from "./HelpLink";
-import { helpLinks } from "./Settings";
 import TextDialog from "./TextDialog";
+
+function FrontmatterList({
+  isFrontmatterDialogOpen,
+  setIsFrontmatterDialogOpen,
+  saveFrontmatter,
+  removeFrontmatter,
+  reorderFrontmatter,
+  metainfoList,
+  parentMetainfoKeys = [],
+}) {
+  const [FrontmatterAnchorEl, setFrontmatterAnchorEl] = useState(null);
+  const [isChildFrontmatterDialogOpen, setIsChildFrontmatterDialogOpen] =
+    useState(false);
+
+  const droppableId = uuid();
+
+  return (
+    <>
+      <FrontmatterDialog
+        open={isFrontmatterDialogOpen}
+        onClose={() => setIsFrontmatterDialogOpen(false)}
+        saveFrontmatter={(newChildMetainfo) =>
+          saveFrontmatter(newChildMetainfo, parentMetainfoKeys)
+        }
+      />
+      <Grid item sx={{ width: "100%" }}>
+        <DragDropContext
+          onDragEnd={(result) => reorderFrontmatter(result, parentMetainfoKeys)}
+        >
+          <Droppable droppableId={droppableId}>
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {metainfoList?.map((metainfo, i) => (
+                  <Draggable draggableId={droppableId + i} index={i}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        style={{ ...provided.draggableProps.style }}
+                      >
+                        <div
+                          className="setting-draggable"
+                          data-key={metainfo.key} //used by Menu
+                        >
+                          <p className="dotdotdot" style={{ width: "20%" }}>
+                            {metainfo.name}
+                          </p>
+                          <p
+                            className="dotdotdot"
+                            style={{
+                              color: "#999",
+                              width: "20%",
+                              marginLeft: "5px",
+                            }}
+                          >
+                            {metainfo.type}
+                          </p>
+                          <p
+                            className="dotdotdot"
+                            style={{
+                              color: "#999",
+                              marginLeft: "5px",
+                            }}
+                          >
+                            {metainfo.type !== FrontmatterTypes.Nest &&
+                              String(metainfo.default)}
+                          </p>
+                          {metainfo.type === FrontmatterTypes.Nest && (
+                            <Tooltip title="add child frontmatter">
+                              <AddCircleOutlinedIcon
+                                onClick={() =>
+                                  setIsChildFrontmatterDialogOpen(true)
+                                }
+                                fontSize="small"
+                                sx={{
+                                  color: "inherit",
+                                  cursor: "pointer",
+                                  position: "absolute",
+                                  right: "100px",
+                                }}
+                              />
+                            </Tooltip>
+                          )}
+                          <div
+                            style={{
+                              position: "absolute",
+                              right: "60px",
+                            }}
+                            {...provided.dragHandleProps}
+                          >
+                            <DragHandleOutlinedIcon />
+                          </div>
+                          <MoreHorizIcon
+                            sx={{ position: "absolute", right: "20px" }}
+                            onClick={(e) => {
+                              setFrontmatterAnchorEl(e.currentTarget);
+                              e.stopPropagation();
+                            }}
+                          />
+                          <Menu
+                            anchorEl={FrontmatterAnchorEl}
+                            open={
+                              FrontmatterAnchorEl?.parentNode.dataset.key ===
+                              metainfo.key
+                            }
+                            onClose={(e) => {
+                              setFrontmatterAnchorEl(null);
+                              e.stopPropagation();
+                            }}
+                            //on Click menuitems
+                            onClick={(e) => {
+                              setFrontmatterAnchorEl(null);
+                              e.stopPropagation();
+                            }}
+                          >
+                            <MenuItem
+                              onClick={() =>
+                                removeFrontmatter(
+                                  metainfo.key,
+                                  parentMetainfoKeys
+                                )
+                              }
+                            >
+                              delete
+                            </MenuItem>
+                          </Menu>
+                        </div>
+                        {metainfo.type === FrontmatterTypes.Nest && (
+                          <div style={{ paddingLeft: "15px" }}>
+                            <FrontmatterList
+                              isFrontmatterDialogOpen={
+                                isChildFrontmatterDialogOpen
+                              }
+                              setIsFrontmatterDialogOpen={
+                                setIsChildFrontmatterDialogOpen
+                              }
+                              metainfoList={metainfo.default}
+                              parentMetainfoKeys={[
+                                ...parentMetainfoKeys,
+                                metainfo.key,
+                              ]}
+                              saveFrontmatter={saveFrontmatter}
+                              removeFrontmatter={removeFrontmatter}
+                              reorderFrontmatter={reorderFrontmatter}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </Grid>
+      {/* -Frontmatter */}
+    </>
+  );
+}
 
 function Site() {
   const siteConfig = useSiteConfig();
@@ -34,8 +193,7 @@ function Site() {
     editMediaStaticPath,
     editFrontmatterLanguage,
     editFrontmatterDelimiter,
-    addCommand,
-    addFrontmatter,
+    saveFrontmatter,
     removeFrontmatter,
     reorderFrontmatter,
     removePinnedDir,
@@ -51,10 +209,8 @@ function Site() {
     saveSiteConfig();
   }
 
-  const [FrontmatterAnchorEl, setFrontmatterAnchorEl] = useState(null);
   const [PinnedDirsAnchorEl, setPinnedDirsAnchorEl] = useState(null);
   const [isFrontmatterDialogOpen, setIsFrontmatterDialogOpen] = useState(false);
-  const [isCommandDialogOpen, setIsCommandDialogOpen] = useState(false);
   const [
     isFrontmatterDelimiterEditorOpen,
     setIsFrontmatterDelimiterEditorOpen,
@@ -62,16 +218,6 @@ function Site() {
 
   return (
     <div id="setting-site">
-      <FrontmatterDialog
-        open={isFrontmatterDialogOpen}
-        onClose={() => setIsFrontmatterDialogOpen(false)}
-        addFrontmatter={addFrontmatter}
-      />
-      <CommandDialog
-        open={isCommandDialogOpen}
-        onClose={() => setIsCommandDialogOpen(false)}
-        addCommand={addCommand}
-      />
       <Typography variant="h5">Settings</Typography>
       <Divider sx={{ marginBottom: "20px" }} />
       <Grid container spacing={2}>
@@ -175,92 +321,16 @@ function Site() {
           </Grid>
         </Grid>
 
-        <Grid item sx={{ width: "100%" }}>
-          <DragDropContext onDragEnd={reorderFrontmatter}>
-            <Droppable droppableId="frontmatter">
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {siteConfigBuffer.frontmatter?.map((matter, i) => (
-                    <Draggable draggableId={"frontmatter" + i} index={i}>
-                      {(provided) => (
-                        <div
-                          className="setting-draggable"
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          style={{ ...provided.draggableProps.style }}
-                          data-id={matter.id} //used by Menu
-                        >
-                          <p className="dotdotdot" style={{ width: "20%" }}>
-                            {matter.key}
-                          </p>
-                          <p
-                            className="dotdotdot"
-                            style={{
-                              color: "#999",
-                              width: "20%",
-                              marginLeft: "5px",
-                            }}
-                          >
-                            {FrontmatterTypeToName(matter.type)}
-                          </p>
-                          <p
-                            className="dotdotdot"
-                            style={{
-                              color: "#999",
-                              marginLeft: "5px",
-                            }}
-                          >
-                            {String(matter.default)}
-                          </p>
-                          <div
-                            style={{
-                              position: "absolute",
-                              right: "60px",
-                            }}
-                            {...provided.dragHandleProps}
-                          >
-                            <DragHandleOutlinedIcon />
-                          </div>
-                          <MoreHorizIcon
-                            sx={{ position: "absolute", right: "20px" }}
-                            onClick={(e) => {
-                              setFrontmatterAnchorEl(e.currentTarget);
-                              e.stopPropagation();
-                            }}
-                          />
-                          <Menu
-                            anchorEl={FrontmatterAnchorEl}
-                            open={
-                              FrontmatterAnchorEl?.parentNode.dataset.id ===
-                              matter.id
-                            }
-                            onClose={(e) => {
-                              setFrontmatterAnchorEl(null);
-                              e.stopPropagation();
-                            }}
-                            //on Click menuitems
-                            onClick={(e) => {
-                              setFrontmatterAnchorEl(null);
-                              e.stopPropagation();
-                            }}
-                          >
-                            <MenuItem
-                              onClick={() => removeFrontmatter(matter.id)}
-                            >
-                              delete
-                            </MenuItem>
-                          </Menu>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </Grid>
-        {/* -Frontmatter */}
+        <FrontmatterList
+          {...{
+            isFrontmatterDialogOpen,
+            setIsFrontmatterDialogOpen,
+            saveFrontmatter,
+            removeFrontmatter,
+            reorderFrontmatter,
+            metainfoList: siteConfigBuffer.frontmatter,
+          }}
+        />
 
         {/* MediaDir TODO: prompt restart*/}
         <Grid item>
