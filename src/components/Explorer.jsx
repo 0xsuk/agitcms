@@ -33,15 +33,17 @@ function Explorer() {
     setFilesAndFolders(filesAndFolders);
   };
 
+  if (!isInDir) {
+    return <></>;
+  }
+
   return (
     <div id="explorer">
-      {isInDir && <CreateNewDf cwdf={cwdf} />}
-      {isInDir &&
-        filesAndFolders.map((df) => {
-          if (df.isDir || df.extension === ".md")
-            return <Df {...{ siteConfig, cwdf, df, loadFilesAndFolders }} />;
-        })}
-      {!isInDir && <EditorWrapper filePath={cwdf}></EditorWrapper>}
+      <CreateNewDf cwdf={cwdf} />
+      {filesAndFolders.map((df) => {
+        if (df.isDir || df.extension === ".md")
+          return <Df {...{ siteConfig, cwdf, df, loadFilesAndFolders }} />;
+      })}
     </div>
   );
 }
