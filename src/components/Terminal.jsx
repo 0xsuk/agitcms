@@ -9,8 +9,7 @@ function Terminal() {
   const { init, exit, isVisible, cid, setCid, terminals, createNew } =
     useTerminalManager(siteConfig);
   useEffect(() => {
-    if (!siteConfig.path) return;
-    if (!config.useTerminal) return;
+    if (!siteConfig.path || !config.useTerminal) return;
     init();
     return exit;
   }, [siteConfig.path]);

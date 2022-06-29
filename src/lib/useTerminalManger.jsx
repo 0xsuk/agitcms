@@ -5,14 +5,14 @@ import { WebLinksAddon } from "../lib/xterm-addon-web-links.js";
 import "xterm/css/xterm.css";
 
 function useTerminalManager(siteConfig) {
-  const isAnyActive = useRef(false);
+  //const isAnyActive = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
   const [cid, setCid] = useState(null); //current id of terminal
   //const [terminals, setTerminals] = useState([]); //list of terminals {xterm, id}
   const terminals = useRef([]); //{xterm, id, el}
   //const [ter, setTer] = useState(terminals);
+  const getParent = () => document.getElementById("terminal-console");
 
-  console.log({ terminals });
   window.xterm = {};
 
   if (cid !== null && isVisible) {
@@ -28,15 +28,13 @@ function useTerminalManager(siteConfig) {
     });
   }
 
-  const createToggleListener = () => {
-    return (e) => {
-      if (e.key === "@" && e.ctrlKey) {
-        setIsVisible((prev) => !prev);
-        if (!isAnyActive.current) {
-          createNew();
-        }
+  const toggleListener = (e) => {
+    if (e.key === "@" && e.ctrlKey) {
+      setIsVisible((prev) => !prev);
+      if (!Boolean(terminals.current.length)) {
+        createNew();
       }
-    };
+    }
   };
   const createResizeListener = (fitAddon) => {
     return () => {
@@ -46,7 +44,7 @@ function useTerminalManager(siteConfig) {
   };
 
   const init = () => {
-    window.addEventListener("keydown", createToggleListener());
+    window.addEventListener("keydown", toggleListener);
     window.electronAPI.onShellData((_, id, data) => {
       terminals.current.every((t) => {
         if (t.id === id) {
@@ -64,7 +62,6 @@ function useTerminalManager(siteConfig) {
           if (terminals.current.length === 0) {
             setIsVisible(false);
             setCid(null);
-            isAnyActive.current = false;
             return false;
           }
           setCid(terminals.current[i]?.id || terminals.current[i - 1].id);
@@ -72,28 +69,22 @@ function useTerminalManager(siteConfig) {
         }
         return true;
       });
-      //setIsVisible(false);
-      //xterm.dispose();
-      //isAnyActive.current = false;
-
-      //window.removeEventListener("resize", resizeListener(fitAddon));
     });
   };
 
   const createNew = () => {
-    const parent = document.getElementById("terminal-console");
     const el = document.createElement("div");
     el.className = "terminal-instance";
+    const parent = getParent();
     parent.appendChild(el);
     let cid = undefined;
     const xterm = new Xterm({ rows: 15 });
-    isAnyActive.current = true;
     const fitAddon = new FitAddon();
     xterm.loadAddon(fitAddon);
     xterm.loadAddon(new WebLinksAddon());
     xterm.open(el);
     fitAddon.fit();
-    window.addEventListener("resize", createResizeListener(fitAddon));
+    window.addEventListener("resize", createResizeListener(fitAddon)); //TODO?: removeEventListener
     xterm.onData((data) => {
       //Ctrl @
       if (data === "\x1B") {
@@ -102,10 +93,6 @@ function useTerminalManager(siteConfig) {
       }
       window.electronAPI.typeCommand(cid, data);
     });
-    //xterm.onResize((size) => {
-    //  console.log("resize", size);
-    //  window.electronAPI.resizeShell(size);
-    //});
     window.electronAPI.spawnShell(siteConfig.path, undefined).then((id) => {
       cid = id; //!important
       el.dataset.id = id;
@@ -115,36 +102,22 @@ function useTerminalManager(siteConfig) {
   };
 
   const exit = () => {
-    window.removeEventListener("keydown", createToggleListener());
-  };
-
-  const createWinListener = () => {
-    return (e) => {
-      if (e.key === "@" && e.ctrlKey) {
-        window.electronAPI.spawnWinShell(siteConfig.path);
-      }
-    };
-  };
-
-  const winInit = () => {
-    window.addEventListener("keydown", createWinListener());
-  };
-  const winExit = () => {
-    window.removeEventListener("keydown", createWinListener());
+    const parent = getParent();
+    terminals.current?.forEach(({ el }) => {
+      parent.removeChild(el); //TODO not triggered
+    });
+    window.removeEventListener("keydown", toggleListener);
   };
 
   return {
-    isAnyActive,
     isVisible,
     setIsVisible,
     cid,
     setCid,
     terminals,
     init,
-    createNew,
     exit,
-    winInit,
-    winExit,
+    createNew,
   };
 }
 
