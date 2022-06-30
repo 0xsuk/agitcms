@@ -63,7 +63,14 @@ function CreateNewDf({ cwdf }) {
       }
     }
     history.push(
-      "?path=" + cwdf + "/" + fileName + "&isDir=false&name=" + fileName
+      "/site/editor/" +
+        siteConfig.key +
+        "?path=" +
+        cwdf +
+        "/" +
+        fileName +
+        "&isDir=false&name=" +
+        fileName
     );
   };
 
