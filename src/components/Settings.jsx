@@ -44,7 +44,7 @@ function Settings() {
       <Grid container spacing={2}>
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
-            <Typography>Use Integrated Terminal:</Typography>
+            <Typography>Open Integrated Terminal with Ctrl+@:</Typography>
           </Grid>
           <Grid item>
             <Switch
@@ -56,7 +56,7 @@ function Settings() {
             />
           </Grid>
         </Grid>
-        <Grid item container spacing={1} alignItems="center">
+        {/*<Grid item container spacing={1} alignItems="center">
           <Grid item>
             <Typography>Auto Save:</Typography>
           </Grid>
@@ -88,8 +88,8 @@ function Settings() {
               )}
             </CustomSelect>
           </Grid>
-        </Grid>
-        <Grid item container spacing={1} alignItems="center">
+        </Grid> */}
+        {/*<Grid item container spacing={1} alignItems="center">
           <Grid item>
             <Typography>Theme:</Typography>
           </Grid>
@@ -121,7 +121,7 @@ function Settings() {
               )}
             </CustomSelect>
           </Grid>
-        </Grid>
+        </Grid> */}
         <Grid item container spacing={1} alignItems="center">
           <Grid item>
             <Typography>Zoom:</Typography>
