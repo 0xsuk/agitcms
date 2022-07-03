@@ -33,7 +33,7 @@ Agit CMS is not authenticated. Some security warning will be displayed by Window
 
 
 # Usage
-Explained here! https://0xsuk.github.io/agitcms
+Explained here! https://0xsuk.github.io/agitcms/overview
 
 
 # Development
