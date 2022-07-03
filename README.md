@@ -10,6 +10,9 @@
 
 Agit CMS is a multi-platform desktop application built on top of Electron, which works as a frontend interface for any static site generator.   
 
+![frontmatter](https://user-images.githubusercontent.com/97814789/177042161-555c631e-2050-453c-b9de-1e2137ed7752.gif)
+
+
 ## Features
 - 100% opensource and free
 - works completely offline
