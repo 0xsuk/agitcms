@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { genContent, parseContent } from "./frontmatterInterface";
 import useSiteConfig from "./useSiteConfig";
@@ -11,7 +11,7 @@ function useFileManager(filePath) {
   const location = useLocation();
   const searchparams = new URLSearchParams(location.search);
   const fileName = searchparams.get("name");
-  const [file, setFile] = useState({
+  const initialState = {
     name: fileName,
     path: filePath,
     content: "", //include frontmatter
@@ -20,8 +20,13 @@ function useFileManager(filePath) {
     isRead: false,
     isModified: false,
     isFrontmatterEmpty: true,
-  });
+  };
+  const [file, setFile] = useState(initialState);
   const siteConfig = useSiteConfig();
+
+  useEffect(() => {
+    setFile(initialState);
+  }, [filePath]);
 
   const editName = (name) => {
     setFile((prev) => ({ ...prev, name }));

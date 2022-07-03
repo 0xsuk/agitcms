@@ -124,14 +124,18 @@ function useCodemirror({ fileManager }) {
         ],
       });
 
-      const view = new EditorView({
+      if (view) {
+        view.setState(startState);
+        return;
+      }
+      const newView = new EditorView({
         state: startState,
         parent: ref.current,
       });
 
-      setView(view);
+      setView(newView);
     });
-  }, [ref]);
+  }, [ref, fileManager.file.path]);
 
   return [ref, view];
 }
