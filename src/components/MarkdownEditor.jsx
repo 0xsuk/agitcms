@@ -186,7 +186,6 @@ function MarkdownEditor({ fileManager, siteConfig }) {
           display: "flex",
           height: "100%",
           overflow: "hidden",
-          paddingTop: "5px",
         }}
       >
         <div
