@@ -89,7 +89,8 @@ function MarkdownEditor({ fileManager, siteConfig }) {
       previewChildNodesOffsetTopList.push(
         previewElem.childNodes[index].offsetTop +
           (isMac ? 22 : 30) - //Window titlebar height
-          previewElem.getBoundingClientRect().top //offsetTop from the top of editor_preview
+          previewElem.getBoundingClientRect().top - //offsetTop from the top of editor_preview
+          10 //padding top of previewElem TODO
       );
     });
 

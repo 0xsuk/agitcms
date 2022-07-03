@@ -171,7 +171,7 @@ $editor-navigator-height: 44px;
 #editor-preview {
   height: 100%;
   flex: 0 0 50%;
-  padding: 0 10px;
+  padding: 10px; //!padding top is used by scrollSync
   border-left: solid 1px #424242; //same as dark color-scheme scroll bar
   overflow-y: auto;
   overflow-x: hidden;

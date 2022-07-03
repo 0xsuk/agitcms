@@ -75,7 +75,6 @@ function useCodemirror({ fileManager }) {
           syntaxHighlighting(markdownHighlighting),
           EditorView.lineWrapping,
           EditorView.updateListener.of((update) => {
-            console.log(update.transactions);
             if (update.docChanged) {
               fileManagerRef.current.setDoc(update.state.doc.toString());
             }
