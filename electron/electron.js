@@ -8,7 +8,6 @@ const {
   saveFile,
   getFolderPath,
   getFilesAndFolders,
-  renameFile,
   typeCommand,
   createFolder,
   createFile,
@@ -18,6 +17,7 @@ const {
   startMediaServer,
   getMediaFile,
   saveImage,
+  renameFileOrFolder,
 } = require("./api");
 const { createWindow } = require("./lib/window_manager");
 
@@ -29,7 +29,7 @@ app.whenReady().then(() => {
   ipcMain.handle("update-config", updateConfig);
   ipcMain.handle("save-file", saveFile);
   ipcMain.handle("read-file", readFile);
-  ipcMain.handle("rename-file", renameFile);
+  ipcMain.handle("rename-file-or-folder", renameFileOrFolder);
   ipcMain.handle("get-folder-path", getFolderPath);
   ipcMain.handle("get-files-and-folders", getFilesAndFolders);
   ipcMain.handle("create-folder", createFolder);

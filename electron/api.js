@@ -64,14 +64,15 @@ exports.readFile = (e, filePath) => {
   }
 };
 
-exports.renameFile = (e, oldFilePath, newFileName) => {
+exports.renameFileOrFolder = (_, oldPath, newPath) => {
   try {
-    const newFilePath = path.join(oldFilePath, "..", newFileName);
-    fs.renameSync(oldFilePath, newFilePath);
-
-    return { newFilePath, err: null };
+    if (!oldPath || !newPath) {
+      throw new Error("Path is not provided");
+    }
+    fs.renameSync(oldPath, newPath);
+    return { err: null };
   } catch (err) {
-    return { newFilePath: null, err };
+    return { err };
   }
 };
 
