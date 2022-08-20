@@ -2,7 +2,7 @@ import { useState, createContext } from "react";
 
 export const configContext = createContext();
 
-function ConfigContext({ children }) {
+const ConfigContext = ({ children }) => {
   const [config, setConfig] = useState(undefined);
 
   const readConfig = async () => {
@@ -64,6 +64,6 @@ function ConfigContext({ children }) {
       {children}
     </configContext.Provider>
   );
-}
+};
 
 export default ConfigContext;

@@ -5,6 +5,10 @@ import useSiteConfig from "../lib/useSiteConfig";
 import FrontmatterEditor from "./FrontmatterEditor";
 import MarkdownEditor from "./MarkdownEditor";
 import { configContext } from "../context/ConfigContext";
+import { switchTab } from "../lib/switchEditorTab";
+import { copyMediaFilePath } from "../lib/copyMediaFilePath";
+import { editorSetup } from "../lib/editorSetup";
+import { stateContext } from "../context/StateContext";
 
 function EditorWrapper() {
   const location = useLocation();

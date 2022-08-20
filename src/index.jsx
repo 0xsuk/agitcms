@@ -5,6 +5,7 @@ import { HashRouter as Router } from "react-router-dom";
 import ConfigContext from "./context/ConfigContext";
 import createTheme from "@mui/material/styles/createTheme";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
+import StateContext from "./context/StateContext";
 
 const theme = createTheme({
   palette: {
@@ -31,9 +32,11 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <ConfigContext>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
+        <StateContext>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </StateContext>
       </ConfigContext>
     </Router>
   </React.StrictMode>,
