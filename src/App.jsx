@@ -11,6 +11,7 @@ import Terminal from "./components/Terminal";
 import BottomBar from "./components/BottomBar";
 import { configContext } from "./context/ConfigContext";
 import Test from "./Test";
+import { setup } from "./lib/setup";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
@@ -21,9 +22,7 @@ function App() {
 
   useEffect(() => {
     if (config === undefined) return;
-    window.electronAPI.webFrames.setZoomFactor(config.zoom);
-    //TODO: theme toggle
-    //TODO: auto save
+    setup(config);
   }, [config]);
 
   if (config === undefined) {
