@@ -51,3 +51,5 @@ yarn run dev
 - [ ] markdown editor - snippet
 - [ ] markdown editor - key bindings
 - [ ] markdown editor - auto saving config
+- [ ] markdown editor - Table of contents
+- [ ] Typescript
