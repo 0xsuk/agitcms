@@ -199,7 +199,10 @@ exports.spawnShell = (_, cwd, shell) => {
 
 exports.startMediaServer = (_, staticPath, publicPath) => {
   const mediaServer = new MediaServer(staticPath, publicPath);
-  mediaServer.run();
+  const server = mediaServer.run();
+  const port = server.address().port;
+
+  return port;
 };
 
 exports.saveImage = (_, filePath, binary) => {

@@ -13,10 +13,36 @@ import rehypeMathJaxSvg from "rehype-mathjax";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { configContext } from "../context/ConfigContext";
 import useCodemirror from "../lib/useCodemirror";
+import { isMac } from "../lib/isMac";
+import { stateContext } from "../context/StateContext";
 let treeData;
-const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+const captureTreePlugin = () => (tree) => {
+  treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
+};
+const mediaPlugin = (port) => () => (tree) => {
+  if (port === undefined) return;
+  tree.children = tree.children.map((child) => {
+    if (
+      child.type !== "element" ||
+      child.tagName !== "p" ||
+      child.children === undefined
+    )
+      return child;
+
+    child.children = child.children.map((c) => {
+      if (c.type !== "element" || c.tagName !== "img") return c;
+      if (isURL(c.properties.src)) return c;
+      c.properties.src = new URL(
+        c.properties.src,
+        "http://localhost:" + port
+      ).href;
+      return c;
+    });
+    return child;
+  });
+  return tree;
+};
 
 const isURL = (url) => {
   try {
@@ -27,51 +53,15 @@ const isURL = (url) => {
   }
 };
 
-function MarkdownEditor({ fileManager, siteConfig }) {
+function MarkdownEditor({ fileManager }) {
   useEffect(() => {
     console.log("MarkdownEditor");
   }, []);
 
-  const { config } = useContext(configContext);
-  if (config.theme === "dark") {
-    import(
-      /* webpackMode: "eager" */ "github-markdown-css/github-markdown-dark.css"
-    );
-  } else {
-    import(
-      /* webpackMode: "eager" */ "github-markdown-css/github-markdown-light.css"
-    );
-  }
-
   const [editorRef, editorView] = useCodemirror({ fileManager });
+  const { state } = useContext(stateContext);
   const mouseIsOn = useRef(null);
 
-  const defaultPlugin = useCallback(
-    () => (tree) => {
-      treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
-      tree.children = tree.children.map((child) => {
-        if (
-          child.type !== "element" ||
-          child.tagName !== "p" ||
-          child.children === undefined
-        )
-          return child;
-
-        child.children = child.children.map((c) => {
-          if (c.type !== "element" || c.tagName !== "img") return c;
-          if (isURL(c.properties.src)) return c;
-          c.properties.src = new URL(
-            c.properties.src,
-            "http://localhost:3001"
-          ).href; //TODO -> port configuration
-          return c;
-        });
-        return child;
-      });
-      return tree;
-    },
-    []
-  );
   const markdownElem = document.getElementById("editor-markdown");
   const previewElem = document.getElementById("editor-preview");
 
@@ -96,6 +86,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
 
     return [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList];
   }, [editorView]);
+
   const handleMdScroll = useCallback(() => {
     if (mouseIsOn.current !== "markdown") {
       return;
@@ -170,6 +161,7 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     }
   }, [editorView]);
 
+  //TODO do create unified instance over every render
   const md = unified()
     .use(remarkParse)
     .use(remarkGfm)
@@ -177,7 +169,8 @@ function MarkdownEditor({ fileManager, siteConfig }) {
     .use(remarkRehype)
     .use(rehypeMathJaxSvg)
     .use(rehypeReact, { createElement, Fragment })
-    .use(defaultPlugin)
+    .use(captureTreePlugin)
+    .use(mediaPlugin(state.media.port))
     .processSync(fileManager.file.doc).result;
 
   return (
