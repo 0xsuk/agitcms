@@ -43,6 +43,104 @@ const mediaPlugin = (port) => () => (tree) => {
   });
   return tree;
 };
+const computeElemsOffsetTop = (editorView) => {
+  const previewElem = document.getElementById("editor-preview");
+  const markdownChildNodesOffsetTopList = [];
+  const previewChildNodesOffsetTopList = [];
+
+  treeData.children.forEach((child, index) => {
+    if (child.type !== "element" || child.position === undefined) return;
+
+    const pos = child.position.start.offset;
+    const lineInfo = editorView.lineBlockAt(pos);
+    const offsetTop = lineInfo.top;
+    markdownChildNodesOffsetTopList.push(offsetTop);
+    previewChildNodesOffsetTopList.push(
+      previewElem.childNodes[index].offsetTop +
+        (isMac ? 22 : 30) - //Window titlebar height
+        previewElem.getBoundingClientRect().top - //offsetTop from the top of editor_preview
+        10 //padding top of previewElem TODO
+    );
+  });
+
+  return [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList];
+};
+const handleMdScroll = (mouseIsOn, editorView) => {
+  const markdownElem = document.getElementById("editor-markdown");
+  const previewElem = document.getElementById("editor-preview");
+  if (mouseIsOn.current !== "markdown") {
+    return;
+  }
+  const [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList] =
+    computeElemsOffsetTop(editorView);
+
+  let scrollElemIndex;
+  for (let i = 0; markdownChildNodesOffsetTopList.length > i; i++) {
+    if (markdownElem.scrollTop < markdownChildNodesOffsetTopList[i]) {
+      scrollElemIndex = i - 1;
+      break;
+    }
+  }
+
+  if (
+    markdownElem.scrollTop >=
+    markdownElem.scrollHeight - markdownElem.clientHeight //true when scroll reached the bottom
+  ) {
+    previewElem.scrollTop = previewElem.scrollHeight - previewElem.clientHeight; //? scroll to the bottom
+    return;
+  }
+
+  if (scrollElemIndex >= 0) {
+    let ratio =
+      (markdownElem.scrollTop -
+        markdownChildNodesOffsetTopList[scrollElemIndex]) /
+      (markdownChildNodesOffsetTopList[scrollElemIndex + 1] -
+        markdownChildNodesOffsetTopList[scrollElemIndex]);
+    previewElem.scrollTop =
+      ratio *
+        (previewChildNodesOffsetTopList[scrollElemIndex + 1] -
+          previewChildNodesOffsetTopList[scrollElemIndex]) +
+      previewChildNodesOffsetTopList[scrollElemIndex];
+  }
+};
+
+const handlePreviewScroll = (mouseIsOn, editorView) => {
+  const markdownElem = document.getElementById("editor-markdown");
+  const previewElem = document.getElementById("editor-preview");
+  if (mouseIsOn.current !== "preview") {
+    return;
+  }
+  const [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList] =
+    computeElemsOffsetTop(editorView);
+  let scrollElemIndex;
+  for (let i = 0; previewChildNodesOffsetTopList.length > i; i++) {
+    if (previewElem.scrollTop < previewChildNodesOffsetTopList[i]) {
+      scrollElemIndex = i - 1;
+      break;
+    }
+  }
+
+  if (
+    previewElem.scrollTop >=
+    previewElem.scrollHeight - previewElem.clientHeight //true when scroll reached the bottom
+  ) {
+    markdownElem.scrollTop =
+      markdownElem.scrollHeight - markdownElem.clientHeight; //? scroll to the bottom
+    return;
+  }
+  if (scrollElemIndex >= 0) {
+    let ratio =
+      (previewElem.scrollTop -
+        previewChildNodesOffsetTopList[scrollElemIndex]) /
+      (previewChildNodesOffsetTopList[scrollElemIndex + 1] -
+        previewChildNodesOffsetTopList[scrollElemIndex]);
+    markdownElem.scrollTop =
+      ratio *
+        (markdownChildNodesOffsetTopList[scrollElemIndex + 1] -
+          markdownChildNodesOffsetTopList[scrollElemIndex]) +
+      markdownChildNodesOffsetTopList[scrollElemIndex];
+  }
+};
 
 const isURL = (url) => {
   try {
@@ -62,116 +160,21 @@ function MarkdownEditor({ fileManager }) {
   const { state } = useContext(stateContext);
   const mouseIsOn = useRef(null);
 
-  const markdownElem = document.getElementById("editor-markdown");
-  const previewElem = document.getElementById("editor-preview");
-
-  const computeElemsOffsetTop = useCallback(() => {
-    let markdownChildNodesOffsetTopList = [];
-    let previewChildNodesOffsetTopList = [];
-
-    treeData.children.forEach((child, index) => {
-      if (child.type !== "element" || child.position === undefined) return;
-
-      const pos = child.position.start.offset;
-      const lineInfo = editorView.lineBlockAt(pos);
-      const offsetTop = lineInfo.top;
-      markdownChildNodesOffsetTopList.push(offsetTop);
-      previewChildNodesOffsetTopList.push(
-        previewElem.childNodes[index].offsetTop +
-          (isMac ? 22 : 30) - //Window titlebar height
-          previewElem.getBoundingClientRect().top - //offsetTop from the top of editor_preview
-          10 //padding top of previewElem TODO
-      );
-    });
-
-    return [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList];
-  }, [editorView]);
-
-  const handleMdScroll = useCallback(() => {
-    if (mouseIsOn.current !== "markdown") {
-      return;
-    }
-    const [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList] =
-      computeElemsOffsetTop();
-
-    let scrollElemIndex;
-    for (let i = 0; markdownChildNodesOffsetTopList.length > i; i++) {
-      if (markdownElem.scrollTop < markdownChildNodesOffsetTopList[i]) {
-        scrollElemIndex = i - 1;
-        break;
-      }
-    }
-
-    if (
-      markdownElem.scrollTop >=
-      markdownElem.scrollHeight - markdownElem.clientHeight //true when scroll reached the bottom
-    ) {
-      previewElem.scrollTop =
-        previewElem.scrollHeight - previewElem.clientHeight; //? scroll to the bottom
-      return;
-    }
-
-    if (scrollElemIndex >= 0) {
-      let ratio =
-        (markdownElem.scrollTop -
-          markdownChildNodesOffsetTopList[scrollElemIndex]) /
-        (markdownChildNodesOffsetTopList[scrollElemIndex + 1] -
-          markdownChildNodesOffsetTopList[scrollElemIndex]);
-      previewElem.scrollTop =
-        ratio *
-          (previewChildNodesOffsetTopList[scrollElemIndex + 1] -
-            previewChildNodesOffsetTopList[scrollElemIndex]) +
-        previewChildNodesOffsetTopList[scrollElemIndex];
-    }
-  }, [editorView]);
-
-  const handlePreviewScroll = useCallback(() => {
-    if (mouseIsOn.current !== "preview") {
-      return;
-    }
-    const [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList] =
-      computeElemsOffsetTop();
-    let scrollElemIndex;
-    for (let i = 0; previewChildNodesOffsetTopList.length > i; i++) {
-      if (previewElem.scrollTop < previewChildNodesOffsetTopList[i]) {
-        scrollElemIndex = i - 1;
-        break;
-      }
-    }
-
-    if (
-      previewElem.scrollTop >=
-      previewElem.scrollHeight - previewElem.clientHeight //true when scroll reached the bottom
-    ) {
-      markdownElem.scrollTop =
-        markdownElem.scrollHeight - markdownElem.clientHeight; //? scroll to the bottom
-      return;
-    }
-    if (scrollElemIndex >= 0) {
-      let ratio =
-        (previewElem.scrollTop -
-          previewChildNodesOffsetTopList[scrollElemIndex]) /
-        (previewChildNodesOffsetTopList[scrollElemIndex + 1] -
-          previewChildNodesOffsetTopList[scrollElemIndex]);
-      markdownElem.scrollTop =
-        ratio *
-          (markdownChildNodesOffsetTopList[scrollElemIndex + 1] -
-            markdownChildNodesOffsetTopList[scrollElemIndex]) +
-        markdownChildNodesOffsetTopList[scrollElemIndex];
-    }
-  }, [editorView]);
+  const mdProcesser = useCallback(() => {
+    return unified()
+      .use(remarkParse)
+      .use(remarkGfm)
+      .use(remarkMath)
+      .use(remarkRehype)
+      .use(rehypeMathJaxSvg)
+      .use(rehypeReact, { createElement, Fragment })
+      .use(captureTreePlugin)
+      .use(mediaPlugin(state.media.port))
+      .processSync(fileManager.file.doc).result;
+  }, [state.media.port, fileManager.file.doc]);
 
   //TODO do create unified instance over every render
-  const md = unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkMath)
-    .use(remarkRehype)
-    .use(rehypeMathJaxSvg)
-    .use(rehypeReact, { createElement, Fragment })
-    .use(captureTreePlugin)
-    .use(mediaPlugin(state.media.port))
-    .processSync(fileManager.file.doc).result;
+  const md = mdProcesser();
 
   return (
     <>
@@ -185,14 +188,14 @@ function MarkdownEditor({ fileManager }) {
         <div
           id="editor-markdown"
           ref={editorRef}
-          onScroll={handleMdScroll}
+          onScroll={() => handleMdScroll(mouseIsOn, editorView)}
           onMouseEnter={() => (mouseIsOn.current = "markdown")}
           onMouseOver={() => (mouseIsOn.current = "markdown")} //in case mouse is above the element at the beginning
         ></div>
         <div
           id="editor-preview"
           className="markdown-body"
-          onScroll={handlePreviewScroll}
+          onScroll={() => handlePreviewScroll(mouseIsOn, editorView)}
           onMouseEnter={() => (mouseIsOn.current = "preview")}
           onMouseOver={() => (mouseIsOn.current = "preview")}
         >
