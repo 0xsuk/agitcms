@@ -52,7 +52,7 @@ function EditorWrapper() {
         <div className="tab" onClick={() => switchTab("frontmatter")}>
           Frontmatter
         </div>
-        <div className="tab" onClick={copyMediaFilePath}>
+        <div className="tab" onClick={copyMediaFilePath(siteConfig)}>
           Media
         </div>
       </div>
