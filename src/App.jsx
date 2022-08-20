@@ -12,6 +12,7 @@ import BottomBar from "./components/BottomBar";
 import { configContext } from "./context/ConfigContext";
 import Test from "./Test";
 import { setup } from "./lib/setup";
+import { isMac } from "./lib/isMac";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
@@ -41,8 +42,6 @@ function App() {
 }
 
 function Wrapper() {
-  const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-
   return (
     // list of workspace
     <div

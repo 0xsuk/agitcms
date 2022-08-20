@@ -15,71 +15,7 @@ function EditorWrapper() {
   const fileManager = useFileManager(filePath);
   const siteConfig = useSiteConfig();
   const { config } = useContext(configContext);
-
-  const switchTab = (tab) => {
-    const frontmatterEl = document.getElementById("editor-frontmatter-tab");
-    const markdownEl = document.getElementById("editor-markdown-tab");
-    const markdownTabEl = document.querySelectorAll(
-      "#editor-navigator > .tab"
-    )[0];
-    const frontmatterTabEl = document.querySelectorAll(
-      "#editor-navigator .tab"
-    )[1];
-    const isFrontmatterVisible = frontmatterEl.style.display !== "none";
-
-    const frontmatterOn = () => {
-      markdownEl.style.display = "none";
-      markdownTabEl.style.borderBottom = "none";
-      frontmatterEl.style.display = "block";
-      frontmatterTabEl.style.borderBottom = "solid 1px red";
-    };
-
-    const markdownOn = () => {
-      markdownEl.style.display = "block";
-      markdownTabEl.style.borderBottom = "solid 1px red";
-      frontmatterEl.style.display = "none";
-      frontmatterTabEl.style.borderBottom = "none";
-    };
-
-    switch (tab) {
-      case undefined:
-        if (isFrontmatterVisible) {
-          markdownOn();
-        } else {
-          frontmatterOn();
-        }
-        break;
-      case "markdown":
-        markdownOn();
-        break;
-      case "frontmatter":
-        frontmatterOn();
-        break;
-    }
-  };
-
-  const copyMediaFilePath = async () => {
-    if (siteConfig.media.staticPath === "") {
-      alert("please set media folder path");
-      return;
-    }
-    const { err, filePath, canceled } = await window.electronAPI.getMediaFile(
-      siteConfig.media.staticPath,
-      siteConfig.media.publicPath
-    );
-    if (canceled) return;
-    if (err !== null) {
-      alert(err);
-      return;
-    }
-
-    const buf = document.createElement("input");
-    document.body.appendChild(buf);
-    buf.value = filePath;
-    buf.select();
-    document.execCommand("copy");
-    document.body.removeChild(buf);
-  };
+  const { setMediaPort } = useContext(stateContext);
 
   const handleSave = () => {
     fileManager.saveFile().then((err) => {
@@ -92,10 +28,11 @@ function EditorWrapper() {
 
   useEffect(() => {
     if (siteConfig.media.staticPath === "") return;
-    window.electronAPI.startMediaServer(
-      siteConfig.media.staticPath,
-      siteConfig.media.publicPath
-    );
+    editorSetup({
+      setMediaPort,
+      mediaStaticPath: siteConfig.media.staticPath,
+      mediaPublicPath: siteConfig.media.publicPath,
+    });
   }, [siteConfig.media.staticPath, siteConfig.media.publicPath]);
 
   if (fileManager.file.isRead && config.autosave === "always") {
