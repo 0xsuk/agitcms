@@ -150,7 +150,7 @@ exports.createFile = (_, filePath, content, doOverwrite) => {
   //TODO remove this block
   try {
     if (doOverwrite) {
-      fs.writeFileSync(filePath, doc);
+      fs.writeFileSync(filePath, content);
       return { err: null, isFileExists: null };
     }
     const isFileExists = fs.existsSync(filePath);
