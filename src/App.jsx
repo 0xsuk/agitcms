@@ -12,7 +12,7 @@ import BottomBar from "./components/BottomBar";
 import { configContext } from "./context/ConfigContext";
 import Test from "./Test";
 import { setup } from "./lib/setup";
-import { isMac } from "./lib/isMac";
+import { isMac } from "./lib/constants";
 
 function App() {
   const { config, readConfig } = useContext(configContext);

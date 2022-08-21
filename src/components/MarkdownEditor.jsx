@@ -1,22 +1,22 @@
 import {
   createElement,
   Fragment,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
 } from "react";
+import rehypeMathJaxSvg from "rehype-mathjax";
 import rehypeReact from "rehype-react";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import rehypeMathJaxSvg from "rehype-mathjax";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import useCodemirror from "../lib/useCodemirror";
-import { isMac } from "../lib/isMac";
 import { stateContext } from "../context/StateContext";
+import { isMac } from "../lib/constants";
+import useCodemirror from "../lib/useCodemirror";
+
 let treeData;
 const captureTreePlugin = () => (tree) => {
   treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
@@ -162,7 +162,6 @@ function MarkdownEditor({ fileManager }) {
   const mouseIsOn = useRef(null);
 
   const md = useMemo(() => {
-    //TODO should we memo?
     return unified()
       .use(remarkParse)
       .use(remarkGfm)
