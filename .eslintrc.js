@@ -3,7 +3,7 @@ module.exports = {
   plugins: ["prettier"],
   parserOptions: {
     sourceType: "module",
-    ecmaVersion: "2020",
+    ecmaVersion: "latest",
     emcaFeatures: {
       jsx: true,
     },
