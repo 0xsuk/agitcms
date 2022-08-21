@@ -4,6 +4,7 @@ function HelpLink({ url }) {
     <a
       href={url}
       target="_blank"
+      rel="noreferrer"
       style={{ color: "inherit", textDecoration: "none" }}
     >
       <HelpOutlinedIcon sx={{ fontSize: "13px" }} />
