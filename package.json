@@ -1,6 +1,6 @@
 {
   "name": "agitcms",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A desktop based headless CMS for markdown blogs",
   "main": "electron/electron.js",
   "scripts": {
@@ -28,11 +28,11 @@
     "Static Sites Generator"
   ],
   "author": "0xsuk <iam0xsuk@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/0xsuk/agitcms/issues"
   },
-  "homepage": "https://0xsuk.github.io/agitcms",
+  "homepage": "https://0xsuk.github.io/agitcms/overview",
   "dependencies": {
     "@codemirror/commands": "^6.0.0",
     "@codemirror/lang-markdown": "^6.0.0",
