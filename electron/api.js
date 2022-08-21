@@ -24,7 +24,7 @@ exports.readConfig = () => {
   return { config: getConfig() };
 };
 
-exports.updateConfig = (e, newConfig) => {
+exports.updateConfig = (_, newConfig) => {
   try {
     const config_str = JSON.stringify(newConfig);
     fs.writeFileSync(CONFIG_FILE, config_str);
@@ -36,7 +36,7 @@ exports.updateConfig = (e, newConfig) => {
   }
 };
 
-exports.saveFile = (e, filePath, content) => {
+exports.saveFile = (_, filePath, content) => {
   try {
     if (!filePath) {
       throw new Error("File path is not provided");
@@ -49,7 +49,7 @@ exports.saveFile = (e, filePath, content) => {
   }
 };
 
-exports.readFile = (e, filePath) => {
+exports.readFile = (_, filePath) => {
   let content;
   try {
     if (!filePath) {
@@ -92,7 +92,7 @@ exports.getFolderPath = (_, defaultPath) => {
   }
 };
 
-exports.getFilesAndFolders = (e, folderPath) => {
+exports.getFilesAndFolders = (_, folderPath) => {
   try {
     const dirents = fs.readdirSync(folderPath, { withFileTypes: true });
     const filesAndFolders = dirents.map((dirent) => ({
@@ -135,7 +135,7 @@ exports.getMediaFile = (_, staticPath, publicPath) => {
   }
 };
 
-exports.createFolder = (e, folderPath) => {
+exports.createFolder = (_, folderPath) => {
   try {
     // response is folderPath
     fs.mkdirSync(folderPath, { recursive: true });

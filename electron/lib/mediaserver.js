@@ -4,22 +4,20 @@ const fs = require("fs");
 const path = require("path");
 
 const DEFAULT_PORT = 0; //random
-let currentServer = undefined;
 module.exports = class MediaServer {
+  server;
+  staticPath;
+  publicPath;
   constructor(staticPath, publicPath) {
     this.staticPath = staticPath;
     if (!publicPath) publicPath = "/";
     if (publicPath[0] !== "/") publicPath = "/" + publicPath;
     this.publicPath = publicPath;
-    if (currentServer !== undefined) {
-      currentServer.close();
-      currentServer = undefined;
-    }
   }
 
   run() {
     if (this.staticPath === undefined) return;
-    currentServer = http.createServer((req, res) => {
+    this.server = http.createServer((req, res) => {
       const parsedUrl = url.parse(req.url);
       const sanitizedPath = path.relative(this.publicPath, parsedUrl.pathname); //EXAMPLE publicPath: /uploads, pathname: /uploads/img.png, sanitizedPath: /img.png
       let pathname = path.join(this.staticPath, sanitizedPath); //pathname: /staticpath/img.png
@@ -38,7 +36,7 @@ module.exports = class MediaServer {
         res.end(data);
       });
     });
-    currentServer.listen(DEFAULT_PORT);
-    return currentServer;
+    this.server.listen(DEFAULT_PORT);
+    return this.server;
   }
 };

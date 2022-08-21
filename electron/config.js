@@ -11,16 +11,6 @@ const getConfig = () => {
     }
     if (!fs.existsSync(CONFIG_FILE)) {
       let config_str;
-      //const isWin = process.platform === "win32";
-      //if (isWin) {
-      //  config_str = fs
-      //    .readFileSync(path.join(__dirname, "assets", "config.win.json"))
-      //    .toString();
-      //} else {
-      //  config_str = fs
-      //    .readFileSync(path.join(__dirname, "assets", "config.unix.json"))
-      //    .toString();
-      //}
       config_str = fs
         .readFileSync(path.join(__dirname, "assets", "config.json"))
         .toString();
