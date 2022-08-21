@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { genContent, parseContent } from "./frontmatterInterface";
+import { useLocation } from "react-router-dom";
+import {
+  genContent,
+  parseContent,
+  updateFrontmatterJson,
+} from "./frontmatterInterface";
 import useSiteConfig from "./useSiteConfig";
-import { updateFrontmatterJson } from "./frontmatterInterface";
 
 //useCodeMirror depends on useFileBuffer's updateDoc
 //filePath is a only dependency.
 function useFileManager(filePath) {
-  const history = useHistory();
   const location = useLocation();
   const searchparams = new URLSearchParams(location.search);
   const fileName = searchparams.get("name");
@@ -86,18 +88,18 @@ function useFileManager(filePath) {
     return err;
   };
 
-  const renameFileAndNavigate = async () => {
-    const { newFilePath, err } = await window.electronAPI.renameFile(
-      filePath,
-      file.name
-    );
-    if (err) {
-      console.warn(err.message);
-      return;
-    }
-    const to = "?path=" + newFilePath + "&isDir=false&fileName=" + file.name;
-    history.replace(to);
-  };
+  //const renameFileAndNavigate = async () => {
+  //  const { newFilePath, err } = await window.electronAPI.renameFile(
+  //    filePath,
+  //    file.name
+  //  );
+  //  if (err) {
+  //    console.warn(err.message);
+  //    return;
+  //  }
+  //  const to = "?path=" + newFilePath + "&isDir=false&fileName=" + file.name;
+  //  history.replace(to);
+  //};
 
   return {
     file,

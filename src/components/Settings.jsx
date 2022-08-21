@@ -3,16 +3,11 @@ import {
   Grid,
   Slider,
   Switch,
-  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 import { useContext } from "react";
 import { configContext } from "../context/ConfigContext";
-import CustomSelect from "./CustomSelect";
-
-const autosaveOptions = ["always"];
-const themeOptions = ["dark"];
 
 export const helpLinks = {};
 
@@ -23,13 +18,13 @@ function Settings() {
     updateConfig({ ...config, useTerminal: newValue });
   };
 
-  const updateAutosave = (newValue) => {
-    updateConfig({ ...config, autosave: newValue });
-  };
+  //const updateAutosave = (newValue) => {
+  //  updateConfig({ ...config, autosave: newValue });
+  //};
 
-  const updateTheme = (newValue) => {
-    updateConfig({ ...config, theme: newValue });
-  };
+  //const updateTheme = (newValue) => {
+  //  updateConfig({ ...config, theme: newValue });
+  //};
 
   const updateZoom = (newValue) => {
     newValue = Number(newValue);

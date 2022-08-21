@@ -101,7 +101,7 @@ function DateMatter({
   option: initialOption,
 }) {
   const [name, setName] = useState(initialName);
-  const [Default, setDefault] = useState(initialDefault);
+  const [Default] = useState(initialDefault);
   const [option, setOption] = useState(initialOption);
   return (
     <>
@@ -345,8 +345,7 @@ function NestMatter({
   );
 }
 
-function TypeDialog({ handleClose, handleSave }) {
-  //const [type, setType] = useState(null);
+function TypeDialog({ handleSave }) {
   return (
     <>
       <DialogTitle>Select Frontmatter Type</DialogTitle>
@@ -396,12 +395,7 @@ function FrontmatterDialog({ open, onClose, saveFrontmatter, metainfo }) {
   return (
     <Dialog open={open} onClose={handleClose}>
       {/* Edit matter type */}
-      {type === null && (
-        <TypeDialog
-          handleClose={handleClose}
-          handleSave={(type) => setType(type)}
-        />
-      )}
+      {type === null && <TypeDialog handleSave={(type) => setType(type)} />}
       {/* Edit matter key&default*/}
       {type === FrontmatterTypes.Text && (
         <TextMatter

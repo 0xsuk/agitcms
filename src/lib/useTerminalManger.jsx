@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Terminal as Xterm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import { WebLinksAddon } from "../lib/xterm-addon-web-links.js";
+//import { WebLinksAddon } from "xterm-addon-web-links"; //This can't open link
 import "xterm/css/xterm.css";
 
 function useTerminalManager(cwd) {
