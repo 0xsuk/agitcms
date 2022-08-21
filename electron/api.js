@@ -1,12 +1,11 @@
-const os = require("os");
 const { dialog } = require("electron");
 const fs = require("fs");
 const { getConfig, CONFIG_FILE } = require("./config.js");
 const path = require("path");
-const YAML = require("yaml");
 const { getWindow } = require("./lib/window_manager");
 const ShellProcessManager = require("./lib/shellprocess_manager.js");
 const MediaServer = require("./lib/mediaserver.js");
+const { defaultShell } = require("./lib/constants.js");
 
 exports.confirm = (_, message) => {
   const win = getWindow();
@@ -183,7 +182,6 @@ exports.removeFolder = (_, folderPath) => {
   }
 };
 
-const defaultShell = os.platform() === "win32" ? "powershell.exe" : "zsh"; //TODO
 const shellProcessManager = new ShellProcessManager();
 
 exports.typeCommand = (_, id, cmd) => {
