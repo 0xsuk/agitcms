@@ -58,6 +58,9 @@ function Wrapper() {
         <Route exact path="/">
           <Home />
         </Route>
+        <Route path="/">
+          <Terminal />
+        </Route>
         <Route exact path="/settings">
           <Settings />
         </Route>
@@ -71,9 +74,6 @@ function Wrapper() {
         <Route path="/site/editor/:siteKey">
           <BottomBar />
           <EditorWrapper />
-        </Route>
-        <Route path="/site">
-          <Terminal />
         </Route>
       </div>
     </div>

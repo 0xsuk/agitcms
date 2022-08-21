@@ -11,7 +11,7 @@ module.exports = class ShellProcessManager {
     const id = uuid();
     const ptyProcess = pty.spawn(shell, [], {
       name: "xterm-color",
-      cwd,
+      cwd, //undefined OK
       env: process.env,
     });
 

@@ -5,14 +5,14 @@ import { configContext } from "../context/ConfigContext";
 
 function Terminal() {
   const { config } = useContext(configContext);
-  const siteConfig = useSiteConfig();
+  const cwd = useSiteConfig()?.path;
   const { init, exit, isVisible, cid, setCid, terminals, createNew } =
-    useTerminalManager(siteConfig);
+    useTerminalManager(cwd);
   useEffect(() => {
-    if (!siteConfig.path || !config.useTerminal) return;
+    if (!config.useTerminal) return;
     init();
     return exit;
-  }, [siteConfig.path]);
+  }, [config.useTerminal]);
 
   return (
     <div id="terminal" style={{ display: !isVisible && "none" }}>

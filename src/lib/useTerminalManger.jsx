@@ -4,7 +4,7 @@ import { FitAddon } from "xterm-addon-fit";
 import { WebLinksAddon } from "../lib/xterm-addon-web-links.js";
 import "xterm/css/xterm.css";
 
-function useTerminalManager(siteConfig) {
+function useTerminalManager(cwd) {
   //const isAnyActive = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
   const [cid, setCid] = useState(null); //current id of terminal
@@ -31,7 +31,7 @@ function useTerminalManager(siteConfig) {
   const toggleListener = (e) => {
     if (e.key === "@" && e.ctrlKey) {
       setIsVisible((prev) => !prev);
-      if (!Boolean(terminals.current.length)) {
+      if (!terminals.current.length) {
         createNew();
       }
     }
@@ -54,7 +54,7 @@ function useTerminalManager(siteConfig) {
         return true;
       });
     });
-    window.electronAPI.onShellExit((_, id, exitCode, signal) => {
+    window.electronAPI.onShellExit((_, id) => {
       terminals.current.every((t, i) => {
         if (t.id === id) {
           t.xterm.dispose();
@@ -93,7 +93,7 @@ function useTerminalManager(siteConfig) {
       }
       window.electronAPI.typeCommand(cid, data);
     });
-    window.electronAPI.spawnShell(siteConfig.path, undefined).then((id) => {
+    window.electronAPI.spawnShell(cwd, undefined).then((id) => {
       cid = id; //!important
       el.dataset.id = id;
       terminals.current.push({ id, xterm, el });
