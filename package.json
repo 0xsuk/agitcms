@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --mode development",
     "dev": "concurrently \"yarn run start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
-    "lint": "eslint . --ext js,jsx",
+    "lint": "eslint src electron --ext js,jsx",
     "build:renderer": "webpack",
     "pack:electron:w": "electron-builder -w -c.extraMetadata.main=build/electron/electron.js",
     "pack:electron:m": "electron-builder -m -c.extraMetadata.main=build/electron/electron.js",
