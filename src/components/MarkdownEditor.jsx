@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
 } from "react";
 import rehypeReact from "rehype-react";
@@ -160,7 +161,8 @@ function MarkdownEditor({ fileManager }) {
   const { state } = useContext(stateContext);
   const mouseIsOn = useRef(null);
 
-  const mdProcesser = useCallback(() => {
+  const md = useMemo(() => {
+    //TODO should we memo?
     return unified()
       .use(remarkParse)
       .use(remarkGfm)
@@ -172,9 +174,6 @@ function MarkdownEditor({ fileManager }) {
       .use(mediaPlugin(state.media.port))
       .processSync(fileManager.file.doc).result;
   }, [state.media.port, fileManager.file.doc]);
-
-  //TODO do create unified instance over every render
-  const md = mdProcesser();
 
   return (
     <>

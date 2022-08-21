@@ -41,6 +41,38 @@ const markdownHighlighting = HighlightStyle.define([
   },
 ]);
 
+const handlePasteImage = ({ pasteEvent, view, staticPath, publicPath }) => {
+  if (!staticPath) return;
+  const item = pasteEvent.clipboardData.items[0];
+  if (item.type.indexOf("image") !== 0) return;
+  //image
+  const fileName =
+    dateFns.formatByString(dateFns.date(), "yyyy-MM-dd-HH:mm:ss") + ".png"; //TODO
+  const blob = item.getAsFile();
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const err = await window.electronAPI.saveImage(
+      path.join(staticPath, fileName), //TODO
+      e.target.result
+    );
+    if (err) {
+      alert(err);
+      return;
+    }
+
+    const position =
+      view.state.selection.ranges[view.state.selection.mainIndex].to;
+    view.dispatch({
+      changes: {
+        from: position,
+        insert: "![](" + path.join(publicPath, fileName) + ")",
+      },
+    });
+  };
+
+  reader.readAsBinaryString(blob);
+};
+
 function useCodemirror({ fileManager }) {
   const ref = useRef(null);
   const [view, setView] = useState(null);
@@ -82,43 +114,12 @@ function useCodemirror({ fileManager }) {
           oneDark,
           EditorView.domEventHandlers({
             paste(pasteEvent, view) {
-              if (!siteConfig.media.staticPath) return;
-              const item = pasteEvent.clipboardData.items[0];
-              if (item.type.indexOf("image") === 0) {
-                //image
-                const fileName =
-                  dateFns.formatByString(
-                    dateFns.date(),
-                    "yyyy-MM-dd-HH:mm:ss"
-                  ) + ".png";
-                const blob = item.getAsFile();
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                  const err = await window.electronAPI.saveImage(
-                    path.join(siteConfig.media.staticPath, fileName), //TODO
-                    e.target.result
-                  );
-                  if (err) {
-                    alert(err);
-                    return;
-                  }
-
-                  const position =
-                    view.state.selection.ranges[view.state.selection.mainIndex]
-                      .to;
-                  view.dispatch({
-                    changes: {
-                      from: position,
-                      insert:
-                        "![](" +
-                        path.join(siteConfig.media.publicPath, fileName) +
-                        ")",
-                    },
-                  });
-                };
-
-                reader.readAsBinaryString(blob);
-              }
+              handlePasteImage({
+                pasteEvent,
+                view,
+                staticPath: siteConfig.media.staticPath,
+                publicPath: siteConfig.media.publicPath,
+              });
             },
           }),
         ],
