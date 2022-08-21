@@ -43,7 +43,7 @@ export const updateFrontmatterConfig = (
   for (let i = 0; i < metainfoList.length; i++) {
     let metainfo = metainfoList[i];
     if (metainfo.key === parentKeys[level]) {
-      const newChildMetainfoList = updateFrontmatter(
+      const newChildMetainfoList = updateFrontmatterConfig(
         metainfo.default,
         parentKeys,
         newChildMetainfo,
@@ -75,7 +75,7 @@ export const removeFrontmatterConfig = (
   for (let i = 0; i < metainfoList.length; i++) {
     let metainfo = metainfoList[i];
     if (metainfo.key === parentKeys[level]) {
-      const newChildMetainfoList = removeFrontmatter(
+      const newChildMetainfoList = removeFrontmatterConfig(
         metainfo.default,
         parentKeys,
         key,
@@ -104,7 +104,7 @@ export const reorderFrontmatterConfig = (
   for (let i = 0; i < metainfoList.length; i++) {
     let metainfo = metainfoList[i];
     if (metainfo.key === parentKeys[level]) {
-      const newChildMetainfoList = reorderFrontmatter(
+      const newChildMetainfoList = reorderFrontmatterConfig(
         metainfo.default,
         result,
         parentKeys,
