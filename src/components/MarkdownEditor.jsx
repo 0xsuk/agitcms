@@ -14,7 +14,7 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 import { stateContext } from "../context/StateContext";
-import { isMac } from "../lib/constants";
+import { isMac, isURL } from "../lib/constants";
 import useCodemirror from "../lib/useCodemirror";
 
 let treeData;
@@ -140,15 +140,6 @@ const handlePreviewScroll = (mouseIsOn, editorView) => {
         (markdownChildNodesOffsetTopList[scrollElemIndex + 1] -
           markdownChildNodesOffsetTopList[scrollElemIndex]) +
       markdownChildNodesOffsetTopList[scrollElemIndex];
-  }
-};
-
-const isURL = (url) => {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
   }
 };
 
