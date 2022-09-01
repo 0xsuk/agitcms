@@ -16,6 +16,7 @@ import { unified } from "unified";
 import { stateContext } from "../context/StateContext";
 import { isMac, isURL } from "../lib/constants";
 import useCodemirror from "../lib/useCodemirror";
+import MarkdownToolbar from "./MarkdownToolbar";
 
 let treeData;
 const captureTreePlugin = () => (tree) => {
@@ -148,6 +149,7 @@ function MarkdownEditor({ fileManager }) {
     console.log("MarkdownEditor");
   }, []);
 
+  //TODO reduce rerender
   const [editorRef, editorView] = useCodemirror({ fileManager });
   const { state } = useContext(stateContext);
   const mouseIsOn = useRef(null);
@@ -167,6 +169,7 @@ function MarkdownEditor({ fileManager }) {
 
   return (
     <>
+      {editorView && <MarkdownToolbar editorView={editorView} />}
       <div
         style={{
           display: "flex",

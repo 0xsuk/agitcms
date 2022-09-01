@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 import { useContext } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
+import { defaultTools } from "./toolbar";
 
 function useSiteConfig() {
   const { config } = useContext(configContext);
@@ -39,6 +40,7 @@ export const newSiteConfig = () => {
     },
     pinnedDirs: [],
     frontmatter: [],
+    tools: null, //TODO: load extension here
   };
 };
 
