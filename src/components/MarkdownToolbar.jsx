@@ -8,7 +8,7 @@ function MarkdownToolbar({ editorView }) {
     <div id="editor-markdown-toolbar">
       {defaultTools.map((tool) => (
         <>
-          <p onClick={() => tool.action(editorView, "arg1", "arg2")}>
+          <p onClick={() => tool.run(editorView, "arg1", "arg2")}>
             {tool.initialChar}
           </p>
         </>

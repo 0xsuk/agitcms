@@ -1,3 +1,0 @@
-class Toolbar {}
-
-class ToolbarItem {}

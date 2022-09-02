@@ -1,12 +1,17 @@
-export class Tool {
-  constructor(initialChar, action) {
-    this.initialChar = initialChar;
-    this.action = action;
-  }
-}
+export const createTool = ({
+  initialChar,
+  run = (editorView, ...args) => {},
+}) => {
+  return {
+    initialChar,
+    run,
+  };
+};
 
-const headingTool = new Tool("H", (editorView, ...args) => {
-  console.log("heading tool", editorView, args);
+const headingTool = createTool({
+  initialChar: "H",
+  run: (editorView, ...args) => {
+    console.log(editorView, args);
+  },
 });
-
 export const defaultTools = [headingTool];
