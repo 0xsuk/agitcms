@@ -4,6 +4,7 @@ $background-default: #0d1117;
 $background-darker: #131820;
 $color-default: #c9d1d9;
 $color-darker: #7d8799;
+$tool-background: #333b4899;
 
 
 /* width */
@@ -164,6 +165,22 @@ $editor-navigator-height: 44px;
 
     .cm-line {
       padding: 0 5px 0 2px; 
+    }
+  }
+}
+
+
+#editor-markdown-toolbar {
+  border-bottom: solid 1px $border-default;
+  display: flex;
+  padding: 10px;
+
+  &>p {
+    margin-right: 10px;
+    padding: 2px 5px;
+    background: #333b48;
+    &:hover{
+      cursor: pointer;
     }
   }
 }

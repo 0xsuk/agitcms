@@ -1,17 +1,17 @@
-export const createTool = ({
-  initialChar,
-  run = (editorView, ...args) => {},
-}) => {
+export const createTool = ({ initialChar, tooltip, run }) => {
   return {
     initialChar,
+    tooltip,
     run,
   };
 };
 
 const headingTool = createTool({
   initialChar: "H",
-  run: (editorView, ...args) => {
-    console.log(editorView, args);
+  tooltip: "Heading",
+  run: (editorView) => {
+    console.log(editorView);
   },
 });
+
 export const defaultTools = [headingTool];
