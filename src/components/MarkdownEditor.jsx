@@ -170,13 +170,7 @@ function MarkdownEditor({ fileManager }) {
   return (
     <>
       {editorView && <MarkdownToolbar editorView={editorView} />}
-      <div
-        style={{
-          display: "flex",
-          height: "100%",
-          overflow: "hidden",
-        }}
-      >
+      <div id="editor-markdown-wrapper">
         <div
           id="editor-markdown"
           ref={editorRef}
