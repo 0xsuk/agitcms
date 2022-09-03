@@ -308,64 +308,68 @@ function Site() {
         </Grid>
       </Grid>
       <Divider sx={{ padding: "20px", color: "#999" }}>optional</Divider>
-      <Grid container spacing={3}>
+      <Grid container spacing={6}>
         {/* Frontmatter */}
-        <Grid item container spacing={1} alignItems="center">
-          <Grid item>
-            <Typography variant="h6">Frontmatter template</Typography>
+        <Grid item container spacing={1}>
+          <Grid item container spacing={1} alignItems="center">
+            <Grid item>
+              <Typography variant="h6">Frontmatter template</Typography>
+            </Grid>
+            <Grid item>
+              <Button onClick={() => setIsFrontmatterDialogOpen(true)}>
+                New
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Button onClick={() => setIsFrontmatterDialogOpen(true)}>
-              New
-            </Button>
-          </Grid>
-        </Grid>
 
-        <FrontmatterList
-          {...{
-            isFrontmatterDialogOpen,
-            setIsFrontmatterDialogOpen,
-            saveFrontmatter,
-            removeFrontmatter,
-            reorderFrontmatter,
-            metainfoList: siteConfigBuffer.frontmatter,
-          }}
-        />
+          <FrontmatterList
+            {...{
+              isFrontmatterDialogOpen,
+              setIsFrontmatterDialogOpen,
+              saveFrontmatter,
+              removeFrontmatter,
+              reorderFrontmatter,
+              metainfoList: siteConfigBuffer.frontmatter,
+            }}
+          />
+        </Grid>
 
         {/* MediaDir TODO: prompt restart*/}
-        <Grid item>
-          <Typography variant="h6">Media</Typography>
-        </Grid>
+        <Grid item container spacing={1}>
+          <Grid item>
+            <Typography variant="h6">Media</Typography>
+          </Grid>
 
-        <Grid item container spacing={1} alignItems="center">
-          <Grid item>
-            <Typography>Media Folder Path:</Typography>
+          <Grid item container spacing={1} alignItems="center">
+            <Grid item>
+              <Typography>Media Folder Path:</Typography>
+            </Grid>
+            <Grid item>
+              <Typography sx={{ color: "#999" }}>
+                {siteConfigBuffer.media.staticPath === ""
+                  ? "select media folder path"
+                  : siteConfigBuffer.media.staticPath}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button onClick={editMediaStaticPath}>
+                <DriveFolderUploadOutlinedIcon size="small" />
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Typography sx={{ color: "#999" }}>
-              {siteConfigBuffer.media.staticPath === ""
-                ? "select media folder path"
-                : siteConfigBuffer.media.staticPath}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button onClick={editMediaStaticPath}>
-              <DriveFolderUploadOutlinedIcon size="small" />
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item container spacing={1} alignItems="center">
-          <Grid item>
-            <Typography>Media Public Path:</Typography>
-          </Grid>
-          <Grid item>
-            <TextField
-              size="small"
-              label="optional"
-              variant="filled"
-              value={siteConfigBuffer.media.publicPath}
-              onChange={(e) => editMediaPublicPath(e.target.value)}
-            />
+          <Grid item container spacing={1} alignItems="center">
+            <Grid item>
+              <Typography>Media Public Path:</Typography>
+            </Grid>
+            <Grid item>
+              <TextField
+                size="small"
+                label="optional"
+                variant="filled"
+                value={siteConfigBuffer.media.publicPath}
+                onChange={(e) => editMediaPublicPath(e.target.value)}
+              />
+            </Grid>
           </Grid>
         </Grid>
         {/* -MediaDir */}
@@ -460,6 +464,7 @@ function Site() {
             </DragDropContext>
           </Grid>
         </Grid>
+        {/* pinned dirs */}
 
         <Grid
           item
