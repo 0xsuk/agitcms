@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import { defaultTools } from "../lib/toolbar";
 import useSiteConfig from "../lib/useSiteConfig";
 
@@ -6,13 +7,16 @@ function MarkdownToolbar({ editorView }) {
   if (!editorView) {
     return <></>;
   }
+
   return (
     <div id="editor-markdown-toolbar">
       {defaultTools.map((tool) => (
         <>
-          <p onClick={() => tool.run(editorView, siteConfig)}>
-            {tool.initialChar}
-          </p>
+          <Tooltip title={tool.tooltip}>
+            <p onClick={() => tool.run(editorView, siteConfig)}>
+              {tool.initialChar}
+            </p>
+          </Tooltip>
         </>
       ))}
     </div>

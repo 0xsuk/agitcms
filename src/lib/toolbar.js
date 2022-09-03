@@ -24,6 +24,7 @@ const headingTool = createTool({
         insert: isLineBeginningSharp ? "#" : "# ",
       },
     });
+    editorView.focus();
   },
 });
 
