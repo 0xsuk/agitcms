@@ -7,10 +7,23 @@ export const createTool = ({ initialChar, tooltip, run }) => {
 };
 
 const headingTool = createTool({
-  initialChar: "H",
+  initialChar: "#",
   tooltip: "Heading",
   run: (editorView) => {
-    console.log(editorView);
+    const cursorPos = editorView.state.selection.ranges[0].from;
+    const lineBlock = editorView.lineBlockAt(cursorPos);
+    const postAtLineBeginning = lineBlock.from;
+    const doc = editorView.state.doc.toString();
+
+    let isLineBeginningSharp = false;
+    if (doc[postAtLineBeginning] === "#") isLineBeginningSharp = true;
+
+    editorView.dispatch({
+      changes: {
+        from: postAtLineBeginning,
+        insert: isLineBeginningSharp ? "#" : "# ",
+      },
+    });
   },
 });
 
