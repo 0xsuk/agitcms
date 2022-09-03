@@ -39,7 +39,7 @@ export const newSiteConfig = () => {
     },
     pinnedDirs: [],
     frontmatter: [],
-    tools: null, //TODO: load extension here
+    rawToolCodes: [], //TODO: load extension here
   };
 };
 

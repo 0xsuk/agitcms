@@ -18,6 +18,8 @@ import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { v4 as uuid } from "uuid";
 import { FrontmatterTypes } from "../lib/frontmatterInterface";
+import { createTool } from "../lib/toolbar";
+import useJavascriptEditor from "../lib/useJavascriptEditor";
 import useSiteConfig, { FrontmatterLanguages } from "../lib/useSiteConfig";
 import useSiteConfigBuffer from "../lib/useSiteConfigBuffer";
 import CustomSelect from "./CustomSelect";
@@ -185,6 +187,20 @@ function FrontmatterList({
   );
 }
 
+function JavascriptEditor({
+  siteConfigBuffer,
+  saveCustomTool,
+  removeCustomTool,
+}) {
+  window.createTool = createTool;
+  const [ref, view] = useJavascriptEditor({
+    doc: siteConfigBuffer.rawToolCodes[0],
+    setDoc: (doc) => saveCustomTool(0, doc),
+  });
+
+  return <div ref={ref} id="setting-site-jseditor"></div>;
+}
+
 function Site() {
   const siteConfig = useSiteConfig();
   const {
@@ -198,12 +214,16 @@ function Site() {
     reorderFrontmatter,
     removePinnedDir,
     reorderPinnedDirs,
+    saveCustomTool,
+    removeCustomTool,
     saveSiteConfig,
     removeSiteConfig,
   } = useSiteConfigBuffer(siteConfig);
 
   const isDirty =
     JSON.stringify(siteConfig) !== JSON.stringify(siteConfigBuffer);
+
+  console.log({ isDirty, siteConfig, siteConfigBuffer });
 
   if (isDirty) {
     saveSiteConfig();
@@ -465,6 +485,19 @@ function Site() {
           </Grid>
         </Grid>
         {/* pinned dirs */}
+
+        <Grid item container spacing={1}>
+          <Grid item>
+            <Typography variant="h6">Custom items for toolbar</Typography>
+          </Grid>
+          <Grid item>
+            <JavascriptEditor
+              siteConfigBuffer={siteConfigBuffer}
+              saveCustomTool={saveCustomTool}
+              removeCustomTool={removeCustomTool}
+            />
+          </Grid>
+        </Grid>
 
         <Grid
           item

@@ -7,6 +7,7 @@ import {
   reorderFrontmatterConfig,
 } from "../lib/frontmatterInterface";
 
+//TODO do not use siteConfigCopy
 function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(
     JSON.parse(JSON.stringify(initialSiteConfig)) //since siteConfig reference to initialSiteConfig, modifying siteConfig changes the initialSiteConfig(which is useSiteConfig())
@@ -126,6 +127,20 @@ function useSiteConfigBuffer(initialSiteConfig) {
     setSiteConfig(siteConfigCopy);
   };
 
+  const saveCustomTool = (index, rawToolCode) => {
+    const newRawToolCodes = siteConfig.rawToolCodes;
+    if (newRawToolCodes[index] !== undefined) {
+      newRawToolCodes[index] = rawToolCode;
+    } else if (index === 0) {
+      newRawToolCodes.push(rawToolCode);
+    }
+    setSiteConfig({ ...siteConfig });
+  };
+  const removeCustomTool = (index) => {
+    siteConfig.rawToolCodes.splice(index, 1);
+    setSiteConfig(siteConfig);
+  };
+
   const saveSiteConfig = () => {
     updateSiteConfig(siteConfig);
     console.log("Saved!");
@@ -160,6 +175,8 @@ function useSiteConfigBuffer(initialSiteConfig) {
     reorderFrontmatter,
     removePinnedDir,
     reorderPinnedDirs,
+    saveCustomTool,
+    removeCustomTool,
     removeSiteConfig,
     saveSiteConfig,
   };

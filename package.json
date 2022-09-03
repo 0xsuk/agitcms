@@ -35,6 +35,7 @@
   "homepage": "https://0xsuk.github.io/agitcms/overview",
   "dependencies": {
     "@codemirror/commands": "^6.0.0",
+    "@codemirror/lang-javascript": "^6.0.2",
     "@codemirror/lang-markdown": "^6.0.0",
     "@codemirror/language": "^6.0.0",
     "@codemirror/state": "^6.0.0",
@@ -48,6 +49,7 @@
     "@mui/lab": "^5.0.0-alpha.82",
     "@mui/material": "^5.8.2",
     "buffer": "^6.0.3",
+    "codemirror": "^6.0.1",
     "css-loader": "^6.7.1",
     "custom-electron-titlebar": "^4.1.0",
     "electron-is-dev": "^2.0.0",

@@ -317,6 +317,15 @@ $editor-navigator-height: 44px;
   }
 }
 
+
+#setting-site-jseditor {
+  width: 500px;;
+  height: 300px;
+  &>.cm-editor {
+    height: 100%;
+  }
+}
+
 .mui-icon {
   cursor: pointer;
 }
