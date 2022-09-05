@@ -6,6 +6,7 @@ const initialState = {
   media: {
     port: undefined,
   },
+  plugins: [],
 };
 
 const StateContext = ({ children }) => {
@@ -21,11 +22,17 @@ const StateContext = ({ children }) => {
     updateState(state);
   };
 
+  const setPlugins = (plugins) => {
+    state.plugins = plugins;
+    updateState(state);
+  };
+
   return (
     <stateContext.Provider
       value={{
         state,
         setMediaPort,
+        setPlugins,
       }}
     >
       {children}
