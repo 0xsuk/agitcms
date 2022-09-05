@@ -1,6 +1,6 @@
 const { dialog } = require("electron");
 const fs = require("fs");
-const { getConfig, CONFIG_FILE } = require("./config.js");
+const { getConfig, CONFIG_FILE, CONFIG_DIR } = require("./config.js");
 const path = require("path");
 const { getWindow } = require("./lib/window_manager");
 const ShellProcessManager = require("./lib/shellprocess_manager.js");
@@ -210,4 +210,25 @@ exports.saveImage = (_, filePath, binary) => {
   } catch (err) {
     return err;
   }
+};
+
+exports.loadPlugins = () => {
+  const pluginFolder = path.join(CONFIG_DIR, "plugins");
+  const res = exports.getFilesAndFolders(null, pluginFolder);
+  if (res.err) {
+    return { err: res.err };
+  }
+
+  const plugins = res.filesAndFolders
+    .filter((dirent) => dirent.isDir === false && dirent.extension === ".js")
+    .map((file) => {
+      const filePath = path.join(pluginFolder, file.name);
+      return {
+        name: file.name,
+        path: filePath,
+        raw: exports.readFile(null, filePath).content,
+      };
+    });
+
+  return { plugins, err: null };
 };

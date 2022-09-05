@@ -1,3 +1,5 @@
+import { createTool } from "../lib/plugin";
+
 const setZoom = (config) => {
   window.electronAPI.webFrames.setZoomFactor(config.zoom);
 };
@@ -12,8 +14,23 @@ const setTheme = (config) => {
     );
   }
 };
+const setPlugins = async () => {
+  const res = await window.electronAPI.loadPlugins();
+  if (res.err) {
+    alert(res.err);
+    return;
+  }
+  window.createTool = createTool;
+  let plugins = [];
+  res.plugins.forEach((plugin) => {
+    plugins.push(eval(plugin.raw));
+  });
+
+  console.log(plugins);
+};
 
 export const setup = (config) => {
   setZoom(config);
   setTheme(config);
+  setPlugins();
 };

@@ -1,5 +1,5 @@
 import { Tooltip } from "@mui/material";
-import { defaultTools } from "../lib/toolbar";
+import { defaultTools } from "../lib/plugin";
 import useSiteConfig from "../lib/useSiteConfig";
 
 function MarkdownToolbar({ editorView }) {

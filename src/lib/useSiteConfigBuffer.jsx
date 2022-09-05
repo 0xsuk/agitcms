@@ -1,10 +1,10 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { configContext } from "../context/ConfigContext";
 import {
-  updateFrontmatterConfig,
   removeFrontmatterConfig,
   reorderFrontmatterConfig,
+  updateFrontmatterConfig,
 } from "../lib/frontmatterInterface";
 
 //TODO do not use siteConfigCopy
@@ -127,20 +127,6 @@ function useSiteConfigBuffer(initialSiteConfig) {
     setSiteConfig(siteConfigCopy);
   };
 
-  const saveCustomTool = (index, rawToolCode) => {
-    const newRawToolCodes = siteConfig.rawToolCodes;
-    if (newRawToolCodes[index] !== undefined) {
-      newRawToolCodes[index] = rawToolCode;
-    } else if (index === 0) {
-      newRawToolCodes.push(rawToolCode);
-    }
-    setSiteConfig({ ...siteConfig });
-  };
-  const removeCustomTool = (index) => {
-    siteConfig.rawToolCodes.splice(index, 1);
-    setSiteConfig(siteConfig);
-  };
-
   const saveSiteConfig = () => {
     updateSiteConfig(siteConfig);
     console.log("Saved!");
@@ -175,8 +161,6 @@ function useSiteConfigBuffer(initialSiteConfig) {
     reorderFrontmatter,
     removePinnedDir,
     reorderPinnedDirs,
-    saveCustomTool,
-    removeCustomTool,
     removeSiteConfig,
     saveSiteConfig,
   };
