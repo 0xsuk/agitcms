@@ -13,12 +13,15 @@ import { configContext } from "./context/ConfigContext";
 import Test from "./Test";
 import { setup } from "./lib/setup";
 import { isMac } from "./lib/constants";
+import { stateContext } from "./context/StateContext";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
+  const { initState } = useContext(stateContext);
 
   useEffect(() => {
     readConfig();
+    initState();
   }, []);
 
   useEffect(() => {
