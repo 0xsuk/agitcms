@@ -1,7 +1,9 @@
-import { defaultKeymap, historyKeymap, history } from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
+import * as stateModule from "@codemirror/state";
 import { EditorState } from "@codemirror/state";
+import * as viewModule from "@codemirror/view";
 import {
   EditorView,
   highlightActiveLine,
@@ -12,9 +14,11 @@ import {
 import DateFnsAdapter from "@date-io/date-fns";
 import { tags } from "@lezer/highlight";
 import path from "path";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { siteContext } from "../context/SiteContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import { oneDark } from "../styles/cm-dark-theme";
+import { ToolbarItem } from "./plugin";
 const dateFns = new DateFnsAdapter();
 
 const markdownHighlighting = HighlightStyle.define([
@@ -77,6 +81,18 @@ function useCodemirror({ fileManager }) {
   const ref = useRef(null);
   const [view, setView] = useState(null);
   const siteConfig = useSiteConfig();
+  const { state } = useContext(siteContext);
+
+  const toolbarItems = state.plugins.filter(
+    (plugin) => plugin instanceof ToolbarItem
+  );
+  const pluginKeymap = toolbarItems
+    .filter((tool) => typeof tool.keyAlias === "string" && tool.keyAlias !== "")
+    .map((tool) => ({
+      key: tool.keyAlias,
+      run: (editorView) =>
+        tool.run(editorView, siteConfig, stateModule, viewModule),
+    }));
 
   useEffect(() => {
     if (!ref.current) {
@@ -87,7 +103,8 @@ function useCodemirror({ fileManager }) {
       doc: fileManager.file.doc,
       contentHeight: "100%",
       extensions: [
-        keymap.of([...defaultKeymap, ...historyKeymap]),
+        //the earlier, the more priority
+        keymap.of([...pluginKeymap, ...defaultKeymap, ...historyKeymap]),
         lineNumbers(),
         highlightActiveLine(),
         highlightActiveLineGutter(),
@@ -114,6 +131,8 @@ function useCodemirror({ fileManager }) {
             });
           },
         }),
+        //TODO set keyAlias here
+        //TODO set keybindings here
       ],
     });
 
