@@ -26,7 +26,7 @@ exports.readConfig = () => {
 
 exports.updateConfig = (_, newConfig) => {
   try {
-    const config_str = JSON.stringify(newConfig);
+    const config_str = JSON.stringify(newConfig, null, "\t");
     fs.writeFileSync(CONFIG_FILE, config_str);
 
     //if config is updated, reload is required to update CONFIG variable in the main process
