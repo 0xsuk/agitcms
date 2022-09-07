@@ -58,9 +58,9 @@ const computeElemsOffsetTop = (editorView) => {
     const offsetTop = lineInfo.top;
     markdownChildNodesOffsetTopList.push(offsetTop);
     previewChildNodesOffsetTopList.push(
-      previewElem.childNodes[index].offsetTop +
+      previewElem.childNodes[index].offsetTop + //bottom of windowbar to the top of childnode, immutable to scroll
         (isMac ? 22 : 30) - //Window titlebar height
-        previewElem.getBoundingClientRect().top - //offsetTop from the top of editor_preview
+        previewElem.getBoundingClientRect().top - //top of window to the top of editor-preview
         10 //padding top of previewElem TODO
     );
   });
@@ -68,7 +68,6 @@ const computeElemsOffsetTop = (editorView) => {
   return [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList];
 };
 const handleMdScroll = (mouseIsOn, editorView) => {
-  console.log("hey");
   const markdownElem = document.getElementById("editor-markdown");
   const previewElem = document.getElementById("editor-preview");
   if (mouseIsOn.current !== "markdown") {

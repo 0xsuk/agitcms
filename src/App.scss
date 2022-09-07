@@ -170,7 +170,9 @@ $editor-navigator-height: 44px;
   overflow-y: auto;
 
   &>.cm-editor {
-    height: 100%;
+  //do not set height: 100%;
+  //onScroll will be broken
+  //  height: 100%;
   }
 
   .ͼ1 .cm-content {
