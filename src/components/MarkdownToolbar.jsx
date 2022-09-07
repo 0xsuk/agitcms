@@ -3,6 +3,8 @@ import { useContext } from "react";
 import { siteContext } from "../context/SiteContext";
 import { ToolbarItem } from "../lib/plugin";
 import useSiteConfig from "../lib/useSiteConfig";
+import * as viewModule from "@codemirror/view";
+import * as stateModule from "@codemirror/state";
 
 function MarkdownToolbar({ editorView }) {
   const siteConfig = useSiteConfig();
@@ -22,7 +24,11 @@ function MarkdownToolbar({ editorView }) {
       {sortedToolbarItems.map((tool) => (
         <>
           <Tooltip title={tool.tooltip}>
-            <p onClick={() => tool.run(editorView, siteConfig)}>
+            <p
+              onClick={() =>
+                tool.run(editorView, siteConfig, stateModule, viewModule)
+              }
+            >
               {tool.initialChar}
             </p>
           </Tooltip>
