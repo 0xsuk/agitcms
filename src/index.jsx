@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-import { HashRouter as Router } from "react-router-dom";
-import ConfigContext from "./context/ConfigContext";
 import createTheme from "@mui/material/styles/createTheme";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import StateContext from "./context/StateContext";
+import React from "react";
+import ReactDOM from "react-dom";
+import { HashRouter as Router } from "react-router-dom";
+import App from "./App";
+import ConfigContext from "./context/ConfigContext";
+import SiteContext from "./context/SiteContext";
 
 const theme = createTheme({
   palette: {
@@ -32,11 +32,11 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <ConfigContext>
-        <StateContext>
+        <SiteContext>
           <ThemeProvider theme={theme}>
             <App />
           </ThemeProvider>
-        </StateContext>
+        </SiteContext>
       </ConfigContext>
     </Router>
   </React.StrictMode>,

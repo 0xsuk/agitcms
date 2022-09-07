@@ -1,23 +1,23 @@
 import { Fragment, useContext, useEffect } from "react";
 import { Route } from "react-router-dom";
 import "./App.scss";
+import BottomBar from "./components/BottomBar";
 import EditorWrapper from "./components/EditorWrapper";
 import Explorer from "./components/Explorer";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
-import SiteSettigs from "./components/SiteSettings";
 import SideBar from "./components/SideBar";
+import SiteSettigs from "./components/SiteSettings";
 import Terminal from "./components/Terminal";
-import BottomBar from "./components/BottomBar";
 import { configContext } from "./context/ConfigContext";
-import Test from "./Test";
-import { setup } from "./lib/setup";
+import { siteContext } from "./context/SiteContext";
 import { isMac } from "./lib/constants";
-import { stateContext } from "./context/StateContext";
+import { setup } from "./lib/setup";
+import useSiteConfig from "./lib/useSiteConfig";
+import Test from "./Test";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
-  const { initState } = useContext(stateContext);
 
   useEffect(() => {
     readConfig();
@@ -26,7 +26,6 @@ function App() {
   useEffect(() => {
     if (config === undefined) return;
     setup(config);
-    initState();
   }, [config]);
 
   if (config === undefined) {
@@ -67,20 +66,35 @@ function Wrapper() {
         <Route exact path="/settings">
           <Settings />
         </Route>
-        <Route path="/site/settings/:siteKey">
-          <SiteSettigs />
-        </Route>
-        <Route path="/site/explorer/:siteKey">
-          <BottomBar />
-          <Explorer />
-        </Route>
-        <Route path="/site/editor/:siteKey">
-          <BottomBar />
-          <EditorWrapper />
+        <Route path="/site">
+          <SiteWrapper>
+            <Route path="/site/settings/:siteKey">
+              <SiteSettigs />
+            </Route>
+            <Route path="/site/explorer/:siteKey">
+              <BottomBar />
+              <Explorer />
+            </Route>
+            <Route path="/site/editor/:siteKey">
+              <BottomBar />
+              <EditorWrapper />
+            </Route>
+          </SiteWrapper>
         </Route>
       </div>
     </div>
   );
+}
+
+function SiteWrapper({ children }) {
+  const siteConfig = useSiteConfig();
+  const { initState } = useContext(siteContext);
+  useEffect(() => {
+    if (!siteConfig) return;
+    initState(siteConfig);
+  }, [siteConfig]);
+  if (!siteConfig) return <></>;
+  return <>{children}</>;
 }
 
 export default App;

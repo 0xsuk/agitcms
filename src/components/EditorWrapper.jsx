@@ -8,7 +8,7 @@ import { configContext } from "../context/ConfigContext";
 import { switchTab } from "../lib/switchEditorTab";
 import { copyMediaFilePath } from "../lib/copyMediaFilePath";
 import { editorSetup } from "../lib/editorSetup";
-import { stateContext } from "../context/StateContext";
+import { siteContext } from "../context/SiteContext";
 
 function EditorWrapper() {
   const location = useLocation();
@@ -19,7 +19,7 @@ function EditorWrapper() {
   const fileManager = useFileManager(filePath);
   const siteConfig = useSiteConfig();
   const { config } = useContext(configContext);
-  const { setMediaPort } = useContext(stateContext);
+  const { setMediaPort } = useContext(siteContext);
 
   const handleSave = () => {
     fileManager.saveFile().then((err) => {

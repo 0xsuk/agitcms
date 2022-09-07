@@ -1,8 +1,7 @@
 import { createContext, useState } from "react";
 import { ToolbarItem } from "../lib/plugin";
-import useSiteConfig from "../lib/useSiteConfig";
 
-export const stateContext = createContext();
+export const siteContext = createContext();
 
 const initialState = {
   media: {
@@ -11,12 +10,10 @@ const initialState = {
   plugins: [],
 };
 
-const StateContext = ({ children }) => {
+const SiteContext = ({ children }) => {
   const [state, setState] = useState(initialState);
-  //this is null in home page
-  const siteConfig = useSiteConfig();
 
-  const initState = async () => {
+  const initState = async (siteConfig) => {
     {
       const res = await window.electronAPI.loadPlugins();
       if (res.err) {
@@ -55,7 +52,7 @@ const StateContext = ({ children }) => {
   };
 
   return (
-    <stateContext.Provider
+    <siteContext.Provider
       value={{
         state,
         initState,
@@ -64,8 +61,8 @@ const StateContext = ({ children }) => {
       }}
     >
       {children}
-    </stateContext.Provider>
+    </siteContext.Provider>
   );
 };
 
-export default StateContext;
+export default SiteContext;

@@ -13,7 +13,7 @@ import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { stateContext } from "../context/StateContext";
+import { siteContext } from "../context/SiteContext";
 import { isMac, isURL } from "../lib/constants";
 import useCodemirror from "../lib/useCodemirror";
 import MarkdownToolbar from "./MarkdownToolbar";
@@ -151,7 +151,7 @@ function MarkdownEditor({ fileManager }) {
 
   //TODO reduce rerender
   const [editorRef, editorView] = useCodemirror({ fileManager });
-  const { state } = useContext(stateContext);
+  const { state } = useContext(siteContext);
   const mouseIsOn = useRef(null);
 
   const md = useMemo(() => {
