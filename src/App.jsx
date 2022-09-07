@@ -21,12 +21,12 @@ function App() {
 
   useEffect(() => {
     readConfig();
-    initState();
   }, []);
 
   useEffect(() => {
     if (config === undefined) return;
     setup(config);
+    initState();
   }, [config]);
 
   if (config === undefined) {
