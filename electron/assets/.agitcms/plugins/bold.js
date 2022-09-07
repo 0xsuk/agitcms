@@ -2,8 +2,8 @@ new ToolbarItem({
   initialChar: "B",
   tooltip: "Bold",
   weight: 1,
-  run: (editorView) => {
-    const changes = state.changeByRange((range) => {
+  run: (editorView, _, { EditorSelection, Text }) => {
+    const changes = editorView.state.changeByRange((range) => {
       return {
         changes: [
           {
