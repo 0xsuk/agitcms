@@ -47,8 +47,6 @@ yarn run dev
 ```
 
 ## TODO
-- [ ] markdown editor - toolbar
-- [ ] markdown editor - snippet
 - [ ] markdown editor - key bindings
 - [ ] markdown editor - auto saving config
 - [ ] markdown editor - Table of contents
