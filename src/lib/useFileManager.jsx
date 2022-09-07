@@ -27,7 +27,10 @@ function useFileManager(filePath) {
   const siteConfig = useSiteConfig();
 
   useEffect(() => {
-    setFile(initialState);
+    //prevent first rerender
+    if (initialState !== file) {
+      setFile(initialState);
+    }
   }, [filePath]);
 
   const editName = (name) => {
@@ -62,7 +65,7 @@ function useFileManager(filePath) {
   const readFile = async () => {
     const { content, err } = await window.electronAPI.readFile(filePath);
     if (err) {
-      return { err };
+      return err;
     }
     const { doc, frontmatter } = parseContent(siteConfig, content);
     const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
@@ -75,8 +78,6 @@ function useFileManager(filePath) {
       isModified: false,
       isFrontmatterEmpty,
     }));
-
-    return { content, doc, frontmatter, err };
   };
 
   const saveFile = async () => {

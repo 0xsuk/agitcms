@@ -68,6 +68,7 @@ const computeElemsOffsetTop = (editorView) => {
   return [markdownChildNodesOffsetTopList, previewChildNodesOffsetTopList];
 };
 const handleMdScroll = (mouseIsOn, editorView) => {
+  console.log("hey");
   const markdownElem = document.getElementById("editor-markdown");
   const previewElem = document.getElementById("editor-preview");
   if (mouseIsOn.current !== "markdown") {
@@ -145,11 +146,6 @@ const handlePreviewScroll = (mouseIsOn, editorView) => {
 };
 
 function MarkdownEditor({ fileManager }) {
-  useEffect(() => {
-    console.log("MarkdownEditor");
-  }, []);
-
-  //TODO reduce rerender
   const [editorRef, editorView] = useCodemirror({ fileManager });
   const { state } = useContext(siteContext);
   const mouseIsOn = useRef(null);

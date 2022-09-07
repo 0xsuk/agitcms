@@ -18,17 +18,22 @@ function EditorWrapper() {
   const siteConfig = useSiteConfig();
   const { config } = useContext(configContext);
 
-  const handleSave = () => {
+  if (!fileManager.file.isRead) {
+    fileManager.readFile().then((err) => {
+      if (err) {
+        alert(err);
+      }
+    });
+    return <></>;
+  }
+
+  if (fileManager.file.isRead && config.autosave === "always") {
     fileManager.saveFile().then((err) => {
       if (err) {
         alert(err);
         return;
       }
     });
-  };
-
-  if (fileManager.file.isRead && config.autosave === "always") {
-    handleSave();
   }
 
   return (

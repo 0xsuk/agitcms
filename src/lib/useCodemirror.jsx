@@ -76,9 +76,6 @@ const handlePasteImage = ({ pasteEvent, view, staticPath, publicPath }) => {
 function useCodemirror({ fileManager }) {
   const ref = useRef(null);
   const [view, setView] = useState(null);
-  const fileManagerRef = useRef(null);
-  fileManagerRef.current = fileManager;
-
   const siteConfig = useSiteConfig();
 
   useEffect(() => {
@@ -86,57 +83,51 @@ function useCodemirror({ fileManager }) {
       return;
     }
 
-    fileManagerRef.current.readFile().then(({ doc, err }) => {
-      if (err) {
-        alert(err);
-        return;
-      }
-      const startState = EditorState.create({
-        doc,
-        contentHeight: "100%",
-        extensions: [
-          keymap.of([...defaultKeymap, ...historyKeymap]),
-          lineNumbers(),
-          highlightActiveLine(),
-          highlightActiveLineGutter(),
-          history(),
-          markdown({
-            base: markdownLanguage, //Support GFM
-            addKeymap: true,
-          }),
-          syntaxHighlighting(markdownHighlighting),
-          EditorView.lineWrapping,
-          EditorView.updateListener.of((update) => {
-            if (update.docChanged) {
-              fileManagerRef.current.setDoc(update.state.doc.toString());
-            }
-          }),
-          oneDark,
-          EditorView.domEventHandlers({
-            paste(pasteEvent, view) {
-              handlePasteImage({
-                pasteEvent,
-                view,
-                staticPath: siteConfig.media.staticPath,
-                publicPath: siteConfig.media.publicPath,
-              });
-            },
-          }),
-        ],
-      });
-
-      if (view) {
-        view.setState(startState);
-        return;
-      }
-      const newView = new EditorView({
-        state: startState,
-        parent: ref.current,
-      });
-
-      setView(newView);
+    const startState = EditorState.create({
+      doc: fileManager.file.doc,
+      contentHeight: "100%",
+      extensions: [
+        keymap.of([...defaultKeymap, ...historyKeymap]),
+        lineNumbers(),
+        highlightActiveLine(),
+        highlightActiveLineGutter(),
+        history(),
+        markdown({
+          base: markdownLanguage, //Support GFM
+          addKeymap: true,
+        }),
+        syntaxHighlighting(markdownHighlighting),
+        EditorView.lineWrapping,
+        EditorView.updateListener.of((update) => {
+          if (update.docChanged) {
+            fileManager.setDoc(update.state.doc.toString());
+          }
+        }),
+        oneDark,
+        EditorView.domEventHandlers({
+          paste(pasteEvent, view) {
+            handlePasteImage({
+              pasteEvent,
+              view,
+              staticPath: siteConfig.media.staticPath,
+              publicPath: siteConfig.media.publicPath,
+            });
+          },
+        }),
+      ],
     });
-  }, [ref, fileManager.file.path]);
+
+    if (view) {
+      view.setState(startState);
+      return;
+    }
+    const newView = new EditorView({
+      state: startState,
+      parent: ref.current,
+    });
+
+    setView(newView);
+  }, [ref]);
 
   return [ref, view];
 }
