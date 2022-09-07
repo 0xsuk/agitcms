@@ -186,9 +186,9 @@ function FrontmatterList({
 }
 
 function Site() {
-  const siteConfig = useSiteConfig();
+  const initialSiteConfig = useSiteConfig();
   const {
-    siteConfig: siteConfigBuffer,
+    siteConfig,
     editMediaPublicPath,
     editMediaStaticPath,
     editFrontmatterLanguage,
@@ -200,12 +200,12 @@ function Site() {
     reorderPinnedDirs,
     saveSiteConfig,
     removeSiteConfig,
-  } = useSiteConfigBuffer(siteConfig);
+  } = useSiteConfigBuffer(initialSiteConfig);
 
   const isDirty =
-    JSON.stringify(siteConfig) !== JSON.stringify(siteConfigBuffer);
+    JSON.stringify(initialSiteConfig) !== JSON.stringify(siteConfig);
 
-  console.log({ isDirty, siteConfig, siteConfigBuffer });
+  console.log(isDirty, initialSiteConfig, siteConfig);
 
   if (isDirty) {
     saveSiteConfig();
@@ -228,9 +228,7 @@ function Site() {
             <Typography>Name:</Typography>
           </Grid>
           <Grid item>
-            <Typography sx={{ color: "#999" }}>
-              {siteConfigBuffer.name}
-            </Typography>
+            <Typography sx={{ color: "#999" }}>{siteConfig.name}</Typography>
           </Grid>
         </Grid>
         <Grid item container spacing={1} alignItems="center">
@@ -238,18 +236,14 @@ function Site() {
             <Typography>Path:</Typography>
           </Grid>
           <Grid item>
-            <Typography sx={{ color: "#999" }}>
-              {siteConfigBuffer.path}
-            </Typography>
+            <Typography sx={{ color: "#999" }}>{siteConfig.path}</Typography>
           </Grid>
         </Grid>
         <Grid item container spacing={1} alignItems="center">
           <Grid item>Frontmatter Language:</Grid>
           <Grid item xs={4}>
             <CustomSelect
-              isSelected={(item) =>
-                item === siteConfigBuffer.frontmatterLanguage
-              }
+              isSelected={(item) => item === siteConfig.frontmatterLanguage}
               onChange={(newValue) => {
                 editFrontmatterLanguage(newValue);
               }}
@@ -268,7 +262,7 @@ function Site() {
                   onClick={() => setIsOpen(true)}
                   ref={ref}
                   sx={{ color: "#999" }}
-                  value={siteConfigBuffer.frontmatterLanguage}
+                  value={siteConfig.frontmatterLanguage}
                   variant="filled"
                   label="required"
                   size="small"
@@ -292,14 +286,14 @@ function Site() {
                 //),
               }}
               sx={{ color: "#999" }}
-              value={siteConfigBuffer.frontmatterDelimiter}
+              value={siteConfig.frontmatterDelimiter}
               variant="filled"
               label="required"
               size="small"
               onClick={() => setIsFrontmatterDelimiterEditorOpen(true)}
             ></TextField>
             <TextDialog
-              initialValue={siteConfigBuffer.frontmatterDelimiter}
+              initialValue={siteConfig.frontmatterDelimiter}
               isOpen={isFrontmatterDelimiterEditorOpen}
               onClose={() => setIsFrontmatterDelimiterEditorOpen(false)}
               onSave={editFrontmatterDelimiter}
@@ -331,7 +325,7 @@ function Site() {
               saveFrontmatter,
               removeFrontmatter,
               reorderFrontmatter,
-              metainfoList: siteConfigBuffer.frontmatter,
+              metainfoList: siteConfig.frontmatter,
             }}
           />
         </Grid>
@@ -348,9 +342,9 @@ function Site() {
             </Grid>
             <Grid item>
               <Typography sx={{ color: "#999" }}>
-                {siteConfigBuffer.media.staticPath === ""
+                {siteConfig.media.staticPath === ""
                   ? "select media folder path"
-                  : siteConfigBuffer.media.staticPath}
+                  : siteConfig.media.staticPath}
               </Typography>
             </Grid>
             <Grid item>
@@ -368,7 +362,7 @@ function Site() {
                 size="small"
                 label="optional"
                 variant="filled"
-                value={siteConfigBuffer.media.publicPath}
+                value={siteConfig.media.publicPath}
                 onChange={(e) => editMediaPublicPath(e.target.value)}
               />
             </Grid>
@@ -390,7 +384,7 @@ function Site() {
               <Droppable droppableId="pinnedDirs">
                 {(provided) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {siteConfigBuffer.pinnedDirs.map((df, i) => (
+                    {siteConfig.pinnedDirs.map((df, i) => (
                       <Draggable
                         //key={matter.key}
                         draggableId={"pinnedDirs" + i}
@@ -468,15 +462,6 @@ function Site() {
         </Grid>
         {/* pinned dirs */}
 
-        <Grid item container spacing={1}>
-          <Grid item container spacing={1} alignItems="center">
-            <Grid item>
-              <Typography variant="h6">Editor plugins</Typography>
-            </Grid>
-            <Grid item></Grid>
-          </Grid>
-        </Grid>
-
         <Grid
           item
           container
@@ -486,7 +471,7 @@ function Site() {
           sx={{ marginTop: "20px" }}
         >
           <Grid item>
-            <Button onClick={() => removeSiteConfig(siteConfigBuffer.key)}>
+            <Button onClick={() => removeSiteConfig(siteConfig.key)}>
               delete site
             </Button>
           </Grid>
