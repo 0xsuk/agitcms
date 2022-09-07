@@ -1,5 +1,5 @@
-import { useState, createContext } from "react";
-import { createTool } from "../lib/plugin";
+import { createContext, useState } from "react";
+import { ToolbarItem } from "../lib/plugin";
 
 export const stateContext = createContext();
 
@@ -14,18 +14,20 @@ const StateContext = ({ children }) => {
   const [state, setState] = useState(initialState);
 
   const initState = async () => {
-    const res = await window.electronAPI.loadPlugins();
-    if (res.err) {
-      alert(res.err);
-      return;
-    }
-    window.createTool = createTool;
-    let plugins = [];
-    res.plugins.forEach((plugin) => {
-      plugins.push(eval(plugin.raw));
-    });
+    {
+      const res = await window.electronAPI.loadPlugins();
+      if (res.err) {
+        alert(res.err);
+        return;
+      }
+      window.ToolbarItem = ToolbarItem;
+      let plugins = [];
+      res.plugins.forEach((plugin) => {
+        plugins.push(eval(plugin.raw));
+      });
 
-    setPlugins(plugins);
+      setPlugins(plugins);
+    }
   };
   const updateState = (newState) => {
     setState({ ...newState });
