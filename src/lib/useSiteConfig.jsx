@@ -5,6 +5,7 @@ import { configContext } from "../context/ConfigContext";
 
 function useSiteConfig() {
   const { config } = useContext(configContext);
+  if (!config) return null;
 
   const match = useRouteMatch("/*/:siteKey");
   if (!match) return null;
