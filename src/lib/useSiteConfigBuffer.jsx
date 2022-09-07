@@ -7,31 +7,30 @@ import {
   updateFrontmatterConfig,
 } from "../lib/frontmatterInterface";
 
-//TODO do not use siteConfigCopy
 function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(
-    JSON.parse(JSON.stringify(initialSiteConfig)) //since siteConfig reference to initialSiteConfig, modifying siteConfig changes the initialSiteConfig(which is useSiteConfig())
+    JSON.parse(JSON.stringify(initialSiteConfig))
+    //siteConfig reference to initialSiteConfig, so changing siteConfig also changes initialSiteConfig, which breaks isDirty
+    //{...initialSiteConfig} does not copy properties' value
   );
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
   const history = useHistory();
-  //siteConfig !== siteConfigCopy //true
-  const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig));
 
   const editMediaPublicPath = (newValue) => {
-    siteConfigCopy.media.publicPath = newValue;
-    setSiteConfig(siteConfigCopy);
+    siteConfig.media.publicPath = newValue;
+    setSiteConfig({ ...siteConfig });
   };
 
   const editMediaStaticPath = async () => {
     const { folderPath, err, canceled } =
-      await window.electronAPI.getFolderPath(siteConfigCopy.path);
+      await window.electronAPI.getFolderPath(siteConfig.path);
     if (err) {
       alert(err);
       return;
     }
     if (!err && !canceled) {
-      siteConfigCopy.media.staticPath = folderPath;
-      setSiteConfig(siteConfigCopy);
+      siteConfig.media.staticPath = folderPath;
+      setSiteConfig({ ...siteConfig });
     }
   };
 
@@ -56,79 +55,79 @@ function useSiteConfigBuffer(initialSiteConfig) {
   };
 
   const editFrontmatterName = (newName, i) => {
-    siteConfigCopy.frontmatter[i].name = newName;
-    setSiteConfig(siteConfigCopy);
+    siteConfig.frontmatter[i].name = newName;
+    setSiteConfig({ ...siteConfig });
   };
   const editFrontmatterType = (newType, i) => {
-    siteConfigCopy.frontmatter[i].type = newType;
-    setSiteConfig(siteConfigCopy);
+    siteConfig.frontmatter[i].type = newType;
+    setSiteConfig({ ...siteConfig });
   };
   const editFrontmatterDefault = (newDefault, i) => {
-    siteConfigCopy.frontmatter[i].default = newDefault;
-    setSiteConfig(siteConfigCopy);
+    siteConfig.frontmatter[i].default = newDefault;
+    setSiteConfig({ ...siteConfig });
   };
   //TODO: const editFrontmatterOption = () => {}
   const editFrontmatter = (id, key, type, Default, option) => {
-    for (let i = 0; i < siteConfigCopy.frontmatter.length; i++) {
-      if (siteConfigCopy.frontmatter[i].id === id) {
-        siteConfigCopy.frontmatter[i] = {
+    for (let i = 0; i < siteConfig.frontmatter.length; i++) {
+      if (siteConfig.frontmatter[i].id === id) {
+        siteConfig.frontmatter[i] = {
           id,
           key,
           type,
           default: Default,
           option,
         };
-        setSiteConfig(siteConfigCopy);
+        setSiteConfig({ ...siteConfig });
         return;
       }
     }
   };
 
   const saveFrontmatter = (newChildMetainfo, parentKeys) => {
-    siteConfigCopy.frontmatter = updateFrontmatterConfig(
-      siteConfigCopy.frontmatter,
+    siteConfig.frontmatter = updateFrontmatterConfig(
+      siteConfig.frontmatter,
       parentKeys,
       newChildMetainfo
     );
-    setSiteConfig(siteConfigCopy);
+    setSiteConfig({ ...siteConfig });
   };
 
   const removeFrontmatter = (key, parentKeys) => {
-    siteConfigCopy.frontmatter = removeFrontmatterConfig(
-      siteConfigCopy.frontmatter,
+    siteConfig.frontmatter = removeFrontmatterConfig(
+      siteConfig.frontmatter,
       parentKeys,
       key
     );
-    setSiteConfig(siteConfigCopy);
+    setSiteConfig({ ...siteConfig });
   };
 
   const reorderFrontmatter = (result, parentKeys) => {
-    siteConfigCopy.frontmatter = reorderFrontmatterConfig(
-      siteConfigCopy.frontmatter,
+    siteConfig.frontmatter = reorderFrontmatterConfig(
+      siteConfig.frontmatter,
       result,
       parentKeys
     );
-    setSiteConfig(siteConfigCopy);
+    setSiteConfig({ ...siteConfig });
   };
 
   const removePinnedDir = (path, isDir) => {
-    const pinnedDirs = siteConfigCopy.pinnedDirs.filter(
+    const pinnedDirs = siteConfig.pinnedDirs.filter(
       (df) => df.path !== path || df.isDir !== isDir
     );
 
-    siteConfigCopy.pinnedDirs = pinnedDirs;
-    setSiteConfig(siteConfigCopy);
+    siteConfig.pinnedDirs = pinnedDirs;
+    setSiteConfig({ ...siteConfig });
   };
   const reorderPinnedDirs = (result) => {
-    const newPinnedDirs = Array.from(siteConfigCopy.pinnedDirs);
+    const newPinnedDirs = Array.from(siteConfig.pinnedDirs);
     const [removed] = newPinnedDirs.splice(result.source.index, 1);
     newPinnedDirs.splice(result.destination.index, 0, removed);
-    siteConfigCopy.pinnedDirs = newPinnedDirs; //important (prevent lag)
-    setSiteConfig(siteConfigCopy);
+    siteConfig.pinnedDirs = newPinnedDirs; //important (prevent lag)
+    setSiteConfig({ ...siteConfig });
   };
 
   const saveSiteConfig = () => {
-    updateSiteConfig(siteConfig);
+    updateSiteConfig({ ...siteConfig });
     console.log("Saved!");
     // navigate(-1);
     return true;

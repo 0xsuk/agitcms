@@ -11,7 +11,6 @@ const ConfigContext = ({ children }) => {
   };
 
   const updateConfig = async (newConfig) => {
-    console.log("config:", newConfig);
     const err = await window.electronAPI.updateConfig(newConfig);
     if (err) {
       alert(err.message);
@@ -32,7 +31,6 @@ const ConfigContext = ({ children }) => {
     if (!isSiteExist) {
       if (config.sites === undefined) config.sites = [];
       config.sites.push(newSiteConfig);
-      console.log("new site created");
     }
 
     updateConfig(config);
