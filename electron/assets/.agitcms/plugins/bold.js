@@ -1,7 +1,8 @@
 new ToolbarItem({
   initialChar: "B",
-  tooltip: "Bold",
+  tooltip: "Bold (Ctrl-b)",
   weight: 1,
+  keyAlias: "Ctrl-b",
   run: (editorView, _, { EditorSelection, Text }) => {
     const changes = editorView.state.changeByRange((range) => {
       return {
