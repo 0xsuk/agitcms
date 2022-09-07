@@ -17,6 +17,10 @@ function MarkdownToolbar({ editorView }) {
   const toolbarItems = state.plugins.filter(
     (plugin) => plugin instanceof ToolbarItem && plugin.isActive
   );
+
+  if (toolbarItems.length === 0) {
+    return <></>;
+  }
   const sortedToolbarItems = toolbarItems.sort((a, b) => a.weight - b.weight); //Ascending order
 
   return (

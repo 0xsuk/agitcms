@@ -216,6 +216,9 @@ exports.loadPlugins = () => {
   const pluginFolder = path.join(CONFIG_DIR, "plugins");
   const res = exports.getFilesAndFolders(null, pluginFolder);
   if (res.err) {
+    if (res.err.code === "ENOENT") {
+      return { plugins: [], err: null };
+    }
     return { err: res.err };
   }
 
