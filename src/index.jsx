@@ -29,16 +29,14 @@ const theme = createTheme({
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <ConfigContext>
-        <SiteContext>
-          <ThemeProvider theme={theme}>
-            <App />
-          </ThemeProvider>
-        </SiteContext>
-      </ConfigContext>
-    </Router>
-  </React.StrictMode>,
+  <Router>
+    <ConfigContext>
+      <SiteContext>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </SiteContext>
+    </ConfigContext>
+  </Router>,
   document.getElementById("root")
 );
