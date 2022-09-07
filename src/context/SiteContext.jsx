@@ -8,13 +8,14 @@ const initialState = {
     port: undefined,
   },
   plugins: [],
+  isInitialized: false,
 };
 
 const SiteContext = ({ children }) => {
   const [state, setState] = useState(initialState);
 
   const initState = async (siteConfig) => {
-    {
+    async function initPlugins() {
       const res = await window.electronAPI.loadPlugins();
       if (res.err) {
         alert(res.err);
@@ -33,22 +34,29 @@ const SiteContext = ({ children }) => {
         return plugin.isActive(siteConfig) !== false;
       });
 
-      setPlugins(activePlugins);
+      state.plugins = activePlugins;
     }
+    async function initMediaPort() {
+      if (siteConfig.media.staticPath === "") return;
+      const port = await window.electronAPI.startMediaServer(
+        siteConfig.media.staticPath,
+        siteConfig.media.publicPath
+      );
+      if (port === undefined) {
+        alert("Error occured setting media port");
+        return;
+      }
+      state.media.port = port;
+    }
+
+    await Promise.all([initPlugins(), initMediaPort()]);
+
+    state.isInitialized = true;
+
+    updateState(state);
   };
   const updateState = (newState) => {
     setState({ ...newState });
-  };
-
-  const setMediaPort = (port) => {
-    console.log("setting media port to", port);
-    state.media.port = port;
-    updateState(state);
-  };
-
-  const setPlugins = (plugins) => {
-    state.plugins = plugins;
-    updateState(state);
   };
 
   return (
@@ -56,8 +64,6 @@ const SiteContext = ({ children }) => {
       value={{
         state,
         initState,
-        setMediaPort,
-        setPlugins,
       }}
     >
       {children}

@@ -1,14 +1,12 @@
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { configContext } from "../context/ConfigContext";
+import { copyMediaFilePath } from "../lib/copyMediaFilePath";
+import { switchTab } from "../lib/switchEditorTab";
 import useFileManager from "../lib/useFileManager";
 import useSiteConfig from "../lib/useSiteConfig";
 import FrontmatterEditor from "./FrontmatterEditor";
 import MarkdownEditor from "./MarkdownEditor";
-import { configContext } from "../context/ConfigContext";
-import { switchTab } from "../lib/switchEditorTab";
-import { copyMediaFilePath } from "../lib/copyMediaFilePath";
-import { editorSetup } from "../lib/editorSetup";
-import { siteContext } from "../context/SiteContext";
 
 function EditorWrapper() {
   const location = useLocation();
@@ -19,7 +17,6 @@ function EditorWrapper() {
   const fileManager = useFileManager(filePath);
   const siteConfig = useSiteConfig();
   const { config } = useContext(configContext);
-  const { setMediaPort } = useContext(siteContext);
 
   const handleSave = () => {
     fileManager.saveFile().then((err) => {
@@ -29,15 +26,6 @@ function EditorWrapper() {
       }
     });
   };
-
-  useEffect(() => {
-    if (siteConfig.media.staticPath === "") return;
-    editorSetup({
-      setMediaPort,
-      mediaStaticPath: siteConfig.media.staticPath,
-      mediaPublicPath: siteConfig.media.publicPath,
-    });
-  }, [siteConfig.media.staticPath, siteConfig.media.publicPath]);
 
   if (fileManager.file.isRead && config.autosave === "always") {
     handleSave();

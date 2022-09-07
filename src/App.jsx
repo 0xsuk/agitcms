@@ -88,11 +88,12 @@ function Wrapper() {
 
 function SiteWrapper({ children }) {
   const siteConfig = useSiteConfig();
-  const { initState } = useContext(siteContext);
+  const { state, initState } = useContext(siteContext);
   useEffect(() => {
     if (!siteConfig) return;
     initState(siteConfig);
   }, [siteConfig]);
+  if (!state.isInitialized) return <></>;
   if (!siteConfig) return <></>;
   return <>{children}</>;
 }
