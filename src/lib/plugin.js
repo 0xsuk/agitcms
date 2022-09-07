@@ -1,14 +1,15 @@
 import { v4 } from "uuid";
 
 class Plugin {
-  constructor() {
+  constructor({ isActive = true }) {
     this.key = v4();
+    this.isActive = isActive;
   }
 }
 let sortedWeights = [];
 export class ToolbarItem extends Plugin {
-  constructor({ initialChar, tooltip, weight, run, keyAlias }) {
-    super();
+  constructor({ initialChar, tooltip, weight, run, keyAlias, isActive }) {
+    super({ isActive });
     if (sortedWeights.includes(weight)) {
       weight = sortedWeights[sortedWeights.length - 1] + 1;
     }

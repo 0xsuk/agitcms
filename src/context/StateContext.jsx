@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import { ToolbarItem } from "../lib/plugin";
+import useSiteConfig from "../lib/useSiteConfig";
 
 export const stateContext = createContext();
 
@@ -12,6 +13,8 @@ const initialState = {
 
 const StateContext = ({ children }) => {
   const [state, setState] = useState(initialState);
+  //this is null in home page
+  const siteConfig = useSiteConfig();
 
   const initState = async () => {
     {
@@ -21,12 +24,19 @@ const StateContext = ({ children }) => {
         return;
       }
       window.ToolbarItem = ToolbarItem;
-      let plugins = [];
+      const plugins = [];
       res.plugins.forEach((plugin) => {
         plugins.push(eval(plugin.raw));
       });
 
-      setPlugins(plugins);
+      const activePlugins = plugins.filter((plugin) => {
+        if (plugin.isActive === true) return true;
+        if (plugin.isActive === false) return false;
+        //then isActive should be function
+        return plugin.isActive(siteConfig) !== false;
+      });
+
+      setPlugins(activePlugins);
     }
   };
   const updateState = (newState) => {
