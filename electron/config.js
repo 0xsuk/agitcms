@@ -7,20 +7,15 @@ const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 const getConfig = () => {
   try {
     if (!fs.existsSync(CONFIG_DIR)) {
-      fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o775 });
-    }
-    if (!fs.existsSync(CONFIG_FILE)) {
-      let config_str;
-      config_str = fs
-        .readFileSync(path.join(__dirname, "assets", "config.json"))
-        .toString();
-      fs.writeFileSync(CONFIG_FILE, config_str, { mode: 0o664 });
+      fs.cpSync(path.join(__dirname, "assets", ".agitcms"), CONFIG_DIR, {
+        recursive: true,
+      });
     }
 
     const config = JSON.parse(fs.readFileSync(CONFIG_FILE));
     return config;
   } catch (err) {
-    throw new Error("Failed to load config\n", err);
+    throw new Error("Failed to load config\n" + err);
   }
 };
 
