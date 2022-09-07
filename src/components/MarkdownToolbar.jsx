@@ -15,7 +15,7 @@ function MarkdownToolbar({ editorView }) {
   }
 
   const toolbarItems = state.plugins.filter(
-    (plugin) => plugin instanceof ToolbarItem && plugin.isActive
+    (plugin) => plugin instanceof ToolbarItem
   );
 
   if (toolbarItems.length === 0) {
