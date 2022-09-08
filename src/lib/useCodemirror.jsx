@@ -86,7 +86,7 @@ function useCodemirror({ fileManager }) {
   const toolbarItems = state.plugins.filter(
     (plugin) => plugin instanceof ToolbarItem
   );
-  const pluginKeymap = toolbarItems
+  const toolKeymap = toolbarItems
     .filter((tool) => typeof tool.keyAlias === "string" && tool.keyAlias !== "")
     .map((tool) => ({
       key: tool.keyAlias,
@@ -104,7 +104,7 @@ function useCodemirror({ fileManager }) {
       contentHeight: "100%",
       extensions: [
         //the earlier, the more priority
-        keymap.of([...pluginKeymap, ...defaultKeymap, ...historyKeymap]),
+        keymap.of([...toolKeymap, ...defaultKeymap, ...historyKeymap]),
         lineNumbers(),
         highlightActiveLine(),
         highlightActiveLineGutter(),
@@ -131,8 +131,7 @@ function useCodemirror({ fileManager }) {
             });
           },
         }),
-        //TODO set keyAlias here
-        //TODO set keybindings here
+        //TODO set key replacing
       ],
     });
 
