@@ -16,13 +16,13 @@ Agit CMS is a multi-platform desktop application built on top of Electron, which
 ## Features
 - 100% opensource and free
 - works completely offline
-- hackable markdown editor/previewer
+- runs on windows/mac/linux
 - dark themed
-- integrated terminal
 - type-aware frontmatter editor
+- integrated terminal
 - support mathjax
 - support image pasting
-- runs on windows/mac/linux
+- custom editor toolbar items
 
 ## Install
 Install latest binary from [Release](https://github.com/0xsuk/agitcms/releases).  
@@ -47,7 +47,7 @@ yarn run dev
 ```
 
 ## TODO
-- [ ] markdown editor - key bindings
+- [ ] markdown editor - key replacing
 - [ ] markdown editor - auto saving config
 - [ ] markdown editor - Table of contents
 - [ ] Typescript
