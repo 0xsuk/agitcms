@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { ToolbarItem } from "../lib/plugin";
+import { ToolbarItem, TransactionFilter } from "../lib/plugin";
 
 export const siteContext = createContext();
 
@@ -22,6 +22,7 @@ const SiteContext = ({ children }) => {
         return;
       }
       window.ToolbarItem = ToolbarItem;
+      window.TransactionFilter = TransactionFilter;
       const plugins = [];
       res.plugins.forEach((plugin) => {
         plugins.push(eval(plugin.raw));

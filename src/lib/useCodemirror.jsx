@@ -18,7 +18,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { siteContext } from "../context/SiteContext";
 import useSiteConfig from "../lib/useSiteConfig";
 import { oneDark } from "../styles/cm-dark-theme";
-import { ToolbarItem } from "./plugin";
+import { ToolbarItem, TransactionFilter } from "./plugin";
 const dateFns = new DateFnsAdapter();
 
 const markdownHighlighting = HighlightStyle.define([
@@ -83,16 +83,18 @@ function useCodemirror({ fileManager }) {
   const siteConfig = useSiteConfig();
   const { state } = useContext(siteContext);
 
-  const toolbarItems = state.plugins.filter(
-    (plugin) => plugin instanceof ToolbarItem
-  );
-  const toolKeymap = toolbarItems
+  const toolKeymap = state.plugins
+    .filter((plugin) => plugin instanceof ToolbarItem)
     .filter((tool) => typeof tool.keyAlias === "string" && tool.keyAlias !== "")
     .map((tool) => ({
       key: tool.keyAlias,
       run: (editorView) =>
         tool.run(editorView, siteConfig, stateModule, viewModule),
     }));
+
+  const transactionFilters = state.plugins.filter(
+    (plugin) => plugin instanceof TransactionFilter
+  );
 
   useEffect(() => {
     if (!ref.current) {
@@ -131,7 +133,12 @@ function useCodemirror({ fileManager }) {
             });
           },
         }),
-        //TODO set key replacing
+        EditorState.transactionFilter.of((tr) => {
+          transactionFilters.forEach((transactionFilter) => {
+            tr = transactionFilter.update(tr);
+          });
+          return tr;
+        }),
       ],
     });
 
