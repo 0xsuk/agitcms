@@ -22,7 +22,8 @@ Agit CMS is a multi-platform desktop application built on top of Electron, which
 - integrated terminal
 - support mathjax
 - support image pasting
-- custom editor toolbar items
+- custom toolbar items
+- custom keymap
 
 ## Install
 Install latest binary from [Release](https://github.com/0xsuk/agitcms/releases).  
@@ -47,7 +48,6 @@ yarn run dev
 ```
 
 ## TODO
-- [ ] markdown editor - key replacing
 - [ ] markdown editor - auto saving config
 - [ ] markdown editor - Table of contents
 - [ ] Typescript
