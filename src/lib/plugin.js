@@ -20,6 +20,7 @@ export class ToolbarItem extends Plugin {
       run = () => alert("No action is registered for this toolbar item");
     }
     this.initialChar = initialChar;
+    this.isImplicit = !initialChar;
     this.tooltip = tooltip;
     this.weight = weight;
     this.run = run;
