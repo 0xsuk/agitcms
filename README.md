@@ -50,4 +50,5 @@ yarn run dev
 ## TODO
 - [ ] markdown editor - auto saving config
 - [ ] markdown editor - Table of contents
-- [ ] Typescript
+- [ ] development - smaller app size
+- [ ] development - typescript
