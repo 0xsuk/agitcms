@@ -1,11 +1,4 @@
-import {
-  createElement,
-  Fragment,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { createElement, Fragment, useContext, useMemo, useRef } from "react";
 import rehypeMathJaxSvg from "rehype-mathjax";
 import rehypeReact from "rehype-react";
 import remarkGfm from "remark-gfm";
