@@ -5,6 +5,7 @@ $background-darker: #131820;
 $color-default: #c9d1d9;
 $color-darker: #7d8799;
 $tool-background: #333b4899;
+$editor-padding-bottom: 200px;
 
 
 /* width */
@@ -173,6 +174,7 @@ $editor-navigator-height: 44px;
   //do not set height: 100%;
   //onScroll will be broken
   //  height: 100%;
+    padding-bottom: $editor-padding-bottom;
   }
 
   .ͼ1 .cm-content {
@@ -205,6 +207,7 @@ $editor-navigator-height: 44px;
   height: 100%;
   flex: 0 0 50%;
   padding: 10px; //!padding top is used by scrollSync
+  padding-bottom: $editor-padding-bottom;
   border-left: solid 1px #424242; //same as dark color-scheme scroll bar
   overflow-y: auto;
   overflow-x: hidden;

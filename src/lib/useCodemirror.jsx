@@ -50,6 +50,11 @@ const markdownHighlighting = HighlightStyle.define([
   },
 ]);
 
+const handleScrollBottom = () => {
+  const cmEditor = document.querySelector("#editor-markdown > .cm-editor");
+  cmEditor.scrollIntoView(false); //scrolls to bottom
+};
+
 const handlePasteImage = ({ pasteEvent, view, staticPath, publicPath }) => {
   if (!staticPath) return;
   const item = pasteEvent.clipboardData.items[0];
@@ -129,6 +134,12 @@ function useCodemirror({ fileManager }) {
         EditorView.lineWrapping,
         EditorView.updateListener.of((update) => {
           if (update.docChanged) {
+            const modifiedPos = update.changedRanges[0].toB; //position of last("to") modified range in the changed state("B")
+            const modifiedLine = update.state.doc.lineAt(modifiedPos).number;
+            const lastLine = update.state.doc.lines;
+            if (modifiedLine === lastLine) {
+              handleScrollBottom();
+            }
             fileManager.setDoc(update.state.doc.toString());
           }
         }),
