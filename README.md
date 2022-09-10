@@ -8,32 +8,33 @@
 
 /eɪdʒɪt/  
 
-Agit CMS is a multi-platform desktop application built on top of Electron, which works as a frontend interface for any static site generator.   
+Agit CMS is a frontend interface for any static site generator including Hugo and Jekyll.  
+Write markdown blog posts in the *hackable* way, get rid of your itch points.
 
 ![frontmatter](https://user-images.githubusercontent.com/97814789/177042161-555c631e-2050-453c-b9de-1e2137ed7752.gif)
 
 
 ## Features
-- 100% opensource and free
-- works completely offline
-- runs on windows/mac/linux
-- dark themed
 - type-aware frontmatter editor
 - integrated terminal
 - support mathjax
 - support image pasting
-- custom toolbar items
+- custom toolbar items / snippets
 - custom keymap
 
 ## Install
 Install latest binary from [Release](https://github.com/0xsuk/agitcms/releases).  
-Agit CMS is not authenticated. Some security warning will be displayed by Windows/Mac. 
-
 | OS | binary name |
 | --- | --- |
 | Windows | agitcms_win.exe |
 | Mac | agitcms_mac.dmg |
-| Linux | agitcms_linux_amd64.deb |
+| Linux | agitcms_linux_amd64.deb |  
+  
+When downloading a binary, some warning might be displayed because Agit CMS is yet to be trusted by Windows/Mac.
+To suppress warning and continue, reference below.
+- Mac: Find agitcms in Finder. Click on the app pressing ctrl key. Select "Open".
+([Open a Mac app from an unidentified developer - Apple Support](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac))
+- Windows: If "Windows protected your PC", click on "More info", and select "Run anyway".
 
 
 ## Usage
@@ -45,9 +46,11 @@ Start agitcms in your local development environment
 ```
 yarn 
 yarn run dev
-```
+```  
+npm cannot run this app because npm does not support yarn "resolutions"
 
-## TODO
+## TODO  
+- [ ] markdown editor - custom markdown rendering
 - [ ] markdown editor - auto saving config
 - [ ] markdown editor - Table of contents
 - [ ] development - smaller app size
