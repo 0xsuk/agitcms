@@ -1,4 +1,9 @@
-import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import {
+  defaultKeymap,
+  history,
+  historyKeymap,
+  indentWithTab,
+} from "@codemirror/commands";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import * as stateModule from "@codemirror/state";
@@ -106,7 +111,12 @@ function useCodemirror({ fileManager }) {
       contentHeight: "100%",
       extensions: [
         //the earlier, the more priority
-        keymap.of([...toolKeymap, ...defaultKeymap, ...historyKeymap]),
+        keymap.of([
+          ...toolKeymap,
+          ...defaultKeymap,
+          ...historyKeymap,
+          indentWithTab,
+        ]),
         lineNumbers(),
         highlightActiveLine(),
         highlightActiveLineGutter(),
@@ -125,6 +135,7 @@ function useCodemirror({ fileManager }) {
         oneDark,
         EditorView.domEventHandlers({
           paste(pasteEvent, view) {
+            console.log(pasteEvent);
             handlePasteImage({
               pasteEvent,
               view,
