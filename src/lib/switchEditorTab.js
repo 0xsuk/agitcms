@@ -17,7 +17,7 @@ export const switchTab = (tab) => {
   };
 
   const markdownOn = () => {
-    markdownEl.style.display = "block";
+    markdownEl.style.display = "flex"; //not block
     markdownTabEl.style.borderBottom = "solid 1px red";
     frontmatterEl.style.display = "none";
     frontmatterTabEl.style.borderBottom = "none";
