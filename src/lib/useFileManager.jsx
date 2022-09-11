@@ -89,19 +89,6 @@ function useFileManager(filePath) {
     return err;
   };
 
-  //const renameFileAndNavigate = async () => {
-  //  const { newFilePath, err } = await window.electronAPI.renameFile(
-  //    filePath,
-  //    file.name
-  //  );
-  //  if (err) {
-  //    console.warn(err.message);
-  //    return;
-  //  }
-  //  const to = "?path=" + newFilePath + "&isDir=false&fileName=" + file.name;
-  //  history.replace(to);
-  //};
-
   return {
     file,
     editName,

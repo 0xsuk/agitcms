@@ -18,6 +18,11 @@ function EditorWrapper() {
   const siteConfig = useSiteConfig();
   const { config } = useContext(configContext);
 
+  if (fileManager.file.path !== filePath) {
+    //wait until fileManager updates
+    return <></>;
+  }
+
   if (!fileManager.file.isRead) {
     fileManager.readFile().then((err) => {
       if (err) {
