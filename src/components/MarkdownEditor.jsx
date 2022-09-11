@@ -81,7 +81,10 @@ const handleMdScroll = (mouseIsOn, editorView) => {
     markdownElem.scrollTop >=
     markdownElem.scrollHeight - markdownElem.clientHeight //true when scroll reached the bottom
   ) {
-    previewElem.scrollTop = previewElem.scrollHeight - previewElem.clientHeight; //? scroll to the bottom
+    previewElem.scrollTo({
+      top: previewElem.scrollHeight - previewElem.clientHeight,
+      behavior: "smooth",
+    }); //scroll to the bottom
     return;
   }
 
