@@ -12,7 +12,7 @@ function Terminal() {
     if (!config.useTerminal) return;
     init();
     return exit;
-  }, [config.useTerminal]);
+  }, [config.useTerminal, cwd]);
 
   return (
     <div id="terminal" style={{ display: !isVisible && "none" }}>

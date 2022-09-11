@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer, webFrame } = require("electron");
 const { Titlebar, Color } = require("custom-electron-titlebar");
 
+let onShellDataCallback;
+let onShellExitCallback;
 window.addEventListener("DOMContentLoaded", () => {
   // Title bar implemenation
   new Titlebar({
@@ -42,6 +44,20 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("save-image", filePath, binary),
   loadPlugins: () => ipcRenderer.invoke("load-plugins"),
 
-  onShellData: (callback) => ipcRenderer.on("shell-data", callback),
-  onShellExit: (callback) => ipcRenderer.on("shell-exit", callback),
+  onShellData: (callback) => {
+    if (onShellDataCallback === undefined) {
+      onShellDataCallback = callback;
+    } else {
+      ipcRenderer.removeAllListeners("shell-data", onShellDataCallback);
+    }
+    ipcRenderer.on("shell-data", callback);
+  },
+  onShellExit: (callback) => {
+    if (onShellExitCallback === undefined) {
+      onShellExitCallback = callback;
+    } else {
+      ipcRenderer.removeAllListeners("shell-exit", onShellExitCallback);
+    }
+    ipcRenderer.on("shell-exit", callback);
+  },
 });
