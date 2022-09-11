@@ -3,7 +3,9 @@ new ToolbarItem({
   tooltip: "Heading",
   weight: 0,
   run: (editorView) => {
-    const cursorPos = editorView.state.selection.ranges[0].from;
+    const cursorPos =
+      editorView.state.selection.ranges[editorView.state.selection.mainIndex]
+        .from;
     const lineBlock = editorView.lineBlockAt(cursorPos);
     const posAtLineBeginning = lineBlock.from;
     const doc = editorView.state.doc.toString();
