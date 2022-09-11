@@ -8,7 +8,6 @@ import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import * as stateModule from "@codemirror/state";
 import { EditorState } from "@codemirror/state";
-import * as viewModule from "@codemirror/view";
 import {
   EditorView,
   highlightActiveLine,
@@ -98,8 +97,7 @@ function useCodemirror({ fileManager }) {
     .filter((tool) => typeof tool.keyAlias === "string" && tool.keyAlias !== "")
     .map((tool) => ({
       key: tool.keyAlias,
-      run: (editorView) =>
-        tool.run(editorView, siteConfig, stateModule, viewModule),
+      run: (editorView) => tool.run(editorView, siteConfig, stateModule),
     }));
 
   const transactionFilters = state.plugins.filter(
@@ -140,13 +138,13 @@ function useCodemirror({ fileManager }) {
             if (modifiedLine === lastLine) {
               handleScrollBottom();
             }
+            //TODO rerender cause performance issue
             fileManager.setDoc(update.state.doc.toString());
           }
         }),
         oneDark,
         EditorView.domEventHandlers({
           paste(pasteEvent, view) {
-            console.log(pasteEvent);
             handlePasteImage({
               pasteEvent,
               view,
@@ -156,9 +154,17 @@ function useCodemirror({ fileManager }) {
           },
         }),
         EditorState.transactionFilter.of((tr) => {
+          const transactionSpecList = [];
           transactionFilters.forEach((transactionFilter) => {
-            tr = transactionFilter.update(tr);
+            const specList = transactionFilter.update(tr); //undefined | transactionSpec[]
+            if (!specList) return;
+            if (Array.isArray(specList) && specList.length) {
+              transactionSpecList.push(...specList);
+            }
           });
+          if (transactionSpecList.length) {
+            return transactionSpecList;
+          }
           return tr;
         }),
       ],

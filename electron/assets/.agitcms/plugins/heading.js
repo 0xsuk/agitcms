@@ -13,12 +13,26 @@ new ToolbarItem({
     let isLineBeginningSharp = false;
     if (doc[posAtLineBeginning] === "#") isLineBeginningSharp = true;
 
-    editorView.dispatch({
-      changes: {
-        from: posAtLineBeginning,
-        insert: isLineBeginningSharp ? "#" : "# ",
-      },
-    });
+    if (isLineBeginningSharp) {
+      editorView.dispatch({
+        changes: {
+          from: posAtLineBeginning,
+          insert: "#",
+        },
+        filter: false,
+      });
+    } else {
+      const insert = "# ";
+      editorView.dispatch({
+        changes: {
+          from: posAtLineBeginning,
+          insert,
+        },
+        selection: { anchor: posAtLineBeginning + insert.length },
+        filter: false,
+      });
+    }
+
     editorView.focus();
   },
 });

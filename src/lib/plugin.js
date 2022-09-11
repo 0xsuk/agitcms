@@ -29,70 +29,35 @@ export class ToolbarItem extends Plugin {
 }
 
 export class TransactionFilter extends Plugin {
-  constructor({ map = new Map(), fn, weight, isActive }) {
+  constructor({ map = new Map(), fn, isActive }) {
     super({ isActive });
     this.map = map;
     this.fn = fn;
-    this.weight = weight;
   }
 
   update(tr) {
-    if (!tr.docChanged) return tr;
-    const inserted = tr.changes.inserted;
-    function createTr(newChars, from) {
-      return tr.startState.update({
-        changes: {
-          from,
-          insert: newChars,
-        },
-        selection: {
-          anchor: tr.startState.selection.ranges[0].from + newChars.length,
-        },
-        filter: false, //disable TransactionFilter on this update
-      });
-    }
-
-    const isSingleChar = inserted.length === 2 && inserted[1].text.length;
-    if (isSingleChar) {
-      const oldChar = inserted[1].text[0];
-      const newChars = this.map.get(oldChar);
-      if (newChars !== undefined) {
-        tr = createTr(newChars, tr.startState.selection.ranges[0].from);
+    if (!tr.docChanged) return;
+    const transactionSpecList = [];
+    tr.changes.iterChanges((fromA, _, fromB, toB) => {
+      const newChars = tr.newDoc.sliceString(fromB, toB);
+      const altChars = this.map.get(newChars);
+      if (altChars !== undefined) {
+        transactionSpecList.push({
+          changes: { from: fromA, insert: altChars },
+          selection: { anchor: fromA + altChars.length },
+          filter: false,
+        });
       }
-    }
-    //don't know why but at position 0 (first character) inserted.length is 1
-    const isSingleCharAtFirstPos =
-      inserted.length === 1 && inserted[0].text.length;
-    if (isSingleCharAtFirstPos) {
-      const oldChar = inserted[0].text[0];
-      const newChars = this.map.get(oldChar);
-      if (newChars !== undefined) {
-        tr = createTr(newChars, tr.startState.selection.ranges[0].from);
-      }
-    }
-
-    //if new line
-    const isNewLine =
-      this.map.get("\n") !== undefined &&
-      inserted.length === 2 &&
-      inserted[1].text[0] === "" &&
-      inserted[1].text[1] === "";
-    //if new line in first position
-    const isNewLineAtFirstPos =
-      this.map.get("\n") !== undefined &&
-      inserted.length === 1 &&
-      inserted[0].text[0] === "" &&
-      inserted[0].text[1] === "";
-    if (isNewLine || isNewLineAtFirstPos) {
-      const newChars = this.map.get("\n");
-      tr = createTr(newChars, tr.startState.selection.ranges[0].from);
-    }
-
-    //TODO: handle tab
-
+    });
     if (this.fn) {
-      tr = this.fn(tr);
+      const spec = this.fn(tr);
+      if (spec && Array.isArray(spec) && spec.length) {
+        const specList = spec;
+        transactionSpecList.push(...specList);
+      } else if (spec && !Array.isArray(spec)) {
+        transactionSpecList.push(spec);
+      }
     }
-    return tr;
+    return transactionSpecList;
   }
 }

@@ -3,7 +3,7 @@ new ToolbarItem({
   tooltip: "Bold (Ctrl-b)",
   weight: 1,
   keyAlias: "Ctrl-b",
-  run: (editorView, _, { EditorSelection, Text }) => {
+  run: (editorView, _, { Text }) => {
     const changes = editorView.state.changeByRange((range) => {
       return {
         changes: [
@@ -16,7 +16,7 @@ new ToolbarItem({
             insert: Text.of(["**"]),
           },
         ],
-        range: EditorSelection.range(range.from + 2, range.to + 2),
+        filter: false,
       };
     });
 
