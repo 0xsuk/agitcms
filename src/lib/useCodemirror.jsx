@@ -1,9 +1,4 @@
-import {
-  defaultKeymap,
-  history,
-  historyKeymap,
-  indentWithTab,
-} from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import * as stateModule from "@codemirror/state";
@@ -114,12 +109,7 @@ function useCodemirror({ fileManager }) {
       contentHeight: "100%",
       extensions: [
         //the earlier, the more priority
-        keymap.of([
-          ...toolKeymap,
-          ...defaultKeymap,
-          ...historyKeymap,
-          indentWithTab,
-        ]),
+        keymap.of([...toolKeymap, ...defaultKeymap, ...historyKeymap]),
         lineNumbers(),
         highlightActiveLine(),
         highlightActiveLineGutter(),
