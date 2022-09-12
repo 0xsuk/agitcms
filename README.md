@@ -53,5 +53,7 @@ npm cannot run this app because npm does not support yarn "resolutions"
 - [ ] markdown editor - custom markdown rendering
 - [ ] markdown editor - auto saving config
 - [ ] markdown editor - Table of contents
+- [ ] markdown editor - use marked instead of unified for speed
 - [ ] development - smaller app size
 - [ ] development - typescript
+- [ ] make it self hostable web app
