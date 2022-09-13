@@ -1,18 +1,14 @@
-import { useContext, useEffect } from "react";
+import { useRef } from "react";
 import useSiteConfig from "../lib/useSiteConfig";
 import useTerminalManager from "../lib/useTerminalManger";
-import { configContext } from "../context/ConfigContext";
 
 function Terminal() {
-  const { config } = useContext(configContext);
   const cwd = useSiteConfig()?.path;
-  const { init, exit, isVisible, cid, setCid, terminals, createNew } =
-    useTerminalManager(cwd);
-  useEffect(() => {
-    if (!config.useTerminal) return;
-    init();
-    return exit;
-  }, [config.useTerminal, cwd]);
+  const parent = useRef(null);
+  const { isVisible, cid, setCid, terminals, createNew } = useTerminalManager(
+    cwd,
+    parent
+  );
 
   return (
     <div id="terminal" style={{ display: !isVisible && "none" }}>
@@ -34,7 +30,7 @@ function Terminal() {
           +
         </div>
       </div>
-      <div id="terminal-console"></div>
+      <div id="terminal-console" ref={parent}></div>
     </div>
   );
 }

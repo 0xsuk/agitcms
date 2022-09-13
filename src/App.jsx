@@ -44,6 +44,8 @@ function App() {
 }
 
 function Wrapper() {
+  const { config } = useContext(configContext);
+
   return (
     // list of workspace
     <div
@@ -60,9 +62,7 @@ function Wrapper() {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/">
-          <Terminal />
-        </Route>
+        <Route path="/">{config.useTerminal && <Terminal />}</Route>
         <Route exact path="/settings">
           <Settings />
         </Route>
