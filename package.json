@@ -1,6 +1,6 @@
 {
   "name": "agitcms",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A desktop based headless CMS for markdown blogs",
   "main": "electron/electron.js",
   "scripts": {
@@ -22,7 +22,8 @@
     "Headless CMS",
     "Hugo",
     "Jekyll",
-    "Static Sites Generator"
+    "Static Sites Generator",
+    "Markdown"
   ],
   "author": "0xsuk <iam0xsuk@gmail.com>",
   "license": "MIT",
