@@ -1,5 +1,7 @@
+import { ThemeProvider } from "@emotion/react";
 import createTheme from "@mui/material/styles/createTheme";
 import ConfigContext from "context/ConfigContext";
+import SiteContext from "context/SiteContext";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 import App from "./App";
@@ -25,22 +27,14 @@ const theme = createTheme({
   },
 });
 
-//ReactDOM.render(
-//  <Router>
-//    <ConfigContext>
-//      <SiteContext>
-//        <ThemeProvider theme={theme}>
-//          <App />
-//        </ThemeProvider>
-//      </SiteContext>
-//    </ConfigContext>
-//  </Router>,
-//  document.getElementById("root")
-//);
 ReactDOM.render(
   <Router>
     <ConfigContext>
-      <App />
+      <SiteContext>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </SiteContext>
     </ConfigContext>
   </Router>,
   document.getElementById("root")
