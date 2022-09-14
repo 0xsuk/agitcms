@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { configContext } from "../context/ConfigContext";
+import { configContext } from "context/ConfigContext";
 import {
   removeFrontmatterConfig,
   reorderFrontmatterConfig,
   updateFrontmatterConfig,
-} from "../lib/frontmatterInterface";
+} from "utils/frontmatterInterface";
 
 function useSiteConfigBuffer(initialSiteConfig) {
   const [siteConfig, setSiteConfig] = useState(

@@ -14,9 +14,9 @@ import DateFnsAdapter from "@date-io/date-fns";
 import { tags } from "@lezer/highlight";
 import path from "path";
 import { useContext, useEffect, useRef, useState } from "react";
-import { siteContext } from "../context/SiteContext";
-import useSiteConfig from "../lib/useSiteConfig";
-import { oneDark } from "../styles/cm-dark-theme";
+import { siteContext } from "context/SiteContext";
+import useSiteConfig from "utils/useSiteConfig";
+import { oneDark } from "styles/cm-dark-theme";
 import { ToolbarItem, TransactionFilter } from "./plugin";
 const dateFns = new DateFnsAdapter();
 

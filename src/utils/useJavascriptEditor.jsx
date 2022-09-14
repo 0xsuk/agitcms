@@ -3,7 +3,7 @@ import { EditorState } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
 import { basicSetup } from "codemirror";
 import { useEffect, useRef, useState } from "react";
-import { oneDark } from "../styles/cm-dark-theme";
+import { oneDark } from "styles/cm-dark-theme";
 
 function useJavascriptEditor({ doc, setDoc }) {
   const ref = useRef(null);

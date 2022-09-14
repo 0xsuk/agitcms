@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { v4 as uuid } from "uuid";
-import { configContext } from "../context/ConfigContext";
+import { configContext } from "context/ConfigContext";
 
 function useSiteConfig() {
   const { config } = useContext(configContext);
