@@ -11,10 +11,10 @@ import { siteContext } from "context/SiteContext";
 import { Fragment, useContext, useEffect } from "react";
 import { Route } from "react-router-dom";
 import { isMac } from "utils/constants";
+import { setup } from "utils/setup";
 import useSiteConfig from "utils/useSiteConfig";
 import "./App.scss";
 import Test from "./Test";
-import { setup } from "./utils/setup";
 
 function App() {
   const { config, readConfig } = useContext(configContext);

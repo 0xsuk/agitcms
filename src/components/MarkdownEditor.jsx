@@ -1,3 +1,4 @@
+import { siteContext } from "context/SiteContext";
 import { createElement, Fragment, useContext, useMemo, useRef } from "react";
 import rehypeMathJaxSvg from "rehype-mathjax";
 import rehypeReact from "rehype-react";
@@ -6,7 +7,6 @@ import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { siteContext } from "context/SiteContext";
 import { isMac, isURL } from "utils/constants";
 import useCodemirror from "utils/useCodemirror";
 import MarkdownToolbar from "./MarkdownToolbar";
