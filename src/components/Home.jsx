@@ -1,8 +1,8 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { configContext } from "../context/ConfigContext";
-import { newSiteConfig } from "../lib/useSiteConfig";
+import { configContext } from "context/ConfigContext";
+import { newSiteConfig } from "utils/useSiteConfig";
 import NewSiteDialog from "./NewSiteDialog";
 
 function Home() {

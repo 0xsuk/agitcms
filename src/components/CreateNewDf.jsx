@@ -6,11 +6,11 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import Grow from "@mui/material/Grow";
-import TextDialog from "./TextDialog";
 import { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
-import useSiteConfig from "../lib/useSiteConfig";
-import { fillFrontmatterJson, genContent } from "../lib/frontmatterInterface";
+import useSiteConfig from "utils/useSiteConfig";
+import { fillFrontmatterJson, genContent } from "utils/frontmatterInterface";
+import TextDialog from "components/TextDialog";
 
 function CreateNewDf({ cwdf }) {
   const siteConfig = useSiteConfig();

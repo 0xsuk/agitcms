@@ -2,9 +2,9 @@ import * as stateModule from "@codemirror/state";
 import * as viewModule from "@codemirror/view";
 import { Tooltip } from "@mui/material";
 import { useContext } from "react";
-import { siteContext } from "../context/SiteContext";
-import { ToolbarItem } from "../lib/plugin";
-import useSiteConfig from "../lib/useSiteConfig";
+import { siteContext } from "context/SiteContext";
+import { ToolbarItem } from "utils/plugin";
+import useSiteConfig from "utils/useSiteConfig";
 
 function MarkdownToolbar({ editorView }) {
   const siteConfig = useSiteConfig();

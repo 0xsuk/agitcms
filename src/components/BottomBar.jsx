@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { useContext } from "react";
-import { configContext } from "../context/ConfigContext";
-import useSiteConfig from "../lib/useSiteConfig";
+import { configContext } from "context/ConfigContext";
+import useSiteConfig from "utils/useSiteConfig";
 import { useLocation } from "react-router-dom";
 function BottomBar() {
   const { updateSiteConfig } = useContext(configContext);

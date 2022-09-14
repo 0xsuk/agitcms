@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { ToolbarItem, TransactionFilter } from "../lib/plugin";
+import { ToolbarItem, TransactionFilter } from "utils/plugin";
 
 export const siteContext = createContext();
 

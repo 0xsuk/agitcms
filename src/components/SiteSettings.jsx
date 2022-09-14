@@ -16,10 +16,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { FrontmatterTypes } from "utils/frontmatterInterface";
+import useSiteConfig from "utils/useSiteConfig";
+import { FrontmatterLanguages } from "utils/useSiteConfig";
+import useSiteConfigBuffer from "utils/useSiteConfigBuffer";
 import { v4 as uuid } from "uuid";
-import { FrontmatterTypes } from "../lib/frontmatterInterface";
-import useSiteConfig, { FrontmatterLanguages } from "../lib/useSiteConfig";
-import useSiteConfigBuffer from "../lib/useSiteConfigBuffer";
 import CustomSelect from "./CustomSelect";
 import FrontmatterDialog from "./FrontmatterDialog";
 import TextDialog from "./TextDialog";
@@ -185,7 +186,7 @@ function FrontmatterList({
   );
 }
 
-function Site() {
+function SiteSettings() {
   const initialSiteConfig = useSiteConfig();
   const {
     siteConfig,
@@ -481,4 +482,4 @@ function Site() {
   );
 }
 
-export default Site;
+export default SiteSettings;

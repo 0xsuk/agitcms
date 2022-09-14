@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext } from "react";
-import { configContext } from "../context/ConfigContext";
+import { configContext } from "context/ConfigContext";
 
 export const helpLinks = {};
 

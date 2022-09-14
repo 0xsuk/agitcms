@@ -1,20 +1,20 @@
+import BottomBar from "components/BottomBar";
+import EditorWrapper from "components/EditorWrapper";
+import Explorer from "components/Explorer";
+import Home from "components/Home";
+import Settings from "components/Settings";
+import SideBar from "components/SideBar";
+import SiteSettings from "components/SiteSettings";
+import Terminal from "components/Terminal";
+import { configContext } from "context/ConfigContext";
+import { siteContext } from "context/SiteContext";
 import { Fragment, useContext, useEffect } from "react";
 import { Route } from "react-router-dom";
+import { isMac } from "utils/constants";
+import useSiteConfig from "utils/useSiteConfig";
 import "./App.scss";
-import BottomBar from "./components/BottomBar";
-import EditorWrapper from "./components/EditorWrapper";
-import Explorer from "./components/Explorer";
-import Home from "./components/Home";
-import Settings from "./components/Settings";
-import SideBar from "./components/SideBar";
-import SiteSettigs from "./components/SiteSettings";
-import Terminal from "./components/Terminal";
-import { configContext } from "./context/ConfigContext";
-import { siteContext } from "./context/SiteContext";
-import { isMac } from "./lib/constants";
-import { setup } from "./lib/setup";
-import useSiteConfig from "./lib/useSiteConfig";
 import Test from "./Test";
+import { setup } from "./utils/setup";
 
 function App() {
   const { config, readConfig } = useContext(configContext);
@@ -69,7 +69,7 @@ function Wrapper() {
         <Route path="/site">
           <SiteWrapper>
             <Route path="/site/settings/:siteKey">
-              <SiteSettigs />
+              <SiteSettings />
             </Route>
             <Route path="/site/explorer/:siteKey">
               <BottomBar />

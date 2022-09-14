@@ -13,7 +13,7 @@ import {
 import {
   FrontmatterTypes,
   generateFrontmatterTree,
-} from "../lib/frontmatterInterface";
+} from "utils/frontmatterInterface";
 
 const wrap = (node, elem) => {
   return (

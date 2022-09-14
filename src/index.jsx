@@ -1,11 +1,8 @@
 import createTheme from "@mui/material/styles/createTheme";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import React from "react";
+import ConfigContext from "context/ConfigContext";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 import App from "./App";
-import ConfigContext from "./context/ConfigContext";
-import SiteContext from "./context/SiteContext";
 
 const theme = createTheme({
   palette: {
@@ -28,14 +25,22 @@ const theme = createTheme({
   },
 });
 
+//ReactDOM.render(
+//  <Router>
+//    <ConfigContext>
+//      <SiteContext>
+//        <ThemeProvider theme={theme}>
+//          <App />
+//        </ThemeProvider>
+//      </SiteContext>
+//    </ConfigContext>
+//  </Router>,
+//  document.getElementById("root")
+//);
 ReactDOM.render(
   <Router>
     <ConfigContext>
-      <SiteContext>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
-      </SiteContext>
+      <App />
     </ConfigContext>
   </Router>,
   document.getElementById("root")

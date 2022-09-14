@@ -3,7 +3,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Menu, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import useSiteConfig from "../lib/useSiteConfig";
+import useSiteConfig from "utils/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
 import TextDialog from "./TextDialog";
 

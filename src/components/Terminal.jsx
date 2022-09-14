@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import useSiteConfig from "../lib/useSiteConfig";
-import useTerminalManager from "../lib/useTerminalManger";
+import useSiteConfig from "utils/useSiteConfig";
+import useTerminalManager from "utils/useTerminalManger";
 
 function Terminal() {
   const cwd = useSiteConfig()?.path;

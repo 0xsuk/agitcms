@@ -6,9 +6,9 @@ import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { siteContext } from "../context/SiteContext";
-import { isMac, isURL } from "../lib/constants";
-import useCodemirror from "../lib/useCodemirror";
+import { siteContext } from "context/SiteContext";
+import { isMac, isURL } from "utils/constants";
+import useCodemirror from "utils/useCodemirror";
 import MarkdownToolbar from "./MarkdownToolbar";
 
 let treeData;
@@ -145,8 +145,10 @@ function MarkdownEditor({ fileManager }) {
   const { state } = useContext(siteContext);
   const mouseIsOn = useRef(null);
 
+  //TODO: takes 140 ms for 1000 lines of document
   const md = useMemo(() => {
-    return unified()
+    console.time("test");
+    const res = unified()
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkMath)
@@ -156,6 +158,8 @@ function MarkdownEditor({ fileManager }) {
       .use(captureTreePlugin)
       .use(mediaPlugin(state.media.port))
       .processSync(fileManager.file.doc).result;
+    console.timeEnd("test");
+    return res;
   }, [state.media.port, fileManager.file.doc]);
 
   return (

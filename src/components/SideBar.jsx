@@ -8,7 +8,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import useSiteConfig from "../lib/useSiteConfig";
+import useSiteConfig from "utils/useSiteConfig";
 
 function SideBar() {
   const siteConfig = useSiteConfig();

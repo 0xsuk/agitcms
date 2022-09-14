@@ -33,6 +33,12 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx"],
+    alias: {
+      components: path.join(__dirname, "src/components"),
+      utils: path.join(__dirname, "src/utils"),
+      context: path.join(__dirname, "src/context"),
+      styles: path.join(__dirname, "src/styles"),
+    },
     fallback: {
       stream: require.resolve("stream-browserify"),
       path: require.resolve("path-browserify"),

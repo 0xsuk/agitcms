@@ -1,10 +1,10 @@
+import { configContext } from "context/ConfigContext";
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
-import { configContext } from "../context/ConfigContext";
-import { copyMediaFilePath } from "../lib/copyMediaFilePath";
-import { switchTab } from "../lib/switchEditorTab";
-import useFileManager from "../lib/useFileManager";
-import useSiteConfig from "../lib/useSiteConfig";
+import { copyMediaFilePath } from "utils/copyMediaFilePath";
+import { switchTab } from "utils/switchEditorTab";
+import useFileManager from "utils/useFileManager";
+import useSiteConfig from "utils/useSiteConfig";
 import FrontmatterEditor from "./FrontmatterEditor";
 import MarkdownEditor from "./MarkdownEditor";
 
