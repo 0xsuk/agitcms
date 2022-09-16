@@ -1,0 +1,1 @@
+export const randomid = () => "asdf";

@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "dom", "dom.iterable"],
+    "paths": {
+      "@shared/*": ["../shared/*"],
+      "@/*": ["*"]
+    },
+    "allowJs": true
+  },
+  "references": [{ "path": "../shared" }]
+}

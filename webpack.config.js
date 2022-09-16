@@ -2,9 +2,9 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/index.jsx",
+  entry: "./renderer/index.tsx",
   output: {
-    path: path.join(__dirname, "build", "dist"),
+    path: path.join(__dirname, "public", "js"),
     publicPath: "/",
     filename: "bundle.js",
   },
@@ -14,35 +14,40 @@ module.exports = {
       directory: path.join(__dirname, "public"),
     },
     devMiddleware: {
-      publicPath: "/dist/",
+      publicPath: "/js/",
     },
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: ["babel-loader"],
+        loader: "ts-loader",
+        options: {
+          configFile: "tsconfig.json",
+        },
       },
       {
         test: /\.scss$/,
         use: ["style-loader", "css-loader", "sass-loader"],
       },
-      { test: /\.css$/, use: ["style-loader", "css-loader"] },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   resolve: {
-    extensions: [".js", ".jsx"],
-    alias: {
-      components: path.join(__dirname, "src/components"),
-      utils: path.join(__dirname, "src/utils"),
-      context: path.join(__dirname, "src/context"),
-      styles: path.join(__dirname, "src/styles"),
-    },
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     fallback: {
       stream: require.resolve("stream-browserify"),
       path: require.resolve("path-browserify"),
       buffer: require.resolve("buffer/"),
+    },
+    //repeating renderer.tsconfig.compilerOptions.paths
+    alias: {
+      "@": path.join(__dirname, "renderer"),
+      "@shared": path.join(__dirname, "shared"),
     },
   },
   plugins: [
