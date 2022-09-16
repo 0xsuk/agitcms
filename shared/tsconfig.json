@@ -2,8 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    },
-    "allowJs": true
-  } ,
+    "module": "CommonJS",
+    "allowJs": true,
+    "composite": true
+  },
   "references": []
 }

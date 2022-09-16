@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "target": "esnext",
+    "target": "es5",
     "sourceMap": true,
     "moduleResolution": "Node",
     "skipLibCheck": true,
     "strict": true,
-    "isolatedModules": true,
     "lib": ["ESNext"]
   }
 }

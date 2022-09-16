@@ -1,3 +1,3 @@
-const { a } = require("../dist/main");
+const { startServer } = require("../dist/main");
 
-a("myconfig");
+//startServer();

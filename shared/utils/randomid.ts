@@ -1,1 +1,3 @@
-export const randomid = () => "asdf";
+export const randomid = () => {
+  return Date.now().toString();
+};

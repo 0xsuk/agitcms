@@ -5,6 +5,7 @@ import SiteContext from "@/context/SiteContext";
 import * as ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 import App from "./App";
+import { readConfig } from "./utils/httpClient";
 
 const theme = createTheme({
   palette: {
@@ -30,6 +31,7 @@ const theme = createTheme({
 (async function () {
   //@ts-ignore
   //const { config } = await window.electronAPI.readConfig();
+  readConfig();
   const config = { sites: [], useTerminal: false, autosave: "always" };
   if (!config) throw Error("No config found!");
 

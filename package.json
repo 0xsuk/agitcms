@@ -2,18 +2,14 @@
   "name": "agitcms",
   "version": "2.0.0",
   "description": "A headless CMS for markdown blogs",
-  "main": "electron/electron.js",
+  "bin": "cli/index.js",
   "scripts": {
-    "start": "node cli/index.js",
-    "dev": "concurrently \"webpack-dev-server --mode development\" \"wait-on http://localhost:3000 && nodemon --exec ts-node server/main.ts\"",
-    "postinstall": "electron-builder install-app-deps",
-    "lint": "eslint src electron --ext js,jsx",
-    "build:renderer": "webpack",
-    "build:server": "cd server && tsc --build",
-    "pack:w": "@powershell if (Test-Path build) {Remove-Item -Recurse build} && @powershell Copy-Item -Recurse public build && yarn run build:renderer && @powershell Copy-Item -Recurse electron build/electron && electron-builder -w -c.extraMetadata.main=build/electron/electron.js",
-    "pack:m": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && electron-builder -m -c.extraMetadata.main=build/electron/electron.js",
-    "pack:l": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && electron-builder -l -c.extraMetadata.main=build/electron/electron.js",
-    "build:l": "rm -rf build && cp -r public build && yarn run build:renderer && cp -r electron build/electron && electron-builder -l -c.extraMetadata.main=build/electron/electron.js --dir"
+    "renderer": "webpack-dev-server --mode development --config webpack.renderer.js",
+    "server": "cd server && ts-node-dev -r tsconfig-paths/register index.ts",
+    "dev": "concurrently \"yarn run renderer\" \"wait-on http://localhost:3000 &&  yarn run server\"",
+    "lint": "eslint renderer --ext ts,tsx",
+    "build:renderer": "webpack --config webpack.renderer.js",
+    "build:server": "webpack --config webpack.server.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +20,8 @@
     "Hugo",
     "Jekyll",
     "Static Sites Generator",
-    "Markdown"
+    "Markdown",
+    "CodeMirror"
   ],
   "author": "0xsuk <iam0xsuk@gmail.com>",
   "license": "MIT",
@@ -49,9 +46,11 @@
     "@mui/material": "^5.8.2",
     "buffer": "^6.0.3",
     "codemirror": "^6.0.1",
+    "cors": "^2.8.5",
     "css-loader": "^6.7.1",
     "custom-electron-titlebar": "^4.1.0",
     "electron-is-dev": "^2.0.0",
+    "express": "^4.18.1",
     "github-markdown-css": "^5.1.0",
     "gray-matter": "^4.0.3",
     "node-abi": "^3.22.0",
@@ -78,58 +77,23 @@
     "xterm-addon-web-links": "^0.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.0",
-    "@babel/preset-env": "^7.18.0",
-    "@babel/preset-react": "^7.17.12",
+    "@types/cors": "^2.8.12",
     "@types/react": "^18.0.20",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",
-    "babel-loader": "^8.2.5",
     "concurrently": "^7.2.0",
-    "electron": "^17.4.7",
-    "electron-builder": "^21.2.0",
     "eslint": "^8.22.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
-    "nodemon": "^2.0.19",
     "ts-loader": "^9.3.1",
     "ts-node": "^10.9.1",
-    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.1.0",
     "typescript": "^4.8.3",
     "wait-on": "^6.0.1",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.0"
-  },
-  "build": {
-    "appId": "com.0xsuk.agitcms",
-    "artifactName": "agitcms_${os}_${arch}.${ext}",
-    "files": [
-      "build/**/*",
-      "package.json"
-    ],
-    "win": {
-      "target": {
-        "target": "nsis",
-        "arch": "x64"
-      }
-    },
-    "linux": {
-      "target": [
-        {
-          "target": "deb"
-        },
-        {
-          "target": "snap"
-        },
-        {
-          "target": "AppImage"
-        }
-      ]
-    }
-  },
-  "resolutions": {
-    "node-abi": "^3.22.0"
   }
 }
