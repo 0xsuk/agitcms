@@ -8,23 +8,25 @@ interface IProcessObj {
 
 let processList: IProcessObj[] = []; //this module has to be singleton
 
-export const spawn = (cwd: string | undefined, shell: string) => {
+export const spawnShell = (
+  cwd: string | undefined,
+  shell: string, //TODO zsh not working
+  onData: (id: string, data: string) => any,
+  onExit: (id: string) => any
+) => {
   const id = randomid();
-  const ptyProcess = pty.spawn(shell, [], {
+  const ptyProcess = pty.spawn("bash", [], {
     name: "xterm-color",
     cwd, //undefined OK
     env: process.env as { [key: string]: string },
   });
 
   ptyProcess.onData((data) => {
-    let win: any; //TODO
-    win.webContents.send("shell-data", id, data);
+    onData(id, data);
   });
   ptyProcess.onExit(() => {
-    //TODO
-    //const win = getWindow();
-    //win.webContents.send("shell-exit", id, exitCode, signal);
-    //processList = processList.filter((obj) => obj.id !== id);
+    onExit(id);
+    processList = processList.filter((processObj) => processObj.id !== id);
   });
 
   processList.push({ ptyProcess, id });
@@ -32,7 +34,7 @@ export const spawn = (cwd: string | undefined, shell: string) => {
   return id;
 };
 
-export const write = (id: string | undefined, cmd: string) => {
+export const writeToShell = (id: string | undefined, cmd: string) => {
   if (id === undefined) return;
   let processObj: IProcessObj | undefined;
   processList.some((obj) => {
