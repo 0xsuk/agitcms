@@ -4,6 +4,7 @@ import { FitAddon } from "xterm-addon-fit";
 import { WebLinksAddon } from "@/utils/xterm-addon-web-links.js";
 //import { WebLinksAddon } from "xterm-addon-web-links"; //This can't open link
 import "xterm/css/xterm.css";
+import { socketClient } from "./socketClient";
 
 //@ts-ignore
 window.xterm = {};
@@ -21,7 +22,7 @@ function useTerminalManager(
     if (!parentRef.current) return;
     window.addEventListener("keydown", toggleListener);
     //@ts-ignore
-    window.electronAPI.onShellData((_, id, data) => {
+    socketClient.onShellData((id, data) => {
       terminals.current.every((t) => {
         if (t.id === id) {
           t.xterm.write(data);
@@ -30,8 +31,8 @@ function useTerminalManager(
         return true;
       });
     });
-    //@ts-ignore
-    window.electronAPI.onShellExit((_, id) => {
+
+    socketClient.onShellExit((id) => {
       terminals.current.every((t, i) => {
         if (t.id === id) {
           t.xterm.dispose();
@@ -103,16 +104,16 @@ function useTerminalManager(
         setIsVisible(false);
         return;
       }
-      //@ts-ignore
-      window.electronAPI.typeCommand(cid, data);
+      socketClient.typeCommand({ cid: cid as string, data });
     });
-    //@ts-ignore
-    window.electronAPI.spawnShell(cwdRef.current, undefined).then((id) => {
-      cid = id; //!important
-      el.dataset.id = id;
-      terminals.current.push({ id, xterm, el });
-      setCid(id);
-    });
+    socketClient
+      .spawnShell({ cwd: cwdRef.current, shell: undefined })
+      .then((id) => {
+        cid = id; //!important
+        el.dataset.id = id;
+        terminals.current.push({ id, xterm, el });
+        setCid(id);
+      });
   };
 
   return {

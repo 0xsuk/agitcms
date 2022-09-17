@@ -1,32 +1,23 @@
-import { randomid } from "@shared/utils/randomid";
+import { IEvent } from "@shared/types/api";
 import * as express from "express";
-import { Action, IPostData } from "@shared/types/api";
 import * as cors from "cors";
+import * as http from "http";
+import handlers from "requestHandlers";
+import { Server, Socket } from "socket.io";
 const app = express();
-
-app.use(
-  cors({
-    origin: "*",
-  })
-);
-app.use(express.json());
-
-app.post("/", (req, res) => {
-  const postData = req.body as IPostData;
-
-  console.log(Action.readConfig);
-  switch (postData.action) {
-    case Action.readConfig:
-      console.log("read config!:", postData.payload);
-  }
-
-  res.send("Hi");
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } }); //passed to cors
+io.on("connection", (socket: Socket) => {
+  const actions = Object.keys(handlers) as IEvent[];
+  actions.forEach((action) => {
+    socket.on(action, handlers[action]);
+  });
 });
+app.use(express.json());
+app.use(cors());
 
 export function startServer(port: number) {
-  console.log(randomid());
-
-  app.listen(port, () => {
+  server.listen(port, () => {
     console.log("Listening on port:", port);
   });
 }

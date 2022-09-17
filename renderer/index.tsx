@@ -1,12 +1,11 @@
-import { ThemeProvider } from "@emotion/react";
-import createTheme from "@mui/material/styles/createTheme";
 import ConfigContext from "@/context/ConfigContext";
 import SiteContext from "@/context/SiteContext";
+import { ThemeProvider } from "@emotion/react";
+import createTheme from "@mui/material/styles/createTheme";
 import * as ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 import App from "./App";
-import { readConfig } from "./utils/httpClient";
-
+import { socketClient } from "./utils/socketClient";
 const theme = createTheme({
   palette: {
     mode: "dark",
@@ -29,10 +28,8 @@ const theme = createTheme({
 });
 
 (async function () {
-  //@ts-ignore
-  //const { config } = await window.electronAPI.readConfig();
-  readConfig();
-  const config = { sites: [], useTerminal: false, autosave: "always" };
+  const config = await socketClient.readConfig();
+  console.log({ config });
   if (!config) throw Error("No config found!");
 
   ReactDOM.render(
