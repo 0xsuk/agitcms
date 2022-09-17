@@ -6,8 +6,6 @@ import { WebLinksAddon } from "@/utils/xterm-addon-web-links.js";
 import "xterm/css/xterm.css";
 import { socketClient } from "./socketClient";
 
-//@ts-ignore
-window.xterm = {};
 function useTerminalManager(
   cwd: string | undefined,
   parentRef: RefObject<HTMLDivElement>
@@ -16,18 +14,19 @@ function useTerminalManager(
   cwdRef.current = cwd;
   const [isVisible, setIsVisible] = useState(false);
   const [cid, setCid] = useState<string | null>(null); //current id of terminal
-  const terminals = useRef<{ xterm: any; id: string; el: HTMLElement }[]>([]); //{xterm, id, el}
+  const terminals = useRef<{ xterm: Xterm; id: string; el: HTMLElement }[]>([]); //{xterm, id, el}
 
   useEffect(() => {
     if (!parentRef.current) return;
     window.addEventListener("keydown", toggleListener);
     socketClient.onShellData((id, data) => {
-      terminals.current.every((t) => {
+      console.log("write", { data });
+      terminals.current.some((t) => {
         if (t.id === id) {
-          t.xterm.write(data);
-          return false;
+          t.xterm.write(data); //TODO: This is not working
+          return true;
         }
-        return true;
+        return false;
       });
     });
 
@@ -103,6 +102,7 @@ function useTerminalManager(
         setIsVisible(false);
         return;
       }
+
       socketClient.typeCommand({ cid: cid as string, data });
     });
     socketClient

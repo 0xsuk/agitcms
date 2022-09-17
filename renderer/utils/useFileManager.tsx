@@ -6,6 +6,7 @@ import {
   parseContent,
   updateFrontmatterJson,
 } from "./frontmatterInterface";
+import { socketClient } from "./socketClient";
 import useSiteConfig from "./useSiteConfig";
 
 export interface IFile {
@@ -25,7 +26,7 @@ export interface IFileManager {
   updateFrontmatter: (name: string, value: any, parentNames?: string[]) => void;
   setDoc: (doc: string) => void;
   readFile: () => Promise<void | Error>;
-  saveFile: () => Promise<Error>;
+  saveFile: () => Promise<null | Error>;
 }
 
 //useCodeMirror depends on useFileBuffer's updateDoc
@@ -88,12 +89,7 @@ function useFileManager(filePath: string): IFileManager {
   };
 
   const readFile = async (): Promise<void | Error> => {
-    const { content, err }: { content: string; err: Error } =
-      //@ts-ignore
-      await window.electronAPI.readFile(filePath);
-    if (err) {
-      return err;
-    }
+    const content = await socketClient.readFile(filePath);
     const { doc, frontmatter } = parseContent(siteConfig, content);
     const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
     setFile((prev) => ({
@@ -109,11 +105,15 @@ function useFileManager(filePath: string): IFileManager {
 
   const saveFile = async () => {
     if (!file.isRead || !file.isModified) {
-      return;
+      return null;
     }
-    //@ts-ignore
-    const { err } = await window.electronAPI.saveFile(filePath, file.content);
-    if (!err) console.log("saved", file);
+    const err = await socketClient.saveFile({
+      filePath,
+      content: file.content,
+    });
+    if (!err) {
+      console.log("saved", file);
+    }
     return err;
   };
 

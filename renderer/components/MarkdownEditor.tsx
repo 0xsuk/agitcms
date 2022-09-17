@@ -6,6 +6,7 @@ import {
   createElement,
   Fragment,
   MutableRefObject,
+  ReactNode,
   useContext,
   useMemo,
   useRef,
@@ -25,7 +26,7 @@ let treeData: any;
 const captureTreePlugin = () => (tree: any) => {
   treeData = tree; //treeData length corresponds to editor-previewer's childNodes length
 };
-const mediaPlugin = (port: number) => () => (tree: any) => {
+const mediaPlugin: any = (port: number) => () => (tree: any) => {
   if (port === undefined) return;
   tree.children = tree.children.map((child: any) => {
     if (
@@ -169,7 +170,6 @@ function MarkdownEditor({ fileManager }: { fileManager: IFileManager }) {
 
   //TODO: takes 140 ms for 1000 lines of document
   const md = useMemo(() => {
-    console.time("test");
     const res = unified()
       .use(remarkParse)
       .use(remarkGfm)
@@ -178,10 +178,9 @@ function MarkdownEditor({ fileManager }: { fileManager: IFileManager }) {
       .use(rehypeMathJaxSvg)
       .use(rehypeReact, { createElement, Fragment })
       .use(captureTreePlugin)
-      //.use(mediaPlugin(state.media.port))
+      .use(mediaPlugin(state.media.port))
       .processSync(fileManager.file.doc).result;
-    console.timeEnd("test");
-    return res;
+    return res as ReactNode;
   }, [state.media.port, fileManager.file.doc]);
 
   return (
@@ -201,7 +200,9 @@ function MarkdownEditor({ fileManager }: { fileManager: IFileManager }) {
           onScroll={() => handlePreviewScroll(mouseIsOn, editorView)}
           onMouseEnter={() => (mouseIsOn.current = "preview")}
           onMouseOver={() => (mouseIsOn.current = "preview")}
-        ></div>
+        >
+          {md}
+        </div>
       </div>
     </>
   );

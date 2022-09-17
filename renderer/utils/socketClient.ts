@@ -41,12 +41,34 @@ export const socketClient:
     } & {
       [key in keyof IListenerMap]: (input: IListenerMap[key]) => Promise<void>;
     } = {
-  readConfig: () => emitSocket<IConfig>("readConfig"),
-  typeCommand: ({ cid, data }) => emitSocket("typeCommand", { cid, data }),
-  spawnShell: ({ cwd, shell }) => emitSocket("spawnShell", { cwd, shell }),
-  onShellData: (callback) => listenSocket("onShellData", callback),
-  onShellExit: (callback) => listenSocket("onShellExit", callback),
+  readConfig() {
+    return emitSocket<IConfig>("readConfig");
+  },
+  readFile(filePath) {
+    return emitSocket("readFile", filePath);
+  },
+  saveFile(input) {
+    return emitSocket("saveFile", input);
+  },
+  getFilesAndFolders(folderPath) {
+    return emitSocket("getFilesAndFolders", folderPath);
+  },
+  loadPlugins() {
+    return emitSocket("loadPlugins");
+  },
+  typeCommand(input) {
+    return emitSocket("typeCommand", input);
+  },
+  spawnShell(input) {
+    return emitSocket("spawnShell", input);
+  },
+  startMediaServer(input) {
+    return emitSocket("startMediaServer", input);
+  },
+  onShellData(callback) {
+    return listenSocket("onShellData", callback);
+  },
+  onShellExit(callback) {
+    return listenSocket("onShellExit", callback);
+  },
 };
-
-//@ts-ignore
-window.onShellData = socketClient.onShellData;

@@ -7,6 +7,7 @@ import {
 import { IFrontmatterConfig, ISiteConfig } from "@shared/types/config";
 import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { socketClient } from "./socketClient";
 
 function useSiteConfigBuffer(initialSiteConfig: ISiteConfig) {
   const [siteConfig, setSiteConfig] = useState(
@@ -23,14 +24,11 @@ function useSiteConfigBuffer(initialSiteConfig: ISiteConfig) {
   };
 
   const editMediaStaticPath = async () => {
-    const { folderPath, err, canceled } =
-      //@ts-ignore
-      await window.electronAPI.getFolderPath(siteConfig.path);
-    if (err) {
-      alert(err);
-      return;
-    }
-    if (!err && !canceled) {
+    //@ts-ignore
+    const { folderPath, canceled } = await socketClient.getFolderPath(
+      siteConfig.path
+    );
+    if (!canceled) {
       siteConfig.media.staticPath = folderPath;
       setSiteConfig({ ...siteConfig });
     }

@@ -1,6 +1,7 @@
 import { ISiteConfig } from "@shared/types/config";
 import { createContext, useState } from "react";
-import { ToolbarItem, TransactionFilter } from "@/utils/plugin";
+import { Plugin, ToolbarItem, TransactionFilter } from "@/utils/plugin";
+import { socketClient } from "@/utils/socketClient";
 
 export interface IState {
   media: {
@@ -34,20 +35,14 @@ const SiteContext = ({ children }: Props) => {
 
   const initState = async (siteConfig: ISiteConfig) => {
     async function initPlugins() {
-      //@ts-ignore //TODO
-      const res = await window.electronAPI.loadPlugins();
-      if (res.err) {
-        alert(res.err);
-        return;
-      }
+      const pluginInfos = await socketClient.loadPlugins();
       //@ts-ignore
       window.ToolbarItem = ToolbarItem;
       //@ts-ignore
       window.TransactionFilter = TransactionFilter;
-      const plugins: any[] = [];
-      res.plugins.forEach((plugin: any) => {
-        plugins.push(eval(plugin.raw));
-      });
+      const plugins = pluginInfos.map(
+        (pluginInfo) => eval(pluginInfo.raw) as ToolbarItem | TransactionFilter
+      );
 
       const activePlugins = plugins.filter((plugin) => {
         if (plugin.isActive === true) return true;
@@ -59,16 +54,12 @@ const SiteContext = ({ children }: Props) => {
       state.plugins = activePlugins;
     }
     async function initMediaPort() {
-      if (siteConfig.media.staticPath === "") return;
-      //@ts-ignore TODO
-      const port = await window.electronAPI.startMediaServer(
-        siteConfig.media.staticPath,
-        siteConfig.media.publicPath
-      );
-      if (port === undefined) {
-        alert("Error occured setting media port");
-        return;
-      }
+      if (!siteConfig.media.staticPath) return;
+
+      const port = await socketClient.startMediaServer({
+        staticPath: siteConfig.media.staticPath,
+        publicPath: siteConfig.media.publicPath || "/",
+      });
       state.media.port = port;
     }
 

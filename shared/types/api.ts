@@ -7,6 +7,13 @@ type InputResMap<Input, Res> = {
 
 export interface IEmitterMap {
   readConfig: InputResMap<void, IConfig>;
+  readFile: InputResMap<string, string>;
+  saveFile: InputResMap<{ filePath: string; content: string }, Error | null>;
+  getFilesAndFolders: InputResMap<
+    string,
+    { name: string; isDir: boolean; extension: string }[]
+  >;
+  loadPlugins: InputResMap<void, { name: string; path: string; raw: string }[]>;
   typeCommand: InputResMap<{ cid: string; data: string }, void>;
   spawnShell: InputResMap<
     {
@@ -14,6 +21,10 @@ export interface IEmitterMap {
       shell: string | undefined;
     },
     string
+  >;
+  startMediaServer: InputResMap<
+    { staticPath: string; publicPath: string },
+    number
   >;
 }
 

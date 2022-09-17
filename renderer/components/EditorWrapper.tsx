@@ -34,12 +34,7 @@ function EditorWrapper() {
   }
 
   if (fileManager.file.isRead && config.autosave === "always") {
-    fileManager.saveFile().then((err) => {
-      if (err) {
-        alert(err);
-        return;
-      }
-    });
+    fileManager.saveFile().then((err) => err && alert(err));
   }
 
   return (

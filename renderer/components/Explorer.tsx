@@ -7,6 +7,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import useSiteConfig from "@/utils/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
 import TextDialog from "./TextDialog";
+import { socketClient } from "@/utils/socketClient";
 
 function Explorer() {
   const [filesAndFolders, setFilesAndFolders] = useState<
@@ -27,13 +28,7 @@ function Explorer() {
   }, [cwdf]); //eslint-disable-line
 
   const loadFilesAndFolders = async () => {
-    const { err, filesAndFolders } =
-      //@ts-ignore
-      await window.electronAPI.getFilesAndFolders(cwdf);
-    if (err !== null) {
-      alert(err);
-      return;
-    }
+    const filesAndFolders = await socketClient.getFilesAndFolders(cwdf);
     setFilesAndFolders(filesAndFolders);
   };
 
