@@ -1,25 +1,28 @@
 import { IConfig } from "./config";
 
-type DataResMap<Data, Res> = {
-  data: Data;
+type InputResMap<Input, Res> = {
+  input: Input;
   res: Res;
 };
 
-export interface IEventMap {
-  readConfig: DataResMap<void, IConfig>;
-  typeCommand: DataResMap<{ cid: string; data: string }, void>;
-  spawnShell: DataResMap<
+export interface IEmitterMap {
+  readConfig: InputResMap<void, IConfig>;
+  typeCommand: InputResMap<{ cid: string; data: string }, void>;
+  spawnShell: InputResMap<
     {
       cwd: string | undefined;
       shell: string | undefined;
     },
     string
   >;
-  onShellData: DataResMap<(id: string, data: string) => void, void>;
-  onShellExit: DataResMap<(id: string) => void, void>;
 }
 
-export type IEvent = keyof IEventMap;
+export interface IListenerMap {
+  onShellData: (id: string, data: string) => void;
+  onShellExit: (id: string) => void;
+}
+
+export type IEvent = keyof IEmitterMap | keyof IListenerMap;
 
 export type ISocketEventMap = {
   [key in IEvent]: any;

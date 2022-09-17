@@ -1,4 +1,9 @@
-import { IEvent, IEventMap, ISocketEventMap } from "@shared/types/api";
+import {
+  IEmitterMap,
+  IEvent,
+  IListenerMap,
+  ISocketEventMap,
+} from "@shared/types/api";
 import { IConfig } from "@shared/types/config";
 const endpoint = "http://localhost:5000";
 
@@ -23,14 +28,25 @@ const emitSocket = async <Response = any>(eventName: IEvent, data?: any) => {
   });
 };
 
-export const socketClient: {
-  [key in IEvent]: (
-    data: IEventMap[key]["data"]
-  ) => Promise<IEventMap[key]["res"]>;
-} = {
+const listenSocket = async (eventName: IEvent, callback: any) => {
+  await connected;
+  socket.emit(eventName, undefined, callback); //does not send any data
+};
+
+export const socketClient:
+  | {
+      [key in keyof IEmitterMap]: (
+        input: IEmitterMap[key]["input"]
+      ) => Promise<IEmitterMap[key]["res"]>;
+    } & {
+      [key in keyof IListenerMap]: (input: IListenerMap[key]) => Promise<void>;
+    } = {
   readConfig: () => emitSocket<IConfig>("readConfig"),
   typeCommand: ({ cid, data }) => emitSocket("typeCommand", { cid, data }),
   spawnShell: ({ cwd, shell }) => emitSocket("spawnShell", { cwd, shell }),
-  onShellData: (callback) => emitSocket("onShellData", callback),
-  onShellExit: (callback) => emitSocket("onShellExit", callback),
+  onShellData: (callback) => listenSocket("onShellData", callback),
+  onShellExit: (callback) => listenSocket("onShellExit", callback),
 };
+
+//@ts-ignore
+window.onShellData = socketClient.onShellData;

@@ -21,7 +21,6 @@ function useTerminalManager(
   useEffect(() => {
     if (!parentRef.current) return;
     window.addEventListener("keydown", toggleListener);
-    //@ts-ignore
     socketClient.onShellData((id, data) => {
       terminals.current.every((t) => {
         if (t.id === id) {
