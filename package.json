@@ -7,7 +7,7 @@
     "renderer": "webpack-dev-server --mode development --config webpack.renderer.js",
     "server": "cd server && nodemon -e ts --exec 'ts-node -r tsconfig-paths/register index.ts'",
     "dev": "concurrently \"yarn run renderer\" \"wait-on http://localhost:3000 &&  yarn run server\"",
-    "lint": "eslint renderer server",
+    "lint": "eslint renderer server shared",
     "build:renderer": "webpack --config webpack.renderer.js",
     "build:server": "webpack --config webpack.server.js"
   },
