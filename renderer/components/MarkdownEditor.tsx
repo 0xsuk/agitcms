@@ -106,7 +106,7 @@ const handleMdScroll = (
   }
 
   if (scrollElemIndex >= 0) {
-    let ratio =
+    const ratio =
       (markdownElem.scrollTop -
         markdownChildNodesOffsetTopList[scrollElemIndex]) /
       (markdownChildNodesOffsetTopList[scrollElemIndex + 1] -
@@ -150,7 +150,7 @@ const handlePreviewScroll = (
     return;
   }
   if (scrollElemIndex >= 0) {
-    let ratio =
+    const ratio =
       (previewElem.scrollTop -
         previewChildNodesOffsetTopList[scrollElemIndex]) /
       (previewChildNodesOffsetTopList[scrollElemIndex + 1] -

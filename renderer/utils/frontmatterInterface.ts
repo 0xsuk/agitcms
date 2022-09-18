@@ -1,6 +1,7 @@
 import * as TOML from "@iarna/toml";
 import { IFrontmatterConfig, ISiteConfig } from "@shared/types/config";
 import * as matter from "gray-matter";
+import { IFile } from "./useFileManager";
 
 export const FrontmatterTypes = {
   Text: "Text",
@@ -42,7 +43,7 @@ export const updateFrontmatterConfig = (
     return metainfoList;
   }
   for (let i = 0; i < metainfoList.length; i++) {
-    let metainfo = metainfoList[i];
+    const metainfo = metainfoList[i];
     if (metainfo.key === parentKeys[level]) {
       const newChildMetainfoList = updateFrontmatterConfig(
         metainfo.default,
@@ -76,7 +77,7 @@ export const removeFrontmatterConfig = (
     return metainfoList;
   }
   for (let i = 0; i < metainfoList.length; i++) {
-    let metainfo = metainfoList[i];
+    const metainfo = metainfoList[i];
     if (metainfo.key === parentKeys[level]) {
       const newChildMetainfoList = removeFrontmatterConfig(
         metainfo.default,
@@ -106,7 +107,7 @@ export const reorderFrontmatterConfig = (
     return metainfoList;
   }
   for (let i = 0; i < metainfoList.length; i++) {
-    let metainfo = metainfoList[i];
+    const metainfo = metainfoList[i];
     if (metainfo.key === parentKeys[level]) {
       const newChildMetainfoList = reorderFrontmatterConfig(
         metainfo.default,
@@ -162,9 +163,9 @@ export interface IFrontmatterNode {
 
 export const generateFrontmatterTree = (
   siteConfig: ISiteConfig,
-  frontmatter: any
+  frontmatter: IFile["frontmatter"]
 ) => {
-  let rootNode: IFrontmatterNode = {
+  const rootNode: IFrontmatterNode = {
     name: "",
     key: "",
     value: "",
@@ -175,7 +176,7 @@ export const generateFrontmatterTree = (
     isFound: true,
   };
   const crawl = (
-    frontmatter: any,
+    frontmatter: IFile["frontmatter"],
     metainfoList: IFrontmatterConfig[] | undefined,
     parentNode: IFrontmatterNode
   ) => {
@@ -213,8 +214,12 @@ export const generateFrontmatterTree = (
             const childMetainfoList = metainfo.children as
               | IFrontmatterConfig[]
               | undefined;
-            const childFrontmatter = node.value;
-            crawl(childFrontmatter, childMetainfoList, node);
+            const childFrontmatter = node.value; //TODO don't know what I'm doing:)
+            crawl(
+              childFrontmatter as IFile["frontmatter"],
+              childMetainfoList,
+              node
+            );
             parentNode.children.push(node);
             break;
           }
@@ -236,7 +241,7 @@ export const generateFrontmatterTree = (
       node.children = [];
       const childMetainfoList = undefined;
       const childFrontmatter = node.value;
-      crawl(childFrontmatter, childMetainfoList, node);
+      crawl(childFrontmatter as IFile["frontmatter"], childMetainfoList, node);
 
       parentNode.children.push(node);
     }
@@ -248,7 +253,7 @@ export const generateFrontmatterTree = (
 };
 
 function toIsoString(date: Date) {
-  var tzo = -date.getTimezoneOffset(),
+  const tzo = -date.getTimezoneOffset(),
     dif = tzo >= 0 ? "+" : "-",
     pad = function (num: string | number) {
       return (num < 10 ? "0" : "") + num;
@@ -275,11 +280,9 @@ function toIsoString(date: Date) {
 
 export const fillFrontmatterJson = (metainfoList: IFrontmatterConfig[]) => {
   const fill = (metainfoList: IFrontmatterConfig[]) => {
-    let frontmatter: {
-      [key: string]: any;
-    } = {};
+    const frontmatter: IFile["frontmatter"] = {};
     for (let i = 0; i < metainfoList.length; i++) {
-      let metainfo = metainfoList[i];
+      const metainfo = metainfoList[i];
       if (metainfo.type !== FrontmatterTypes.Nest) {
         let value = metainfo.default;
         if (
@@ -304,7 +307,7 @@ export const fillFrontmatterJson = (metainfoList: IFrontmatterConfig[]) => {
 };
 
 export const updateFrontmatterJson = (
-  frontmatter: any,
+  frontmatter: IFile["frontmatter"],
   value: any,
   name: string,
   parentNames: string[] | undefined,
@@ -343,7 +346,7 @@ const genMatterOption = (siteConfig: ISiteConfig) => {
 export const genContent = (
   siteConfig: ISiteConfig,
   doc: string,
-  frontmatter: any
+  frontmatter: IFile["frontmatter"]
 ) => {
   let content = matter.stringify(doc, frontmatter, genMatterOption(siteConfig));
   if (doc[doc.length - 1] !== "\n")

@@ -11,7 +11,7 @@ export const runMediaServer = (staticPath: string, publicPath: string) => {
       publicPath,
       parsedUrl.pathname as string
     ); //EXAMPLE publicPath: /uploads, pathname: /uploads/img.png, sanitizedPath: /img.png
-    let pathname = path.join(staticPath, sanitizedPath); //pathname: /staticpath/img.png
+    const pathname = path.join(staticPath, sanitizedPath); //pathname: /staticpath/img.png
 
     if (!fs.existsSync(pathname)) {
       res.statusCode = 404;

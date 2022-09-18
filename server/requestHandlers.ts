@@ -2,11 +2,12 @@ import { IEmitterMap, IListenerMap } from "@shared/types/api";
 import { IConfig } from "@shared/types/config";
 import * as fs from "fs";
 import * as path from "path";
+import * as os from "os";
 import { defaultShell } from "@/utils/constants";
 import { spawnShell, writeToShell } from "@/utils/shellProcess";
 import { runMediaServer } from "./utils/mediaServer";
 
-const CONFIG_DIR = path.join(require("os").homedir(), ".agitcms");
+const CONFIG_DIR = path.join(os.homedir(), ".agitcms");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
 let onShellDataCallback: IListenerMap["onShellData"];
@@ -226,11 +227,11 @@ const handlers:
       }
     }
   },
-  //should be called once
+  //TODO: should be called once, but is called multiple times when user opens Agit CMS in multiple tabs
   onShellData(_, callback) {
     onShellDataCallback = callback;
   },
-  //should be called once
+  //TODO should be called once
   onShellExit(_, callback) {
     onShellExitCallback = callback; //register action to perform when a shell exits
   },

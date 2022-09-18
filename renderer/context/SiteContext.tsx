@@ -1,6 +1,6 @@
 import { ISiteConfig } from "@shared/types/config";
 import { createContext, useState } from "react";
-import { Plugin, ToolbarItem, TransactionFilter } from "@/utils/plugin";
+import { ToolbarItem, TransactionFilter } from "@/utils/plugin";
 import { socketClient } from "@/utils/socketClient";
 
 export interface IState {

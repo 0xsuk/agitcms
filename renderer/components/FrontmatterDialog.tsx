@@ -192,7 +192,7 @@ function TextMatter({
               variant="filled"
               label="optional"
               onChange={(e) => {
-                let value = e.target.value;
+                const value = e.target.value;
                 if (value == "") {
                   setDefault(null);
                   return;
@@ -254,7 +254,7 @@ const MultilineTextMatter = ({
               variant="filled"
               label="optional"
               onChange={(e) => {
-                let value = e.target.value;
+                const value = e.target.value;
                 if (value == "") {
                   setDefault(null);
                   return;
@@ -416,7 +416,7 @@ function FrontmatterDialog({
 }: Props) {
   const initialType = metainfo ? metainfo.type : null;
   const [type, setType] = useState(initialType);
-  let key = metainfo ? metainfo.key : randomid();
+  const key = metainfo ? metainfo.key : randomid();
   //save key, default
   const handleClose = () => {
     onClose();

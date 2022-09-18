@@ -1,9 +1,6 @@
-import {configContext} from "@/context/ConfigContext";
-import {
-  Divider,
-  Grid, Switch, Typography
-} from "@mui/material";
-import {useContext} from "react";
+import { configContext } from "@/context/ConfigContext";
+import { Divider, Grid, Switch, Typography } from "@mui/material";
+import { useContext } from "react";
 
 export const helpLinks = {};
 

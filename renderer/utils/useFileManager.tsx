@@ -13,7 +13,7 @@ export interface IFile {
   name: string;
   path: string;
   content: string;
-  frontmatter: {};
+  frontmatter: { [key: string]: any };
   doc: string;
   isRead: boolean;
   isModified: boolean;
@@ -47,6 +47,8 @@ function useFileManager(filePath: string): IFileManager {
   };
   const [file, setFile] = useState(initialState);
   const siteConfig = useSiteConfig() as ISiteConfig;
+
+  console.log(file);
 
   useEffect(() => {
     //prevent first rerender

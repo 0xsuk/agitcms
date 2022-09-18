@@ -62,7 +62,7 @@ const arrayOfTextEditor = ({
           endAdornment: (
             <Button
               onClick={() => {
-                let ref = document.getElementById(
+                const ref = document.getElementById(
                   "agit-" + node.name + "-input"
                 ) as HTMLInputElement;
                 if (!value) {
