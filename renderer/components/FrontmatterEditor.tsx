@@ -112,8 +112,8 @@ const dateEditor = ({ node, parentNames, updateFrontmatter }: EditorProps) => (
     <MobileDateTimePicker
       label={FrontmatterTypes.Date}
       value={node.value}
-      renderInput={(props) => <TextField {...props} />}
-      onChange={(newValue) =>
+      renderInput={(props: any) => <TextField {...props} />}
+      onChange={(newValue: any) =>
         updateFrontmatter(node.name, newValue, parentNames)
       }
       ampm={false}
