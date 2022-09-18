@@ -227,8 +227,6 @@ function SiteSettings() {
   const isDirty =
     JSON.stringify(initialSiteConfig) !== JSON.stringify(siteConfig);
 
-  console.log(isDirty, initialSiteConfig, siteConfig);
-
   if (isDirty) {
     saveSiteConfig();
   }

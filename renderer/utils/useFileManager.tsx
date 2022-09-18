@@ -48,8 +48,6 @@ function useFileManager(filePath: string): IFileManager {
   const [file, setFile] = useState(initialState);
   const siteConfig = useSiteConfig() as ISiteConfig;
 
-  console.log(file);
-
   useEffect(() => {
     //prevent first rerender
     if (initialState !== file) {
@@ -118,7 +116,7 @@ function useFileManager(filePath: string): IFileManager {
       content: file.content,
     });
     if (!err) {
-      console.log("saved", file);
+      console.log("saved");
     }
     return err;
   };

@@ -20,7 +20,6 @@ interface Props {
 function NewSiteDialog({ open, onClose, addNewSite }: Props) {
   const [siteName, setSiteName] = useState("");
   const [sitePath, setSitePath] = useState("");
-  console.log(siteName, sitePath);
   const isValid = siteName !== "" && sitePath !== "";
 
   const handleClose = () => {
