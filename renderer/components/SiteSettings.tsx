@@ -138,10 +138,18 @@ function FrontmatterList({
                           />
                           <Menu
                             anchorEl={FrontmatterAnchorEl}
-                            open={
-                              (FrontmatterAnchorEl?.parentNode as HTMLElement)
-                                .dataset.key === metainfo.key
-                            }
+                            open={(() => {
+                              if (
+                                FrontmatterAnchorEl?.parentNode &&
+                                (FrontmatterAnchorEl.parentNode as any).dataset
+                              ) {
+                                return (
+                                  (FrontmatterAnchorEl.parentNode as any)
+                                    .dataset.key === metainfo.key
+                                );
+                              }
+                              return false;
+                            })()}
                             onClose={(e: any) => {
                               setFrontmatterAnchorEl(null);
                               e.stopPropagation();
@@ -444,10 +452,18 @@ function SiteSettings() {
                             />
                             <Menu
                               anchorEl={PinnedDirsAnchorEl}
-                              open={
-                                (PinnedDirsAnchorEl?.parentNode as HTMLElement)
-                                  .dataset.id === df.path
-                              }
+                              open={(() => {
+                                if (
+                                  PinnedDirsAnchorEl?.parentNode &&
+                                  (PinnedDirsAnchorEl.parentNode as any).dataset
+                                ) {
+                                  return (
+                                    (PinnedDirsAnchorEl?.parentNode as any)
+                                      .dataset.id === df.path
+                                  );
+                                }
+                                return false;
+                              })()}
                               onClose={(e: any) => {
                                 setPinnedDirsAnchorEl(null);
                                 e.stopPropagation();
