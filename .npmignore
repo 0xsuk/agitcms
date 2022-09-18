@@ -1,0 +1,7 @@
+/server
+/renderer
+/shared
+/tsconfig.json
+/webpack*
+!/public/**
+!/dist
