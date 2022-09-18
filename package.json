@@ -4,12 +4,13 @@
   "description": "A headless CMS for markdown blogs",
   "bin": "cli/index.js",
   "scripts": {
-    "renderer": "webpack-dev-server --mode development --config webpack.renderer.js",
+    "prepublish": "npm run build:renderer && npm run build:server",
+    "renderer": "webpack-dev-server --mode development --config webpack.renderer.js --port 3131",
     "server": "cd server && nodemon -e ts --exec 'ts-node -r tsconfig-paths/register index.ts'",
-    "dev": "concurrently \"yarn run renderer\" \"wait-on http://localhost:3000 &&  yarn run server\"",
+    "dev": "concurrently \"npm run renderer\" \"wait-on http://localhost:3131 && npm run server\"",
     "lint": "eslint renderer server shared",
-    "build:renderer": "webpack --config webpack.renderer.js",
-    "build:server": "webpack --config webpack.server.js"
+    "build:renderer": "webpack --config webpack.renderer.js --mode production",
+    "build:server": "webpack --config webpack.server.js --mode production"
   },
   "repository": {
     "type": "git",
@@ -69,7 +70,6 @@
     "socket.io-client": "^4.5.2",
     "stream-browserify": "^3.0.0",
     "style-loader": "^3.3.1",
-    "toml": "^3.0.0",
     "unified": "^10.1.2",
     "xterm": "^4.18.0",
     "xterm-addon-fit": "^0.5.0",
@@ -98,6 +98,7 @@
     "wait-on": "^6.0.1",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.0"
+    "webpack-dev-server": "^4.9.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }
