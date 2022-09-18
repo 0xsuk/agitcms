@@ -15,23 +15,25 @@ function useSiteConfigBuffer(initialSiteConfig: ISiteConfig) {
     //siteConfig reference to initialSiteConfig, so changing siteConfig also changes initialSiteConfig, which breaks isDirty
     //{...initialSiteConfig} does not copy properties' value
   );
+  const siteConfigCopy = JSON.parse(JSON.stringify(siteConfig)) as ISiteConfig; //whenever I operate on siteConfig, I should not modify siteConfig, because even updating to {...siteCofig} does not work, since it is not deep copy, but partly reference copy
+
   const { updateSiteConfig, deleteSiteConfig } = useContext(configContext);
   const history = useHistory();
 
   const editMediaPublicPath = (newValue: string) => {
-    siteConfig.media.publicPath = newValue;
-    setSiteConfig({ ...siteConfig });
+    siteConfigCopy.media.publicPath = newValue;
+    setSiteConfig(siteConfigCopy);
   };
 
   const editMediaStaticPath = async () => {
     //TODO
     //@ts-ignore can't getFolderPath in browser
     const { folderPath, canceled } = await socketClient.getFolderPath(
-      siteConfig.path
+      siteConfigCopy.path
     );
     if (!canceled) {
-      siteConfig.media.staticPath = folderPath;
-      setSiteConfig({ ...siteConfig });
+      siteConfigCopy.media.staticPath = folderPath;
+      setSiteConfig(siteConfigCopy);
     }
   };
 
@@ -52,50 +54,50 @@ function useSiteConfigBuffer(initialSiteConfig: ISiteConfig) {
     newChildMetainfo: IFrontmatterConfig,
     parentKeys: string[]
   ) => {
-    siteConfig.frontmatter = updateFrontmatterConfig(
-      siteConfig.frontmatter,
+    siteConfigCopy.frontmatter = updateFrontmatterConfig(
+      siteConfigCopy.frontmatter,
       parentKeys,
       newChildMetainfo
     );
-    setSiteConfig({ ...siteConfig });
+    setSiteConfig(siteConfigCopy);
   };
 
   const removeFrontmatter = (key: string, parentKeys: string[]) => {
-    siteConfig.frontmatter = removeFrontmatterConfig(
-      siteConfig.frontmatter,
+    siteConfigCopy.frontmatter = removeFrontmatterConfig(
+      siteConfigCopy.frontmatter,
       parentKeys,
       key
     );
-    setSiteConfig({ ...siteConfig });
+    setSiteConfig(siteConfigCopy);
   };
 
   const reorderFrontmatter = (result: any, parentKeys: string[]) => {
-    siteConfig.frontmatter = reorderFrontmatterConfig(
-      siteConfig.frontmatter,
+    siteConfigCopy.frontmatter = reorderFrontmatterConfig(
+      siteConfigCopy.frontmatter,
       result,
       parentKeys
     );
-    setSiteConfig({ ...siteConfig });
+    setSiteConfig(siteConfigCopy);
   };
 
   const removePinnedDir = (path: string, isDir: boolean) => {
-    const pinnedDirs = siteConfig.pinnedDirs.filter(
+    const pinnedDirs = siteConfigCopy.pinnedDirs.filter(
       (df) => df.path !== path || df.isDir !== isDir
     );
 
-    siteConfig.pinnedDirs = pinnedDirs;
-    setSiteConfig({ ...siteConfig });
+    siteConfigCopy.pinnedDirs = pinnedDirs;
+    setSiteConfig(siteConfigCopy);
   };
   const reorderPinnedDirs = (result: any) => {
-    const newPinnedDirs = Array.from(siteConfig.pinnedDirs);
+    const newPinnedDirs = Array.from(siteConfigCopy.pinnedDirs);
     const [removed] = newPinnedDirs.splice(result.source.index, 1);
     newPinnedDirs.splice(result.destination.index, 0, removed);
-    siteConfig.pinnedDirs = newPinnedDirs; //important (prevent lag)
-    setSiteConfig({ ...siteConfig });
+    siteConfigCopy.pinnedDirs = newPinnedDirs; //important (prevent lag)
+    setSiteConfig(siteConfigCopy);
   };
 
   const saveSiteConfig = () => {
-    updateSiteConfig({ ...siteConfig });
+    updateSiteConfig(siteConfigCopy);
     console.log("Saved!");
     // navigate(-1);
     return true;

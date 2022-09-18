@@ -211,10 +211,8 @@ export const generateFrontmatterTree = (
             //type is Nest
             //fill node.children
             node.children = [];
-            const childMetainfoList = metainfo.children as
-              | IFrontmatterConfig[]
-              | undefined;
-            const childFrontmatter = node.value; //TODO don't know what I'm doing:)
+            const childMetainfoList = undefined;
+            const childFrontmatter = node.value;
             crawl(
               childFrontmatter as IFile["frontmatter"],
               childMetainfoList,

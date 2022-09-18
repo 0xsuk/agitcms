@@ -3,7 +3,6 @@ export interface IFrontmatterConfig {
   key: string;
   type: string;
   default: any;
-  children?: IFrontmatterConfig[]; //TODO
   option?: any;
 }
 
