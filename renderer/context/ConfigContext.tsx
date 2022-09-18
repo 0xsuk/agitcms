@@ -1,5 +1,6 @@
 import { useState, createContext } from "react";
 import type { IConfig, ISiteConfig } from "@shared/types/config";
+import { socketClient } from "@/utils/socketClient";
 
 export interface IConfigContext {
   config: IConfig;
@@ -22,16 +23,18 @@ const ConfigContext = ({ initialConfig, children }: Props) => {
   const [config, setConfig] = useState<IConfig>(initialConfig);
 
   const readConfig = async () => {
-    //@ts-ignore: TODO
-    const { config: newConfig } = await window.electronAPI.readConfig();
+    const { config: newConfig, err } = await socketClient.readConfig();
+    if (err) {
+      alert(err);
+      return;
+    }
     setConfig({ ...newConfig });
   };
 
   const updateConfig = async (newConfig: IConfig) => {
-    //@ts-ignore: TODO
-    const err = await window.electronAPI.updateConfig(newConfig);
+    const err = await socketClient.updateConfig(newConfig);
     if (err) {
-      alert(err.message);
+      alert(err);
       return;
     }
     setConfig({ ...newConfig });
