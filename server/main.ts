@@ -2,8 +2,8 @@ import { IEvent } from "@shared/types/api";
 import * as express from "express";
 import * as cors from "cors";
 import * as http from "http";
-import handlers from "requestHandlers";
 import { Server, Socket } from "socket.io";
+import handlers from "./requestHandlers";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } }); //passed to cors
