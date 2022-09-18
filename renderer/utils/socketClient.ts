@@ -4,7 +4,7 @@ import {
   IListenerMap,
   ISocketEventMap,
 } from "@shared/types/api";
-const endpoint = "http://localhost:5000";
+const endpoint = "http://localhost:5151";
 
 import { io, Socket } from "socket.io-client";
 

@@ -1,6 +1,6 @@
 import { IEvent } from "@shared/types/api";
-import * as express from "express";
 import * as cors from "cors";
+import * as express from "express";
 import * as http from "http";
 import { Server, Socket } from "socket.io";
 import handlers from "./requestHandlers";
@@ -16,8 +16,13 @@ io.on("connection", (socket: Socket) => {
 app.use(express.json());
 app.use(cors());
 
-export function startServer(port: number) {
+const port = 5151; //TODO make it optional
+
+export function startServer(resolve?: () => void) {
   server.listen(port, () => {
-    console.log("Listening on port:", port);
+    console.log("Backend process started on port:", port);
+    if (resolve) {
+      resolve();
+    }
   });
 }
