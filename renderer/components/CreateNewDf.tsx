@@ -48,7 +48,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
       doOverwrite: false,
     });
     if (err !== null) {
-      window.alert(err.message);
+      window.alert("Error! Invalid characters might be provided.");
       return;
     }
     if (fileAlreadyExists) {
@@ -61,7 +61,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
         doOverwrite: true,
       });
       if (err !== null) {
-        window.alert(err.message);
+        window.alert("Error! Invalid characters might be provided.");
         return;
       }
     }
