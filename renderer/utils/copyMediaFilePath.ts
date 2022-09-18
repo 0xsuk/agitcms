@@ -5,7 +5,7 @@ export const copyMediaFilePath = async (siteConfig: ISiteConfig) => {
     alert("please set media folder path");
     return;
   }
-  //@ts-ignore
+  //@ts-ignore can't getMediaFile from browser
   const { err, filePath, canceled } = await window.electronAPI.getMediaFile(
     siteConfig.media.staticPath,
     siteConfig.media.publicPath

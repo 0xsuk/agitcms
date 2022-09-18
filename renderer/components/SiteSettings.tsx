@@ -142,9 +142,8 @@ function FrontmatterList({
                               (FrontmatterAnchorEl?.parentNode as HTMLElement)
                                 .dataset.key === metainfo.key
                             }
-                            onClose={(e) => {
+                            onClose={(e: any) => {
                               setFrontmatterAnchorEl(null);
-                              //@ts-ignore
                               e.stopPropagation();
                             }}
                             //on Click menuitems
@@ -449,9 +448,8 @@ function SiteSettings() {
                                 (PinnedDirsAnchorEl?.parentNode as HTMLElement)
                                   .dataset.id === df.path
                               }
-                              onClose={(e) => {
+                              onClose={(e: any) => {
                                 setPinnedDirsAnchorEl(null);
-                                //@ts-ignore
                                 e.stopPropagation();
                               }}
                               //on Click menuitems

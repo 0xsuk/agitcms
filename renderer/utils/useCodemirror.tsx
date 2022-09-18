@@ -20,6 +20,7 @@ import * as path from "path";
 import { useContext, useEffect, useRef, useState } from "react";
 import { IFileManager } from "@/utils/useFileManager";
 import { ToolbarItem, TransactionFilter } from "./plugin";
+import { socketClient } from "./socketClient";
 const dateFns = new DateFnsAdapter();
 
 const markdownHighlighting = HighlightStyle.define([
@@ -68,13 +69,11 @@ const handlePasteImage = (
     dateFns.formatByString(dateFns.date(), "yyyy-MM-dd-HH:mm:ss") + ".png"; //TODO
   const blob = item.getAsFile();
   const reader = new FileReader();
-  reader.onload = async (e) => {
-    //@ts-ignore
-    const err = await window.electronAPI.saveImage(
-      path.join(staticPath, fileName), //TODO
-      //@ts-ignore
-      e.target.result
-    );
+  reader.onload = async (e: any) => {
+    const err = socketClient.saveImage({
+      filePath: path.join(staticPath, fileName),
+      binary: e.target.result,
+    });
     if (err) {
       alert(err);
       return;
@@ -90,7 +89,7 @@ const handlePasteImage = (
     });
   };
 
-  //@ts-ignore
+  //@ts-ignore because it works
   reader.readAsBinaryString(blob);
 };
 
@@ -139,8 +138,10 @@ function useCodemirror({ fileManager }: { fileManager: IFileManager }) {
         EditorView.lineWrapping,
         EditorView.updateListener.of((update) => {
           if (update.docChanged) {
-            //@ts-ignore TODO changedRanges
-            const modifiedPos = update.changedRanges[0].toB; //position of last("to") modified range in the changed state("B")
+            const modifiedPos =
+              update.state.selection.ranges[update.state.selection.mainIndex]
+                .to;
+            //const modifiedPos = update.changedRanges[0].toB; //position of last("to") modified range in the changed state("B")
             const modifiedLine = update.state.doc.lineAt(modifiedPos).number;
             const lastLine = update.state.doc.lines;
             if (modifiedLine === lastLine) {

@@ -35,10 +35,14 @@ const SiteContext = ({ children }: Props) => {
 
   const initState = async (siteConfig: ISiteConfig) => {
     async function initPlugins() {
-      const pluginInfos = await socketClient.loadPlugins();
-      //@ts-ignore
+      const { pluginInfos, err } = await socketClient.loadPlugins();
+      if (err) {
+        alert(err);
+        return;
+      }
+      //@ts-ignore because it works
       window.ToolbarItem = ToolbarItem;
-      //@ts-ignore
+      //@ts-ignore because it works
       window.TransactionFilter = TransactionFilter;
       const plugins = pluginInfos.map(
         (pluginInfo) => eval(pluginInfo.raw) as ToolbarItem | TransactionFilter
@@ -56,10 +60,14 @@ const SiteContext = ({ children }: Props) => {
     async function initMediaPort() {
       if (!siteConfig.media.staticPath) return;
 
-      const port = await socketClient.startMediaServer({
+      const { port, err } = await socketClient.startMediaServer({
         staticPath: siteConfig.media.staticPath,
         publicPath: siteConfig.media.publicPath || "/",
       });
+      if (err) {
+        alert(err);
+        return;
+      }
       state.media.port = port;
     }
 

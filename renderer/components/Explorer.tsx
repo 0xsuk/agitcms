@@ -28,7 +28,13 @@ function Explorer() {
   }, [cwdf]); //eslint-disable-line
 
   const loadFilesAndFolders = async () => {
-    const filesAndFolders = await socketClient.getFilesAndFolders(cwdf);
+    const { filesAndFolders, err } = await socketClient.getFilesAndFolders(
+      cwdf
+    );
+    if (err) {
+      alert(err);
+      return;
+    }
     setFilesAndFolders(filesAndFolders);
   };
 
@@ -64,11 +70,10 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
   const renameDf = async (newName: string) => {
     const oldDfPath = cwdf + "/" + df.name;
     const newDfPath = cwdf + "/" + newName;
-    //@ts-ignore
-    const { err } = await window.electronAPI.renameFileOrFolder(
+    const err = await socketClient.renameFileOrFolder({
       oldDfPath,
-      newDfPath
-    );
+      newDfPath,
+    });
     if (err !== null) {
       alert(err);
       return;
@@ -80,11 +85,9 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
     if (!window.confirm("Delete " + dfPath + " ?")) return;
     let err;
     if (df.isDir) {
-      //@ts-ignore
-      err = (await window.electronAPI.removeFolder(dfPath)).err;
+      err = await socketClient.removeFolder(dfPath);
     } else {
-      //@ts-ignore
-      err = (await window.electronAPI.removeFile(dfPath)).err;
+      err = await socketClient.removeFile(dfPath);
     }
     if (err !== null) {
       alert(err);
@@ -154,9 +157,8 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
         <Menu
           anchorEl={anchorEl}
           open={anchorEl !== null}
-          onClose={(e) => {
+          onClose={(e: Event) => {
             setAnchorEl(null);
-            //@ts-ignore TODO
             e.stopPropagation();
           }}
           //on Click menuitems

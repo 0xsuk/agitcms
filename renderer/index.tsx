@@ -28,9 +28,11 @@ const theme = createTheme({
 });
 
 (async function () {
-  const config = await socketClient.readConfig();
-  console.log({ config });
-  if (!config) throw Error("No config found!");
+  const { config, err } = await socketClient.readConfig();
+  if (err) {
+    alert(err);
+    return;
+  }
 
   ReactDOM.render(
     <Router>

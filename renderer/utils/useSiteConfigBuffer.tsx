@@ -24,7 +24,8 @@ function useSiteConfigBuffer(initialSiteConfig: ISiteConfig) {
   };
 
   const editMediaStaticPath = async () => {
-    //@ts-ignore
+    //TODO
+    //@ts-ignore can't getFolderPath in browser
     const { folderPath, canceled } = await socketClient.getFolderPath(
       siteConfig.path
     );

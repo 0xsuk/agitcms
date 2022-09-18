@@ -4,7 +4,6 @@ import {
   IListenerMap,
   ISocketEventMap,
 } from "@shared/types/api";
-import { IConfig } from "@shared/types/config";
 const endpoint = "http://localhost:5000";
 
 import { io, Socket } from "socket.io-client";
@@ -42,7 +41,10 @@ export const socketClient:
       [key in keyof IListenerMap]: (input: IListenerMap[key]) => Promise<void>;
     } = {
   readConfig() {
-    return emitSocket<IConfig>("readConfig");
+    return emitSocket("readConfig");
+  },
+  updateConfig(config) {
+    return emitSocket("updateConfig", config);
   },
   readFile(filePath) {
     return emitSocket("readFile", filePath);
@@ -50,8 +52,23 @@ export const socketClient:
   saveFile(input) {
     return emitSocket("saveFile", input);
   },
+  createFolder(folderPath) {
+    return emitSocket("createFolder", folderPath);
+  },
+  createFile(filePath) {
+    return emitSocket("createFile", filePath);
+  },
+  removeFolder(folderPath) {
+    return emitSocket("removeFolder", folderPath);
+  },
+  removeFile(filePath) {
+    return emitSocket("removeFile", filePath);
+  },
   getFilesAndFolders(folderPath) {
     return emitSocket("getFilesAndFolders", folderPath);
+  },
+  renameFileOrFolder(input) {
+    return emitSocket("renameFileOrFolder", input);
   },
   loadPlugins() {
     return emitSocket("loadPlugins");
@@ -64,6 +81,9 @@ export const socketClient:
   },
   startMediaServer(input) {
     return emitSocket("startMediaServer", input);
+  },
+  saveImage(input) {
+    return emitSocket("saveImage", input);
   },
   onShellData(callback) {
     return listenSocket("onShellData", callback);

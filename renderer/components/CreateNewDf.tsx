@@ -1,5 +1,6 @@
 import TextDialog from "@/components/TextDialog";
 import { fillFrontmatterJson, genContent } from "@/utils/frontmatterInterface";
+import { socketClient } from "@/utils/socketClient";
 import useSiteConfig from "@/utils/useSiteConfig";
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 import Button from "@mui/material/Button";
@@ -41,25 +42,24 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
     const frontmatter = fillFrontmatterJson(siteConfig.frontmatter);
     const content = genContent(siteConfig, doc, frontmatter);
 
-    //@ts-ignore
-    const { err, isFileExists } = await window.electronAPI.createFile(
+    const { err, fileAlreadyExists } = await socketClient.createFile({
       filePath,
-      content
-    );
+      content,
+      doOverwrite: false,
+    });
     if (err !== null) {
       window.alert(err.message);
       return;
     }
-    if (isFileExists) {
+    if (fileAlreadyExists) {
       if (!window.confirm("File already exists! Overwrite?")) {
         return;
       }
-      //@ts-ignore
-      const { err } = await window.electronAPI.createFile(
+      const { err } = await socketClient.createFile({
         filePath,
         content,
-        true
-      );
+        doOverwrite: true,
+      });
       if (err !== null) {
         window.alert(err.message);
         return;
@@ -79,8 +79,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
 
   const createFolder = async (folderName: string) => {
     const folderPath = cwdf + "/" + folderName;
-    //@ts-ignore
-    const { err } = await window.electronAPI.createFolder(folderPath);
+    const err = await socketClient.createFolder(folderPath);
     if (err !== null) {
       alert(err.message);
       return;

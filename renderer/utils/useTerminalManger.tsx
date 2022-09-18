@@ -90,7 +90,7 @@ function useTerminalManager(
     const xterm = new Xterm({ rows: 15 });
     const fitAddon = new FitAddon();
     xterm.loadAddon(fitAddon);
-    //@ts-ignore
+    //@ts-ignore because it works
     xterm.loadAddon(new WebLinksAddon());
     xterm.open(el);
     fitAddon.fit();
@@ -107,7 +107,11 @@ function useTerminalManager(
     });
     socketClient
       .spawnShell({ cwd: cwdRef.current, shell: undefined })
-      .then((id) => {
+      .then(({ id, err }) => {
+        if (err) {
+          alert(err);
+          return;
+        }
         cid = id; //!important
         el.dataset.id = id;
         terminals.current.push({ id, xterm, el });

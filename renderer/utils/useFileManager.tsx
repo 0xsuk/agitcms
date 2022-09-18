@@ -89,7 +89,11 @@ function useFileManager(filePath: string): IFileManager {
   };
 
   const readFile = async (): Promise<void | Error> => {
-    const content = await socketClient.readFile(filePath);
+    const { content, err } = await socketClient.readFile(filePath);
+    if (err) {
+      alert(err);
+      return;
+    }
     const { doc, frontmatter } = parseContent(siteConfig, content);
     const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;
     setFile((prev) => ({

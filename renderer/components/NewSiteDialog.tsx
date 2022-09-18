@@ -36,7 +36,7 @@ function NewSiteDialog({ open, onClose, addNewSite }: Props) {
 
   const editSitePath = async () => {
     const { folderPath, err, canceled } =
-      //@ts-ignore
+      //@ts-ignore can't do this in browser
       await window.electronAPI.getFolderPath();
     if (err) {
       console.warn(err);
