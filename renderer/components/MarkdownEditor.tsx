@@ -49,6 +49,7 @@ const mediaPlugin: any = (port: number) => () => (tree: any) => {
   });
   return tree;
 };
+//TODO this is immutable to scroll, should be used as unified plugin
 const computeElemsOffsetTop = (editorView: EditorView) => {
   const previewElem = document.getElementById("editor-preview") as HTMLElement;
   const markdownChildNodesOffsetTopList: number[] = [];
@@ -62,9 +63,8 @@ const computeElemsOffsetTop = (editorView: EditorView) => {
     const offsetTop = lineInfo.top;
     markdownChildNodesOffsetTopList.push(offsetTop);
     previewChildNodesOffsetTopList.push(
-      (previewElem.childNodes[index] as HTMLElement).offsetTop + //bottom of windowbar to the top of childnode, immutable to scroll
-        (isMac ? 22 : 30) - //Window titlebar height
-        previewElem.getBoundingClientRect().top - //top of window to the top of editor-preview
+      (previewElem.childNodes[index] as HTMLElement).offsetTop - //bottom of windowbar to the top of childnode, immutable to scroll
+        previewElem.getBoundingClientRect().top - //top of window to the top of editor-preview, immutable to scroll
         10 //padding top of previewElem TODO
     );
   });

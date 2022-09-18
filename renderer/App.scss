@@ -1,4 +1,3 @@
-$titlebar-height: 30px;
 $border-default: #42424242;
 $background-default: #0d1117;
 $background-darker: #131820;
@@ -55,7 +54,12 @@ html {
 }
 
 #root {
-  height: calc(100vh - $titlebar-height);
+  height: 100vh;
+}
+
+#wrapper {
+  display: flex;
+  height: 100%;
 }
 
 

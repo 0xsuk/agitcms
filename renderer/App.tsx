@@ -31,12 +31,7 @@ function Wrapper() {
   const { config } = useContext(configContext);
   return (
     // list of workspace
-    <div
-      style={{
-        display: "flex",
-        height: isMac ? "calc(100vh - 22px)" : "calc(100vh - 30px)",
-      }}
-    >
+    <div id="wrapper">
       <SideBar />
       <div id="main">
         <Route path="/test">
