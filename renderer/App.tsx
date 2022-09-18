@@ -8,10 +8,9 @@ import SiteSettings from "@/components/SiteSettings";
 import Terminal from "@/components/Terminal";
 import { configContext } from "@/context/ConfigContext";
 import { siteContext } from "@/context/SiteContext";
+import useSiteConfig from "@/utils/useSiteConfig";
 import { useContext, useEffect } from "react";
 import { Route } from "react-router-dom";
-import { isMac } from "@/utils/constants";
-import useSiteConfig from "@/utils/useSiteConfig";
 import "./App.scss";
 import Test from "./Test";
 

@@ -1,4 +1,6 @@
 import { siteContext } from "@/context/SiteContext";
+import { isURL } from "@/utils/constants";
+import useCodemirror from "@/utils/useCodemirror";
 import { IFileManager } from "@/utils/useFileManager";
 import { EditorView } from "codemirror";
 import "github-markdown-css/github-markdown-dark.css";
@@ -18,8 +20,6 @@ import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { isMac, isURL } from "@/utils/constants";
-import useCodemirror from "@/utils/useCodemirror";
 import MarkdownToolbar from "./MarkdownToolbar";
 
 let treeData: any;
