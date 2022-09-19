@@ -1,3 +1,4 @@
+import { APIError } from "@shared/types/api";
 import { ISiteConfig } from "@shared/types/config";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -20,18 +21,11 @@ export interface IFile {
   isFrontmatterEmpty: boolean;
 }
 
-export interface IFileManager {
-  file: IFile;
-  editName: (name: string) => void;
-  updateFrontmatter: (name: string, value: any, parentNames?: string[]) => void;
-  setDoc: (doc: string) => void;
-  readFile: () => Promise<void | Error>;
-  saveFile: () => Promise<null | Error>;
-}
+export type IFileManager = ReturnType<typeof useFileManager>;
 
 //useCodeMirror depends on useFileBuffer's updateDoc
 //filePath is a only dependency.
-function useFileManager(filePath: string): IFileManager {
+function useFileManager(filePath: string) {
   const location = useLocation();
   const searchparams = new URLSearchParams(location.search);
   const fileName = searchparams.get("name") as string;
@@ -88,11 +82,10 @@ function useFileManager(filePath: string): IFileManager {
     }));
   };
 
-  const readFile = async (): Promise<void | Error> => {
+  const readFile = async () => {
     const { content, err } = await socketClient.readFile(filePath);
-    if (err) {
-      alert(err);
-      return;
+    if (err !== null) {
+      return err;
     }
     const { doc, frontmatter } = parseContent(siteConfig, content);
     const isFrontmatterEmpty = Object.keys(frontmatter).length === 0;

@@ -29,8 +29,8 @@ const theme = createTheme({
 
 (async function () {
   const { config, err } = await socketClient.readConfig();
-  if (err) {
-    alert(err);
+  if (err !== null) {
+    err.warn();
     return;
   }
 

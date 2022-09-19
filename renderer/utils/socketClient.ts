@@ -1,15 +1,11 @@
-import {
-  IEmitterMap,
-  IEvent,
-  IListenerMap,
-  ISocketEventMap,
-} from "@shared/types/api";
+import { IEmitterMap, IListenerMap } from "@shared/types/api";
 const endpoint = "http://localhost:5151";
 
 import { io, Socket } from "socket.io-client";
 
 const timeout = 10 * 1000;
-const socket: Socket<ISocketEventMap> = io(endpoint);
+//not type IEmitterMap, IListenerMap. Since emit socket is resolved, not returned, Socket should not have explicit type, because socketClient does
+const socket: Socket = io(endpoint);
 
 const connected = new Promise<void>((resolve, reject) => {
   socket.on("connect", () => {
@@ -19,17 +15,23 @@ const connected = new Promise<void>((resolve, reject) => {
   setTimeout(reject, timeout);
 });
 
-const emitSocket = async <Response = any>(eventName: IEvent, data?: any) => {
+const emitSocket = async <Res = any>(
+  eventName: keyof IEmitterMap,
+  data?: any
+) => {
   await connected;
-  return new Promise<Response>((resolve, reject) => {
-    socket.emit(eventName, data, (res: Response) => resolve(res)); //every listener on server should call callback, even if no data is to returned
+  return new Promise<Res>((resolve, reject) => {
+    socket.emit(eventName, data, (res: Res) => {
+      console.log({ res });
+      resolve(res);
+    }); //every listener on server should call callback, even if no data is to returned
     setTimeout(reject, timeout);
   });
 };
 
-const listenSocket = async (eventName: IEvent, callback: any) => {
+const listenSocket = async (eventName: keyof IListenerMap, callback: any) => {
   await connected;
-  socket.emit(eventName, undefined, callback); //does not send any data
+  socket.on(eventName, callback); //does not send any data
 };
 
 export const socketClient:
@@ -38,7 +40,7 @@ export const socketClient:
         input: IEmitterMap[key]["input"]
       ) => Promise<IEmitterMap[key]["res"]>;
     } & {
-      [key in keyof IListenerMap]: (input: IListenerMap[key]) => Promise<void>;
+      [key in keyof IListenerMap]: (callback: IListenerMap[key]) => void;
     } = {
   readConfig() {
     return emitSocket("readConfig");

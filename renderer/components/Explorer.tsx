@@ -31,8 +31,8 @@ function Explorer() {
     const { filesAndFolders, err } = await socketClient.getFilesAndFolders(
       cwdf
     );
-    if (err) {
-      alert(err);
+    if (err !== null) {
+      err.warn();
       return;
     }
     setFilesAndFolders(filesAndFolders);
@@ -75,7 +75,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
       newDfPath,
     });
     if (err !== null) {
-      alert(err);
+      err.warn();
       return;
     }
     loadFilesAndFolders();
@@ -90,7 +90,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
       err = await socketClient.removeFile(dfPath);
     }
     if (err !== null) {
-      alert(err);
+      err.warn();
       return;
     }
     loadFilesAndFolders();

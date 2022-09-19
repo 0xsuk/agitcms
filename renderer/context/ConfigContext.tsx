@@ -24,8 +24,8 @@ const ConfigContext = ({ initialConfig, children }: Props) => {
 
   const readConfig = async () => {
     const { config: newConfig, err } = await socketClient.readConfig();
-    if (err) {
-      alert(err);
+    if (err !== null) {
+      err.warn();
       return;
     }
     setConfig({ ...newConfig });
@@ -33,8 +33,8 @@ const ConfigContext = ({ initialConfig, children }: Props) => {
 
   const updateConfig = async (newConfig: IConfig) => {
     const err = await socketClient.updateConfig(newConfig);
-    if (err) {
-      alert(err);
+    if (err !== null) {
+      err.warn();
       return;
     }
     setConfig({ ...newConfig });

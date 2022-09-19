@@ -70,12 +70,12 @@ const handlePasteImage = (
   const blob = item.getAsFile();
   const reader = new FileReader();
   reader.onload = async (e: any) => {
-    const err = socketClient.saveImage({
+    const err = await socketClient.saveImage({
       filePath: path.join(staticPath, fileName),
       binary: e.target.result,
     });
-    if (err) {
-      alert(err);
+    if (err !== null) {
+      err.warn();
       return;
     }
 

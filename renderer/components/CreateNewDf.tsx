@@ -48,7 +48,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
       doOverwrite: false,
     });
     if (err !== null) {
-      window.alert("Error! Invalid characters might be provided.");
+      err.warn();
       return;
     }
     if (fileAlreadyExists) {
@@ -61,7 +61,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
         doOverwrite: true,
       });
       if (err !== null) {
-        window.alert("Error! Invalid characters might be provided.");
+        err.warn();
         return;
       }
     }
@@ -81,7 +81,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
     const folderPath = cwdf + "/" + folderName;
     const err = await socketClient.createFolder(folderPath);
     if (err !== null) {
-      alert(err.message);
+      err.warn();
       return;
     }
     window.location.reload();

@@ -8,21 +8,21 @@ type InputResMap<Input, Res> = {
 export interface IEmitterMap {
   readConfig: InputResMap<
     void,
-    { config: IConfig; err: null } | { config: null; err: Error }
+    { config: IConfig; err: null } | { config: null; err: APIError }
   >;
-  updateConfig: InputResMap<IConfig, Error | null>;
+  updateConfig: InputResMap<IConfig, APIError | null>;
   readFile: InputResMap<
     string,
-    { content: string; err: null } | { content: null; err: Error }
+    { content: string; err: null } | { content: null; err: APIError }
   >;
-  saveFile: InputResMap<{ filePath: string; content: string }, Error | null>;
-  createFolder: InputResMap<string, Error | null>;
+  saveFile: InputResMap<{ filePath: string; content: string }, APIError | null>;
+  createFolder: InputResMap<string, APIError | null>;
   createFile: InputResMap<
     { filePath: string; content: string; doOverwrite: boolean },
-    { err: Error | null; fileAlreadyExists: boolean }
+    { err: APIError | null; fileAlreadyExists: boolean }
   >;
-  removeFile: InputResMap<string, Error | null>;
-  removeFolder: InputResMap<string, Error | null>;
+  removeFile: InputResMap<string, APIError | null>;
+  removeFolder: InputResMap<string, APIError | null>;
   getFilesAndFolders: InputResMap<
     string,
     | {
@@ -31,12 +31,12 @@ export interface IEmitterMap {
       }
     | {
         filesAndFolders: null;
-        err: Error;
+        err: APIError;
       }
   >;
   renameFileOrFolder: InputResMap<
     { oldDfPath: string; newDfPath: string },
-    Error | null
+    APIError | null
   >;
   loadPlugins: InputResMap<
     void,
@@ -46,7 +46,7 @@ export interface IEmitterMap {
       }
     | {
         pluginInfos: null;
-        err: Error;
+        err: APIError;
       }
   >;
   typeCommand: InputResMap<{ cid: string; data: string }, void>;
@@ -55,18 +55,18 @@ export interface IEmitterMap {
       cwd: string | undefined;
       shell: string | undefined;
     },
-    { id: string; err: null } | { id: null; err: Error }
+    { id: string; err: null } | { id: null; err: APIError }
   >;
   startMediaServer: InputResMap<
     { staticPath: string; publicPath: string },
-    { port: number; err: null } | { port: null; err: Error }
+    { port: number; err: null } | { port: null; err: APIError }
   >;
   saveImage: InputResMap<
     {
       filePath: string;
       binary: string | NodeJS.ArrayBufferView;
     },
-    Error | null
+    APIError | null
   >;
 }
 
@@ -75,8 +75,21 @@ export interface IListenerMap {
   onShellExit: (id: string) => void;
 }
 
-export type IEvent = keyof IEmitterMap | keyof IListenerMap;
+//Unlike Error, APIError is sendable via socket.io callback
+export class APIError {
+  err;
+  constructor(err: Error) {
+    this.err = JSON.parse(
+      JSON.stringify(err, Object.getOwnPropertyNames(err))
+    ) as Error;
+  }
 
-export type ISocketEventMap = {
-  [key in IEvent]: any;
-};
+  warn() {
+    if (this.err.message) {
+      alert(this.err.message);
+    } else {
+      alert("Error occured! see the browser console");
+    }
+    console.error(this.err);
+  }
+}

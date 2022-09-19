@@ -108,8 +108,8 @@ function useTerminalManager(
     socketClient
       .spawnShell({ cwd: cwdRef.current, shell: undefined })
       .then(({ id, err }) => {
-        if (err) {
-          alert(err);
+        if (err !== null) {
+          err.warn();
           return;
         }
         cid = id; //!important

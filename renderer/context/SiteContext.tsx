@@ -36,8 +36,8 @@ const SiteContext = ({ children }: Props) => {
   const initState = async (siteConfig: ISiteConfig) => {
     async function initPlugins() {
       const { pluginInfos, err } = await socketClient.loadPlugins();
-      if (err) {
-        alert(err);
+      if (err !== null) {
+        err.warn();
         return;
       }
       //@ts-ignore because it works
@@ -64,8 +64,8 @@ const SiteContext = ({ children }: Props) => {
         staticPath: siteConfig.media.staticPath,
         publicPath: siteConfig.media.publicPath || "/",
       });
-      if (err) {
-        alert(err);
+      if (err !== null) {
+        err.warn();
         return;
       }
       state.media.port = port;
