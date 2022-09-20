@@ -8,3 +8,5 @@ export const isURL = (url: string) => {
     return false;
   }
 };
+
+export const pathDelimiter = window.navigator.platform === "Win32" ? "\\" : "/";
