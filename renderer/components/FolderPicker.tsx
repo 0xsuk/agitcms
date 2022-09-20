@@ -42,7 +42,7 @@ function FolderPicker({ onPickFolder }: Props) {
     return <></>;
   }
   return (
-    <div id="folder-picker">
+    <div>
       <div
         style={{
           padding: "10px",
