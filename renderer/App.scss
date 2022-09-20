@@ -5,6 +5,7 @@ $color-default: #c9d1d9;
 $color-darker: #7d8799;
 $tool-background: #333b4899;
 $editor-padding-bottom: 200px;
+$accent-color: #3391ff;
 
 
 /* width */
@@ -401,5 +402,8 @@ $editor-navigator-height: 44px;
 }
 
 
+.accent {
+  color: $accent-color;
+}
 
 
