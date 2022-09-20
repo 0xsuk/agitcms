@@ -103,15 +103,15 @@ $bottom-bar-height: 15px;
   button {
     font-size: 12px;
   }
-  span {
-    unicode-bidi: bidi-override; 
-    direction: rtl;
-    text-align: left;
-    width: calc(100% - 31px - 30px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+}
+
+#folder-navigator {
+  unicode-bidi: bidi-override; 
+  direction: rtl;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #main {

@@ -60,15 +60,16 @@ function BottomBar() {
       <FolderNavigator
         cwdf={cwdf}
         root={siteConfig.path}
-        onClickNewPath={(newPath: string) =>
+        onClickNewPath={(newPath: string) => {
+          if (newPath === cwdf) return;
           history.push(
             "/site/explorer/" +
               siteConfig.key +
               "?path=" +
               newPath +
               "&isDir=true"
-          )
-        }
+          );
+        }}
       />
     </div>
   );

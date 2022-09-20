@@ -15,7 +15,7 @@ function FolderNavigator({ cwdf, root, onClickNewPath }: Props) {
     .split("/");
 
   return (
-    <span>
+    <span id="folder-navigator">
       {significantPathSplit
         .map((p, i) => (
           <>
