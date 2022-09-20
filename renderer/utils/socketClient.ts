@@ -22,7 +22,6 @@ const emitSocket = async <Res = any>(
   await connected;
   return new Promise<Res>((resolve, reject) => {
     socket.emit(eventName, data, (res: Res) => {
-      console.log({ res });
       resolve(res);
     }); //every listener on server should call callback, even if no data is to returned
     setTimeout(reject, timeout);

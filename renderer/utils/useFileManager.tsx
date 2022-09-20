@@ -1,4 +1,3 @@
-import { APIError } from "@shared/types/api";
 import { ISiteConfig } from "@shared/types/config";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
