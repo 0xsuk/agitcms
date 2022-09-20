@@ -42,7 +42,6 @@ function BottomBar() {
     <div id="bottom-bar">
       {isDfPinned ? (
         <Button
-          size="small"
           onClick={() => removePinnedDir(cwdf, isInDir)}
           sx={{ padding: "0 5px", lineHeight: "unset", minWidth: "0" }}
         >
@@ -50,7 +49,6 @@ function BottomBar() {
         </Button>
       ) : (
         <Button
-          size="small"
           onClick={() => addPinnedDirs(cwdf, isInDir)}
           sx={{ padding: "0 5px", lineHeight: "unset", minWidth: "0" }}
         >

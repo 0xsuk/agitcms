@@ -9,7 +9,7 @@ interface Props {
 const reverseString = (str: string) => str.split("").reverse().join("");
 
 function FolderNavigator({ cwdf, root = "/", onClickNewPath }: Props) {
-  const insignificantPath = path.join(root, "..");
+  const insignificantPath = path.join(root, ".."); //resolves to / if root is /
   const significantPathSplit = path
     .relative(insignificantPath, cwdf)
     .split("/");
