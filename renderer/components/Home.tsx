@@ -10,10 +10,7 @@ function Home() {
   const history = useHistory();
   const addNewSite = (name: string, path: string) => {
     //siteKey == "new"
-    const siteConfig = newSiteConfig();
-    siteConfig.name = name;
-    siteConfig.path = path;
-    siteConfig.pinnedDirs = [{ name: "Root", path, isDir: true }];
+    const siteConfig = newSiteConfig(name, path);
     updateSiteConfig(siteConfig);
   };
 

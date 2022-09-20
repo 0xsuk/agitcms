@@ -1,5 +1,6 @@
 import { configContext } from "@/context/ConfigContext";
 import { ISiteConfig } from "@shared/types/config";
+import { randomid } from "@shared/utils/randomid";
 import { useContext } from "react";
 import { useRouteMatch } from "react-router-dom";
 
@@ -27,18 +28,18 @@ function useSiteConfig(): null | ISiteConfig {
 
 export const FrontmatterLanguages = ["yaml", "toml"];
 
-export const newSiteConfig = (): ISiteConfig => {
+export const newSiteConfig = (name: string, path: string): ISiteConfig => {
   return {
-    name: "",
-    key: "a",
-    path: "",
+    name,
+    key: randomid(),
+    path,
     frontmatterLanguage: "yaml",
     frontmatterDelimiter: "---",
     media: {
       staticPath: "",
       publicPath: "",
     },
-    pinnedDirs: [],
+    pinnedDirs: [{ name: path.split("/").reverse()[0], path, isDir: true }],
     frontmatter: [],
   };
 };
