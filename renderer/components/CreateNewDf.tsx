@@ -2,6 +2,7 @@ import TextDialog from "@/components/TextDialog";
 import { fillFrontmatterJson, genContent } from "@/utils/frontmatterInterface";
 import { socketClient } from "@/utils/socketClient";
 import useSiteConfig from "@/utils/useSiteConfig";
+import { warnError } from "@/utils/warnError";
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 import Button from "@mui/material/Button";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
@@ -48,7 +49,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
       doOverwrite: false,
     });
     if (err !== null) {
-      err.warn();
+      warnError(err);
       return;
     }
     if (fileAlreadyExists) {
@@ -61,7 +62,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
         doOverwrite: true,
       });
       if (err !== null) {
-        err.warn();
+        warnError(err);
         return;
       }
     }
@@ -80,7 +81,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
     const folderPath = cwdf + "/" + folderName;
     const err = await socketClient.createFolder(folderPath);
     if (err !== null) {
-      err.warn();
+      warnError(err);
       return;
     }
     window.location.reload();

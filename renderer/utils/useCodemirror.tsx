@@ -21,6 +21,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { IFileManager } from "@/utils/useFileManager";
 import { ToolbarItem, TransactionFilter } from "./plugin";
 import { socketClient } from "./socketClient";
+import { warnError } from "./warnError";
 const dateFns = new DateFnsAdapter();
 
 const markdownHighlighting = HighlightStyle.define([
@@ -75,7 +76,7 @@ const handlePasteImage = (
       binary: e.target.result,
     });
     if (err !== null) {
-      err.warn();
+      warnError(err);
       return;
     }
 

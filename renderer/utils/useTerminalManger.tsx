@@ -5,6 +5,7 @@ import { WebLinksAddon } from "@/utils/xterm-addon-web-links.js";
 //import { WebLinksAddon } from "xterm-addon-web-links"; //This can't open link
 import "xterm/css/xterm.css";
 import { socketClient } from "./socketClient";
+import { warnError } from "./warnError";
 
 function useTerminalManager(
   cwd: string | undefined,
@@ -109,7 +110,7 @@ function useTerminalManager(
       .spawnShell({ cwd: cwdRef.current, shell: undefined })
       .then(({ id, err }) => {
         if (err !== null) {
-          err.warn();
+          warnError(err);
           return;
         }
         cid = id; //!important

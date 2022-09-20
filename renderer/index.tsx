@@ -6,6 +6,7 @@ import * as ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 import App from "./App";
 import { socketClient } from "./utils/socketClient";
+import { warnError } from "./utils/warnError";
 const theme = createTheme({
   palette: {
     mode: "dark",
@@ -30,7 +31,7 @@ const theme = createTheme({
 (async function () {
   const { config, err } = await socketClient.readConfig();
   if (err !== null) {
-    err.warn();
+    warnError(err);
     return;
   }
 

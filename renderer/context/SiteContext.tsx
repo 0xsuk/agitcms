@@ -2,6 +2,7 @@ import { ISiteConfig } from "@shared/types/config";
 import { createContext, useState } from "react";
 import { ToolbarItem, TransactionFilter } from "@/utils/plugin";
 import { socketClient } from "@/utils/socketClient";
+import { warnError } from "@/utils/warnError";
 
 export interface IState {
   media: {
@@ -37,7 +38,7 @@ const SiteContext = ({ children }: Props) => {
     async function initPlugins() {
       const { pluginInfos, err } = await socketClient.loadPlugins();
       if (err !== null) {
-        err.warn();
+        warnError(err);
         return;
       }
       //@ts-ignore because it works
@@ -65,7 +66,7 @@ const SiteContext = ({ children }: Props) => {
         publicPath: siteConfig.media.publicPath || "/",
       });
       if (err !== null) {
-        err.warn();
+        warnError(err);
         return;
       }
       state.media.port = port;

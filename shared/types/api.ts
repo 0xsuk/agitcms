@@ -27,10 +27,12 @@ export interface IEmitterMap {
     string,
     | {
         filesAndFolders: { name: string; isDir: boolean; extension: string }[];
+        cwd: string;
         err: null;
       }
     | {
         filesAndFolders: null;
+        cwd: null;
         err: APIError;
       }
   >;
@@ -75,21 +77,4 @@ export interface IListenerMap {
   onShellExit: (id: string) => void;
 }
 
-//Unlike Error, APIError is sendable via socket.io callback
-export class APIError {
-  err;
-  constructor(err: Error) {
-    this.err = JSON.parse(
-      JSON.stringify(err, Object.getOwnPropertyNames(err))
-    ) as Error;
-  }
-
-  warn() {
-    if (this.err.message) {
-      alert(this.err.message);
-    } else {
-      alert("Error occured! see the browser console");
-    }
-    console.error(this.err);
-  }
-}
+export type APIError = { [key: string]: string } & Error;

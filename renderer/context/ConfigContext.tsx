@@ -1,6 +1,7 @@
 import { useState, createContext } from "react";
 import type { IConfig, ISiteConfig } from "@shared/types/config";
 import { socketClient } from "@/utils/socketClient";
+import { warnError } from "@/utils/warnError";
 
 export interface IConfigContext {
   config: IConfig;
@@ -25,7 +26,7 @@ const ConfigContext = ({ initialConfig, children }: Props) => {
   const readConfig = async () => {
     const { config: newConfig, err } = await socketClient.readConfig();
     if (err !== null) {
-      err.warn();
+      warnError(err);
       return;
     }
     setConfig({ ...newConfig });
@@ -34,7 +35,7 @@ const ConfigContext = ({ initialConfig, children }: Props) => {
   const updateConfig = async (newConfig: IConfig) => {
     const err = await socketClient.updateConfig(newConfig);
     if (err !== null) {
-      err.warn();
+      warnError(err);
       return;
     }
     setConfig({ ...newConfig });

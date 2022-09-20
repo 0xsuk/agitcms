@@ -8,10 +8,11 @@ import useSiteConfig from "@/utils/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
 import TextDialog from "./TextDialog";
 import { socketClient } from "@/utils/socketClient";
+import { warnError } from "@/utils/warnError";
 
 function Explorer() {
   const [filesAndFolders, setFilesAndFolders] = useState<
-    { isDir: boolean; extension: string }[]
+    { name: string; isDir: boolean; extension: string }[]
   >([]);
   const siteConfig = useSiteConfig() as ISiteConfig;
   const location = useLocation();
@@ -32,7 +33,7 @@ function Explorer() {
       cwdf
     );
     if (err !== null) {
-      err.warn();
+      warnError(err);
       return;
     }
     setFilesAndFolders(filesAndFolders);
@@ -56,7 +57,7 @@ function Explorer() {
 interface DfProps {
   siteConfig: ISiteConfig;
   cwdf: string;
-  df: any; //TODO
+  df: { name: string; isDir: boolean; extension: string };
   loadFilesAndFolders: () => Promise<void>;
 }
 
@@ -74,7 +75,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
       newDfPath,
     });
     if (err !== null) {
-      err.warn();
+      warnError(err);
       return;
     }
     loadFilesAndFolders();
@@ -89,7 +90,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
       err = await socketClient.removeFile(dfPath);
     }
     if (err !== null) {
-      err.warn();
+      warnError(err);
       return;
     }
     loadFilesAndFolders();

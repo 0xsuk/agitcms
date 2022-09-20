@@ -1,12 +1,13 @@
-import { APIError, IEmitterMap, IListenerMap } from "@shared/types/api";
-import { IConfig } from "@shared/types/config";
-import * as fs from "fs";
-import * as path from "path";
-import * as os from "os";
 import { defaultShell } from "@/utils/constants";
 import { spawnShell, writeToShell } from "@/utils/shellProcess";
-import { runMediaServer } from "./utils/mediaServer";
+import { IEmitterMap, IListenerMap } from "@shared/types/api";
+import { IConfig } from "@shared/types/config";
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 import { Socket } from "socket.io";
+import { runMediaServer } from "./utils/mediaServer";
+import { parseError } from "./utils/parseError";
 
 const CONFIG_DIR = path.join(os.homedir(), ".agitcms");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
@@ -64,7 +65,7 @@ export const createListeners = (
         resolve({ config, err: null });
       } catch (err) {
         if (err instanceof Error) {
-          resolve({ config: null, err: new APIError(err) });
+          resolve({ config: null, err: parseError(err) });
         }
       }
     },
@@ -75,7 +76,7 @@ export const createListeners = (
         resolve(null);
       } catch (err) {
         if (err instanceof Error) {
-          resolve(new APIError(err));
+          resolve(parseError(err));
         }
       }
     },
@@ -85,7 +86,7 @@ export const createListeners = (
         resolve({ content, err: null });
       } catch (err) {
         if (err instanceof Error) {
-          resolve({ content: null, err: new APIError(err) });
+          resolve({ content: null, err: parseError(err) });
         }
       }
     },
@@ -95,7 +96,7 @@ export const createListeners = (
         resolve(null);
       } catch (err) {
         if (err instanceof Error) {
-          resolve(new APIError(err));
+          resolve(parseError(err));
         }
       }
     },
@@ -106,7 +107,7 @@ export const createListeners = (
         resolve(null);
       } catch (err) {
         if (err instanceof Error) {
-          resolve(new APIError(err));
+          resolve(parseError(err));
         }
       }
     },
@@ -126,7 +127,7 @@ export const createListeners = (
         resolve({ err: null, fileAlreadyExists: false });
       } catch (err) {
         if (err instanceof Error) {
-          resolve({ err: new APIError(err), fileAlreadyExists: false });
+          resolve({ err: parseError(err), fileAlreadyExists: false });
         }
       }
     },
@@ -136,7 +137,7 @@ export const createListeners = (
         resolve(null);
       } catch (err) {
         if (err instanceof Error) {
-          resolve(new APIError(err));
+          resolve(parseError(err));
         }
       }
     },
@@ -146,17 +147,21 @@ export const createListeners = (
         resolve(null);
       } catch (err) {
         if (err instanceof Error) {
-          resolve(new APIError(err));
+          resolve(parseError(err));
         }
       }
     },
     getFilesAndFolders(folderPath, resolve) {
       try {
+        if (folderPath === "") {
+          folderPath = os.homedir();
+        }
         const filesAndFolders = _getFilesAndFolders(folderPath);
-        resolve({ filesAndFolders, err: null });
+        resolve({ filesAndFolders, cwd: folderPath, err: null });
       } catch (err) {
         if (err instanceof Error) {
-          resolve({ filesAndFolders: null, err: new APIError(err) });
+          console.log(err);
+          resolve({ filesAndFolders: null, cwd: null, err: parseError(err) });
         }
       }
     },
@@ -166,7 +171,7 @@ export const createListeners = (
         resolve(null);
       } catch (err) {
         if (err instanceof Error) {
-          resolve(new APIError(err));
+          resolve(parseError(err));
         }
       }
     },
@@ -190,7 +195,7 @@ export const createListeners = (
         resolve({ pluginInfos, err: null });
       } catch (err) {
         if (err instanceof Error) {
-          resolve({ pluginInfos: null, err: new APIError(err) });
+          resolve({ pluginInfos: null, err: parseError(err) });
         }
       }
     },
@@ -210,7 +215,7 @@ export const createListeners = (
         resolve({ id, err: null });
       } catch (err) {
         if (err instanceof Error) {
-          resolve({ id: null, err: new APIError(err) });
+          resolve({ id: null, err: parseError(err) });
         }
       }
     },
@@ -220,7 +225,7 @@ export const createListeners = (
         resolve({ port, err: null });
       } catch (err) {
         if (err instanceof Error) {
-          resolve({ port: null, err: new APIError(err) });
+          resolve({ port: null, err: parseError(err) });
         }
       }
     },
@@ -230,7 +235,7 @@ export const createListeners = (
         resolve(null);
       } catch (err) {
         if (err instanceof Error) {
-          resolve(new APIError(err));
+          resolve(parseError(err));
         }
       }
     },
