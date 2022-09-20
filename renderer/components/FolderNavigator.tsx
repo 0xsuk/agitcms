@@ -21,7 +21,7 @@ function FolderNavigator({ cwdf, root, onClickNewPath }: Props) {
           <>
             <span
               className="accent hpointer"
-              style={{ padding: "0 5px" }}
+              style={{ padding: "0 2px" }}
               onClick={() => {
                 const newPath = path.join(
                   insignificantPath,
@@ -32,11 +32,23 @@ function FolderNavigator({ cwdf, root, onClickNewPath }: Props) {
             >
               {reverseString(p)}
             </span>
-            {pathDelimiter}
+            {i == 0 && root === "/" ? (
+              <span
+                className="accent hpointer"
+                onClick={() => {
+                  onClickNewPath("/");
+                }}
+              >
+                {pathDelimiter}
+              </span>
+            ) : (
+              pathDelimiter
+            )}
           </>
         ))
         .reverse()}
-      {reverseString(insignificantPath).replaceAll("/", pathDelimiter)}
+      {insignificantPath !== "/" &&
+        reverseString(insignificantPath).replaceAll("/", pathDelimiter)}
     </span>
   );
 }
