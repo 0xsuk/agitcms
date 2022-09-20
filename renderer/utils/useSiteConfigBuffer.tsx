@@ -25,16 +25,9 @@ function useSiteConfigBuffer(initialSiteConfig: ISiteConfig) {
     setSiteConfig(siteConfigCopy);
   };
 
-  const editMediaStaticPath = async () => {
-    //TODO
-    //@ts-ignore can't getFolderPath in browser
-    const { folderPath, canceled } = await socketClient.getFolderPath(
-      siteConfigCopy.path
-    );
-    if (!canceled) {
-      siteConfigCopy.media.staticPath = folderPath;
-      setSiteConfig(siteConfigCopy);
-    }
+  const editMediaStaticPath = async (folderPath: string) => {
+    siteConfigCopy.media.staticPath = folderPath;
+    setSiteConfig(siteConfigCopy);
   };
 
   const editFrontmatterLanguage = (newValue: string) => {
