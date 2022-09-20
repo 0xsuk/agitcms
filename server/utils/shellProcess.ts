@@ -15,7 +15,7 @@ export const spawnShell = (
   onExit: (id: string) => any
 ) => {
   const id = randomid();
-  const ptyProcess = pty.spawn("bash", [], {
+  const ptyProcess = pty.spawn(shell, [], {
     name: "xterm-color",
     cwd, //undefined OK
     env: process.env as { [key: string]: string },
