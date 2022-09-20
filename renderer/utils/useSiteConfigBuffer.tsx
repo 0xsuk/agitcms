@@ -7,7 +7,6 @@ import {
 import { IFrontmatterConfig, ISiteConfig } from "@shared/types/config";
 import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { socketClient } from "./socketClient";
 
 function useSiteConfigBuffer(initialSiteConfig: ISiteConfig) {
   const [siteConfig, setSiteConfig] = useState(

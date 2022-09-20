@@ -1,5 +1,4 @@
 import { configContext } from "@/context/ConfigContext";
-import { copyMediaFilePath } from "@/utils/copyMediaFilePath";
 import { switchTab } from "@/utils/switchEditorTab";
 import useFileManager from "@/utils/useFileManager";
 import useSiteConfig from "@/utils/useSiteConfig";
