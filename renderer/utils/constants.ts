@@ -10,3 +10,5 @@ export const isURL = (url: string) => {
 };
 
 export const pathDelimiter = window.navigator.platform === "Win32" ? "\\" : "/";
+
+export const mediaExtensions = ["jpg", "jpeg", "png"];
