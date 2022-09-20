@@ -5,6 +5,12 @@ type InputResMap<Input, Res> = {
   res: Res;
 };
 
+export type IFilesAndFolders = {
+  name: string;
+  isDir: boolean;
+  extension: string;
+}[];
+
 export interface IEmitterMap {
   readConfig: InputResMap<
     void,
@@ -26,7 +32,7 @@ export interface IEmitterMap {
   getFilesAndFolders: InputResMap<
     string,
     | {
-        filesAndFolders: { name: string; isDir: boolean; extension: string }[];
+        filesAndFolders: IFilesAndFolders;
         cwd: string;
         err: null;
       }

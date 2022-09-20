@@ -9,11 +9,10 @@ import CreateNewDf from "./CreateNewDf";
 import TextDialog from "./TextDialog";
 import { socketClient } from "@/utils/socketClient";
 import { warnError } from "@/utils/warnError";
+import { IFilesAndFolders } from "@shared/types/api";
 
 function Explorer() {
-  const [filesAndFolders, setFilesAndFolders] = useState<
-    { name: string; isDir: boolean; extension: string }[]
-  >([]);
+  const [filesAndFolders, setFilesAndFolders] = useState<IFilesAndFolders>([]);
   const siteConfig = useSiteConfig() as ISiteConfig;
   const location = useLocation();
   const searchparams = new URLSearchParams(location.search);
@@ -57,7 +56,7 @@ function Explorer() {
 interface DfProps {
   siteConfig: ISiteConfig;
   cwdf: string;
-  df: { name: string; isDir: boolean; extension: string };
+  df: IFilesAndFolders extends (infer ElementType)[] ? ElementType : never;
   loadFilesAndFolders: () => Promise<void>;
 }
 
