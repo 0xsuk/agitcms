@@ -1,8 +1,7 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 import { Terminal as Xterm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
-import { WebLinksAddon } from "@/utils/xterm-addon-web-links.js";
-//import { WebLinksAddon } from "xterm-addon-web-links"; //This can't open link
+import { WebLinksAddon } from "xterm-addon-web-links";
 import "xterm/css/xterm.css";
 import { socketClient } from "./socketClient";
 import { warnError } from "./warnError";
@@ -79,8 +78,7 @@ function useTerminalManager(
   };
   const createResizeListener = (fitAddon: any) => {
     return () => {
-      console.log("resized");
-      fitAddon.fit();
+      fitAddon.fit(); //BUG: https://github.com/bus-stop/x-terminal/issues/57
     };
   };
 
@@ -91,7 +89,6 @@ function useTerminalManager(
     const xterm = new Xterm({ rows: 15 });
     const fitAddon = new FitAddon();
     xterm.loadAddon(fitAddon);
-    //@ts-ignore because it works
     xterm.loadAddon(new WebLinksAddon());
     xterm.open(el);
     fitAddon.fit();
