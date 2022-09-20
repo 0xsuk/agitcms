@@ -4,7 +4,7 @@
   "description": "A headless CMS for markdown blogs",
   "bin": "cli/index.js",
   "scripts": {
-    "prepublish": "npm run build:renderer && npm run build:server",
+    "build": "npm run build:renderer && npm run build:server",
     "renderer": "webpack-dev-server --mode development --config webpack.renderer.js --port 3131",
     "server": "cd server && nodemon -e ts --exec 'ts-node -r tsconfig-paths/register index.ts'",
     "dev": "concurrently \"npm run renderer\" \"wait-on http://localhost:3131 && npm run server\"",
