@@ -22,6 +22,7 @@ import { IFileManager } from "@/utils/useFileManager";
 import { ToolbarItem, TransactionFilter } from "./plugin";
 import { socketClient } from "./socketClient";
 import { warnError } from "./warnError";
+import { socketSizeLimit } from "./constants";
 const dateFns = new DateFnsAdapter();
 
 const markdownHighlighting = HighlightStyle.define([
@@ -68,7 +69,11 @@ const handlePasteImage = (
   //image
   const fileName =
     dateFns.formatByString(dateFns.date(), "yyyy-MM-dd-HH:mm:ss") + ".png"; //TODO
-  const blob = item.getAsFile();
+  const blob = item.getAsFile() as File;
+  if (blob.size > socketSizeLimit) {
+    alert("Image of more than 1MB cannot be pasted");
+    return;
+  }
   const reader = new FileReader();
   reader.onload = async (e: any) => {
     const err = await socketClient.saveImage({
