@@ -1,14 +1,14 @@
 import { pathDelimiter } from "@/utils/constants";
 import * as path from "path";
 interface Props {
-  root: string;
   cwdf: string;
   onClickNewPath: (newPath: string) => void;
+  root?: string;
 }
 
 const reverseString = (str: string) => str.split("").reverse().join("");
 
-function FolderNavigator({ cwdf, root, onClickNewPath }: Props) {
+function FolderNavigator({ cwdf, root = "/", onClickNewPath }: Props) {
   const insignificantPath = path.join(root, "..");
   const significantPathSplit = path
     .relative(insignificantPath, cwdf)

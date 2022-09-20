@@ -7,11 +7,12 @@ import FolderNavigator from "./FolderNavigator";
 
 interface Props {
   onPickFolder: (folderPath: string) => void;
+  root?: string;
 }
 
-function FolderPicker({ onPickFolder }: Props) {
+function FolderPicker({ onPickFolder, root }: Props) {
   const [folders, setFolders] = useState<string[]>([]);
-  const [cwd, setCwd] = useState("");
+  const [cwd, setCwd] = useState(root === undefined ? "" : root);
 
   useEffect(() => {
     loadFolders();
@@ -53,7 +54,7 @@ function FolderPicker({ onPickFolder }: Props) {
       >
         <FolderNavigator
           cwdf={cwd}
-          root={"/"}
+          root={root}
           onClickNewPath={(newPath) => setCwd(newPath)}
         />
         <Button size="large" onClick={() => onPickFolder(cwd)}>
