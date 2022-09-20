@@ -1,6 +1,6 @@
-import { LocalizationProvider } from "@mui/lab";
-import DateAdapter from "@mui/lab/AdapterDateFns";
-import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import {
   Button,
   Chip,
@@ -108,7 +108,7 @@ const multilineTextEditor = ({
 );
 
 const dateEditor = ({ node, parentNames, updateFrontmatter }: EditorProps) => (
-  <LocalizationProvider dateAdapter={DateAdapter}>
+  <LocalizationProvider dateAdapter={AdapterDateFns}>
     <MobileDateTimePicker
       label={FrontmatterTypes.Date}
       value={node.value}
@@ -117,8 +117,12 @@ const dateEditor = ({ node, parentNames, updateFrontmatter }: EditorProps) => (
         updateFrontmatter(node.name, newValue, parentNames)
       }
       ampm={false}
-      showTodayButton={true}
-      todayText="Now"
+      //https://mui.com/x/react-date-pickers/custom-components/#action-bar
+      componentsProps={{
+        actionBar: {
+          actions: ["cancel", "today", "accept"],
+        },
+      }}
     />
   </LocalizationProvider>
 );
