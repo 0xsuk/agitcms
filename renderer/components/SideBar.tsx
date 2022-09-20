@@ -73,8 +73,6 @@ function SideBar() {
                           siteConfig.key +
                           "?path=" +
                           dir.path +
-                          "&name=" +
-                          dir.name +
                           "&isDir=" +
                           dir.isDir
                       );
@@ -84,8 +82,6 @@ function SideBar() {
                           siteConfig.key +
                           "?path=" +
                           dir.path +
-                          "&name=" +
-                          dir.name +
                           "&isDir=" +
                           dir.isDir
                       );

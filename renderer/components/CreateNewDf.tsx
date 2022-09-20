@@ -72,8 +72,7 @@ function CreateNewDf({ cwdf }: { cwdf: string }) {
         cwdf +
         "/" +
         fileName +
-        "&isDir=false&name=" +
-        fileName
+        "&isDir=false"
     );
   };
 

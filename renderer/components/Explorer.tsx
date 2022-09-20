@@ -64,7 +64,6 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
   const [isFileDialogOpen, setIsFileDialogOpen] = useState(false);
   const [isFolderDialogOpen, setIsFolderDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null);
-  //const renameDf = async () => {};
   const history = useHistory();
 
   const renameDf = async (newName: string) => {
@@ -119,14 +118,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
         onClick={() => {
           if (df.isDir) {
             history.push(
-              "?path=" +
-                cwdf +
-                "/" +
-                df.name +
-                "&isDir=" +
-                df.isDir +
-                "&name=" +
-                df.name
+              "?path=" + cwdf + "/" + df.name + "&isDir=" + df.isDir
             );
             return;
           }
@@ -138,9 +130,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
               "/" +
               df.name +
               "&isDir=" +
-              df.isDir +
-              "&name=" +
-              df.name
+              df.isDir
           );
         }}
       >

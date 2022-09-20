@@ -48,7 +48,7 @@ function Home() {
                     siteConfig.key +
                     "?path=" +
                     siteConfig.path +
-                    "&name=Root&isDir=true"
+                    "&isDir=true"
                 )
               }
             >
