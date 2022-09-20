@@ -156,15 +156,68 @@ $editor-navigator-height: 44px;
 
 
 #editor-frontmatter-tab {
+  height: 100%; //scrollable
   display: none;
   padding: 20px;
   overflow-y: auto;
 }
 
 #editor-media-tab {
+  height: 100%; //scrollable
   display: none;
-  padding: 20px;
+  padding: 30px;
   overflow-y: auto;
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .item {
+    width: 110px; //img max width + padding
+    height: 140px; //img/svg height + margin + desc height + padding
+    margin: 10px;
+    padding: 10px;
+    border: solid 1px $border-default;
+    svg {
+      display: block;
+      margin: auto;
+      font-size: 50px;
+    }
+    img {
+      max-width: 90px;
+      height: 50px;
+      display: block;
+      margin: auto;
+    }
+    .desc {
+      text-align: center;
+      margin-top: 5px;
+      height: 65px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .line-clamp2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow-wrap: break-word;
+        overflow: hidden; 
+      }
+      .line-clamp3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow-wrap: break-word;
+        overflow: hidden; 
+      }
+      .copy {
+        button {
+          font-size: 15px;
+          padding: 0;
+        }
+      }
+    }
+  }
 }
 
 #editor-markdown-wrapper {

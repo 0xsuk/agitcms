@@ -6,11 +6,10 @@ import type { AddressInfo } from "net";
 
 export const runMediaServer = (staticPath: string, publicPath: string) => {
   const server = http.createServer((req, res) => {
-    const parsedUrl = url.parse(req.url as string);
-    const sanitizedPath = path.relative(
-      publicPath,
-      parsedUrl.pathname as string
-    ); //EXAMPLE publicPath: /uploads, pathname: /uploads/img.png, sanitizedPath: /img.png
+    const parsedUrl = decodeURI(
+      url.parse(req.url as string).pathname as string
+    );
+    const sanitizedPath = path.relative(publicPath, parsedUrl as string); //EXAMPLE publicPath: /uploads, pathname: /uploads/img.png, sanitizedPath: /img.png
     const pathname = path.join(staticPath, sanitizedPath); //pathname: /staticpath/img.png
 
     if (!fs.existsSync(pathname)) {
