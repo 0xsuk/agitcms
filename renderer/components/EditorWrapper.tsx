@@ -1,13 +1,14 @@
 import { configContext } from "@/context/ConfigContext";
-import { useContext } from "react";
-import { useLocation } from "react-router-dom";
 import { copyMediaFilePath } from "@/utils/copyMediaFilePath";
 import { switchTab } from "@/utils/switchEditorTab";
 import useFileManager from "@/utils/useFileManager";
 import useSiteConfig from "@/utils/useSiteConfig";
+import { ISiteConfig } from "@shared/types/config";
+import { useContext } from "react";
+import { useLocation } from "react-router-dom";
 import FrontmatterEditor from "./FrontmatterEditor";
 import MarkdownEditor from "./MarkdownEditor";
-import { ISiteConfig } from "@shared/types/config";
+import MediaExplorer from "./MediaExplorer";
 
 function EditorWrapper() {
   const location = useLocation();
@@ -46,7 +47,7 @@ function EditorWrapper() {
         <div className="tab" onClick={() => switchTab("frontmatter")}>
           Frontmatter
         </div>
-        <div className="tab" onClick={() => copyMediaFilePath(siteConfig)}>
+        <div className="tab" onClick={() => switchTab("media")}>
           Media
         </div>
       </div>
@@ -59,6 +60,9 @@ function EditorWrapper() {
             fileManager={fileManager}
             siteConfig={siteConfig}
           />
+        </div>
+        <div id="editor-media-tab">
+          <MediaExplorer />
         </div>
       </div>
     </>

@@ -161,6 +161,12 @@ $editor-navigator-height: 44px;
   overflow-y: auto;
 }
 
+#editor-media-tab {
+  display: none;
+  padding: 20px;
+  overflow-y: auto;
+}
+
 #editor-markdown-wrapper {
   display: flex;
   overflow: hidden;
