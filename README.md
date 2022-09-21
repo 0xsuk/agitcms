@@ -22,7 +22,10 @@ Write markdown blog posts the *hackable* way, get rid of your itch points.
 - mathjax
 
 ## Install
-`npm install -g agitcms`
+`npm install -g agitcms`  
+
+To start: `agitcms`  
+To change port: `AGIT_FRONTEND=3001 agitcms`  
 
 
 ## Usage
