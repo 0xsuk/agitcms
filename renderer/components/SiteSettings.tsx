@@ -1,5 +1,5 @@
 import { FrontmatterTypes } from "@/utils/frontmatterInterface";
-import useSiteConfig, { FrontmatterLanguages } from "@/utils/useSiteConfig";
+import useSiteConfig from "@/utils/useSiteConfig";
 import useSiteConfigBuffer from "@/utils/useSiteConfigBuffer";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -21,6 +21,7 @@ import {
   Typography,
 } from "@mui/material";
 import { IFrontmatterConfig, ISiteConfig } from "@shared/types/config";
+import { frontmatterLanguageOptions } from "@shared/utils/constants";
 import { randomid } from "@shared/utils/randomid";
 import { Dispatch, SetStateAction, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -291,7 +292,7 @@ function SiteSettings() {
                 onChange={(newValue: string) => {
                   editFrontmatterLanguage(newValue);
                 }}
-                items={FrontmatterLanguages}
+                items={[...frontmatterLanguageOptions]}
               >
                 {({ ref, setIsOpen }) => (
                   <TextField

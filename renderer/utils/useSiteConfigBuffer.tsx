@@ -5,6 +5,7 @@ import {
   updateFrontmatterConfig,
 } from "@/utils/frontmatterInterface";
 import { IFrontmatterConfig, ISiteConfig } from "@shared/types/config";
+import { frontmatterLanguageOptions } from "@shared/utils/constants";
 import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -32,7 +33,8 @@ function useSiteConfigBuffer(initialSiteConfig: ISiteConfig) {
   const editFrontmatterLanguage = (newValue: string) => {
     setSiteConfig((prev) => ({
       ...prev,
-      frontmatterLanguage: newValue,
+      frontmatterLanguage:
+        newValue as typeof frontmatterLanguageOptions[number],
     }));
   };
   const editFrontmatterDelimiter = (newValue: string) => {

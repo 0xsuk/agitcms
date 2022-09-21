@@ -1,3 +1,8 @@
+import {
+  autosaveOptions,
+  frontmatterLanguageOptions,
+} from "../utils/constants";
+
 export interface IFrontmatterConfig {
   name: string;
   key: string;
@@ -16,7 +21,7 @@ export interface ISiteConfig {
   name: string;
   key: string;
   path: string;
-  frontmatterLanguage: string;
+  frontmatterLanguage: typeof frontmatterLanguageOptions[number];
   frontmatterDelimiter: string;
   media: {
     staticPath?: string;
@@ -29,5 +34,6 @@ export interface ISiteConfig {
 export interface IConfig {
   sites: ISiteConfig[];
   useTerminal: boolean;
-  autosave: string;
+  autosave: typeof autosaveOptions[number];
+  version?: string;
 }

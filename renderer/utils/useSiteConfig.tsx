@@ -26,8 +26,6 @@ function useSiteConfig(): null | ISiteConfig {
   return siteConfig;
 }
 
-export const FrontmatterLanguages = ["yaml", "toml"];
-
 export const newSiteConfig = (name: string, path: string): ISiteConfig => {
   return {
     name,
