@@ -11,7 +11,7 @@ const reverseString = (str: string) => str.split("").reverse().join("");
 function FolderNavigator({ cwdf, root = "/", onClickNewPath }: Props) {
   const insignificantPath = path.join(root, ".."); //resolves to / if root is /
   const significantPathSplit = path
-    .relative(insignificantPath, cwdf)
+    .relative(insignificantPath, cwdf) //in path-browserify, relative internally calls posix.resolve, which calls process.cwd(), resulting in "undefined" error. That's why agit uses @0xsuk/path-browserify
     .split("/");
 
   return (

@@ -41,7 +41,7 @@ module.exports = {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
     fallback: {
       stream: require.resolve("stream-browserify"),
-      path: require.resolve("path-browserify"),
+      path: require.resolve("@0xsuk/path-browserify"),
       buffer: require.resolve("buffer/"),
     },
     //repeating renderer.tsconfig.compilerOptions.paths

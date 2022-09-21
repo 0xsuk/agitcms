@@ -69,6 +69,7 @@
     "xterm-addon-web-links": "^0.5.1"
   },
   "devDependencies": {
+    "@0xsuk/path-browserify": "^1.0.1",
     "@types/cors": "^2.8.12",
     "@types/react": "^18.0.20",
     "@types/react-beautiful-dnd": "^13.1.2",
@@ -85,7 +86,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
     "nodemon": "^2.0.20",
-    "path-browserify": "^1.0.1",
     "prettier": "2.7.1",
     "sass": "^1.54.9",
     "sass-loader": "^13.0.2",
