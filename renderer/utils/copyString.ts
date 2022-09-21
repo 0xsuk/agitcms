@@ -1,6 +1,4 @@
-import * as path from "path";
-
-export const copyMediaFilePath = async (str: string) => {
+export const copyString = async (str: string) => {
   const buf = document.createElement("input");
   document.body.appendChild(buf);
   buf.value = str;

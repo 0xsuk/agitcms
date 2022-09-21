@@ -1,6 +1,6 @@
 import { siteContext } from "@/context/SiteContext";
 import { mediaExtensions } from "@/utils/constants";
-import { copyString } from "@/utils/copyMediaFilePath";
+import { copyString } from "@/utils/copyString";
 import { socketClient } from "@/utils/socketClient";
 import useSiteConfig from "@/utils/useSiteConfig";
 import { warnError } from "@/utils/warnError";
