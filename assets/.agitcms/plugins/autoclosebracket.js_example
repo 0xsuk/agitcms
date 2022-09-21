@@ -1,0 +1,34 @@
+function handleAutoclose(transactionSpecList, transaction) {
+  return function forBracket(opening, closing) {
+    transaction.changes.iterChanges((fromA, _, fromB, toB) => {
+      const newChars = transaction.newDoc.sliceString(fromB, toB);
+      if (newChars === opening) {
+        transactionSpecList.push({
+          changes: { from: fromA, insert: opening + closing },
+          selection: { anchor: fromA + 1 },
+          filter: false, //do not filter transaction for this update to prevent unintended behaviour
+        });
+      }
+      if (newChars === closing) {
+        //if the next char is also closing bracket, move cursor right
+        const nextChar = transaction.startState.sliceDoc(fromA, fromA + 1);
+        if (nextChar === closing) {
+          transactionSpecList.push({
+            selection: { anchor: fromA + 1 },
+            filter: false,
+          });
+        }
+      }
+    });
+  };
+}
+new TransactionFilter({
+  fn: (transaction) => {
+    const transactionSpecList = [];
+    const forBracket = handleAutoclose(transactionSpecList, transaction);
+    forBracket("[", "]");
+    forBracket("(", ")");
+
+    return transactionSpecList;
+  },
+});

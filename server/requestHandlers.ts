@@ -54,9 +54,13 @@ export const createListeners = (
     readConfig(_, resolve) {
       try {
         if (!fs.existsSync(CONFIG_DIR)) {
-          fs.cpSync(path.join(__dirname, "assets", ".agitcms"), CONFIG_DIR, {
-            recursive: true,
-          });
+          fs.cpSync(
+            path.join(__dirname, "..", "assets", ".agitcms"),
+            CONFIG_DIR,
+            {
+              recursive: true,
+            }
+          );
         }
 
         const config = JSON.parse(

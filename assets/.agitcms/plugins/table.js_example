@@ -1,0 +1,16 @@
+new ToolbarItem({
+  initialChar: "T",
+  run: (editorView) => {
+    const from =
+      editorView.state.selection.ranges[editorView.state.selection.mainIndex]
+        .to;
+    const insert = "|  |  |\n|---|---|\n";
+
+    editorView.dispatch({
+      changes: { from, insert },
+      selection: { anchor: from + 2 },
+    });
+
+    editorView.focus();
+  },
+});

@@ -1,0 +1,24 @@
+const sitesToEnablePlugin = ["0xsuk's blog"];
+new ToolbarItem({
+  initialChar: "A",
+  weight: 5,
+  run: (editorView) => {
+    const from =
+      editorView.state.selection.ranges[editorView.state.selection.mainIndex]
+        .to;
+    const insert = "{{<alert `\n\n` info>}}";
+
+    editorView.dispatch({
+      changes: { from, insert },
+      selection: { anchor: from + 11 },
+    });
+
+    editorView.focus();
+  },
+  isActive: (siteConfig) => {
+    if (sitesToEnablePlugin.includes(siteConfig.name)) {
+      return true;
+    }
+    return false;
+  },
+});
