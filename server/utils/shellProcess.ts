@@ -1,5 +1,5 @@
 import { randomid } from "@shared/utils/randomid";
-import * as pty from "node-pty";
+import * as pty from "node-pty-prebuilt-multiarch";
 
 interface IProcessObj {
   ptyProcess: pty.IPty;
