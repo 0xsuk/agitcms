@@ -34,6 +34,9 @@ const theme = createTheme({
     warnError(err);
     return;
   }
+  if (config.version === undefined || config.version !== "2.0") {
+    alert("Configuration file is out of date and might cause some bugs");
+  }
 
   ReactDOM.render(
     <Router>
