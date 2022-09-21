@@ -6,8 +6,8 @@ import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import { Tooltip, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 function SideBar() {
@@ -21,19 +21,6 @@ function SideBar() {
   } else if (!isVisible && sidebarBody) {
     sidebarBody.style.display = "none";
   }
-
-  const toggleIsVisible = (e: any) => {
-    if (e.key === "B" && e.ctrlKey) {
-      setIsVisible((prev) => !prev);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", toggleIsVisible);
-    return () => {
-      document.removeEventListener("keydown", toggleIsVisible);
-    };
-  }, []);
 
   return (
     <div id="sidebar">
@@ -159,26 +146,22 @@ function SideBar() {
         )}
       </div>
       {!isVisible && (
-        <Tooltip title="Ctrl+Shift+B">
-          <a id="sidebar-open" onClick={() => setIsVisible(true)}>
-            <span>
-              <svg viewBox="0 0 24 24">
-                <path d="m 8 5 l 8 7 l -8 7 l -1 -1 l 7 -6 l -7 -6 l 1 -1"></path>
-              </svg>
-            </span>
-          </a>
-        </Tooltip>
+        <a id="sidebar-open" onClick={() => setIsVisible(true)}>
+          <span>
+            <svg viewBox="0 0 24 24">
+              <path d="m 8 5 l 8 7 l -8 7 l -1 -1 l 7 -6 l -7 -6 l 1 -1"></path>
+            </svg>
+          </span>
+        </a>
       )}
       {isVisible && (
-        <Tooltip title="Ctrl+Shift+B">
-          <a id="sidebar-close" onClick={() => setIsVisible(false)}>
-            <span>
-              <svg viewBox="0 0 24 24">
-                <path d="m 16 5 l -8 7 l 8 7 l 1 -1 l -7 -6 l 7 -6 l -1 -1"></path>
-              </svg>
-            </span>
-          </a>
-        </Tooltip>
+        <a id="sidebar-close" onClick={() => setIsVisible(false)}>
+          <span>
+            <svg viewBox="0 0 24 24">
+              <path d="m 16 5 l -8 7 l 8 7 l 1 -1 l -7 -6 l 7 -6 l -1 -1"></path>
+            </svg>
+          </span>
+        </a>
       )}
     </div>
   );
