@@ -1,11 +1,8 @@
 import { IEmitterMap } from "@shared/types/api";
-import * as cors from "cors";
-import * as express from "express";
 import * as http from "http";
 import { Server, Socket } from "socket.io";
 import { createListeners } from "./requestHandlers";
-const app = express();
-const server = http.createServer(app);
+const server = http.createServer();
 const io = new Server(server, { cors: { origin: "*" } }); //passed to cors
 //Do not provde type explicitly(with IEmitterMap, IListenerMap) to socket
 io.on("connection", (socket: Socket) => {
@@ -15,8 +12,6 @@ io.on("connection", (socket: Socket) => {
     socket.on(action, listeners[action]);
   });
 });
-app.use(express.json());
-app.use(cors());
 
 const port = 5151; //TODO make it optional
 
