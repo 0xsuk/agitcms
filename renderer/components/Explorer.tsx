@@ -1,15 +1,16 @@
+import { socketClient } from "@/utils/socketClient";
+import useSiteConfig from "@/utils/useSiteConfig";
+import { warnError } from "@/utils/warnError";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Menu, MenuItem } from "@mui/material";
+import { IFilesAndFolders } from "@shared/types/api";
 import { ISiteConfig } from "@shared/types/config";
+import * as path from "path";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import useSiteConfig from "@/utils/useSiteConfig";
 import CreateNewDf from "./CreateNewDf";
 import TextDialog from "./TextDialog";
-import { socketClient } from "@/utils/socketClient";
-import { warnError } from "@/utils/warnError";
-import { IFilesAndFolders } from "@shared/types/api";
 
 function Explorer() {
   const [filesAndFolders, setFilesAndFolders] = useState<IFilesAndFolders>([]);
@@ -67,8 +68,8 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
   const history = useHistory();
 
   const renameDf = async (newName: string) => {
-    const oldDfPath = cwdf + "/" + df.name;
-    const newDfPath = cwdf + "/" + newName;
+    const oldDfPath = path.join(cwdf, df.name);
+    const newDfPath = path.join(cwdf, newName);
     const err = await socketClient.renameFileOrFolder({
       oldDfPath,
       newDfPath,
@@ -80,7 +81,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
     loadFilesAndFolders();
   };
   const removeDf = async () => {
-    const dfPath = cwdf + "/" + df.name;
+    const dfPath = path.join(cwdf, df.name);
     if (!window.confirm("Delete " + dfPath + " ?")) return;
     let err;
     if (df.isDir) {
@@ -118,7 +119,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
         onClick={() => {
           if (df.isDir) {
             history.push(
-              "?path=" + cwdf + "/" + df.name + "&isDir=" + df.isDir
+              "?path=" + path.join(cwdf, df.name) + "&isDir=" + df.isDir
             );
             return;
           }
@@ -126,9 +127,7 @@ function Df({ siteConfig, cwdf, df, loadFilesAndFolders }: DfProps) {
             "/site/editor/" +
               siteConfig.key +
               "?path=" +
-              cwdf +
-              "/" +
-              df.name +
+              path.join(cwdf, df.name) +
               "&isDir=" +
               df.isDir
           );
