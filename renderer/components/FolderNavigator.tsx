@@ -1,4 +1,3 @@
-import { pathDelimiter } from "@/utils/constants";
 import * as path from "path";
 interface Props {
   cwdf: string;
@@ -8,10 +7,11 @@ interface Props {
 
 const reverseString = (str: string) => str.split("").reverse().join("");
 
+//cwdf is always posix
 function FolderNavigator({ cwdf, root = "/", onClickNewPath }: Props) {
   const insignificantPath = path.join(root, ".."); //resolves to / if root is /
   const significantPathSplit = path
-    .relative(insignificantPath, cwdf) //in path-browserify, relative internally calls posix.resolve, which calls process.cwd(), resulting in "undefined" error. That's why agit uses @0xsuk/path-browserify
+    .relative(insignificantPath, cwdf)
     .split("/");
 
   return (
@@ -39,16 +39,15 @@ function FolderNavigator({ cwdf, root = "/", onClickNewPath }: Props) {
                   onClickNewPath("/");
                 }}
               >
-                {pathDelimiter}
+                {"/"}
               </span>
             ) : (
-              pathDelimiter
+              "/"
             )}
           </>
         ))
         .reverse()}
-      {insignificantPath !== "/" &&
-        reverseString(insignificantPath).replaceAll("/", pathDelimiter)}
+      {insignificantPath !== "/" && reverseString(insignificantPath)}
     </span>
   );
 }

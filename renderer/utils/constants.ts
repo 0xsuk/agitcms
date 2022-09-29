@@ -7,8 +7,6 @@ export const isURL = (url: string) => {
   }
 };
 
-export const pathDelimiter = window.navigator.platform === "Win32" ? "\\" : "/";
-
 export const mediaExtensions = ["jpg", "jpeg", "png"];
 
 export const socketSizeLimit = 1000000; //1MB

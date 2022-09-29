@@ -1,4 +1,4 @@
-import { defaultShell } from "@/utils/constants";
+import { defaultShell, isWin } from "@/utils/constants";
 import { spawnShell, writeToShell } from "@/utils/shellProcess";
 import { IEmitterMap, IListenerMap } from "@shared/types/api";
 import { IConfig } from "@shared/types/config";
@@ -159,6 +159,11 @@ export const createListeners = (
       try {
         if (folderPath === "") {
           folderPath = os.homedir();
+          if (isWin)
+            folderPath = path.posix.join(
+              "/",
+              ...folderPath.split("\\").slice(1)
+            );
         }
         const filesAndFolders = _getFilesAndFolders(folderPath);
         resolve({ filesAndFolders, cwd: folderPath, err: null });

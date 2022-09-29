@@ -2,6 +2,7 @@ import { socketClient } from "@/utils/socketClient";
 import { warnError } from "@/utils/warnError";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import { Button } from "@mui/material";
+import * as path from "path";
 import { useEffect, useState } from "react";
 import FolderNavigator from "./FolderNavigator";
 
@@ -62,7 +63,7 @@ function FolderPicker({ onPickFolder, root }: Props) {
         </Button>
       </div>
       {folders.map((f) => (
-        <div className="df" onClick={() => setCwd(cwd + "/" + f)}>
+        <div className="df" onClick={() => setCwd(path.join(cwd, "/", f))}>
           <div style={{ display: "flex" }}>
             <FolderOpenOutlinedIcon fontSize="small" />
             <p style={{ paddingLeft: "10px" }}>{f}</p>
