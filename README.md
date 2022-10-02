@@ -110,7 +110,7 @@ Agit CMS allows `Ctrl + v` to paste images into the editor.
 
 This feature is useful when you want to paste a screen capture without looking for its file name.
 
-Set [media folder path](/agitcms/configuration/#media-folder-path) and [media public path](/agitcms/configuration/#media-public-path) to enable this feature.  
+Set [media folder path](#media-folder-path) and [media public path](#media-public-path) to enable this feature.  
 
 Images larger than 1MB cannot be pasted.
 
