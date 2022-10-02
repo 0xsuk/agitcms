@@ -13,14 +13,6 @@ Write markdown blog posts the *hackable* way, get rid of your itch points.
 ![frontmatter](https://user-images.githubusercontent.com/97814789/177042161-555c631e-2050-453c-b9de-1e2137ed7752.gif)
 
 
-## Features
-- vertial-split style markdown editor 
-- type-aware frontmatter editor
-- integrated terminal
-- custom editor plugin (toolbar/snippets/keymap)
-- image pasting
-- mathjax
-
 ## Install
 `npm install -g agitcms`  
 
@@ -28,42 +20,27 @@ To start: `agitcms`
 To change port: `AGIT_FRONTEND=3001 agitcms`  
 
 
-## Usage
-Explained here! https://0xsuk.github.io/agitcms/overview
-
-### Overview
-![](/uploads/agitv1.0.0.png)
-
-Agit CMS is a multi-platform desktop application built on top of Electron, which works as a frontend interface for any static site generator like Hugo and Jekyll.  
-
-You need to have a ready-to-run static sites on your local computer, as Agit CMS works as a frontend interface for it. 
-
-#### Features
-- Vertical split style markdown editor.
+## Features
+- [Vertical split style markdown editor](#markdown-editor).
 - [type-aware frontmatter interface](/agitcms/quick-start/#frontmatter-editor)
 - [Integrated Terminal](/agitcms/quick-start/#integrated-terminal)
 - mathjax rendering: $ a + b = c$
 - image pasting into editor
-- pin folder/file in the sidebar
 - custom frontmatter language(yaml/toml) & delimiters
-- custom editor snippet
-- custom editor toolbar
-- custom editor keymap
+- custom editor snippet/toolbar/keymap
+
 
 
 Agit CMS tries to be a hackable headless CMS.  
   
   
-#### Who should and should not use Agit CMS?  
-  
-If you want high customizability on your writing experience, go for Agit.  
-If you want a CMS to work *with your team* or if you want to provide a CMS for writers who are not in tech, go for other CMS.  
-  
-Agit CMS is designed for people who  
-- write contents alone
-- find existing CMS for writer, not for devs
-- prefer vertical split editing to WYSIWYG
-- want to write fast with powerful customization
+## Comparison with other CMS  
+
+|  | Agit CMS | Netlify CMS |
+|---|---|---|
+| Markdown or WYSIWYG | Markdown | Both |
+| Where CMS runs | Runs on your computer | Runs on website's /admin | 
+
  
 
 ### Quick Start
