@@ -7,7 +7,7 @@
 ![image](https://user-images.githubusercontent.com/97814789/191286020-479deeba-3d7e-4b45-857d-6504eb8947e7.png)
 /eɪdʒɪt/  
 
-Agit CMS is a web frontend interface for markdown-based static site generators, like Hugo and Jekyll.  
+Agit CMS is a simple web frontend interface for markdown-based static site generators, like Hugo and Jekyll.  
 Write markdown blog posts the *hackable* way, get rid of your itch points.
 
 ![frontmatter](https://user-images.githubusercontent.com/97814789/177042161-555c631e-2050-453c-b9de-1e2137ed7752.gif)
@@ -21,37 +21,33 @@ To change port: `AGIT_FRONTEND=3001 agitcms`
 
 
 ## Features
-- [Vertical split style markdown editor](#markdown-editor).
-- [type-aware frontmatter interface](/agitcms/quick-start/#frontmatter-editor)
-- [Integrated Terminal](/agitcms/quick-start/#integrated-terminal)
-- mathjax rendering: $ a + b = c$
-- image pasting into editor
-- custom frontmatter language(yaml/toml) & delimiters
+- vertical split style markdown editor
+- type-aware frontmatter editor
 - custom editor snippet/toolbar/keymap
+- custom frontmatter language(yaml/toml) & delimiters
+- Integrated Terminal
+- mathjax rendering: $ a + b = c$
+- image pasting into the editor
 
 
-
-Agit CMS tries to be a hackable headless CMS.  
-  
+Agit CMS tries to be a hackable headless CMS for developers.
   
 ## Comparison with other CMS  
 
 |  | Agit CMS | Netlify CMS |
 |---|---|---|
-| Markdown or WYSIWYG | Markdown | Both |
-| Where CMS runs | Runs on your computer | Runs on website's /admin | 
+| Where CMS runs | Runs on your computer | Runs on website's /admin (which is a security issue) | 
+| Installation | easy(npm i) | hard
+| image pasting | O | X
+| mathjax rendering | O | △(requires additional setup)
+| Integrated Terminal | O | X
+| customizability | O | X
 
  
 
-### Quick Start
-#### Installation
-Install latest binary from [here](https://github.com/0xsuk/agitcms/releases)
+## Quick Start
 
-{{< alert `
-When downloading a binary, some warning will be displayed because Agit CMS is yet to be trusted by Windows/Mac. To suppress warning and continue, please reference below. Mac: Find agitcms in Finder. Click on the app pressing ctrl key. Select "Open". (Open a Mac app from an unidentified developer - Apple Support) Windows: If "Windows protected your PC", click on "More info", and select "Run anyway".
-` info >}} 
-
-#### Adding a site
+### Adding a new site
 
 Open Agit CMS and click `NEW` button. 
 
@@ -62,7 +58,7 @@ Once you add a new site, click on it, then Agit CMS provides a file explorer whe
 
 Click `PIN` button at the very top to pin a folder or a file to left sidebar for easy access.
 
-#### Integrated Terminal
+### Integrated Terminal
 Press `Control + @` to open up a integrated terminal.
 
 Try starting a server of your static sites generator.
@@ -72,135 +68,18 @@ In jekyll: `jekyll server`
 
 ![](/uploads/2022-07-03-16:38:13.png)
 
-Now your preview server is running on your host!
-
-#### Modifying a post
-Click on a markdown file you want to edit in file explorer.
-
-Agit CMS provides a markdown editor with nice syntax highlighting and keymaps.
-
-Type some text, right pane automatically renders markdown in a Github flavored style,
-
-##### Frontmatter Editor
-Click on a Frontmatter tab in the editor.
-Agit CMS automatically scans frontmatter section of your existing post, and provides a **type-aware frontmatter editor** like this.
-
-![](/uploads/2022-07-03-16:50:25.png)
-
-which is equal to
-```markdown
----
-title: Quick Start
-type: docs
-date: '2022-07-03T16:11:40+09:00'
-draft: false
-comment: true
-toc: true
-reward: false
-pinned: false
-featured: false
-math: false
-categories: []
-tags: []
-series: []
-images:
-  - '![](/uploads/2022-07-03-16:38:13.png)'
----
-```
-
-You can confirm that for example, since `draft` is a boolean value, Agit CMS provides a boolean toggler for `draft`.
-
-You can learn more about how to configure frontmatter [language](/agitcms/configuration/#frontmatter-language), [delimiters](/agitcms/configuration/#frontmatter-delimiters) and its [types](/agitcms/configuration/#frontmatter-template) in the next page. 
+Now your preview server is running on your host!  
+Try modifying a post as you wish, with a nice markdown&frontmatter editor!
 
 
-### Configuration
-Agit CMS configration is really simple.  
-
-There's two configurations.  
-1. Global configuration: applies globally.  
-2. Site configuration: applies only to specific site.
-
-
-Let's start with Global configuration
-#### Global configuration
-Navigate to Home (start page), and click on `Settings` in `GLOBAL` section of the sidebar.  
-
-##### Open Integrated Terminal with Ctrl+@
-Disable this to prevent Agit CMS from opening an integrated terminal when ctrl+@ is captured.  
-
-##### Zoom
-Change zoom rate.  
-
-#### Site configuration
-Go to one of site you added, and click on `Settings` in `SITE` section of the sidebar. 
-
-##### Frontmatter language
-Define what language you use to represent frontmatter in markdown posts.
-
-Default: `yaml`
-
-##### Frontmatter delimiters
-Define what delimiters you use to wrap frontmatter.  
-If you want to parse frontmatter in toml like below, you want to set frontmatter delimiters to `+++`, and frontmatter language to `toml`.  
-```markdown
-+++
-title = example
-+++
-# Heading of the article
-...
-```
-
-Default: `---`
-
-##### Frontmatter template
-This one is optional but recommended if you want to parse frontmatter with correct types, or if you want to create new posts by `CREATE NEW` button of the Agit CMS file explorer.  
-
-Frontmatter template specifies what type each property of frontmatter attributed to.
-
-This information is used when Agit CMS parses markdown and generates a [type-aware frontmatter editor](/agitcms/quick-start/#frontmatter-editor), or when Agit CMS creates a new post with default frontmatter values. 
-
-###### example
-Let's take a frontmatter below for example.
-```markdown
----
-title: Configuration
-date: '2022-07-03T17:52:46+09:00'
-draft: false
-tags: ["React.js", "Web Dev"]
----
-```
-When Agit CMS parses frontmatter and generates a type-aware frontmatter editor, it tries to find a type for each property of frontmatter.
-
-If you set `date` property of frontmatter to be a type of `Date` for instance, Agit CMS provides a date picker in the frontmatter editor.  
-If you set `draft` to be a type of `Bool`, Agit CMS provides a boolean toggler in the frontmatter editor. 
-
-###### Supported types
-| type | |
-| --- | --- |
-| Text | plain text (ex. `title: Configuration`)|
-| List of Text | list of text (ex. `tags: ["React.js", "Web Dev"]`) |
-| Multiline Text | text with multiple lines |
-| Date | date in ISO 8601 format (ex. `date: '2022-07-03T17:52:46+09:00'`) |
-| Bool | `true` or `false` (ex. `draft: false`) |
-| Nest | property that contains child properties |
-
-##### Media Folder Path
-Specify where you store media (image, GIF and so on) in your file system.  
-
-##### Media Public Path
-Specify the url path media content is accesible from.  
-
-###### example
-Suppose media folder path is `/home/mysite/static/uploads`, and `/home/mysite/static/uploads/example.png`'s url is `https://mywebsite.com/contents/images/example.png`.
-
-Then media public path should be `/contents/images`.
-
-### Editor
-#### keymaps
+## Usage
+### Markdown Editor
+#### default keymaps
 Visit [here](https://codemirror.net/docs/ref/#h_keymaps) and [here](https://codemirror.net/docs/ref/#commands.historyKeymap) for keymaps available by default.  
 
+#### custom keymaps
 Want to add your own keymaps?  
-Try creating your own [plugin](http://localhost:1313/agitcms/plugins/)!
+Try creating your own [plugin](#plugins)!
 
 #### mathjax
 Type 
@@ -227,27 +106,28 @@ $
 to represent inline math.  
 
 #### image pasting
-Agit CMS supports `Ctrl + v` to paste image into the editor.  
+Agit CMS allows `Ctrl + v` to paste images into the editor.  
 
-This feature is useful when you want to past a screen capture without looking for its file name.
+This feature is useful when you want to paste a screen capture without looking for its file name.
 
 Set [media folder path](/agitcms/configuration/#media-folder-path) and [media public path](/agitcms/configuration/#media-public-path) to enable this feature.  
 
+Images larger than 1MB cannot be pasted.
 
-{{< alert "At this version, all images pasted into the editor is saved in `year-month-date-time.png` format" info>}}
+{{< alert "At this version, all images pasted into the editor are saved in `year-month-date-time.png` format" info>}}
 
 #### Media
-`![](${media_public_path}/example.png)` written in the markdown editor panel (left side) gets parsed into `<img src="http://localhost:${random_port}/${media_public_path}/example.png">` in the preview panel at the right side .  (`${media_public_path}` is a [media public path](/agitcms/configuration/#media-public-path))
+`![](${media_public_path}/example.png)` written in the markdown editor panel (left side) gets parsed into `<img src="http://localhost:${random_port}/${media_public_path}/example.png">` in the preview panel at the right side .  (`${media_public_path}` is a [media public path](#media-public-path))
 
-Agit CMS starts local http server on ${random_port} at [media folder path](/agitcms/configuration/#media-folder-path) in the filesystem to serve media contents.  
-Http server automatically closes when Agit CMS is closed.  
+Agit CMS starts local http server on ${random_port} at [media folder path](#media-folder-path) in the filesystem to serve media contents.  
+HTTP server automatically closes when Agit CMS is closed.  
 
-There's a couple of things to note
-- On Windows, you have to tell windows to allow Agit CMS to start http server when warning is shown. 
-- Image placed at the same folder as the markdown post file is in cannot be previewed at this version.  
+There are a couple of things to note
+- On Windows, you might have to tell windows to allow Agit CMS to start HTTP server when a warning is shown. 
+- Image placed in the same folder as the markdown post file is in cannot be previewed at this version.  
 
-To quickly get image path you want to insert into the editor, Agit CMS has a file explorer shortcut button `Media` for it.  
-It opens [media folder path](/agitcms/configuration/#media-folder-path), and selected image's public path will be copied into your clipboard.  
+To quickly get the image path you want to insert into the editor, Agit CMS has a file explorer shortcut button `Media` for it.  
+It opens [media folder path](#media-folder-path), and the selected image's public path will be copied into your clipboard.  
 This way, you can easily type `![](${ctrl + v})` (where `${ctrl + v}` means pressing `ctrl + v`) to insert the image.  
 
 ### Plugins
@@ -257,21 +137,21 @@ Agit CMS evaluate javascript files in `~/.agitcms/plugins` as plugins when boot,
 
 Creating your own plugin requires a bit of knowledge of codemirror. If you don't know any, [Examples](#examples) is helpful.
 
-There’s two types of plugins.  
+There are two types of plugins.  
 - Toolbar Item: manually invoked
 - TransactionFilter: automatically invoked
 
 #### Toolbar Item
-To create Toolbar Item plugin, create a new instance of [ToolbarItem](/agitcms/api-reference/#class-toolbaritem) class and provide a valid [config](/agitcms/api-reference/#config) as a first argument.
+To create Toolbar Item plugin, create a new instance of [ToolbarItem](#class-toolbaritem) class and provide a valid [config](#config) as a first argument.
 
-If you don't want your plugin to show up in the toolbar, set [config](/agitcms/api-reference/#config).initialChar to empty. That way you can only call plugin via [config](/agitcms/api-reference/#config).keyAlias
+If you don't want your plugin to show up in the toolbar, set [config](#config).initialChar to empty. That way you can only call the plugin via [config](#config).keyAlias
 
 See [table plugin](#table-plugin) for an exmaple.
 
 #### Transaction Filter
 Every time editor updates its document, this type of plugins, i.e., Transaction Filter plugin is called.  Unlike ToolbarItem plugin, Transaction Filter does not modify, 
 
-To create Transaction Filter plugin, create a new instance of [Transaction Filter](/agitcms/api-reference/#class-transactionfilter) class and provide a valid [config](/agitcms/api-reference/#config-1) as a first argument.
+To create Transaction Filter plugin, create a new instance of [Transaction Filter](#class-transactionfilter) class and provide a valid [config](#config-1) as a first argument.
 
 
 #### Examples
@@ -384,8 +264,79 @@ Press `ctrl+d` to kill a process. If a process is killed, integrated terminal au
 Click `+` to add an instance.
 
 If you navigate to Home while integrated terminal is open, all instances will be inaccesible, but still be running in the background.  
-### API Reference
-#### siteConfig
+
+## Global settings
+Navigate to Home (start page), and click on `Settings` in `GLOBAL` section of the sidebar.  
+
+### Open Integrated Terminal with Ctrl+@
+Disable this to prevent Agit CMS from opening an integrated terminal when ctrl+@ is captured.  
+
+## Site settings
+Go to one of site you added, and click on `Settings` in `SITE` section of the sidebar. 
+
+### Frontmatter language
+Define what language you use to represent frontmatter in markdown posts.
+
+Default: `yaml`
+
+### Frontmatter delimiters
+Define what delimiters you use to wrap frontmatter.  
+If you want to parse frontmatter in toml like below, you want to set frontmatter delimiters to `+++`, and frontmatter language to `toml`.  
+```markdown
++++
+title = example
++++
+# Heading of the article
+...
+```
+
+Default: `---`
+
+### Frontmatter template
+This one is optional but recommended if you want to parse frontmatter with correct types, or if you want to create new posts by `CREATE NEW` button of the Agit CMS file explorer.  
+
+Frontmatter template specifies what type each property of frontmatter is attributed to.
+
+This information is used when Agit CMS parses markdown and generates a type-aware frontmatter editor, or when Agit CMS creates a new post with default frontmatter values. 
+
+#### example
+Let's take a frontmatter below for example.
+```markdown
+---
+title: Configuration
+date: '2022-07-03T17:52:46+09:00'
+draft: false
+tags: ["React.js", "Web Dev"]
+---
+```
+When Agit CMS parses frontmatter and generates a type-aware frontmatter editor, it tries to find a type for each property of frontmatter.
+
+If you set `date` property of frontmatter to be a type of `Date` for instance, Agit CMS provides a date picker in the frontmatter editor.  
+If you set `draft` to be a type of `Bool`, Agit CMS provides a boolean toggler in the frontmatter editor. 
+
+#### Supported types
+| type | |
+| --- | --- |
+| Text | plain text (ex. `title: Configuration`)|
+| List of Text | list of text (ex. `tags: ["React.js", "Web Dev"]`) |
+| Multiline Text | text with multiple lines |
+| Date | date in ISO 8601 format (ex. `date: '2022-07-03T17:52:46+09:00'`) |
+| Bool | `true` or `false` (ex. `draft: false`) |
+| Nest | property that contains child properties |
+
+### Media Folder Path
+Specify where you store media (image, GIF and so on) in your file system.  
+
+### Media Public Path
+Specify the url path media content is accesible from.  
+
+#### example
+Suppose media folder path is `/home/mysite/static/uploads`, and `/home/mysite/static/uploads/example.png`'s url is `https://mywebsite.com/contents/images/example.png`.
+
+Then media public path should be `/contents/images`.
+
+## API Reference
+### siteConfig
 | property | desc |
 |---|---|
 | name | name of the site |
@@ -398,42 +349,42 @@ If you navigate to Home while integrated terminal is open, all instances will be
 | pinnedDirs | array of pinned folders and files |
 | frontmatter | frontmatter template |
 
-#### class Plugin
+### class Plugin
 | property/method | desc | type | default |
 |---|---|---|---|
 | constructor({isActive}) | create new instance |
-| isActive | Plugin is active or not | bool \| ([siteConfig](#siteConfig)) => bool | true |
+| isActive | Plugin is active or not | bool \| ([siteConfig](#siteconfig)) => bool | true |
 
-#### class ToolbarItem
-subclass of [Plugin](#Plugin)
+### class ToolbarItem
+subclass of [Plugin](#class-plugin)
 | property/method | desc |
 |---|---|
 | constructor([config](#config)) | create new instance |
-##### config
+#### config
 | property | desc | type | default |
 |---|---|---|---|
 | initialChar | single character that represents item in the toolbar | string | |
 | tooltip | description of the tool | string | |
 | weight | The more weight, the latter the item appears in the toolbar | number | |
 | keyAlias | key to invoke the plugin. To learn more about key notation, visit https://codemirror.net/docs/ref/#view.KeyBinding | string | |
-| run | action to perform. editorView holds information of the editor, and siteConfig holds configuration of the site. stateModule is a codemirror's state module, which has access to all the classes/constants exported from https://codemirror.net/docs/ref/#state. In most cases, you want to call editorView.[dispatch](https://codemirror.net/docs/ref/#view.EditorView.dispatch) to perform action on editor. | ([editorView](https://codemirror.net/docs/ref/#view.EditorView), [siteConfig](#siteConfig), [stateModule](https://codemirror.net/docs/ref/#state)) => void | () => alert("No action is registered for this toolbar item").  |
-| isActive | = [Plugin](#Plugin).isActive
+| run | action to perform. editorView holds information of the editor, and siteConfig holds configuration of the site. stateModule is a codemirror's state module, which has access to all the classes/constants exported from https://codemirror.net/docs/ref/#state. In most cases, you want to call editorView.[dispatch](https://codemirror.net/docs/ref/#view.EditorView.dispatch) to perform action on editor. | ([editorView](https://codemirror.net/docs/ref/#view.EditorView), [siteConfig](#siteconfig), [stateModule](https://codemirror.net/docs/ref/#state)) => void | () => alert("No action is registered for this toolbar item").  |
+| isActive | = [Plugin](#class-plugin).isActive
 
-#### class TransactionFilter
-subclass of [Plugin](#Plugin)
+### class TransactionFilter
+subclass of [Plugin](#class-plugin)
 | property/method | desc |
 |---|---|
-| constructor([config](#config)) | create new instance |
-##### config
+| constructor([config](#config-1)) | create new instance |
+#### config
 | property | desc | type | default |
 |---|---|---|---|
 | map | map key to another key | [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) | new Map() |
 | fn | function to perform. Use this field to perform complicated job that you can't with map. | ([transaction](https://codemirror.net/docs/ref/#state.Transaction)) => [transaction](https://codemirror.net/docs/ref/#state.Transaction) | |
-| isActive | = [Plugin](#Plugin).isActive |
+| isActive | = [Plugin](#class-plugin).isActive |
 
 
 
-### Bugs and Questions
+## Bugs and Questions
 If you want to report a bug or have a question, create a new [issue](https://github.com/0xsuk/agitcms/issues). Don't forget to label it!
 
 ## Development
