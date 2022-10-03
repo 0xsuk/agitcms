@@ -1,6 +1,6 @@
 {
   "name": "agitcms",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "A hackable headless CMS for markdown blogs",
   "bin": "cli/index.js",
   "scripts": {
