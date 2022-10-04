@@ -112,9 +112,9 @@ This feature is useful when you want to paste a screen capture without looking f
 
 Set [media folder path](#media-folder-path) and [media public path](#media-public-path) to enable this feature.  
 
-Images larger than 1MB cannot be pasted.
-
-{{< alert "At this version, all images pasted into the editor are saved in `year-month-date-time.png` format" info>}}
+A couple of things to note
+- Images larger than 1MB cannot be pasted.
+- At this version, all images pasted into the editor are saved in `year-month-date-time.png` format
 
 #### Media
 `![](${media_public_path}/example.png)` written in the markdown editor panel (left side) gets parsed into `<img src="http://localhost:${random_port}/${media_public_path}/example.png">` in the preview panel at the right side .  (`${media_public_path}` is a [media public path](#media-public-path))
