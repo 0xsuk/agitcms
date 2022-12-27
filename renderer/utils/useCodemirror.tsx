@@ -168,6 +168,7 @@ function useCodemirror({ fileManager }: { fileManager: IFileManager }) {
             );
           },
         }),
+				EditorView.contentAttributes.of({autocorrect: "on", autocapitalize:"on"}),
         EditorState.transactionFilter.of((tr) => {
           const transactionSpecList: TransactionSpec[] = [];
           transactionFilters.forEach((transactionFilter) => {
