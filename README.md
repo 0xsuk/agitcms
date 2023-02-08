@@ -12,7 +12,7 @@ Write markdown blog posts the *hackable* way, get rid of your itch points.
 
 ![frontmatter](/github/local.gif)
 
-[More screenshots](/github)
+[More screenshots](/github/showcase.md)
 
 ## Install
 `npm install -g agitcms`  
