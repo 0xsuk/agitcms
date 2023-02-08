@@ -4,14 +4,15 @@
     <p align="center">A hackable headless CMS for markdown blogs</p>
 </p>
 
-![image](https://user-images.githubusercontent.com/97814789/191286020-479deeba-3d7e-4b45-857d-6504eb8947e7.png)
+![image](/github/local1.png)
 /eɪdʒɪt/  
 
 Agit CMS is a simple web frontend interface that utilizes filesystem to manage markdown/media contents. Built for markdown-based static site generators, like Hugo and Jekyll.  
 Write markdown blog posts the *hackable* way, get rid of your itch points.
 
-![frontmatter](https://user-images.githubusercontent.com/97814789/177042161-555c631e-2050-453c-b9de-1e2137ed7752.gif)
+![frontmatter](/github/local.gif)
 
+[More screenshots](/github)
 
 ## Install
 `npm install -g agitcms`  
