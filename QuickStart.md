@@ -10,7 +10,7 @@ Once you registered, click on it, then Agit CMS provides a file explorer where y
 
 Click PIN button at the very top to pin a folder or a file to left sidebar for easy access.
 
-## Using Integrated Terminal
+## Starting preview server
 Press Control + @ to open/close a integrated terminal.
 
 Try starting a preview server of your static sites generator.
