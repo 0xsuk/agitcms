@@ -1,18 +1,18 @@
-Listing files
+### Listing files  
 ![](localhost_3131_1.png)
-Creating new post
+### Creating new post  
 ![](localhost_3131_2.png)
-Settings
+### Settings
 ![](localhost_3131_3.png)
-Settings
+### Settings
 ![](localhost_3131_4.png)
-Markdown
+### Markdown
 ![](localhost_3131_5.png)
-Frontmatter
+### Frontmatter
 ![](localhost_3131_6.png)
-Updating `date` property
+### Updating date property
 ![](localhost_3131_7.png)
-Listing images
+### Listing images
 ![](localhost_3131_8.png)
-Popping up terminal
+### Popping up terminal
 ![](localhost_3131_9.png)
