@@ -28,10 +28,19 @@ $
 ```
 to represent inline math.
 
+
+## Media
+`![](${media_public_path}/example.png)` written in the markdown editor panel (left side)
+gets rendered as `<img src="http://localhost:${random_port}/${media_public_path}/example.png">` in the preview panel at the right side. 
+(`${media_public_path}` is a [media public path](/Settings.md#media))
+
+
 ## Image pasting
 Agit CMS allows Ctrl + v to paste into the editor an image previously copied on your clipboard.
 
-Set [media folder path](/Media.md/#media-folder-path) and [media public path](/Media.md/#media-public-path) to enable this feature.  
+Agit CMS automatically uploads pasted image to [Media Folder Path](/Settings.md#media) and then inserts proper `![](image path)` into the editor.
+
+Set [media folder path](/Settings.md#media) and maybe [media public path](/Settings.md#media) to for this feature.  
 
 A couple of things to note
 
@@ -42,6 +51,7 @@ A couple of things to note
 Want to add your own keymaps / toolbar items?
 Try creating your own [plugins](/Plugins.md)!
 
-
+## Custom rendering
+Not supported yet! But in the future you will be able to define custom renderer function so that Agit supports various kinds of notations, like marmaid.
 
 ![](https://github.com/0xsuk/agitcms/blob/main/github/localhost_3131_5.png)
