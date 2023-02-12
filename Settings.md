@@ -8,9 +8,28 @@ Navigate to one of your site in Agit, then click Settings in the sidebar.
 
 
 ## Frontmatter
-Things you can customize
-- language / delimiter characters
-- template: default frontmatter property and value, order (you can grab `=` to change the order)
+### Delimiters
+Default: "---". Delimiters is what surrounds frontmatter.
+### Language
+Default: "yaml". another options is "toml"
+### Template
+Specifies type, property name, default value of each frontmatter.  (you can grab = to change the order)  
+
+Agit parses frontmatter and provides type-aware editor using this information.
+
+| type | examplme in yaml |
+| --- | --- |
+| Text | this is text
+| List of Text | - Web Dev<br>- React.js<br>- Node.js 
+| Multiline Text | text with <br>multiple lines |
+| Date (in ISO 8601 format) | 2022-01-01
+| Bool | true
+| Nest (property that contains child properties) |  |
+
+Things to note
+- No number type: just use text
+- No image type: it's just a path to image. It's a text. I switch to Media tab to copy whatever image path, then paste it into text field.   
+- No list of Date, Bool: Nobody needs it, I guess
 
 ## Media
 - Media Folder Path: Filesystem path to the folder that contains all the media contents. Only used in media tab to figure out the root folder of media contents.  
