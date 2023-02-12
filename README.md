@@ -48,33 +48,8 @@ Agit CMS tries to be a hackable headless CMS for developers.
 | For multiple editors? | X | O
 | Looks good? | O (Colors picked from github site) | X (100% personal opinion)
 
-    
-
-## Quick Start
-
-### Adding a new site
-
-Open Agit CMS and click `NEW` button. 
-
-Type your site’s name, and root folder path of the static site.
-These two configurations cannot be changed afterwards unless you modify ~/.agitcms/config.json directly.
-
-Once you add a new site, click on it, then Agit CMS provides a file explorer where you can navigate through folders and files thas have `.md` extension.
-
-Click `PIN` button at the very top to pin a folder or a file to left sidebar for easy access.
-
-### Integrated Terminal
-Press `Control + @` to open/close a integrated terminal.
-
-Try starting a preview server of your static sites generator.
-
-In hugo: `hugo server`  
-In jekyll: `jekyll server`
-
-![](/uploads/2022-07-03-16:38:13.png)
-
-Now your preview server is running on your host!  
-Try modifying a post as you wish, with a nice markdown&frontmatter editor!
+## Documents
+[Quick Start](QuickStart.md)
 
 
 ## Usage
