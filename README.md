@@ -34,16 +34,16 @@ To change port: `AGIT_FRONTEND=3001 agitcms`
 Agit CMS tries to be a hackable headless CMS for developers.
   
 ## Comparison with other CMS  
-
 |  | Agit CMS | Netlify CMS |
 |---|---|---|
-| Where CMS runs | Runs on your computer | Runs on website's /admin (which is a security issue) | 
-| Installation | easy(npm i) | hard
-| image pasting | O | X
-| mathjax rendering | O | △(requires additional setup)
-| Integrated Terminal | O | X
-| customizability | O | X
-
+| How/Where does the CMS run? | You start agitcms when you want to from terminal. Then it runs on your computer. | It always lives in website's /admin path (which heavily relies on the strength of your password) | 
+| How are changes committed to a remote git repository? | Agit CMS directly writes to your filesystem. So you simply use [integrated terminal](https://github.com/0xsuk/agitcms#integrated-terminal) or whatever to run git command. | Push Publish button
+| Who is the CMS for? | Developers | Writers
+| Installation | Dead simple (npm i) | Pretty complicated 
+| Can you paste(Control+v/Command+v) an image into the markdown editor? | O | X
+| Can the markdown editor preview mathjax? | O | X (requires additional setup)
+| How do I preview a post real-time in my actual website? | Run a preview command specific to your static site generator in [integrated terminal](https://github.com/0xsuk/agitcms#integrated-terminal) | You can't.
+| How customizable is the markdown editor? | [O](https://github.com/0xsuk/agitcms#plugins) | X
  
 
 ## Quick Start
@@ -60,9 +60,9 @@ Once you add a new site, click on it, then Agit CMS provides a file explorer whe
 Click `PIN` button at the very top to pin a folder or a file to left sidebar for easy access.
 
 ### Integrated Terminal
-Press `Control + @` to open up a integrated terminal.
+Press `Control + @` to open/close a integrated terminal.
 
-Try starting a server of your static sites generator.
+Try starting a preview server of your static sites generator.
 
 In hugo: `hugo server`  
 In jekyll: `jekyll server`
