@@ -1,6 +1,6 @@
 # Quick Start
 ## Startig agitcms
-run `agitcms` from terminal, navigate to localhost:3000
+run `agitcms` from terminal, navigate to http://localhost:3131
 ## Register a new site
 Open Agit CMS and click NEW button.
 
