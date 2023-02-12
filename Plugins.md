@@ -11,16 +11,16 @@ There are two types of plugins.
 - TransactionFilter: automatically invoked before editor updates
 
 ## Toolbar Item
-To create Toolbar Item plugin, create a new instance of [ToolbarItem](#class-toolbaritem) class and provide a valid [config](#config) as a first argument.
+To create Toolbar Item plugin, create a new instance of [ToolbarItem](/APIReference.md#class-toolbaritem) class and provide a valid [config](/APIReference.md#config) as a first argument.
 
-If you don't want your plugin to show up in the toolbar, set [config](#config).initialChar to empty. That way you can only call the plugin via [config](#config).keyAlias
+If you don't want your plugin to show up in the toolbar, set [config](/APIReference.md#config).initialChar to empty. That way you can only call the plugin via [config](/APIReference.md#config).keyAlias
 
 See [table plugin](#table-plugin) for an exmaple.
 
 ## Transaction Filter
 Every time editor updates its document, this type of plugins, i.e., Transaction Filter plugin is called.  Unlike ToolbarItem plugin, Transaction Filter does not modify, 
 
-To create Transaction Filter plugin, create a new instance of [Transaction Filter](#class-transactionfilter) class and provide a valid [config](#config-1) as a first argument.
+To create Transaction Filter plugin, create a new instance of [Transaction Filter](/APIReference.md#class-transactionfilter) class and provide a valid [config](/APIReference.md#config-1) as a first argument.
 
 
 ## Examples
@@ -117,6 +117,7 @@ new TransactionFilter({
 ```
 
 ### japanese keymap
+日本語入力の際に＃やスペースをおすためだけに英語入力に切り替えたくないので
 ```javascript
 new TransactionFilter({
   map: new Map([
