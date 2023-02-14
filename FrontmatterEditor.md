@@ -6,7 +6,7 @@ It is placed at the top of markdown file, and wrapped by delimiter characters (d
 
 It follows same syntax as yaml or toml, which are configuration language that consists of key-value pair.  
 
-Delimiters, and which syntax to use (yaml/toml) can be customized in [settings](https://github.com/0xsuk/agitcms/edit/main/Settings.md#delimiters)  
+Delimiters, and which syntax to use (yaml/toml) can be customized in [settings](/Settings.md#delimiters)  
 
 ## Type-awareness
 Agit CMS by default automatically reads frontmatter value, and infers its data type to provide type-aware editor.
