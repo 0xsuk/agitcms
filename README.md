@@ -86,6 +86,8 @@ Start: `npm run dev`
 ### changelog
 From version 2.0.0, Agit CMS became a web interface instead of a desktop app. This way you can use your favorite chrome extension like Grammarly.
   
+### info
+Agit CMS is still maintained, but is not actively developed. The latest version is mature enough for me.
 
 ### TODO  
 - [ ] markdown editor - custom markdown rendering
