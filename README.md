@@ -20,6 +20,7 @@ Write markdown blog posts the *hackable* way, get rid of your itch points.
 To start: `agitcms`  
 To change port: `AGIT_FRONTEND=3001 agitcms`  
 
+Node.js >= 18 is supported
 
 ## Features
 - vertical split style markdown editor
