@@ -22,6 +22,14 @@ To change port: `AGIT_FRONTEND=3001 agitcms`
 
 Node.js >= 18 is supported
 
+
+## Idea
+- it runs locally on browser
+- it directly modifies the local markdown file
+- you write javascript to tweak the editor
+- you can use browser's feature (bookmarking, and all chrome extensions)
+- you can use shell scripts or cli program against the local markdown file.
+
 ## Features
 - vertical split style markdown editor
 - type-aware frontmatter editor
@@ -74,26 +82,3 @@ Agit CMS tries to be a hackable headless CMS for developers.
 [Screenshots](/github/showcase.md)
 
 [Explanation](/Explanation.md)
-
-## Bugs and Questions
-If you want to report a bug or have a question, create a new [issue](https://github.com/0xsuk/agitcms/issues). Don't forget to label it!
-
-## Development
-Agit CMS is built with React.js, Typescript, webpack, Material UI, and CodeMirror
-### environment setup
-Install: `git clone git@github.com:0xsuk/agitcms.git` && `npm i`  
-Start: `npm run dev`  
-
-### changelog
-From version 2.0.0, Agit CMS became a web interface instead of a desktop app. This way you can use your favorite chrome extension like Grammarly.
-  
-### info
-Agit CMS is still maintained, but is not actively developed. The latest version is mature enough for me.
-
-### TODO  
-- [ ] markdown editor - custom markdown rendering
-- [ ] markdown editor - auto saving config
-- [ ] markdown editor - Table of contents
-- [ ] integrated terminal - zsh annoys me.
-- [ ] Media tab - drag and drop image
-
