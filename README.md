@@ -20,8 +20,8 @@ Node.js >= 18 is supported
 - it runs locally on browser
 - it directly modifies the local markdown file
 - you write javascript to tweak the editor
-- you can use browser's feature (bookmarking, and all chrome extensions)
-- you can use shell scripts or cli program against the local markdown file.
+- you can use browser's feature (bookmarking, and all chrome extensions) because it runs on a browser.
+- you can use shell scripts or cli program on the markdown files because it runs locally.
 
 ## Features
 - vertical split style markdown editor
