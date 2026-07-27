@@ -62,6 +62,6 @@ if (process.env.AGIT_FRONTEND) {
 startServer(() => {
   //once backend started
   frontendServer.listen(port, () => {
-    console.log("Agit CMS is live on: http://localhost:" + port);
+    console.log("Agit CMS is live on: http://0.0.0.0:" + port);
   });
 });
